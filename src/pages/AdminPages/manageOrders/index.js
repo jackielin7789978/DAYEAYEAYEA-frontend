@@ -1,1 +1,1 @@
-export { default } from "./manageOrder";
+export { default } from "./ManageOrder";
