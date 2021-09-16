@@ -23,7 +23,7 @@ export default function App() {
     <Router basename="/">
       <Navbar />
       <Switch>
-        {/* <Route exact path="">
+        <Route exact path="">
           <Home />
         </Route>
         <Route path="/about">
@@ -64,8 +64,8 @@ export default function App() {
         </Route>
         <Route path="/products/:slug">
           <Products />
-        </Route> */}
-        <Route exact path="./">
+        </Route>
+        <Route exact path="/">
           <Home />
         </Route>
       </Switch>

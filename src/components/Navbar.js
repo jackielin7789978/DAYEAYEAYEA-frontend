@@ -7,8 +7,8 @@ const NavbarWrapper = styled.div`
   font-family: ${FONT.text_en2};
 `;
 const TopContainer = styled.div`
-  color: ${COLOR["text-light"]};
-  background: ${COLOR.warm_3};
+  color: ${COLOR["text_light"]};
+  background: ${COLOR.navbar};
 `;
 const Wrapper = styled.div`
   max-width: 1680px;
@@ -32,27 +32,27 @@ const BottomContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #fff;
+  background: ${COLOR.background_light};
   position: relative;
   z-index: 2;
   padding: 25px 0 20px;
-  box-shadow: 0px 5px 10px 1px rgba(100, 100, 100, 0.2);
+  box-shadow: 0px 5px 10px 1px ${COLOR.box_shadow};
 `;
 const LOGO = styled.div`
-  font-size: 40px;
+  font-size: 42px;
   cursor: pointer;
-  color: #333;
+  color: ${COLOR["text_dark"]};
   margin-right: 40px;
-  font-family: ${FONT.logo_jackie1};
+  font-family: ${FONT.logo};
 `;
 const PageLink = styled(Link)`
   text-decoration: none;
   cursor: pointer;
   padding: 8px 22px;
   font-size: 16px;
-  color: ${COLOR["text-dark"]};
+  color: ${COLOR["text_dark"]};
   &:hover {
-    color: ${COLOR.warm_5};
+    color: ${COLOR.navbar_link_hover};
   }
 `;
 

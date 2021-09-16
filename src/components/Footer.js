@@ -3,13 +3,13 @@ import { COLOR, FONT } from "../constants/style";
 
 const FooterWrapper = styled.div`
   font-family: ${FONT.text_en2};
-  background: ${COLOR.warm_1};
+  background: ${COLOR.footer};
 `;
 const Mainarea = styled.div`
   display: flex;
   justify-content: center;
   padding: 20px;
-  color: ${COLOR["text-light"]};
+  color: ${COLOR["text_light"]};
 `;
 const Column = styled.div`
   padding: 20px 40px;
@@ -20,15 +20,18 @@ const Column = styled.div`
 const ColumnTitle = styled.div`
   padding: 12px;
   margin-bottom: 8px;
-  border-bottom: 1px solid ${COLOR["text-light"]};
+  border-bottom: 1px solid ${COLOR["text_light"]};
 `;
 const PageLink = styled.a`
   text-decoration: none;
-  color: ${COLOR["text-light"]};
+  color: ${COLOR["text_light"]};
   cursor: pointer;
+  &:hover {
+    color: ${COLOR["text_dark"]};
+  }
 `;
 const Copyright = styled.div`
-  color: ${COLOR["text-light"]};
+  color: ${COLOR["text_light"]};
   text-align: center;
   padding: 20px 0;
   font-size: 14px;

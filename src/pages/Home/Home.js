@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import Carousel from "react-bootstrap/Carousel";
-import carousel1 from "../../demo-pics/carousel1.jpg";
-import carousel2 from "../../demo-pics/carousel2.jpg";
-import carousel3 from "../../demo-pics/carousel3.jpg";
+import carousel1 from "../../../src/demo-pics/carousel1.jpg";
+import carousel2 from "../../../src/demo-pics/carousel2.jpg";
+import carousel3 from "../../../src/demo-pics/carousel3.jpg";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Page = styled.div`
