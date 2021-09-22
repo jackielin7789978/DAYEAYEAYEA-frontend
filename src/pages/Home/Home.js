@@ -17,6 +17,7 @@ export default function Home() {
   return (
     <Page>
       <Wrapper>
+        黑!
         <Carousel>
           <Carousel.Item>
             <img src={carousel1} className="d-block w-100" alt="1st" />

@@ -76,6 +76,7 @@ export default function Navbar() {
         <PageLink to="/">廚房餐具</PageLink>
         <PageLink to="/">文具雜貨</PageLink>
         <PageLink to="/">戶外用品</PageLink>
+        <PageLink to="/">新的分類</PageLink>
       </BottomContainer>
     </NavbarWrapper>
   );
