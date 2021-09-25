@@ -4,21 +4,27 @@ import { COLOR, FONT } from "../constants/style";
 const FooterWrapper = styled.div`
   font-family: ${FONT.text_en2};
   background: ${COLOR.footer};
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 const Mainarea = styled.div`
   display: flex;
   justify-content: center;
-  padding: 20px;
   color: ${COLOR["text_light"]};
+  margin-top: 20px;
 `;
 const Column = styled.div`
-  padding: 20px 40px;
+  margin: 0 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 const ColumnTitle = styled.div`
-  padding: 12px;
+  width: 160px;
+  text-align: center;
+  padding: 10px 0;
   margin-bottom: 8px;
   border-bottom: 1px solid ${COLOR["text_light"]};
 `;
@@ -30,10 +36,17 @@ const PageLink = styled.a`
     color: ${COLOR["text_dark"]};
   }
 `;
+const ColumnDesc = styled.div`
+  text-align: center;
+  p {
+    font-size: 14px;
+    margin: 2px;
+  }
+`;
 const Copyright = styled.div`
   color: ${COLOR["text_light"]};
   text-align: center;
-  padding: 20px 0;
+  margin-bottom: 20px;
   font-size: 14px;
 `;
 export default function Footer() {
@@ -43,24 +56,28 @@ export default function Footer() {
         <Column>
           <ColumnTitle>INFORMATION</ColumnTitle>
           <PageLink>購物需知</PageLink>
-          <PageLink>購物需知</PageLink>
-          <PageLink>購物需知</PageLink>
+          <PageLink>常見問題</PageLink>
+          <PageLink>隱私權條款</PageLink>
         </Column>
         <Column>
-          <ColumnTitle>INFORMATION</ColumnTitle>
-          <PageLink>購物需知</PageLink>
-          <PageLink>購物需知</PageLink>
-          <PageLink>購物需知</PageLink>
+          <ColumnTitle>ABOUT US</ColumnTitle>
+          <PageLink>品牌理念</PageLink>
+          <PageLink>加入我們</PageLink>
         </Column>
         <Column>
-          <ColumnTitle>INFORMATION</ColumnTitle>
-          <PageLink>購物需知</PageLink>
-          <PageLink>購物需知</PageLink>
+          <ColumnTitle>STORE LOCATION</ColumnTitle>
+          <ColumnDesc>
+            門市資訊<p>台北市大安區師大路 88 號</p>
+          </ColumnDesc>
         </Column>
         <Column>
-          <ColumnTitle>INFORMATION</ColumnTitle>
-          <PageLink>購物需知</PageLink>
-          <PageLink>購物需知</PageLink>
+          <ColumnTitle>CONTACT</ColumnTitle>
+          <ColumnDesc>
+            客服專線<p>02-2829-3031</p>
+          </ColumnDesc>
+          <ColumnDesc>
+            客服信箱<p>dayeayeayea@gmail.com</p>
+          </ColumnDesc>
         </Column>
       </Mainarea>
       <Copyright>© 2021 DAYEAYEAYEA - All Rights Reserved.</Copyright>
