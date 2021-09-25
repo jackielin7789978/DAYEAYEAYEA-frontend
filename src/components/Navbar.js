@@ -71,11 +71,12 @@ export default function Navbar() {
       <BottomContainer>
         <LOGO>DAYEAYEAYEA</LOGO>
         <PageLink to="/">所有商品</PageLink>
-        <PageLink to="/">秋季精選</PageLink>
-        <PageLink to="/">個人用品</PageLink>
+        <PageLink to="/">居家生活</PageLink>
+        <PageLink to="/">服飾配件</PageLink>
         <PageLink to="/">廚房餐具</PageLink>
-        <PageLink to="/">文具雜貨</PageLink>
-        <PageLink to="/">戶外用品</PageLink>
+        <PageLink to="/">食材雜貨</PageLink>
+        <PageLink to="/">設計文具</PageLink>
+        <PageLink to="/">休閒戶外</PageLink>
       </BottomContainer>
     </NavbarWrapper>
   );
