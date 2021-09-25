@@ -45,7 +45,6 @@ export default function Footer() {
           <PageLink>購物需知</PageLink>
           <PageLink>購物需知</PageLink>
           <PageLink>購物需知</PageLink>
-          <PageLink>購物需知</PageLink>
         </Column>
         <Column>
           <ColumnTitle>INFORMATION</ColumnTitle>
