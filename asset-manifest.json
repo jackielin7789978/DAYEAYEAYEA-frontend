@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/DAYEAYEAYEA-frontend/static/js/main.d5d8a874.chunk.js",
-    "main.js.map": "/DAYEAYEAYEA-frontend/static/js/main.d5d8a874.chunk.js.map",
+    "main.js": "/DAYEAYEAYEA-frontend/static/js/main.fba4f15a.chunk.js",
+    "main.js.map": "/DAYEAYEAYEA-frontend/static/js/main.fba4f15a.chunk.js.map",
     "runtime-main.js": "/DAYEAYEAYEA-frontend/static/js/runtime-main.f5940c9a.js",
     "runtime-main.js.map": "/DAYEAYEAYEA-frontend/static/js/runtime-main.f5940c9a.js.map",
     "static/css/2.28bb0c3d.chunk.css": "/DAYEAYEAYEA-frontend/static/css/2.28bb0c3d.chunk.css",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.f5940c9a.js",
     "static/css/2.28bb0c3d.chunk.css",
     "static/js/2.5f754140.chunk.js",
-    "static/js/main.d5d8a874.chunk.js"
+    "static/js/main.fba4f15a.chunk.js"
   ]
 }
