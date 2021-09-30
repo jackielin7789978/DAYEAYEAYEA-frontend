@@ -11,6 +11,8 @@ export const PageContainer = styled.div`
 export const ImgAnchor = styled(Link)`
   display: inline-block;
   width: 100%;
-  outline: 1px solid gold;
   color: transparent;
+  &:hover {
+    color: transparent;
+  }
 `;
