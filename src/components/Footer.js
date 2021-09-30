@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { COLOR, FONT, FONT_SIZE } from "../constants/style";
+import { Link } from "react-router-dom";
 
 const FooterWrapper = styled.div`
   font-family: ${FONT.logo};
@@ -28,7 +29,7 @@ const ColumnTitle = styled.div`
   margin-bottom: 8px;
   border-bottom: 1px solid ${COLOR.text_light};
 `;
-const PageLink = styled.a`
+const PageLink = styled(Link)`
   color: ${COLOR.text_light};
   &:hover {
     color: ${COLOR.text_dark};
@@ -53,14 +54,14 @@ export default function Footer() {
       <Mainarea>
         <Column>
           <ColumnTitle>INFORMATION</ColumnTitle>
-          <PageLink>購物需知</PageLink>
-          <PageLink>常見問題</PageLink>
-          <PageLink>隱私權條款</PageLink>
+          <PageLink to="/info/notice">購物需知</PageLink>
+          <PageLink to="/info/FAQ">常見問題</PageLink>
+          <PageLink to="/info/privacy">隱私權條款</PageLink>
         </Column>
         <Column>
           <ColumnTitle>ABOUT US</ColumnTitle>
-          <PageLink>品牌理念</PageLink>
-          <PageLink>加入我們</PageLink>
+          <PageLink to="/info/brand">品牌理念</PageLink>
+          <PageLink to="/info/join">加入我們</PageLink>
         </Column>
         <Column>
           <ColumnTitle>STORE LOCATION</ColumnTitle>

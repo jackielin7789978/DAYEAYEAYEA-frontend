@@ -7,6 +7,12 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     list-style: none;
     line-height: 1.5em;
+    text-decoration: none;
+  }
+  #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
   a {
     text-decoration: none;
@@ -31,6 +37,9 @@ const GlobalStyle = createGlobalStyle`
   }
   textarea {
     resize: none;
+  }
+  img {
+    height: 600px;
   }
 `;
 

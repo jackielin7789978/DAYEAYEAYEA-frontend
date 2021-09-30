@@ -28,5 +28,5 @@ export const FONT_SIZE = {
 };
 
 export const EFFECT = {
-  shadow_dark: `0px 5px 10px 1px rgba(100, 100, 100, 0.2);`,
+  shadow_dark: `0px 5px 12px 1px rgba(140, 140, 140, 0.2);`,
 };
