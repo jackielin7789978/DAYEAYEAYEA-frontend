@@ -26,7 +26,11 @@ const ImgLink = styled(ImgAnchor)`
 export default function Home() {
   return (
     <>
-      <Carousel>
+      <Carousel
+        style={{
+          "z-index": "0",
+        }}
+      >
         <Carousel.Item>
           <OutdoorImg>
             <ImgLink to="/info/notice">Link</ImgLink>

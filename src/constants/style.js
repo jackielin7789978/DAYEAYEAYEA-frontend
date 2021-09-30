@@ -23,10 +23,15 @@ export const FONT_SIZE = {
   logo: "42px",
   xl: "30px",
   lg: "24px",
-  md: "18px",
+  md: "16px",
   sm: "14px",
 };
 
 export const EFFECT = {
   shadow_dark: `0px 5px 12px 1px rgba(140, 140, 140, 0.2);`,
+};
+
+export const MEDIA_QUERY = {
+  desktop: "@media screen and (min-width: 1200px)",
+  tablet: "@media screen and (min-width: 768px) and (max-width: 1200px)",
 };
