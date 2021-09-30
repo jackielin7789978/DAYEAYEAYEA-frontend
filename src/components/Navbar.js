@@ -5,18 +5,21 @@ import { Link } from "react-router-dom";
 const NavbarWrapper = styled.div`
   width: 100%;
   font-family: ${FONT.logo};
+  position: fixed;
+  top: 0;
+  z-index: 1;
 `;
-const TopContainer = styled.div`
-  height: 40px;
+const Top = styled.div`
+  height: 30px;
   color: ${COLOR.text_light};
   background: ${COLOR.primary_light};
   position: relative;
+  display: flex;
+  justify-content: flex-end;
 `;
 const Icons = styled.div`
   display: flex;
-  position: absolute;
-  top: 4px;
-  right: 30px;
+  margin-right: 40px;
 `;
 const Icon = styled.div`
   padding: 4px 16px;
@@ -35,19 +38,21 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-around;
 `;
-const BottomContainer = styled.div`
-  height: 100px;
-  background: ${COLOR.background_light};
+const Bottom = styled.div`
+  height: 90px;
+  background: ${COLOR.light};
   position: relative;
   z-index: 2;
   box-shadow: ${EFFECT.shadow_dark};
 `;
-const LOGO = styled.div`
+const LOGO = styled(Link)`
   font-size: ${FONT_SIZE.logo};
-  cursor: pointer;
   color: ${COLOR.text_dark};
   margin-right: 40px;
   font-family: ${FONT.logo};
+  &:hover {
+    color: ${COLOR.text_dark};
+  }
 `;
 const PageLink = styled(Link)`
   text-decoration: none;
@@ -63,16 +68,16 @@ const PageLink = styled(Link)`
 export default function Navbar() {
   return (
     <NavbarWrapper>
-      <TopContainer>
+      <Top>
         <Icons>
           <Icon>Search</Icon>
           <Icon>Login / Register</Icon>
           <Icon>Cart</Icon>
         </Icons>
-      </TopContainer>
-      <BottomContainer>
+      </Top>
+      <Bottom>
         <Wrapper>
-          <LOGO>DAYEAYEAYEA</LOGO>
+          <LOGO to="/">DAYEAYEAYEA</LOGO>
           <div>
             <PageLink to="/">所有商品</PageLink>
             <PageLink to="/">居家生活</PageLink>
@@ -83,7 +88,7 @@ export default function Navbar() {
             <PageLink to="/">休閒戶外</PageLink>
           </div>
         </Wrapper>
-      </BottomContainer>
+      </Bottom>
     </NavbarWrapper>
   );
 }

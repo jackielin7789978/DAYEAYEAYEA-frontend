@@ -1,34 +1,48 @@
-import styled from "styled-components";
 import Carousel from "react-bootstrap/Carousel";
-import carousel1 from "../../../src/demo-pics/carousel1.jpg";
-import carousel2 from "../../../src/demo-pics/carousel2.jpg";
-import carousel3 from "../../../src/demo-pics/carousel3.jpg";
 import "bootstrap/dist/css/bootstrap.min.css";
+import styled from "styled-components";
+import { ImgAnchor } from "../../components/common";
 
-const Page = styled.div`
-  background: #f5f5f5;
+const Img = styled.div`
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 720px;
 `;
-const Wrapper = styled.div`
-  width: 100%;
-  margin: 0px;
+const OutdoorImg = styled(Img)`
+  background-image: url("https://i.imgur.com/SdIsgaD.jpg");
+`;
+const DiningImg = styled(Img)`
+  background-image: url("https://i.imgur.com/jrOqpOa.jpg");
+`;
+const FragranceImg = styled(Img)`
+  background-image: url("https://i.imgur.com/yx6JDOZ.jpg");
+  background-position: bottom;
+`;
+const ImgLink = styled(ImgAnchor)`
+  height: 720px;
 `;
 
 export default function Home() {
   return (
-    <Page>
-      <Wrapper>
-        <Carousel>
-          <Carousel.Item>
-            <img src={carousel1} className="d-block w-100" alt="1st" />
-          </Carousel.Item>
-          <Carousel.Item>
-            <img src={carousel2} className="d-block w-100" alt="2nd" />
-          </Carousel.Item>
-          <Carousel.Item>
-            <img src={carousel3} className="d-block w-100" alt="3rd" />
-          </Carousel.Item>
-        </Carousel>
-      </Wrapper>
-    </Page>
+    <>
+      <Carousel>
+        <Carousel.Item>
+          <OutdoorImg>
+            <ImgLink href="http://localhost:3000/#/info/notice">Link</ImgLink>
+          </OutdoorImg>
+        </Carousel.Item>
+        <Carousel.Item>
+          <DiningImg>
+            <ImgLink href="http://localhost:3000/#/info/FAQ">Link</ImgLink>
+          </DiningImg>
+        </Carousel.Item>
+        <Carousel.Item>
+          <FragranceImg>
+            <ImgLink href="http://localhost:3000/#/info/join">Link</ImgLink>
+          </FragranceImg>
+        </Carousel.Item>
+      </Carousel>
+    </>
   );
 }
