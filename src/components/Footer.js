@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { COLOR, FONT } from "../constants/style";
 
 const FooterWrapper = styled.div`
-  font-family: ${FONT.text_en2};
+  font-family: ${FONT.logo};
   background: ${COLOR.footer};
   height: 260px;
   display: flex;

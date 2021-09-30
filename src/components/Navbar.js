@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const NavbarWrapper = styled.div`
   width: 100%;
-  font-family: ${FONT.text_en2};
+  font-family: ${FONT.logo};
 `;
 const TopContainer = styled.div`
   color: ${COLOR["text_light"]};

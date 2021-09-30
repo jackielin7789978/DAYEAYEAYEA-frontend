@@ -9,5 +9,5 @@ export const COLOR = {
 };
 
 export const FONT = {
-  logo: '"Caveat", cursive',
+  logo: "'Karla', sans-serif;",
 };
