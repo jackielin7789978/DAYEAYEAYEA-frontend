@@ -1,23 +1,20 @@
 {
   "files": {
-    "main.js": "/DAYEAYEAYEA-frontend/static/js/main.c9b313ff.chunk.js",
-    "main.js.map": "/DAYEAYEAYEA-frontend/static/js/main.c9b313ff.chunk.js.map",
+    "main.js": "/DAYEAYEAYEA-frontend/static/js/main.ca978854.chunk.js",
+    "main.js.map": "/DAYEAYEAYEA-frontend/static/js/main.ca978854.chunk.js.map",
     "runtime-main.js": "/DAYEAYEAYEA-frontend/static/js/runtime-main.f5940c9a.js",
     "runtime-main.js.map": "/DAYEAYEAYEA-frontend/static/js/runtime-main.f5940c9a.js.map",
     "static/css/2.28bb0c3d.chunk.css": "/DAYEAYEAYEA-frontend/static/css/2.28bb0c3d.chunk.css",
-    "static/js/2.0e01f80d.chunk.js": "/DAYEAYEAYEA-frontend/static/js/2.0e01f80d.chunk.js",
-    "static/js/2.0e01f80d.chunk.js.map": "/DAYEAYEAYEA-frontend/static/js/2.0e01f80d.chunk.js.map",
+    "static/js/2.3b451063.chunk.js": "/DAYEAYEAYEA-frontend/static/js/2.3b451063.chunk.js",
+    "static/js/2.3b451063.chunk.js.map": "/DAYEAYEAYEA-frontend/static/js/2.3b451063.chunk.js.map",
     "index.html": "/DAYEAYEAYEA-frontend/index.html",
     "static/css/2.28bb0c3d.chunk.css.map": "/DAYEAYEAYEA-frontend/static/css/2.28bb0c3d.chunk.css.map",
-    "static/js/2.0e01f80d.chunk.js.LICENSE.txt": "/DAYEAYEAYEA-frontend/static/js/2.0e01f80d.chunk.js.LICENSE.txt",
-    "static/media/carousel1.458a7c18.jpg": "/DAYEAYEAYEA-frontend/static/media/carousel1.458a7c18.jpg",
-    "static/media/carousel2.a725d388.jpg": "/DAYEAYEAYEA-frontend/static/media/carousel2.a725d388.jpg",
-    "static/media/carousel3.676309f4.jpg": "/DAYEAYEAYEA-frontend/static/media/carousel3.676309f4.jpg"
+    "static/js/2.3b451063.chunk.js.LICENSE.txt": "/DAYEAYEAYEA-frontend/static/js/2.3b451063.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.f5940c9a.js",
     "static/css/2.28bb0c3d.chunk.css",
-    "static/js/2.0e01f80d.chunk.js",
-    "static/js/main.c9b313ff.chunk.js"
+    "static/js/2.3b451063.chunk.js",
+    "static/js/main.ca978854.chunk.js"
   ]
 }
