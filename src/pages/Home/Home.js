@@ -29,17 +29,17 @@ export default function Home() {
       <Carousel>
         <Carousel.Item>
           <OutdoorImg>
-            <ImgLink href="http://localhost:3000/#/info/notice">Link</ImgLink>
+            <ImgLink href="/#/info/notice">Link</ImgLink>
           </OutdoorImg>
         </Carousel.Item>
         <Carousel.Item>
           <DiningImg>
-            <ImgLink href="http://localhost:3000/#/info/FAQ">Link</ImgLink>
+            <ImgLink href="/#/info/FAQ">Link</ImgLink>
           </DiningImg>
         </Carousel.Item>
         <Carousel.Item>
           <FragranceImg>
-            <ImgLink href="http://localhost:3000/#/info/join">Link</ImgLink>
+            <ImgLink href="/#/info/join">Link</ImgLink>
           </FragranceImg>
         </Carousel.Item>
       </Carousel>
