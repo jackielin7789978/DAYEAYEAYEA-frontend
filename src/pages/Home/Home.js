@@ -1,6 +1,7 @@
 import Carousel from "react-bootstrap/Carousel";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
+import { ImgAnchor } from "../../components/common";
 
 const Img = styled.div`
   background-size: cover;
@@ -18,19 +19,28 @@ const FragranceImg = styled(Img)`
   background-image: url("https://i.imgur.com/yx6JDOZ.jpg");
   background-position: bottom;
 `;
+const ImgLink = styled(ImgAnchor)`
+  height: 720px;
+`;
 
 export default function Home() {
   return (
     <>
       <Carousel>
         <Carousel.Item>
-          <OutdoorImg />
+          <OutdoorImg>
+            <ImgLink href="http://localhost:3000/#/info/notice">Link</ImgLink>
+          </OutdoorImg>
         </Carousel.Item>
         <Carousel.Item>
-          <DiningImg />
+          <DiningImg>
+            <ImgLink href="http://localhost:3000/#/info/FAQ">Link</ImgLink>
+          </DiningImg>
         </Carousel.Item>
         <Carousel.Item>
-          <FragranceImg />
+          <FragranceImg>
+            <ImgLink href="http://localhost:3000/#/info/join">Link</ImgLink>
+          </FragranceImg>
         </Carousel.Item>
       </Carousel>
     </>
