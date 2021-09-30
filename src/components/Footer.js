@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { COLOR, FONT } from "../constants/style";
+import { COLOR, FONT, FONT_SIZE } from "../constants/style";
 
 const FooterWrapper = styled.div`
-  font-family: ${FONT.text_en2};
-  background: ${COLOR.footer};
+  font-family: ${FONT.logo};
+  background: ${COLOR.primary_dark};
   height: 260px;
   display: flex;
   flex-direction: column;
@@ -12,7 +12,7 @@ const FooterWrapper = styled.div`
 const Mainarea = styled.div`
   display: flex;
   justify-content: center;
-  color: ${COLOR["text_light"]};
+  color: ${COLOR.text_light};
   margin-top: 20px;
 `;
 const Column = styled.div`
@@ -26,28 +26,26 @@ const ColumnTitle = styled.div`
   text-align: center;
   padding: 10px 0;
   margin-bottom: 8px;
-  border-bottom: 1px solid ${COLOR["text_light"]};
+  border-bottom: 1px solid ${COLOR.text_light};
 `;
 const PageLink = styled.a`
-  text-decoration: none;
-  color: ${COLOR["text_light"]};
-  cursor: pointer;
+  color: ${COLOR.text_light};
   &:hover {
-    color: ${COLOR["text_dark"]};
+    color: ${COLOR.text_dark};
   }
 `;
 const ColumnDesc = styled.div`
   text-align: center;
   p {
-    font-size: 14px;
+    font-size: ${FONT_SIZE.sm};
     margin: 2px;
   }
 `;
 const Copyright = styled.div`
-  color: ${COLOR["text_light"]};
+  color: ${COLOR.text_light};
   text-align: center;
   margin-bottom: 20px;
-  font-size: 14px;
+  font-size: ${FONT_SIZE.sm};
 `;
 export default function Footer() {
   return (

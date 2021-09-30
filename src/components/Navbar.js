@@ -1,24 +1,22 @@
 import styled from "styled-components";
-import { COLOR, FONT } from "../constants/style";
+import { COLOR, FONT, EFFECT, FONT_SIZE } from "../constants/style";
 import { Link } from "react-router-dom";
 
 const NavbarWrapper = styled.div`
   width: 100%;
-  font-family: ${FONT.text_en2};
+  font-family: ${FONT.logo};
 `;
 const TopContainer = styled.div`
-  color: ${COLOR["text_light"]};
-  background: ${COLOR.navbar};
-`;
-const Wrapper = styled.div`
-  max-width: 1680px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  height: 40px;
+  color: ${COLOR.text_light};
+  background: ${COLOR.primary_light};
+  position: relative;
 `;
 const Icons = styled.div`
   display: flex;
+  position: absolute;
+  top: 4px;
+  right: 30px;
 `;
 const Icon = styled.div`
   padding: 4px 16px;
@@ -28,20 +26,26 @@ const Icon = styled.div`
     transform: scale(1.1);
   }
 `;
-const BottomContainer = styled.div`
+const Wrapper = styled.div`
+  height: 100%;
+  width: 90vw;
+  max-width: 1800px;
+  margin: 0 auto;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: space-around;
+`;
+const BottomContainer = styled.div`
+  height: 100px;
   background: ${COLOR.background_light};
   position: relative;
   z-index: 2;
-  padding: 25px 0 20px;
-  box-shadow: 0px 5px 10px 1px ${COLOR.box_shadow};
+  box-shadow: ${EFFECT.shadow_dark};
 `;
 const LOGO = styled.div`
-  font-size: 42px;
+  font-size: ${FONT_SIZE.logo};
   cursor: pointer;
-  color: ${COLOR["text_dark"]};
+  color: ${COLOR.text_dark};
   margin-right: 40px;
   font-family: ${FONT.logo};
 `;
@@ -49,10 +53,10 @@ const PageLink = styled(Link)`
   text-decoration: none;
   cursor: pointer;
   padding: 8px 22px;
-  font-size: 16px;
-  color: ${COLOR["text_dark"]};
+  font-size: ${FONT_SIZE.md};
+  color: ${COLOR.text_dark};
   &:hover {
-    color: ${COLOR.navbar_link_hover};
+    color: ${COLOR.primary_dark};
   }
 `;
 
@@ -60,23 +64,25 @@ export default function Navbar() {
   return (
     <NavbarWrapper>
       <TopContainer>
-        <Wrapper>
-          <Icons>
-            <Icon>Search</Icon>
-            <Icon>Login / Register</Icon>
-            <Icon>Cart</Icon>
-          </Icons>
-        </Wrapper>
+        <Icons>
+          <Icon>Search</Icon>
+          <Icon>Login / Register</Icon>
+          <Icon>Cart</Icon>
+        </Icons>
       </TopContainer>
       <BottomContainer>
-        <LOGO>DAYEAYEAYEA</LOGO>
-        <PageLink to="/">所有商品</PageLink>
-        <PageLink to="/">居家生活</PageLink>
-        <PageLink to="/">服飾配件</PageLink>
-        <PageLink to="/">廚房餐具</PageLink>
-        <PageLink to="/">食材雜貨</PageLink>
-        <PageLink to="/">設計文具</PageLink>
-        <PageLink to="/">休閒戶外</PageLink>
+        <Wrapper>
+          <LOGO>DAYEAYEAYEA</LOGO>
+          <div>
+            <PageLink to="/">所有商品</PageLink>
+            <PageLink to="/">居家生活</PageLink>
+            <PageLink to="/">服飾配件</PageLink>
+            <PageLink to="/">廚房餐具</PageLink>
+            <PageLink to="/">食材雜貨</PageLink>
+            <PageLink to="/">設計文具</PageLink>
+            <PageLink to="/">休閒戶外</PageLink>
+          </div>
+        </Wrapper>
       </BottomContainer>
     </NavbarWrapper>
   );
