@@ -10,6 +10,8 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import SearchIcon from "@mui/icons-material/Search";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 
 const NavbarWrapper = styled.div`
   ${MEDIA_QUERY.desktop} {
@@ -162,12 +164,7 @@ function Menu() {
     </CategoryContainer>
   );
 }
-function Search() {
-  return <></>;
-}
-function Account() {
-  return <></>;
-}
+
 function Cart() {
   return <></>;
 }
@@ -176,17 +173,15 @@ export default function Navbar() {
     <NavbarWrapper>
       <Top>
         <Icons>
-          <Icon>Search</Icon>
-          <Icon>Login / Register</Icon>
-          <Icon>Cart</Icon>
+          <SearchIcon />
+          <Icon>登入 / 註冊</Icon>
+          <ShoppingCartOutlinedIcon />
         </Icons>
       </Top>
       <Bottom>
         <Wrapper>
           <MenuController />
-          <Search />
           <LOGO to="/">DAYEAYEAYEA</LOGO>
-          <Account />
           <Cart />
           <Menu />
         </Wrapper>
