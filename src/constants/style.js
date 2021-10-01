@@ -1,8 +1,11 @@
 export const COLOR = {
   primary_light: "#D2C9B1",
+  primary_light_hover: "#D2C9B1cc",
   primary_dark: "#9A8B66",
   warning: "#FFA100",
+  warning_hover: "#FFA100cc",
   accent: "#5B756E",
+  accent_hover: "#5B756Eee",
   light: "#FFF",
 
   text_light: "#fff",
