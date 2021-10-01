@@ -1,5 +1,7 @@
 [Demo](https://jackielin7789978.github.io/DAYEAYEAYEA-frontend/)
 
+Clone 到本地之後，只要執行 `yarn add create-react-app` 就可以跑起來了噢！
+
 ---
 
 # Getting Started with Create React App
