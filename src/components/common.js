@@ -2,9 +2,24 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 // 撐主頁面用，已加在 Route 外面，單一頁面不用再套
-export const PageContainer = styled.div`
-  margin-top: 120px;
+export const PageHeight = styled.div`
+  margin-top: 121px;
   flex: 1;
+`;
+
+// 非滿版一律用 PageWidth 包
+export const PageWidth = styled.div`
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+
+  outline: 2px solid lightgrey;
+`;
+// 滿版用 FullWidth
+export const FullWidth = styled.div`
+  width: 100%;
+  text-align: center;
 `;
 
 // 可包在圖片裡的連結 component，height 需視圖片高度另外加上去

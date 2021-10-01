@@ -30,6 +30,7 @@ const ColumnTitle = styled.div`
   border-bottom: 1px solid ${COLOR.text_light};
 `;
 const PageLink = styled(Link)`
+  text-decoration: none;
   color: ${COLOR.text_light};
   &:hover {
     color: ${COLOR.text_dark};

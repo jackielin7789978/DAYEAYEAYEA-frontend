@@ -15,14 +15,14 @@ import {
   Products,
 } from "./pages/index";
 import { Brand, FAQ, Join, Notice, Privacy } from "./pages/InfoPages/index";
-import { PageContainer } from "./components/common";
+import { PageHeight } from "./components/common";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 
 export default function App() {
   return (
     <Router basename="/">
       <Navbar />
-      <PageContainer>
+      <PageHeight>
         <Switch>
           <Route path="/articles/:slug">
             <Articles />
@@ -76,7 +76,7 @@ export default function App() {
             <Home />
           </Route>
         </Switch>
-      </PageContainer>
+      </PageHeight>
       <Footer />
     </Router>
   );

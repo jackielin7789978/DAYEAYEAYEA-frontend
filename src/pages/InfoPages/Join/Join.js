@@ -1,5 +1,6 @@
-import { COLOR, FONT_SIZE, MEDIA_QUERY } from "../../../constants/style";
 import styled from "styled-components";
+import { COLOR, FONT_SIZE, MEDIA_QUERY } from "../../../constants/style";
+import { PageWidth } from "../../../components/common";
 
 // 以下測試 Button hover 顏色用
 const TempWrapper = styled.div`
@@ -31,8 +32,12 @@ const TempBTN = styled.button`
 
 export default function Join() {
   return (
-    <TempWrapper>
-      <TempBTN>加入購物車</TempBTN>
-    </TempWrapper>
+    <>
+      <PageWidth>
+        <TempWrapper>
+          <TempBTN>加入購物車</TempBTN>
+        </TempWrapper>
+      </PageWidth>
+    </>
   );
 }
