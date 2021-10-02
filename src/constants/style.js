@@ -23,7 +23,7 @@ export const FONT = {
 };
 
 export const FONT_SIZE = {
-  logo: "42px",
+  xxl: "42px",
   xl: "30px",
   lg: "24px",
   md: "16px",
