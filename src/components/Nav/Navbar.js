@@ -15,7 +15,6 @@ import Burger from "./Burger";
 import { useState } from "react";
 
 const DesktopBar = styled.div`
-  outline: 1px solid gold;
   ${MEDIA_QUERY.desktop} {
     position: fixed;
     width: 100%;
@@ -26,10 +25,10 @@ const DesktopBar = styled.div`
   }
 `;
 const DesktopContainer = styled.div`
-  outline: 1px solid gold;
   ${MEDIA_QUERY.desktop} {
     background: ${COLOR.light};
     position: fixed;
+    top: 30px;
     width: 100%;
     height: 90px;
     display: flex;
@@ -53,7 +52,7 @@ const Nav = styled.nav`
     width: 100px;
     display: flex;
     justify-content: space-around;
-    outline: 1px solid gold;
+
     ${MEDIA_QUERY.desktop} {
       width: 0;
       margin: 0;
@@ -70,7 +69,6 @@ const Nav = styled.nav`
   }
 `;
 const LOGO = styled(Link)`
-  outline: 1px solid gold;
   text-decoration: none;
   font-size: ${FONT_SIZE.lg};
   color: ${COLOR.text_dark};

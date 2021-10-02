@@ -27,7 +27,6 @@ export const PageWidth = styled.div`
 export const FullWidth = styled.div`
   width: 100%;
   text-align: center;
-  outline: 1px solid gold;
 `;
 
 // 可包在圖片裡的連結 component，height 需視圖片高度另外加上去
@@ -38,5 +37,4 @@ export const ImgAnchor = styled(Link)`
   &:hover {
     color: transparent;
   }
-  outline: 1px solid gold;
 `;

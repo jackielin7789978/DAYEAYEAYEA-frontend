@@ -3,7 +3,6 @@ import { COLOR, FONT_SIZE, MEDIA_QUERY } from "../../constants/style";
 import { Link } from "react-router-dom";
 
 const CategoryContainer = styled.div`
-  outline: 1px solid gold;
   position: fixed;
   height: 100vh;
   width: 100vw;
@@ -23,7 +22,6 @@ const CategoryContainer = styled.div`
   }
 `;
 const Category = styled(Link)`
-  outline: 1px solid gold;
   text-decoration: none;
   text-align: center;
   cursor: pointer;
