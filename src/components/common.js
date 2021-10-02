@@ -4,7 +4,7 @@ import { MEDIA_QUERY } from "../constants/style";
 
 // 撐主頁面用，已加在 Route 外面，單一頁面不用再套
 export const PageHeight = styled.div`
-  margin-top: 0px;
+  margin-top: 50px;
   width: 100%;
   flex: 1;
   ${MEDIA_QUERY.desktop} {
@@ -17,16 +17,18 @@ export const PageWidth = styled.div`
   width: 90%;
   margin: 0 auto;
   text-align: center;
+  border: 1px solid transparent;
   ${MEDIA_QUERY.desktop} {
     max-width: 1200px;
   }
 
-  outline: 2px solid lightgrey;
+  outline: 1px solid lightgrey;
 `;
 // 滿版用 FullWidth
 export const FullWidth = styled.div`
   width: 100%;
   text-align: center;
+  border: 1px solid transparent;
 `;
 
 // 可包在圖片裡的連結 component，height 需視圖片高度另外加上去

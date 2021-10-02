@@ -19,7 +19,6 @@ const Column = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  outline: 1px solid gold;
 `;
 const ColumnTitle = styled.div`
   width: 160px;
@@ -27,6 +26,7 @@ const ColumnTitle = styled.div`
   padding: 10px 0;
   margin-bottom: 8px;
   border-bottom: 1px solid ${COLOR.text_light};
+  color: ${COLOR.text_light};
 `;
 const PageLink = styled(Link)`
   text-decoration: none;
@@ -37,9 +37,11 @@ const PageLink = styled(Link)`
 `;
 const ColumnDesc = styled.div`
   text-align: center;
+  color: ${COLOR.text_light};
   p {
     font-size: ${FONT_SIZE.sm};
     margin: 2px;
+    color: ${COLOR.text_light};
   }
 `;
 const Copyright = styled.div`

@@ -13,7 +13,8 @@ export const COLOR = {
   text_grey: "#999",
 
   border_primary: "#D2C9B1",
-  border_grey: "#999",
+  border_grey: "#aaa",
+  border_light_grey: "#e5e5e5",
   border_light: "#fff",
   border_dark: "#333",
 };
@@ -25,7 +26,7 @@ export const FONT = {
 export const FONT_SIZE = {
   xxl: "42px",
   xl: "30px",
-  lg: "24px",
+  lg: "20px",
   md: "16px",
   sm: "14px",
 };

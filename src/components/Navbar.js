@@ -69,7 +69,7 @@ const LOGO = styled(Link)`
   font-family: ${FONT.logo};
   padding: 10px;
   ${MEDIA_QUERY.desktop} {
-    font-size: ${FONT_SIZE.logo};
+    font-size: ${FONT_SIZE.xxl};
     line-height: 90px;
     outline: 1px solid red;
   }
