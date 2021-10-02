@@ -1,18 +1,25 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { MEDIA_QUERY } from "../constants/style";
 
 // 撐主頁面用，已加在 Route 外面，單一頁面不用再套
 export const PageHeight = styled.div`
-  margin-top: 121px;
+  margin-top: 0px;
+  width: 100%;
   flex: 1;
+  ${MEDIA_QUERY.desktop} {
+    margin-top: 121px;
+  }
 `;
 
 // 非滿版一律用 PageWidth 包
 export const PageWidth = styled.div`
   width: 90%;
-  max-width: 1200px;
   margin: 0 auto;
   text-align: center;
+  ${MEDIA_QUERY.desktop} {
+    max-width: 1200px;
+  }
 
   outline: 2px solid lightgrey;
 `;

@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
 import { ImgAnchor } from "../../components/common";
 import { PageWidth, FullWidth } from "../../components/common";
+import Card from "../../components/Card_test/Card";
 
 const Img = styled.div`
   background-size: cover;
@@ -23,6 +24,13 @@ const ImgLink = styled(ImgAnchor)`
   height: 520px;
 `;
 
+// 測試用
+const CardContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  margin: 40px 0px;
+  flex-wrap: wrap;
+`;
 export default function Home() {
   return (
     <>
@@ -50,14 +58,20 @@ export default function Home() {
         </Carousel>
       </FullWidth>
       <PageWidth>
-        <h3>非滿版區塊</h3>
-        <img src="https://i.imgur.com/An05Pk6.jpg" alt="demo" />
-        <h3>看起來像這樣</h3>
-        <img src="https://i.imgur.com/dBV6j0t.jpg" alt="demo" />
-        <h3>嘿嘿嘿呵呵呵</h3>
-        <img src="https://i.imgur.com/AwgiVmD.jpg" alt="demo" />
-        <h3>好看嗎好看嗎</h3>
-        <img src="https://i.imgur.com/q1wWaav.jpg" alt="demo" />
+        <CardContainer>
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+        </CardContainer>
       </PageWidth>
     </>
   );

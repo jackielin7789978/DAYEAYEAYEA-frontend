@@ -7,23 +7,24 @@ import {
   MEDIA_QUERY,
 } from "../constants/style";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useState, useContext } from "react";
+import { MenuContext } from "../contexts";
 
-const NavbarWrapper = styled.div`
+const NavbarContainer = styled.div`
+  width: 100%;
   ${MEDIA_QUERY.desktop} {
-    width: 100%;
     font-family: ${FONT.logo};
     position: fixed;
     top: 0;
-    z-index: 1;
+    z-index: 3;
   }
 `;
-const Top = styled.div`
-  display: none;
+const DesktopBar = styled.div`
   ${MEDIA_QUERY.desktop} {
     height: 30px;
     color: ${COLOR.text_light};
@@ -33,159 +34,203 @@ const Top = styled.div`
     justify-content: flex-end;
   }
 `;
-const Icons = styled.div`
-  display: flex;
-  margin-right: 40px;
-`;
-const Icon = styled.div`
-  padding: 4px 16px;
-  cursor: pointer;
-  transition: all 0.2s;
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
-const Wrapper = styled.div`
-  height: 100%;
-  width: 90vw;
-  max-width: 1800px;
-  margin: 0 auto;
+const DesktopWrapper = styled.div`
+  display: none;
   ${MEDIA_QUERY.desktop} {
     display: flex;
-    align-items: center;
     justify-content: space-around;
+    align-items: center;
+    height: 90px;
+    background: ${COLOR.light};
+    box-shadow: ${EFFECT.shadow_dark};
+    position: static;
   }
 `;
-const Bottom = styled.div`
-  height: 90px;
-  background: ${COLOR.light};
-  position: relative;
-  z-index: 2;
-  box-shadow: ${EFFECT.shadow_dark};
+const MainBar = styled.div`
+  height: 50px;
+  background: ${COLOR.text_light};
+  text-align: center;
+  z-index: 3;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  ${MEDIA_QUERY.desktop} {
+    height: 100%;
+    position: static;
+    background: transparent;
+  }
 `;
 const LOGO = styled(Link)`
   text-decoration: none;
-  font-size: ${FONT_SIZE.logo};
+  font-size: ${FONT_SIZE.lg};
+  line-height: 50px;
   color: ${COLOR.text_dark};
   font-family: ${FONT.logo};
   padding: 10px;
-  &:hover {
-    color: ${COLOR.text_dark};
-  }
-`;
-const ControllerContrainer = styled.button`
-  background: transparent;
   ${MEDIA_QUERY.desktop} {
-    display: none;
+    font-size: ${FONT_SIZE.logo};
+    line-height: 90px;
+    outline: 1px solid red;
   }
 `;
-
-const CategoryContainer = styled.div`
+const MenuContainer = styled.div`
   position: absolute;
   height: 100vh;
-  top: 0;
+  transition: ease 0.3s;
+  top: ${(props) => (props.$isOpen ? "50px" : "-100vh")};
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 1;
+  z-index: 2;
+  padding-top: 40px;
   background: ${COLOR.primary_light};
   display: flex;
   flex-direction: column;
   align-items: center;
-  div {
-    width: 100%;
-    height: 12%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    ${MEDIA_QUERY.desktop} {
-      display: none;
-    }
-  }
   ${MEDIA_QUERY.desktop} {
     flex-direction: row;
-    background: ${COLOR.light};
+    background: transparent;
     position: static;
     height: 90px;
+    margin-top: -40px;
   }
 `;
-const Category = styled(Link)`
+const MenuItem = styled(Link)`
   text-decoration: none;
   text-align: center;
   cursor: pointer;
   border-bottom: 1px solid ${COLOR.border_light};
-  font-size: ${FONT_SIZE.xl};
+  font-size: ${FONT_SIZE.md};
   width: 80%;
   color: ${COLOR.text_light};
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 12%;
+  height: 10%;
   &:hover {
     color: ${COLOR.primary_dark};
   }
   ${MEDIA_QUERY.desktop} {
     color: ${COLOR.text_dark};
     font-size: ${FONT_SIZE.md};
+    height: 90px;
     padding: 0 22px;
   }
 `;
-const CloseMenu = styled(FontAwesomeIcon)`
-  height: 100%;
+const MenuBTN = styled(MenuIcon)`
+  cursor: pointer;
   position: absolute;
-  left: 5%;
+  top: 10px;
+  left: 20px;
+  display: ${(props) => (props.$isOpen ? "none" : "inline-block")};
   ${MEDIA_QUERY.desktop} {
     display: none;
   }
 `;
-
-function MenuController() {
-  const handleMenuClick = () => {};
+const CloseBTN = styled(CloseOutlinedIcon)`
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  display: ${(props) => (props.$isOpen ? "inline-block" : "none")};
+  ${MEDIA_QUERY.desktop} {
+    display: none;
+  }
+`;
+const Icons = styled.div`
+  ${MEDIA_QUERY.desktop} {
+    display: flex;
+    position: absolute;
+    top: 3px;
+    right: 60px;
+    width: 140px;
+    justify-content: space-between;
+  }
+`;
+const AccountBTN = styled(AccountCircleOutlinedIcon)`
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 60px;
+  transition: all 0.2s;
+  &:hover {
+    transform: scale(1.1);
+  }
+  ${MEDIA_QUERY.desktop} {
+    position: static;
+  }
+`;
+const SearchBTN = styled(SearchIcon)`
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  left: 55px;
+  transition: all 0.2s;
+  &:hover {
+    transform: scale(1.1);
+  }
+  ${MEDIA_QUERY.desktop} {
+    position: static;
+  }
+`;
+const CartBTN = styled(ShoppingCartOutlinedIcon)`
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  transition: all 0.2s;
+  &:hover {
+    transform: scale(1.1);
+  }
+  ${MEDIA_QUERY.desktop} {
+    position: static;
+  }
+`;
+function Menu({ isOpen, setIsOpen }) {
+  useContext(MenuContext);
   return (
-    <ControllerContrainer onClick={handleMenuClick}>
-      <FontAwesomeIcon icon={faBars} size="2x" />
-    </ControllerContrainer>
+    <MenuContainer $isOpen={isOpen}>
+      <MenuItem to="/">所有商品</MenuItem>
+      <MenuItem to="/">居家生活</MenuItem>
+      <MenuItem to="/">服飾配件</MenuItem>
+      <MenuItem to="/">廚房餐具</MenuItem>
+      <MenuItem to="/">食材雜貨</MenuItem>
+      <MenuItem to="/">設計文具</MenuItem>
+      <MenuItem to="/">休閒戶外</MenuItem>
+    </MenuContainer>
   );
-}
-function Menu() {
-  return (
-    <CategoryContainer>
-      <div>
-        <CloseMenu icon={faTimes} size="2x" />
-        <LOGO to="/">DAYEAYEAYEA</LOGO>
-      </div>
-      <Category to="/">所有商品</Category>
-      <Category to="/">居家生活</Category>
-      <Category to="/">服飾配件</Category>
-      <Category to="/">廚房餐具</Category>
-      <Category to="/">食材雜貨</Category>
-      <Category to="/">設計文具</Category>
-      <Category to="/">休閒戶外</Category>
-    </CategoryContainer>
-  );
-}
-
-function Cart() {
-  return <></>;
 }
 export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const openMenu = () => {
+    setIsOpen(true);
+  };
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
   return (
-    <NavbarWrapper>
-      <Top>
-        <Icons>
-          <SearchIcon />
-          <Icon>登入 / 註冊</Icon>
-          <ShoppingCartOutlinedIcon />
-        </Icons>
-      </Top>
-      <Bottom>
-        <Wrapper>
-          <MenuController />
-          <LOGO to="/">DAYEAYEAYEA</LOGO>
-          <Cart />
-          <Menu />
-        </Wrapper>
-      </Bottom>
-    </NavbarWrapper>
+    <MenuContext.Provider value={{ isOpen, setIsOpen }}>
+      <NavbarContainer>
+        <DesktopBar>
+          <Icons>
+            <SearchBTN />
+            <AccountBTN />
+            <CartBTN />
+          </Icons>
+        </DesktopBar>
+        <DesktopWrapper>
+          <MainBar $isOpen={isOpen}>
+            <MenuBTN onClick={openMenu} $isOpen={isOpen} />
+            <CloseBTN onClick={closeMenu} $isOpen={isOpen} />
+            <SearchBTN />
+            <LOGO to="/">DAYEAYEAYEA</LOGO>
+            <AccountBTN />
+            <CartBTN />
+          </MainBar>
+          <Menu isOpen={isOpen} setIsOpen={setIsOpen} />
+        </DesktopWrapper>
+      </NavbarContainer>
+    </MenuContext.Provider>
   );
 }
