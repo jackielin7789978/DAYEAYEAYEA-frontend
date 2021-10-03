@@ -4,7 +4,7 @@ import { MEDIA_QUERY } from "../constants/style";
 
 // 撐主頁面用，已加在 Route 外面，單一頁面不用再套
 export const PageHeight = styled.div`
-  margin-top: 51px;
+  margin-top: 49px;
   width: 100%;
   flex: 1;
   ${MEDIA_QUERY.desktop} {

@@ -29,6 +29,7 @@ export const FONT_SIZE = {
   lg: "20px",
   md: "16px",
   sm: "14px",
+  tablet: "24px",
 };
 
 export const EFFECT = {

@@ -62,7 +62,7 @@ export default function App() {
           <Route path="/info/brand">
             <Brand />
           </Route>
-          <Route path="/info/FAQ">
+          <Route path="/info/faq">
             <FAQ />
           </Route>
           <Route path="/info/join">
