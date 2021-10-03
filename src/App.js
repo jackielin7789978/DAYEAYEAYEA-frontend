@@ -15,7 +15,7 @@ import {
   Products,
 } from "./pages/index";
 import { Brand, FAQ, Join, Notice, Privacy } from "./pages/InfoPages/index";
-import { PageHeight } from "./components/common";
+import { PageHeight } from "./components/general";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import { ScrollToTop } from "./utils";
 

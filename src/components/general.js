@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { MEDIA_QUERY } from "../constants/style";
 
-// 撐主頁面用，已加在 Route 外面，單一頁面不用再套
+// 撐頁面高度用，已加在 Route 外面
 export const PageHeight = styled.div`
   margin-top: 49px;
   width: 100%;
@@ -12,7 +12,7 @@ export const PageHeight = styled.div`
   }
 `;
 
-// 非滿版一律用 PageWidth 包
+// 非滿版用 PageWidth 包
 export const PageWidth = styled.div`
   width: 90%;
   margin: 0 auto;
@@ -22,11 +22,11 @@ export const PageWidth = styled.div`
     max-width: 1200px;
   }
 `;
-// 滿版用 FullWidth
+
+// 滿版用 FullWidth 包
 export const FullWidth = styled.div`
   width: 100%;
   text-align: center;
-  border: 1px solid transparent;
 `;
 
 // 可包在圖片裡的連結 component，height 需視圖片高度另外加上去

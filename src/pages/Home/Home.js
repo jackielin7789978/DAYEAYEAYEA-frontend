@@ -1,8 +1,7 @@
 import Carousel from "react-bootstrap/Carousel";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
-import { ImgAnchor } from "../../components/common";
-import { PageWidth, FullWidth } from "../../components/common";
+import { PageWidth, FullWidth, ImgAnchor } from "../../components/general";
 import Card from "../../components/Card_test/Card";
 
 const Img = styled.div`

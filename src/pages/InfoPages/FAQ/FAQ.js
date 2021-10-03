@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { PageWidth } from "../../../components/common";
+import { PageWidth } from "../../../components/general";
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from "../../../constants/style";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import QA from "./questions";

@@ -34,7 +34,7 @@ const Category = styled(Link)`
   align-items: center;
   height: 12%;
   &:hover {
-    color: ${COLOR.primary_dark};
+    color: ${COLOR.text_primary_dark};
   }
   ${MEDIA_QUERY.desktop} {
     color: ${COLOR.text_dark};

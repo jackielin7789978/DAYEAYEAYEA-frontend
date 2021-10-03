@@ -5,12 +5,16 @@ export const COLOR = {
   warning: "#FFA100",
   warning_hover: "#FFA100cc",
   accent: "#5B756E",
-  accent_hover: "#5B756Eee",
-  light: "#FFF",
+  accent_hover: "#304f47",
+  light: "#fff",
 
+  text_primary_light: "#D2C9B1",
+  text_primary_dark: "#9A8B66",
+  text_warning: "#FFA100",
   text_light: "#fff",
   text_dark: "#333",
   text_grey: "#999",
+  text_placeholder: "#CECECE",
 
   border_primary: "#D2C9B1",
   border_grey: "#aaa",
@@ -19,6 +23,7 @@ export const COLOR = {
   border_dark: "#333",
 };
 
+// 要用什麼字體？
 export const FONT = {
   logo: "'Karla', sans-serif;",
 };
@@ -29,7 +34,7 @@ export const FONT_SIZE = {
   lg: "20px",
   md: "16px",
   sm: "14px",
-  tablet: "24px",
+  tablet: "24px", //要不要再加這個大小?
 };
 
 export const EFFECT = {
