@@ -19,7 +19,7 @@ const DesktopBar = styled.div`
     position: fixed;
     width: 100%;
     display: static;
-    height: 30px;
+    height: 40px;
     background: ${COLOR.primary_light};
     z-index: 1;
   }
@@ -28,7 +28,7 @@ const DesktopContainer = styled.div`
   ${MEDIA_QUERY.desktop} {
     background: ${COLOR.light};
     position: fixed;
-    top: 30px;
+    top: 40px;
     width: 100%;
     height: 90px;
     display: flex;
@@ -87,8 +87,8 @@ const SearchBTN = styled(SearchIcon)`
   margin: 0 5px;
   ${MEDIA_QUERY.desktop} {
     position: absolute;
-    top: -28px;
-    right: 170px;
+    top: -32px;
+    right: 160px;
   }
 `;
 const AccountBTN = styled(AccountCircleOutlinedIcon)`
@@ -96,8 +96,8 @@ const AccountBTN = styled(AccountCircleOutlinedIcon)`
   margin: 0 5px;
   ${MEDIA_QUERY.desktop} {
     position: absolute;
-    top: -28px;
-    right: 120px;
+    top: -32px;
+    right: 110px;
   }
 `;
 const CartBTN = styled(ShoppingCartOutlinedIcon)`
@@ -105,8 +105,8 @@ const CartBTN = styled(ShoppingCartOutlinedIcon)`
   margin: 0 5px;
   ${MEDIA_QUERY.desktop} {
     position: absolute;
-    top: -28px;
-    right: 70px;
+    top: -32px;
+    right: 60px;
   }
 `;
 function Search() {

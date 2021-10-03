@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from "../../../constants/style";
 import { PageWidth } from "../../../components/general";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+// import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 
 // 以下測試 Button hover 顏色用
 const TempWrapper = styled.div`
