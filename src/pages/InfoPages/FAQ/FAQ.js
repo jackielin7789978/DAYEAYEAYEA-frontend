@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PageWidth } from "../../../components/common";
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from "../../../constants/style";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
+import QA from "./questions";
 
 const Title = styled.div`
   margin-top: 20px;
@@ -18,7 +19,8 @@ const Container = styled.div`
   padding: 20px;
   ${MEDIA_QUERY.desktop} {
     width: 60%;
-    margin: 40px auto;
+    margin: 0px auto;
+    margin-bottom: 60px;
   }
 `;
 const Q = styled.div`
@@ -27,20 +29,23 @@ const Q = styled.div`
   justify-content: space-between;
   border-bottom: ${({ $isOpen }) =>
     $isOpen ? "none" : `2px solid ${COLOR.border_light_grey}`};
-  h2 {
-    font-size: ${FONT_SIZE.md};
-    font-weight: bold;
-    ${MEDIA_QUERY.desktop} {
-      font-size: ${FONT_SIZE.lg};
-    }
+  font-size: ${FONT_SIZE.sm};
+  font-weight: bold;
+  ${MEDIA_QUERY.desktop} {
+    font-size: ${FONT_SIZE.lg};
   }
 `;
 const A = styled.div`
   padding: 20px;
-  width: 90%;
   display: ${({ $isOpen }) => ($isOpen ? "block" : "none")};
+  text-align: left;
+  font-size: ${FONT_SIZE.sm};
+  border-bottom: ${({ $isOpen }) =>
+    $isOpen ? `2px solid ${COLOR.border_light_grey}` : `none`};
   div {
-    text-align: left;
+    width: 90%;
+  }
+  ${MEDIA_QUERY.desktop} {
     font-size: ${FONT_SIZE.md};
   }
 `;
@@ -50,40 +55,34 @@ const Toggle = styled(KeyboardArrowDownRoundedIcon)`
   transform: ${({ $isOpen }) => ($isOpen ? "rotate(180deg)" : "none")};
 `;
 
-// 問題：問題要怎麼分開展開？又要怎麼一次只開一個問題？
-export default function FAQ() {
+// 問題：要怎麼限制一次只能展開一個答案？
+function Item({ qa }) {
   const [isOpen, setIsOpen] = useState(false);
   const toggleOpen = () => {
     setIsOpen(!isOpen);
   };
   return (
+    <>
+      <Q $isOpen={isOpen}>
+        {qa.question} <Toggle onClick={toggleOpen} $isOpen={isOpen} />
+      </Q>
+      <A $isOpen={isOpen}>
+        <div>{qa.answer}</div>
+      </A>
+    </>
+  );
+}
+export default function FAQ() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
+  return (
     <PageWidth>
       <Title>常見問題</Title>
       <Container>
-        <Q $isOpen={isOpen}>
-          <h2>如何加入會員？</h2>
-          <Toggle onClick={toggleOpen} $isOpen={isOpen} />
-        </Q>
-        <A $isOpen={isOpen}>
-          <div>
-            在 IKEA，如果你對於購買的產品不滿意，你可在 365
-            天內，攜帶完好的商品、原始包裝、統一發票及明細（刷卡購買者需信用卡與簽單）到
-            IKEA 分店退換貨。完整退換貨資訊請點選這裡。
-            或是你也可以與IKEA客服連繫確認，請點選這裡確認各分店連絡方式。
-          </div>
-        </A>
-        <Q $isOpen={isOpen}>
-          <h2>如何加入會員？</h2>
-          <Toggle onClick={toggleOpen} $isOpen={isOpen} />
-        </Q>
-        <A $isOpen={isOpen}>
-          <div>
-            在 IKEA，如果你對於購買的產品不滿意，你可在 365
-            天內，攜帶完好的商品、原始包裝、統一發票及明細（刷卡購買者需信用卡與簽單）到
-            IKEA 分店退換貨。完整退換貨資訊請點選這裡。
-            或是你也可以與IKEA客服連繫確認，請點選這裡確認各分店連絡方式。
-          </div>
-        </A>
+        {QA.map((qa) => (
+          <Item qa={qa} />
+        ))}
       </Container>
     </PageWidth>
   );

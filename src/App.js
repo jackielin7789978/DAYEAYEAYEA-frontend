@@ -17,10 +17,12 @@ import {
 import { Brand, FAQ, Join, Notice, Privacy } from "./pages/InfoPages/index";
 import { PageHeight } from "./components/common";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import { ScrollToTop } from "./utils";
 
 export default function App() {
   return (
     <Router basename="/">
+      <ScrollToTop />
       <Navbar />
       <PageHeight>
         <Switch>
