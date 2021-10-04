@@ -84,29 +84,26 @@ const LOGO = styled(Link)`
 
 const SearchBTN = styled(SearchIcon)`
   cursor: pointer;
-  margin: 0 5px;
   ${MEDIA_QUERY.desktop} {
     position: absolute;
     top: -32px;
-    right: 160px;
+    right: 10vw;
   }
 `;
 const AccountBTN = styled(AccountCircleOutlinedIcon)`
   cursor: pointer;
-  margin: 0 5px;
   ${MEDIA_QUERY.desktop} {
     position: absolute;
     top: -32px;
-    right: 110px;
+    right: 7vw;
   }
 `;
 const CartBTN = styled(ShoppingCartOutlinedIcon)`
   cursor: pointer;
-  margin: 0 5px;
   ${MEDIA_QUERY.desktop} {
     position: absolute;
     top: -32px;
-    right: 60px;
+    right: 4vw;
   }
 `;
 function Search() {
