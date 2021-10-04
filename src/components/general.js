@@ -17,7 +17,6 @@ export const PageWidth = styled.div`
   width: 90%;
   margin: 0 auto;
   text-align: center;
-  border: 1px solid transparent;
   ${MEDIA_QUERY.desktop} {
     max-width: 1200px;
   }
