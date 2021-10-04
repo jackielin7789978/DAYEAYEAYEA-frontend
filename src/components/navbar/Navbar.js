@@ -76,37 +76,37 @@ const LOGO = styled(Link)`
   &:hover {
     color: ${COLOR.text_dark};
   }
-  ${MEDIA_QUERY.desktop} {
+  ${MEDIA_QUERY.tablet} {
     font-size: ${FONT_SIZE.xxl};
+  }
+  ${MEDIA_QUERY.desktop} {
+    font-size: ${FONT_SIZE.xxxl};
     position: relative;
   }
 `;
 
 const SearchBTN = styled(SearchIcon)`
   cursor: pointer;
-  margin: 0 5px;
   ${MEDIA_QUERY.desktop} {
     position: absolute;
     top: -32px;
-    right: 160px;
+    right: 19vw;
   }
 `;
 const AccountBTN = styled(AccountCircleOutlinedIcon)`
   cursor: pointer;
-  margin: 0 5px;
   ${MEDIA_QUERY.desktop} {
     position: absolute;
     top: -32px;
-    right: 110px;
+    right: 16vw;
   }
 `;
 const CartBTN = styled(ShoppingCartOutlinedIcon)`
   cursor: pointer;
-  margin: 0 5px;
   ${MEDIA_QUERY.desktop} {
     position: absolute;
     top: -32px;
-    right: 60px;
+    right: 13vw;
   }
 `;
 function Search() {

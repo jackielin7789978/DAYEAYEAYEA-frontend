@@ -36,6 +36,9 @@ const Category = styled(Link)`
   &:hover {
     color: ${COLOR.text_primary_dark};
   }
+  ${MEDIA_QUERY.tablet} {
+    font-size: ${FONT_SIZE.lg};
+  }
   ${MEDIA_QUERY.desktop} {
     color: ${COLOR.text_dark};
     font-size: ${FONT_SIZE.md};

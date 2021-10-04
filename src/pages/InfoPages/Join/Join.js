@@ -26,9 +26,7 @@ const BTN1 = styled(TempBTN)`
   border: 1px solid transparent;
   color: ${COLOR.text_light};
   &:hover {
-    background: ${COLOR.light};
-    color: ${COLOR.primary_light};
-    border: 1px solid ${COLOR.primary_light};
+    background: ${COLOR.primary_light_hover};
   }
 `;
 const BTN2 = styled(TempBTN)`

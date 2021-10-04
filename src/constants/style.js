@@ -1,16 +1,16 @@
 export const COLOR = {
   primary_light: "#D2C9B1",
-  primary_light_hover: "#D2C9B1cc",
+  primary_light_hover: "#b5a988",
   primary_dark: "#9A8B66",
-  warning: "#FFA100",
-  warning_hover: "#FFA100cc",
+  warning: "#ffb22e",
+  warning_hover: "#f7a100",
   accent: "#5B756E",
-  accent_hover: "#304f47",
+  accent_hover: "#35574e",
   light: "#fff",
 
   text_primary_light: "#D2C9B1",
   text_primary_dark: "#9A8B66",
-  text_warning: "#FFA100",
+  text_warning: "#ffb22e",
   text_light: "#fff",
   text_dark: "#333",
   text_grey: "#999",
@@ -29,12 +29,13 @@ export const FONT = {
 };
 
 export const FONT_SIZE = {
-  xxl: "42px",
-  xl: "30px",
+  xxxl: "42px",
+  xxl: "30px",
+  xl: "24px",
   lg: "20px",
   md: "16px",
   sm: "14px",
-  tablet: "24px", //要不要再加這個大小?
+  xs: "12px",
 };
 
 export const EFFECT = {

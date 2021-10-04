@@ -1,13 +1,13 @@
 // Admin Pages 還沒加進來
 import Articles from "./Articles";
-import Step1 from "./CartPages/Step1";
-import Step2 from "./CartPages/Step2";
-import Step3 from "./CartPages/Step3";
+import Step1 from "./Checkout/Step1";
+import Step2 from "./Checkout/Step2";
+import Step3 from "./Checkout/Step3";
 import Categories from "./Categories";
 import Home from "./Home";
 import Login from "./Login";
 import Me from "./MemberPages/Me";
-import MemberInfo from "./MemberPages/MemberInfo";
+import ModifyInfo from "./MemberPages/ModifyInfo";
 import OrderDetail from "./MemberPages/OrderDetail";
 import Orders from "./MemberPages/Orders";
 import Products from "./Products";
@@ -21,7 +21,7 @@ export {
   Home,
   Login,
   Me,
-  MemberInfo,
+  ModifyInfo,
   OrderDetail,
   Orders,
   Products,
