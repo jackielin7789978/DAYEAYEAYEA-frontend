@@ -9,7 +9,7 @@ import {
   Home,
   Login,
   Me,
-  MemberInfo,
+  ModifyInfo,
   OrderDetail,
   Orders,
   Products,
@@ -29,13 +29,13 @@ export default function App() {
           <Route path="/articles/:slug">
             <Articles />
           </Route>
-          <Route path="/cart/step1">
+          <Route path="/checkout/step1">
             <Step1 />
           </Route>
-          <Route path="/cart/step2">
+          <Route path="/checkout/step2">
             <Step2 />
           </Route>
-          <Route path="/cart/step3">
+          <Route path="/checkout/step3">
             <Step3 />
           </Route>
           <Route path="/categories/:slug">
@@ -44,16 +44,20 @@ export default function App() {
           <Route path="/login">
             <Login />
           </Route>
-          <Route path="/member-info">
-            <MemberInfo />
-          </Route>
-          <Route path="/me">
+          <Route path="/member/me">
+            {/* 會員首頁 */}
             <Me />
           </Route>
-          <Route path="/orders/order-detail">
+          <Route path="/member/modify-info">
+            {/* 修改資料頁面 */}
+            <ModifyInfo />
+          </Route>
+          <Route path="/member/orders/order-detail">
+            {/* 訂單詳細資料頁面 */}
             <OrderDetail />
           </Route>
-          <Route path="/orders">
+          <Route path="/member/orders">
+            {/* 訂單頁面 */}
             <Orders />
           </Route>
           <Route path="/products/:slug">

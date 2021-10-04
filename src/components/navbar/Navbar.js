@@ -76,8 +76,11 @@ const LOGO = styled(Link)`
   &:hover {
     color: ${COLOR.text_dark};
   }
-  ${MEDIA_QUERY.desktop} {
+  ${MEDIA_QUERY.tablet} {
     font-size: ${FONT_SIZE.xxl};
+  }
+  ${MEDIA_QUERY.desktop} {
+    font-size: ${FONT_SIZE.xxxl};
     position: relative;
   }
 `;
@@ -87,7 +90,7 @@ const SearchBTN = styled(SearchIcon)`
   ${MEDIA_QUERY.desktop} {
     position: absolute;
     top: -32px;
-    right: 10vw;
+    right: 19vw;
   }
 `;
 const AccountBTN = styled(AccountCircleOutlinedIcon)`
@@ -95,7 +98,7 @@ const AccountBTN = styled(AccountCircleOutlinedIcon)`
   ${MEDIA_QUERY.desktop} {
     position: absolute;
     top: -32px;
-    right: 7vw;
+    right: 16vw;
   }
 `;
 const CartBTN = styled(ShoppingCartOutlinedIcon)`
@@ -103,7 +106,7 @@ const CartBTN = styled(ShoppingCartOutlinedIcon)`
   ${MEDIA_QUERY.desktop} {
     position: absolute;
     top: -32px;
-    right: 4vw;
+    right: 13vw;
   }
 `;
 function Search() {

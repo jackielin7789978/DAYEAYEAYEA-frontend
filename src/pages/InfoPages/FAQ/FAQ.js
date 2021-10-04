@@ -11,11 +11,11 @@ const Title = styled.div`
   font-weight: bold;
   ${MEDIA_QUERY.tablet} {
     margin-top: 80px;
-    font-size: ${FONT_SIZE.tablet};
+    font-size: ${FONT_SIZE.xl};
   }
   ${MEDIA_QUERY.desktop} {
     margin-top: 80px;
-    font-size: ${FONT_SIZE.xl};
+    font-size: ${FONT_SIZE.xxl};
   }
 `;
 const Container = styled.div`
@@ -41,7 +41,7 @@ const Q = styled.div`
   border-bottom: ${({ $isOpen }) =>
     $isOpen ? "none" : `2px solid ${COLOR.border_light_grey}`};
   div {
-    font-size: ${FONT_SIZE.md};
+    font-size: ${FONT_SIZE.sm};
     font-weight: bold;
     text-align: left;
     margin-right: 4px;
@@ -63,6 +63,9 @@ const A = styled.div`
   div {
     width: 90%;
     text-align: left;
+  }
+  ${MEDIA_QUERY.tablet} {
+    font-size: ${FONT_SIZE.md};
   }
   ${MEDIA_QUERY.desktop} {
     font-size: ${FONT_SIZE.md};
