@@ -1,18 +1,20 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 import {
   COLOR,
   FONT,
   FONT_SIZE,
   EFFECT,
-  MEDIA_QUERY,
-} from "../../constants/style";
-import { Link } from "react-router-dom";
-import SearchIcon from "@mui/icons-material/Search";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import Menu from "./Menu";
-import Burger from "./Burger";
-import { useState } from "react";
+  MEDIA_QUERY
+} from '../../constants/style'
+import { Link } from 'react-router-dom'
+import SearchIcon from '@mui/icons-material/Search'
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined'
+import MenuIcon from '@mui/icons-material/Menu'
+import CloseIcon from '@mui/icons-material/Close'
+import Menu from './Menu'
+import { useState } from 'react'
+import Cart from '../cartSystem/Cart'
 
 const DesktopBar = styled.div`
   ${MEDIA_QUERY.desktop} {
@@ -23,7 +25,7 @@ const DesktopBar = styled.div`
     background: ${COLOR.primary_light};
     z-index: 1;
   }
-`;
+`
 const DesktopContainer = styled.div`
   ${MEDIA_QUERY.desktop} {
     background: ${COLOR.light};
@@ -37,7 +39,7 @@ const DesktopContainer = styled.div`
     box-shadow: ${EFFECT.shadow_dark};
     z-index: 2;
   }
-`;
+`
 const Nav = styled.nav`
   background: ${COLOR.primary_light};
   position: fixed;
@@ -67,7 +69,24 @@ const Nav = styled.nav`
     height: 90px;
     box-shadow: none;
   }
-`;
+`
+const BurgerBTN = styled(MenuIcon)`
+  cursor: pointer;
+  display: ${({ $isClicked }) => ($isClicked ? 'none' : 'inline-block')};
+  ${MEDIA_QUERY.desktop} {
+    display: none;
+  }
+`
+const CloseBTN = styled(CloseIcon)`
+  cursor: pointer;
+  position: absolute;
+  top: 13px;
+  left: 30px;
+  display: ${({ $isClicked }) => ($isClicked ? 'inline-block' : 'none')};
+  ${MEDIA_QUERY.desktop} {
+    display: none;
+  }
+`
 const LOGO = styled(Link)`
   text-decoration: none;
   font-size: ${FONT_SIZE.lg};
@@ -83,7 +102,7 @@ const LOGO = styled(Link)`
     font-size: ${FONT_SIZE.xxxl};
     position: relative;
   }
-`;
+`
 
 const SearchBTN = styled(SearchIcon)`
   cursor: pointer;
@@ -92,7 +111,7 @@ const SearchBTN = styled(SearchIcon)`
     top: -32px;
     right: 19vw;
   }
-`;
+`
 const AccountBTN = styled(AccountCircleOutlinedIcon)`
   cursor: pointer;
   ${MEDIA_QUERY.desktop} {
@@ -100,7 +119,7 @@ const AccountBTN = styled(AccountCircleOutlinedIcon)`
     top: -32px;
     right: 16vw;
   }
-`;
+`
 const CartBTN = styled(ShoppingCartOutlinedIcon)`
   cursor: pointer;
   ${MEDIA_QUERY.desktop} {
@@ -108,37 +127,10 @@ const CartBTN = styled(ShoppingCartOutlinedIcon)`
     top: -32px;
     right: 13vw;
   }
-`;
-function Search() {
-  return (
-    <SearchBTN>
-      <SearchIcon />
-    </SearchBTN>
-  );
-}
-function Account() {
-  return (
-    <AccountBTN>
-      <AccountCircleOutlinedIcon />
-    </AccountBTN>
-  );
-}
-function Cart() {
-  return (
-    <CartBTN>
-      <ShoppingCartOutlinedIcon />
-    </CartBTN>
-  );
-}
+`
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const handleOpen = () => {
-    setIsOpen(true);
-  };
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  const [menu, setMenu] = useState('')
 
   return (
     <>
@@ -146,21 +138,49 @@ export default function Navbar() {
       <DesktopContainer>
         <Nav>
           <p>
-            <Burger
-              $isOpen={isOpen}
-              handleOpen={handleOpen}
-              handleClose={handleClose}
+            {!menu && (
+              <BurgerBTN
+                onClick={() => {
+                  setMenu('menu')
+                }}
+                $isClicked={menu === 'menu' ? true : false}
+              />
+            )}
+            <CloseBTN
+              onClick={() => {
+                setMenu('')
+              }}
+              $isClicked={menu !== '' ? true : false}
             />
-            <Search />
+            {!menu && (
+              <SearchBTN
+                onClick={() => {
+                  setMenu('search')
+                }}
+              />
+            )}
           </p>
-          <LOGO to="/">DAYEAYEAYEA</LOGO>
+          <LOGO to='/'>DAYEAYEAYEA</LOGO>
           <p>
-            <Account />
-            <Cart />
+            {!menu && (
+              <AccountBTN
+                onClick={() => {
+                  setMenu('account')
+                }}
+              />
+            )}
+            {!menu && (
+              <CartBTN
+                onClick={() => {
+                  setMenu('cart')
+                }}
+              />
+            )}
           </p>
         </Nav>
-        <Menu $isOpen={isOpen} />
+        <Menu $isOpen={menu === 'menu' ? true : false} />
+        <Cart $isOpen={menu === 'cart' ? true : false} />
       </DesktopContainer>
     </>
-  );
+  )
 }
