@@ -6,6 +6,7 @@ export const COLOR = {
   warning_hover: "#f7a100",
   accent: "#5B756E",
   accent_hover: "#35574e",
+  light_grey: "#cecece",
   light: "#fff",
 
   text_primary_light: "#D2C9B1",

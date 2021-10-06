@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PageWidth } from "../../../components/general";
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from "../../../constants/style";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
@@ -96,9 +96,6 @@ function Item({ qa }) {
   );
 }
 export default function FAQ() {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  });
   return (
     <PageWidth>
       <Title>常見問題</Title>
