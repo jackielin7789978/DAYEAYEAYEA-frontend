@@ -6,21 +6,20 @@ const HoverArea = styled.div`
   position: fixed;
   height: 100vh;
   width: 100%;
-  transition: linear 0.3s;
   top: ${({ $isOpen }) => ($isOpen ? '50px' : '-100vh')};
   background: ${COLOR.light};
   z-index: 1;
   ${MEDIA_QUERY.desktop} {
-    transition: linear 0.2s;
+    transition: ease 0.2s;
     height: ${({ $isOpen }) => ($isOpen ? 'unset' : '0px')};
     width: ${({ $isOpen }) => ($isOpen ? '380px' : 'unset')};
     top: 40px;
-    right: 14vw;
+    right: 60px;
     background: transparent;
   }
 `
 const MenuContainer = styled.div`
-  width: 100%;
+  width: 84%;
   margin: 30px auto;
   button {
     width: 100%;
@@ -30,6 +29,7 @@ const MenuContainer = styled.div`
     border-radius: 3px;
   }
   ${MEDIA_QUERY.desktop} {
+    width: unset;
     outline: 1px solid
       ${({ $isOpen }) => ($isOpen ? COLOR.primary_light : 'transparent')};
     height: ${({ $isOpen }) => ($isOpen ? '100%' : '0px')};
@@ -103,7 +103,6 @@ export default function CartMenu({ handleHover, $isOpen }) {
           </Triangle>
           <Title>購物車</Title>
           <Items>
-            <CartItem />
             <CartItem />
             <CartItem />
             <CartItem />
