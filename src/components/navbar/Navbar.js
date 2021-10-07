@@ -49,13 +49,24 @@ const Nav = styled.nav`
   justify-content: space-around;
   align-items: center;
   z-index: 2;
-  p {
-    margin: 0 5%;
-    width: 100px;
-    display: flex;
-    justify-content: space-around;
-
+  p:first-child {
+    position: absolute;
+    top: 13px;
+    left: 2vw;
     ${MEDIA_QUERY.desktop} {
+      position: static;
+      top: 0;
+      width: 0;
+      margin: 0;
+    }
+  }
+  p:last-child {
+    position: absolute;
+    top: 13px;
+    right: 2vw;
+    ${MEDIA_QUERY.desktop} {
+      position: static;
+      top: 0;
       width: 0;
       margin: 0;
     }
@@ -70,27 +81,10 @@ const Nav = styled.nav`
     box-shadow: none;
   }
 `
-const BurgerBTN = styled(MenuIcon)`
-  cursor: pointer;
-  display: ${({ $isClicked }) => ($isClicked ? 'none' : 'inline-block')};
-  ${MEDIA_QUERY.desktop} {
-    display: none;
-  }
-`
-const CloseBTN = styled(CloseIcon)`
-  cursor: pointer;
-  position: absolute;
-  top: 13px;
-  left: 30px;
-  display: ${({ $isClicked }) => ($isClicked ? 'inline-block' : 'none')};
-  ${MEDIA_QUERY.desktop} {
-    display: none;
-  }
-`
 const LOGO = styled(Link)`
   text-decoration: none;
-  font-size: ${FONT_SIZE.lg};
   color: ${COLOR.text_dark};
+  font-size: ${FONT_SIZE.xl};
   font-family: ${FONT.logo};
   &:hover {
     color: ${COLOR.text_dark};
@@ -103,25 +97,45 @@ const LOGO = styled(Link)`
     position: relative;
   }
 `
-
+const BurgerBTN = styled(MenuIcon)`
+  cursor: pointer;
+  margin: 0 2vw;
+  display: ${({ $isClicked }) => ($isClicked ? 'none' : 'inline-block')};
+  ${MEDIA_QUERY.desktop} {
+    position: absolute;
+    display: none;
+  }
+`
+const CloseBTN = styled(CloseIcon)`
+  cursor: pointer;
+  margin: 0 2vw;
+  display: ${({ $isClicked }) => ($isClicked ? 'inline-block' : 'none')};
+  ${MEDIA_QUERY.desktop} {
+    position: absolute;
+    display: none;
+  }
+`
 const SearchBTN = styled(SearchIcon)`
   cursor: pointer;
+  margin: 0 2vw;
   ${MEDIA_QUERY.desktop} {
     position: absolute;
     top: -32px;
-    right: 19vw;
+    right: 21vw;
   }
 `
 const AccountBTN = styled(AccountCircleOutlinedIcon)`
   cursor: pointer;
+  margin: 0 2vw;
   ${MEDIA_QUERY.desktop} {
     position: absolute;
     top: -32px;
-    right: 16vw;
+    right: 17vw;
   }
 `
 const CartBTN = styled(ShoppingCartOutlinedIcon)`
   cursor: pointer;
+  margin: 0 2vw;
   ${MEDIA_QUERY.desktop} {
     position: absolute;
     top: -32px;

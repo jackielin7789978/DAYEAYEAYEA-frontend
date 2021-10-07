@@ -1,16 +1,21 @@
 import styled from 'styled-components'
-import { COLOR, FONT_SIZE } from '../../constants/style'
+import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import CartItem from './CartItem'
 
 const CartContainer = styled.div`
   position: fixed;
   height: 100vh;
+  width: 100%;
   transition: linear 0.3s;
   top: ${({ $isOpen }) => ($isOpen ? '50px' : '-100vh')};
-  left: 0;
-  right: 0;
   background: ${COLOR.light};
   z-index: 1;
+  ${MEDIA_QUERY.desktop} {
+    height: 420px;
+    width: 360px;
+    top: 130px;
+    right: 0px;
+  }
 `
 const Wrapper = styled.div`
   width: 84%;
@@ -21,6 +26,9 @@ const Wrapper = styled.div`
     background: ${COLOR.primary_light};
     color: #fff;
     border-radius: 3px;
+  }
+  ${MEDIA_QUERY.desktop} {
+    margin: 10px auto;
   }
 `
 const Title = styled.div`
@@ -34,6 +42,9 @@ const TotalPrice = styled.div`
   font-size: ${FONT_SIZE.sm};
   font-weight: bold;
   margin: 30px 0px;
+  ${MEDIA_QUERY.desktop} {
+    margin: 20px 0px;
+  }
 `
 
 export default function Cart({ $isOpen }) {
