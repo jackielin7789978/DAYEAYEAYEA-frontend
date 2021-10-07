@@ -1,5 +1,5 @@
-import { createGlobalStyle } from "styled-components";
-import { COLOR } from "./style";
+import { createGlobalStyle } from 'styled-components'
+import { COLOR } from './style'
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -53,6 +53,6 @@ const GlobalStyle = createGlobalStyle`
   img {
     height: 600px;
   }
-`;
+`
 
-export default GlobalStyle;
+export default GlobalStyle

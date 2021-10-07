@@ -14,7 +14,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
 import Menu from './Menu'
 import { useState } from 'react'
-import Cart from '../cartSystem/Cart'
+import CartMenu from '../cartSystem/CartMenu'
 
 const DesktopBar = styled.div`
   ${MEDIA_QUERY.desktop} {
@@ -133,18 +133,23 @@ const AccountBTN = styled(AccountCircleOutlinedIcon)`
     right: 17vw;
   }
 `
-const CartBTN = styled(ShoppingCartOutlinedIcon)`
+const CartBTN = styled.div`
   cursor: pointer;
   margin: 0 2vw;
   ${MEDIA_QUERY.desktop} {
+    margin-right: 30px;
+    padding: 5px;
     position: absolute;
-    top: -32px;
-    right: 13vw;
+    top: -37px;
+    right: 14vw;
   }
 `
 
 export default function Navbar() {
   const [menu, setMenu] = useState('')
+  const handleHover = (name) => {
+    setMenu(name)
+  }
 
   return (
     <>
@@ -152,48 +157,51 @@ export default function Navbar() {
       <DesktopContainer>
         <Nav>
           <p>
-            {!menu && (
-              <BurgerBTN
-                onClick={() => {
-                  setMenu('menu')
-                }}
-                $isClicked={menu === 'menu' ? true : false}
-              />
-            )}
+            <BurgerBTN
+              onClick={() => {
+                setMenu('menu')
+              }}
+              $isClicked={menu === 'menu' ? true : false}
+            />
             <CloseBTN
               onClick={() => {
                 setMenu('')
               }}
               $isClicked={menu !== '' ? true : false}
             />
-            {!menu && (
-              <SearchBTN
-                onClick={() => {
-                  setMenu('search')
-                }}
-              />
-            )}
+            <SearchBTN
+              onClick={() => {
+                setMenu('search')
+              }}
+            />
           </p>
           <LOGO to='/'>DAYEAYEAYEA</LOGO>
           <p>
-            {!menu && (
-              <AccountBTN
-                onClick={() => {
-                  setMenu('account')
-                }}
-              />
-            )}
-            {!menu && (
-              <CartBTN
-                onClick={() => {
-                  setMenu('cart')
-                }}
-              />
-            )}
+            <AccountBTN
+              onClick={() => {
+                setMenu('account')
+              }}
+            />
+            <CartBTN
+              onClick={() => {
+                setMenu('cart')
+              }}
+              onMouseOver={() => {
+                setMenu('cart')
+              }}
+              onMouseOut={() => {
+                setMenu('')
+              }}
+            >
+              <ShoppingCartOutlinedIcon />
+            </CartBTN>
           </p>
         </Nav>
         <Menu $isOpen={menu === 'menu' ? true : false} />
-        <Cart $isOpen={menu === 'cart' ? true : false} />
+        <CartMenu
+          handleHover={handleHover}
+          $isOpen={menu === 'cart' ? true : false}
+        />
       </DesktopContainer>
     </>
   )
