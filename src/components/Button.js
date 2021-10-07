@@ -1,8 +1,8 @@
-import styled from 'styled-components';
-import { COLOR, FONT_SIZE } from '../constants/style';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import styled from 'styled-components'
+import { COLOR, FONT_SIZE } from '../constants/style'
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
 
 const ButtonStyle = styled.button`
   display: inline-block;
@@ -45,32 +45,32 @@ const ButtonStyle = styled.button`
      border: 1.5px solid ${COLOR.border_primary};
      color: ${COLOR.primary_light}
   `};
-`;
+`
 
 const ShoppingCardIcon = styled(ShoppingCartOutlinedIcon)`
   fill: ${COLOR.light};
   margin-right: 6px;
   margin-bottom: 2px;
-`;
+`
 
 const ColorShoppingCardIcon = styled(ShoppingCartOutlinedIcon)`
   fill: ${COLOR.primary_light};
   margin-right: 6px;
   margin-bottom: 2px;
-`;
+`
 
 const WhiteArrowForwardIcon = styled(ArrowForwardIcon)`
   fill: ${COLOR.light};
   margin-left: 6px;
   margin-bottom: 1px;
-`;
+`
 
 const BorderColorIcon = styled(BorderColorOutlinedIcon)`
   fill: ${COLOR.light};
   margin-left: 6px;
   margin-bottom: 1px;
   font-size: large;
-`;
+`
 
 function ShoppingCarBtn({ color, children, marginStyle }) {
   return (
@@ -78,16 +78,16 @@ function ShoppingCarBtn({ color, children, marginStyle }) {
       <ShoppingCardIcon />
       {children}
     </ButtonStyle>
-  );
+  )
 }
 
 function ShoppingCarWhiteBtn({ children, marginStyle }) {
   return (
-    <ButtonStyle color="white" style={marginStyle}>
+    <ButtonStyle color='white' style={marginStyle}>
       <ColorShoppingCardIcon />
       {children}
     </ButtonStyle>
-  );
+  )
 }
 
 function ArrowBtn({ color, children, marginStyle }) {
@@ -96,7 +96,7 @@ function ArrowBtn({ color, children, marginStyle }) {
       {children}
       <WhiteArrowForwardIcon />
     </ButtonStyle>
-  );
+  )
 }
 
 function EditBtn({ color, children, marginStyle }) {
@@ -105,7 +105,7 @@ function EditBtn({ color, children, marginStyle }) {
       {children}
       <BorderColorIcon />
     </ButtonStyle>
-  );
+  )
 }
 
 function GeneralBtn({ color, children, marginStyle }) {
@@ -113,7 +113,7 @@ function GeneralBtn({ color, children, marginStyle }) {
     <ButtonStyle color={color} style={marginStyle}>
       {children}
     </ButtonStyle>
-  );
+  )
 }
 
-export { ShoppingCarBtn, ArrowBtn, EditBtn, GeneralBtn, ShoppingCarWhiteBtn };
+export { ShoppingCarBtn, ArrowBtn, EditBtn, GeneralBtn, ShoppingCarWhiteBtn }

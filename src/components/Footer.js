@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { COLOR, FONT, FONT_SIZE } from "../constants/style";
-import { Link } from "react-router-dom";
+import styled from 'styled-components';
+import { COLOR, FONT, FONT_SIZE } from '../constants/style';
+import { Link } from 'react-router-dom';
 
 const FooterContainer = styled.div`
   font-family: ${FONT.logo};

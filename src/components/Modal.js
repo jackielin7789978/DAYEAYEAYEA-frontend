@@ -1,5 +1,6 @@
-import styled from 'styled-components';
-import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../constants/style';
+import styled from 'styled-components'
+import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../constants/style'
+import CancelRoundedIcon from '@mui/icons-material/CancelRounded'
 
 const FixedBackground = styled.div`
   position: fixed;
@@ -11,7 +12,7 @@ const FixedBackground = styled.div`
   background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
-`;
+`
 
 const ModalContent = styled.div`
   background: ${COLOR.light};
@@ -39,24 +40,33 @@ const ModalContent = styled.div`
     height: 260px;
     width: 420px;
   }
-`;
+`
 
 const ModalIconDiv = styled.div`
   margin-bottom: 20px;
-`;
+`
 
 const ModalBtnDiv = styled.div`
   margin-top: 30px;
   display: flex;
   justify-content: space-around;
-`;
+`
 
 const ModalContentDiv = styled.div`
   word-wrap: break-word;
-`;
+`
+
+const CancelRoundedColorIcon = styled(CancelRoundedIcon)`
+  position: absolute;
+  top: 12px;
+  left: 15px;
+  fill: #cecece;
+  font-size: 32px;
+  cursor: pointer;
+`
 
 function ModalIcon({ icon }) {
-  return <ModalIconDiv>{icon}</ModalIconDiv>;
+  return <ModalIconDiv>{icon}</ModalIconDiv>
 }
 
 function ModalButton({ buttonOne, buttonTwo }) {
@@ -65,17 +75,18 @@ function ModalButton({ buttonOne, buttonTwo }) {
       {buttonOne}
       {buttonTwo}
     </ModalBtnDiv>
-  );
+  )
 }
 
 function GeneralModal({ icon, children, buttonOne, buttonTwo }) {
   return (
     <ModalContent>
+      <CancelRoundedColorIcon />
       <ModalIcon icon={icon} />
       <ModalContentDiv>{children}</ModalContentDiv>
       <ModalButton buttonOne={buttonOne} buttonTwo={buttonTwo}></ModalButton>
     </ModalContent>
-  );
+  )
 }
 
 function FullModal({ icon, children, buttonOne, buttonTwo }) {
@@ -88,7 +99,7 @@ function FullModal({ icon, children, buttonOne, buttonTwo }) {
         buttonTwo={buttonTwo}
       />
     </FixedBackground>
-  );
+  )
 }
 
-export { FullModal, GeneralModal };
+export { FullModal, GeneralModal }
