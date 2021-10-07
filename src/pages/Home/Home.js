@@ -3,16 +3,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import styled from 'styled-components'
 import { PageWidth, FullWidth, ImgAnchor } from '../../components/general'
 import Card from '../../components/Card_test/Card'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
-import { FullModal, GeneralModal } from '../../components/Modal'
-import {
-  ShoppingCarBtn,
-  ShoppingCarWhiteBtn,
-  ArrowBtn,
-  EditBtn,
-  GeneralBtn
-} from '../../components/Button'
-import { IsLoadingComponent } from '../../components/IsLoading'
 import { PaginatorButton } from '../../components/Paginator'
 import { Link, useLocation } from 'react-router-dom'
 
@@ -75,36 +65,7 @@ export default function Home() {
         </Carousel>
       </FullWidth>
       <PageWidth>
-        {/* <IsLoadingComponent /> */}
-        <FullModal
-          buttonOne={
-            <ShoppingCarBtn
-              color='primary'
-              marginStyle={{ marginRight: '8px' }}
-            >
-              結帳
-            </ShoppingCarBtn>
-          }
-          buttonTwo={<EditBtn color='accent'>編輯</EditBtn>}
-        >
-          已成功加入購物車!
-        </FullModal>
-        {/* <GeneralModal
-          buttonOne={
-            <ArrowBtn marginStyle={{ marginRight: '8px' }} color='primary' />
-          }
-          buttonTwo={<EditBtn color='accent'>編輯</EditBtn>}
-        >
-          確定要取消此訂單?
-        </GeneralModal> */}
         <CardContainer>
-          {/* <ArrowBtn>註冊</ArrowBtn>
-          <EditBtn color="accent">編輯</EditBtn>
-          <ShoppingCarBtn color="primary">前往結帳</ShoppingCarBtn> */}
-          <GeneralBtn>取消訂單</GeneralBtn>
-          {/* <Link style={{ width: '100%' }} to='/info/join'>
-            <ShoppingCarWhiteBtn />
-          </Link> */}
           <Card />
           <Card />
           <Card />

@@ -14,7 +14,7 @@ const ButtonStyle = styled.button`
   height: 36px;
   width: 100%;
   transition: linear 0.2s;
-  background: #cecece;
+  background: ${COLOR.light_grey};
   ${(props) =>
     props.color === 'primary' &&
     `background: ${COLOR.primary_light};
