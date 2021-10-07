@@ -1,11 +1,13 @@
 import styled from 'styled-components'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import CartItem from './CartItem'
+import { ShoppingCarBtn } from '../Button'
 
 const HoverArea = styled.div`
   position: fixed;
   height: 100vh;
   width: 100%;
+  transition: linear 0.3s;
   top: ${({ $isOpen }) => ($isOpen ? '50px' : '-100vh')};
   background: ${COLOR.light};
   z-index: 1;
@@ -41,6 +43,7 @@ const MenuContainer = styled.div`
   }
 `
 const Wrapper = styled.div`
+  position: relative;
   ${MEDIA_QUERY.desktop} {
     display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
   }
@@ -54,8 +57,8 @@ const Triangle = styled.div`
     border-right: 15px solid transparent;
     border-bottom: 15px solid ${COLOR.primary_light};
     position: absolute;
-    top: -15px;
-    right: 30px;
+    top: -31px;
+    right: 15px;
 
     p {
       width: 0;
@@ -74,14 +77,20 @@ const Title = styled.div`
   font-size: ${FONT_SIZE.md};
   font-weight: bold;
 `
-const Items = styled.div``
 const TotalPrice = styled.div`
   text-align: right;
   font-size: ${FONT_SIZE.sm};
   font-weight: bold;
-  margin: 30px 0px;
+  margin: 30px 4px;
   ${MEDIA_QUERY.desktop} {
-    margin: 20px 0px;
+    margin: 20px 4px;
+  }
+`
+const RestyledBtn = styled.div`
+  ${MEDIA_QUERY.tablet} {
+    position: absolute;
+    right: 0;
+    width: 250px;
   }
 `
 
@@ -102,13 +111,13 @@ export default function CartMenu({ handleHover, $isOpen }) {
             <p></p>
           </Triangle>
           <Title>購物車</Title>
-          <Items>
-            <CartItem />
-            <CartItem />
-            <CartItem />
-            <TotalPrice>總金額 NT$ 3900</TotalPrice>
-            <button>訂單結帳</button>
-          </Items>
+          <CartItem />
+          <CartItem />
+          <CartItem />
+          <TotalPrice>總金額 NT$ 3900</TotalPrice>
+          <RestyledBtn>
+            <ShoppingCarBtn>訂單結帳</ShoppingCarBtn>
+          </RestyledBtn>
         </Wrapper>
       </MenuContainer>
     </HoverArea>

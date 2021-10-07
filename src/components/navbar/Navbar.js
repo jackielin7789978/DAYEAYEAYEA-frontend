@@ -168,6 +168,7 @@ const CartBTN = styled.div`
 export default function Navbar() {
   const [menu, setMenu] = useState('')
   const handleHover = (name) => {
+    if (window.innerWidth < 1200) return
     setMenu(name)
   }
 
@@ -215,10 +216,10 @@ export default function Navbar() {
                 setMenu('cart')
               }}
               onMouseOver={() => {
-                setMenu('cart')
+                handleHover('cart')
               }}
               onMouseOut={() => {
-                setMenu('')
+                handleHover('')
               }}
             >
               <ShoppingCartOutlinedIcon />
