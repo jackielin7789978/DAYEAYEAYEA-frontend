@@ -49,30 +49,7 @@ const Nav = styled.nav`
   justify-content: center;
   align-items: center;
   z-index: 2;
-  p:first-child {
-    position: absolute;
-    top: 13px;
-    left: 2vw;
-    display: flex;
-    ${MEDIA_QUERY.desktop} {
-      position: static;
-      top: 0;
-      width: 0;
-      margin: 0;
-    }
-  }
-  p:last-child {
-    position: absolute;
-    top: 13px;
-    right: 2vw;
-    display: flex;
-    ${MEDIA_QUERY.desktop} {
-      position: static;
-      top: 0;
-      width: 0;
-      margin: 0;
-    }
-  }
+
   ${MEDIA_QUERY.desktop} {
     position: static;
     width: unset;
@@ -81,6 +58,30 @@ const Nav = styled.nav`
     top: 30px;
     height: 90px;
     box-shadow: none;
+  }
+`
+const LeftIcons = styled.div`
+  position: absolute;
+  top: 13px;
+  left: 2vw;
+  display: flex;
+  ${MEDIA_QUERY.desktop} {
+    position: static;
+    top: 0;
+    width: 0;
+    margin: 0;
+  }
+`
+const RightIcons = styled.div`
+  position: absolute;
+  top: 13px;
+  right: 2vw;
+  display: flex;
+  ${MEDIA_QUERY.desktop} {
+    position: static;
+    top: 0;
+    width: 0;
+    margin: 0;
   }
 `
 const LOGO = styled(Link)`
@@ -177,7 +178,7 @@ export default function Navbar() {
       <DesktopBar />
       <DesktopContainer>
         <Nav>
-          <p>
+          <LeftIcons>
             <BurgerBTN
               onClick={() => {
                 setMenu('menu')
@@ -201,9 +202,9 @@ export default function Navbar() {
             >
               <SearchIcon />
             </SearchBTN>
-          </p>
+          </LeftIcons>
           <LOGO to='/'>DAYEAYEAYEA</LOGO>
-          <p>
+          <RightIcons>
             <AccountBTN
               onClick={() => {
                 setMenu('account')
@@ -224,7 +225,7 @@ export default function Navbar() {
             >
               <ShoppingCartOutlinedIcon />
             </CartBTN>
-          </p>
+          </RightIcons>
         </Nav>
         <Menu $isOpen={menu === 'menu' ? true : false} />
         <CartMenu
