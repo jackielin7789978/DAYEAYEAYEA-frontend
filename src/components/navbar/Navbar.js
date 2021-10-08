@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import {
   COLOR,
@@ -6,15 +8,13 @@ import {
   EFFECT,
   MEDIA_QUERY
 } from '../../constants/style'
-import { Link } from 'react-router-dom'
 import SearchIcon from '@mui/icons-material/Search'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined'
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
 import Menu from './Menu'
-import { useState } from 'react'
-import Cart from '../cartSystem/Cart'
+import CartMenu from '../cartSystem/CartMenu'
 
 const DesktopBar = styled.div`
   ${MEDIA_QUERY.desktop} {
@@ -46,31 +46,10 @@ const Nav = styled.nav`
   width: 100%;
   height: 50px;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   z-index: 2;
-  p:first-child {
-    position: absolute;
-    top: 13px;
-    left: 2vw;
-    ${MEDIA_QUERY.desktop} {
-      position: static;
-      top: 0;
-      width: 0;
-      margin: 0;
-    }
-  }
-  p:last-child {
-    position: absolute;
-    top: 13px;
-    right: 2vw;
-    ${MEDIA_QUERY.desktop} {
-      position: static;
-      top: 0;
-      width: 0;
-      margin: 0;
-    }
-  }
+
   ${MEDIA_QUERY.desktop} {
     position: static;
     width: unset;
@@ -79,6 +58,30 @@ const Nav = styled.nav`
     top: 30px;
     height: 90px;
     box-shadow: none;
+  }
+`
+const LeftIcons = styled.div`
+  position: absolute;
+  top: 13px;
+  left: 2vw;
+  display: flex;
+  ${MEDIA_QUERY.desktop} {
+    position: static;
+    top: 0;
+    width: 0;
+    margin: 0;
+  }
+`
+const RightIcons = styled.div`
+  position: absolute;
+  top: 13px;
+  right: 2vw;
+  display: flex;
+  ${MEDIA_QUERY.desktop} {
+    position: static;
+    top: 0;
+    width: 0;
+    margin: 0;
   }
 `
 const LOGO = styled(Link)`
@@ -97,103 +100,138 @@ const LOGO = styled(Link)`
     position: relative;
   }
 `
-const BurgerBTN = styled(MenuIcon)`
+const BurgerBTN = styled.div`
   cursor: pointer;
   margin: 0 2vw;
+
   display: ${({ $isClicked }) => ($isClicked ? 'none' : 'inline-block')};
   ${MEDIA_QUERY.desktop} {
+    padding: 5px;
     position: absolute;
     display: none;
   }
 `
-const CloseBTN = styled(CloseIcon)`
+const CloseBTN = styled.div`
   cursor: pointer;
   margin: 0 2vw;
+
   display: ${({ $isClicked }) => ($isClicked ? 'inline-block' : 'none')};
   ${MEDIA_QUERY.desktop} {
+    padding: 5px;
     position: absolute;
     display: none;
   }
 `
-const SearchBTN = styled(SearchIcon)`
+const SearchBTN = styled.div`
   cursor: pointer;
   margin: 0 2vw;
+
   ${MEDIA_QUERY.desktop} {
+    margin-right: 30px;
+    padding: 5px;
     position: absolute;
-    top: -32px;
-    right: 21vw;
+    top: -37px;
+    right: 160px;
+  }
+  @media screen and (min-width: 2560px) {
+    right: 20vw;
   }
 `
-const AccountBTN = styled(AccountCircleOutlinedIcon)`
+const AccountBTN = styled.div`
   cursor: pointer;
   margin: 0 2vw;
   ${MEDIA_QUERY.desktop} {
+    margin-right: 30px;
+    padding: 5px;
     position: absolute;
-    top: -32px;
-    right: 17vw;
+    top: -37px;
+    right: 110px;
+  }
+  @media screen and (min-width: 2560px) {
+    right: 18vw;
   }
 `
-const CartBTN = styled(ShoppingCartOutlinedIcon)`
+const CartBTN = styled.div`
   cursor: pointer;
   margin: 0 2vw;
   ${MEDIA_QUERY.desktop} {
+    margin-right: 30px;
+    padding: 5px;
     position: absolute;
-    top: -32px;
-    right: 13vw;
+    top: -37px;
+    right: 60px;
+  }
+  @media screen and (min-width: 2560px) {
+    right: 16vw;
   }
 `
 
 export default function Navbar() {
   const [menu, setMenu] = useState('')
+  const handleHover = (name) => {
+    if (window.innerWidth < 1200) return
+    setMenu(name)
+  }
 
   return (
     <>
       <DesktopBar />
       <DesktopContainer>
         <Nav>
-          <p>
-            {!menu && (
-              <BurgerBTN
-                onClick={() => {
-                  setMenu('menu')
-                }}
-                $isClicked={menu === 'menu' ? true : false}
-              />
-            )}
+          <LeftIcons>
+            <BurgerBTN
+              onClick={() => {
+                setMenu('menu')
+              }}
+              $isClicked={menu === 'menu' ? true : false}
+            >
+              <MenuIcon />
+            </BurgerBTN>
             <CloseBTN
               onClick={() => {
                 setMenu('')
               }}
               $isClicked={menu !== '' ? true : false}
-            />
-            {!menu && (
-              <SearchBTN
-                onClick={() => {
-                  setMenu('search')
-                }}
-              />
-            )}
-          </p>
+            >
+              <CloseIcon />
+            </CloseBTN>
+            <SearchBTN
+              onClick={() => {
+                setMenu('search')
+              }}
+            >
+              <SearchIcon />
+            </SearchBTN>
+          </LeftIcons>
           <LOGO to='/'>DAYEAYEAYEA</LOGO>
-          <p>
-            {!menu && (
-              <AccountBTN
-                onClick={() => {
-                  setMenu('account')
-                }}
-              />
-            )}
-            {!menu && (
-              <CartBTN
-                onClick={() => {
-                  setMenu('cart')
-                }}
-              />
-            )}
-          </p>
+          <RightIcons>
+            <AccountBTN
+              onClick={() => {
+                setMenu('account')
+              }}
+            >
+              <AccountCircleOutlinedIcon />
+            </AccountBTN>
+            <CartBTN
+              onClick={() => {
+                setMenu('cart')
+              }}
+              onMouseOver={() => {
+                handleHover('cart')
+              }}
+              onMouseOut={() => {
+                handleHover('')
+              }}
+            >
+              <ShoppingCartOutlinedIcon />
+            </CartBTN>
+          </RightIcons>
         </Nav>
         <Menu $isOpen={menu === 'menu' ? true : false} />
-        <Cart $isOpen={menu === 'cart' ? true : false} />
+        <CartMenu
+          handleHover={handleHover}
+          $isOpen={menu === 'cart' ? true : false}
+        />
       </DesktopContainer>
     </>
   )

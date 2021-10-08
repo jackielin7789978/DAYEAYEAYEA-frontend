@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Carousel from 'react-bootstrap/Carousel'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import styled from 'styled-components'
