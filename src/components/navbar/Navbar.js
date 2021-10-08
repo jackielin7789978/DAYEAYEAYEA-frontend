@@ -13,7 +13,7 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined'
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
-import Menu from './Menu'
+import CategoryMenu from './CategoryMenu'
 import CartMenu from '../cartSystem/CartMenu'
 
 const DesktopBar = styled.div`
@@ -227,11 +227,13 @@ export default function Navbar() {
             </CartBTN>
           </RightIcons>
         </Nav>
-        <Menu $isOpen={menu === 'menu' ? true : false} />
+        <CategoryMenu $isOpen={menu === 'menu' ? true : false} />
         <CartMenu
           handleHover={handleHover}
           $isOpen={menu === 'cart' ? true : false}
         />
+        {/* <AccountMenu /> */}
+        {/* <SearchMenu /> */}
       </DesktopContainer>
     </>
   )
