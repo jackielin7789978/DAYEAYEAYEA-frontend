@@ -76,7 +76,7 @@ export default function Home() {
       </FullWidth>
       <PageWidth>
         {/* <IsLoadingComponent /> */}
-        <FullModal
+        {/* <FullModal
           buttonOne={
             <ShoppingCarBtn
               color='primary'
@@ -88,7 +88,7 @@ export default function Home() {
           buttonTwo={<EditBtn color='accent'>編輯</EditBtn>}
         >
           已成功加入購物車!
-        </FullModal>
+        </FullModal> */}
         {/* <GeneralModal
           buttonOne={
             <ArrowBtn marginStyle={{ marginRight: '8px' }} color='primary' />
