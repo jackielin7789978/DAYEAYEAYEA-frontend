@@ -46,7 +46,7 @@ const Category = styled(Link)`
   }
 `
 
-export default function Menu({ $isOpen }) {
+export default function CategoryMenu({ $isOpen }) {
   return (
     <CategoryContainer $isOpen={$isOpen}>
       <Category to='/'>所有商品</Category>

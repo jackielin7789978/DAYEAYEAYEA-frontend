@@ -1,79 +1,19 @@
 import { useState, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
-import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
+import { FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import CartItem from './CartItem'
 import { ShoppingCarBtn } from '../Button'
+import {
+  HoverArea,
+  MenuContainer,
+  CSSTriangle,
+  Title
+} from '../navbar/MenuStyles'
 
-const HoverArea = styled.div`
-  position: fixed;
-  height: 100vh;
-  width: 100%;
-  transition: linear 0.3s;
-  top: ${({ $isOpen }) => ($isOpen ? '50px' : '-100vh')};
-  background: ${COLOR.light};
-  z-index: 1;
+const RestyledHoverArea = styled(HoverArea)`
   ${MEDIA_QUERY.desktop} {
-    transition: ease 0.2s;
-    height: ${({ $isOpen }) => ($isOpen ? 'unset' : '0px')};
-    width: ${({ $isOpen }) => ($isOpen ? '380px' : 'unset')};
-    top: 40px;
     right: 60px;
-    background: transparent;
   }
-`
-const MenuContainer = styled.div`
-  width: 84%;
-  margin: 30px auto;
-  position: relative;
-  button {
-    width: 100%;
-    height: 35px;
-    background: ${COLOR.primary_light};
-    color: #fff;
-    border-radius: 3px;
-  }
-  ${MEDIA_QUERY.desktop} {
-    width: unset;
-    display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
-    outline: 1px solid
-      ${({ $isOpen }) => ($isOpen ? COLOR.primary_light : 'transparent')};
-    height: ${({ $isOpen }) => ($isOpen ? '100%' : '0px')};
-    padding: ${({ $isOpen }) => ($isOpen ? '16px' : '0px')};
-    background: ${COLOR.light};
-    position: relative;
-    bottom: 0;
-    margin: ${({ $isOpen }) => ($isOpen ? '10px 0 0 0;' : '0px')};
-  }
-`
-const Triangle = styled.div`
-  ${MEDIA_QUERY.desktop} {
-    opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
-    width: 0;
-    height: 0;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-bottom: 15px solid ${COLOR.primary_light};
-    position: absolute;
-    top: -15px;
-    right: 32px;
-
-    p {
-      width: 0;
-      height: 0;
-      border-left: 14px solid transparent;
-      border-right: 14px solid transparent;
-      border-bottom: 14px solid ${COLOR.light};
-      position: absolute;
-      right: -14px;
-      top: 1px;
-    }
-  }
-`
-const Title = styled.div`
-  text-align: center;
-  font-size: ${FONT_SIZE.md};
-  font-weight: bold;
-  margin-bottom: 10px;
 `
 const ItemsContainer = styled.div`
   max-height: ${({ $isOpen }) => ($isOpen ? '470px' : '0px')};
@@ -136,7 +76,7 @@ export default function CartMenu({ handleHover, $isOpen }) {
   const totalItems = useMemo(() => items.length, [items])
 
   return (
-    <HoverArea
+    <RestyledHoverArea
       onMouseOver={() => {
         handleHover('cart')
       }}
@@ -146,9 +86,8 @@ export default function CartMenu({ handleHover, $isOpen }) {
       $isOpen={$isOpen}
     >
       <MenuContainer $isOpen={$isOpen}>
-        <Triangle $isOpen={$isOpen}>
-          <p></p>
-        </Triangle>
+        <CSSTriangle $isOpen={$isOpen} />
+
         {!totalItems && (
           <>
             <EmptyCart>您的購物車是空的</EmptyCart>
@@ -181,6 +120,6 @@ export default function CartMenu({ handleHover, $isOpen }) {
           </>
         )}
       </MenuContainer>
-    </HoverArea>
+    </RestyledHoverArea>
   )
 }
