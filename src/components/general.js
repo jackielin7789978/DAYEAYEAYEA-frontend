@@ -1,16 +1,17 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { MEDIA_QUERY } from "../constants/style";
+import styled from 'styled-components'
+import { Link } from 'react-router-dom'
+import { MEDIA_QUERY } from '../constants/style'
 
 // 撐頁面高度用，已加在 Route 外面
 export const PageHeight = styled.div`
+  position: relative;
   margin-top: 49px;
   width: 100%;
   flex: 1;
   ${MEDIA_QUERY.desktop} {
     margin-top: 121px;
   }
-`;
+`
 
 // 非滿版用 PageWidth 包
 export const PageWidth = styled.div`
@@ -20,13 +21,13 @@ export const PageWidth = styled.div`
   ${MEDIA_QUERY.desktop} {
     max-width: 1200px;
   }
-`;
+`
 
 // 滿版用 FullWidth 包
 export const FullWidth = styled.div`
   width: 100%;
   text-align: center;
-`;
+`
 
 // 可包在圖片裡的連結 component，height 需視圖片高度另外加上去
 export const ImgAnchor = styled(Link)`
@@ -36,4 +37,4 @@ export const ImgAnchor = styled(Link)`
   &:hover {
     color: transparent;
   }
-`;
+`
