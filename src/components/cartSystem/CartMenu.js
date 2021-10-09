@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import CartItem from './CartItem'
@@ -21,7 +22,6 @@ const RestyledHoverArea = styled(HoverArea)`
 const ItemsContainer = styled.div`
   max-height: ${({ $isOpen }) => ($isOpen ? '50vh' : '0px')};
   overflow: scroll;
-
   &::-webkit-scrollbar {
     width: 3px;
   }
@@ -46,7 +46,7 @@ const CartInfo = styled.div`
   font-size: ${FONT_SIZE.sm};
   font-weight: bold;
 `
-const BtnWrapper = styled.div`
+const BtnWrapper = styled(Link)`
   ${MEDIA_QUERY.tablet} {
     position: absolute;
     right: 0;
@@ -119,6 +119,7 @@ export default function CartMenu({ handleHover, $isOpen }) {
                     key={item.id}
                     id={item.id}
                     name={item.name}
+                    img={item.Product_imgs[0].imgUrlSm}
                     price={item.price}
                     handleRemove={handleRemove}
                   />
@@ -130,7 +131,7 @@ export default function CartMenu({ handleHover, $isOpen }) {
               <div>總金額 NT$ {totalPrice}</div>
             </CartInfo>
 
-            <BtnWrapper>
+            <BtnWrapper to='/checkout/step1'>
               <ShoppingCarBtn color={'primary'}>訂單結帳</ShoppingCarBtn>
             </BtnWrapper>
           </>

@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
+import { ImgAnchor } from '../general'
 
 const ItemContainer = styled.div`
   border-bottom: 2px solid ${COLOR.border_grey};
@@ -14,9 +15,8 @@ const ItemContainer = styled.div`
 `
 const Pic = styled.div`
   width: 70px;
-  min-width: 70px;
   height: 70px;
-  background: ${COLOR.accent};
+  background: url(${({ $img }) => ($img ? $img : $img)});
 `
 const Info = styled.div`
   padding-left: 14px;
@@ -56,12 +56,17 @@ const RemoveBtn = styled(DeleteOutlinedIcon)`
   }
 `
 
-export default function CartItem({ id, name, price, handleRemove }) {
+export default function CartItem({ id, name, img, price, handleRemove }) {
   return (
     <ItemContainer>
-      <Pic />
+      <Pic $img={img}>
+        <ImgAnchor
+          to={`/products/${id}`}
+          style={{ width: '70px', height: '70px' }}
+        />
+      </Pic>
       <Info>
-        <Name to='/'>{name}</Name>
+        <Name to={`/products/${id}`}>{name}</Name>
         <NumPrice>1 x NT${price}</NumPrice>
         <RemoveBtn
           onClick={() => {

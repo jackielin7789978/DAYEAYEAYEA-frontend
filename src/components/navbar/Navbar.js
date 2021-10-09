@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import SearchIcon from '@mui/icons-material/Search'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined'
@@ -28,11 +29,15 @@ export default function Navbar() {
     if (window.innerWidth < 1200) return
     setMenu(name)
   }
+  const { pathname } = useLocation()
+  useEffect(() => {
+    setMenu('')
+  }, [pathname, setMenu])
 
   // 待修：只有 mobile 和 tablet 需要這個效果
   useEffect(() => {
-    if (menu) return (document.body.style.overflow = 'hidden')
-    if (!menu) return (document.body.style.overflow = 'scroll')
+    if (menu) return (document.body.style.overflowY = 'hidden')
+    if (!menu) return (document.body.style.overflowY = 'scroll')
   }, [menu])
 
   return (
