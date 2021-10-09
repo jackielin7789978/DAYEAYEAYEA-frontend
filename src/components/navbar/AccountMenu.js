@@ -6,6 +6,9 @@ const RestyledHoverArea = styled(HoverArea)`
   ${MEDIA_QUERY.desktop} {
     right: 110px;
   }
+  ${MEDIA_QUERY.widescreen} {
+    right: 18vw;
+  }
 `
 
 export default function AccountMenu({ handleHover, $isOpen }) {

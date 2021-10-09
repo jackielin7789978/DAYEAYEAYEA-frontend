@@ -48,5 +48,6 @@ export const EFFECT = {
 
 export const MEDIA_QUERY = {
   desktop: '@media screen and (min-width: 1200px)',
-  tablet: '@media screen and (min-width: 768px) and (max-width: 1200px)'
+  tablet: '@media screen and (min-width: 768px) and (max-width: 1200px)',
+  widescreen: '@media screen and (min-width: 2560px)'
 }

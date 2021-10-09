@@ -125,7 +125,7 @@ const SearchBTN = styled.div`
     top: -37px;
     right: 160px;
   }
-  @media screen and (min-width: 2560px) {
+  ${MEDIA_QUERY.widescreen} {
     right: 20vw;
   }
 `
@@ -139,7 +139,7 @@ const AccountBTN = styled.div`
     top: -37px;
     right: 110px;
   }
-  @media screen and (min-width: 2560px) {
+  ${MEDIA_QUERY.widescreen} {
     right: 18vw;
   }
 `
@@ -153,7 +153,7 @@ const CartBTN = styled.div`
     top: -37px;
     right: 60px;
   }
-  @media screen and (min-width: 2560px) {
+  ${MEDIA_QUERY.widescreen} {
     right: 16vw;
   }
 `

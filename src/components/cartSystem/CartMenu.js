@@ -14,13 +14,29 @@ const RestyledHoverArea = styled(HoverArea)`
   ${MEDIA_QUERY.desktop} {
     right: 60px;
   }
+  ${MEDIA_QUERY.widescreen} {
+    right: 16vw;
+  }
 `
 const ItemsContainer = styled.div`
-  max-height: ${({ $isOpen }) => ($isOpen ? '470px' : '0px')};
+  max-height: ${({ $isOpen }) => ($isOpen ? '50vh' : '0px')};
   overflow: scroll;
+
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+  &::-webkit-scrollbar-track {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    background: rgb(219, 219, 219);
+  }
   padding: 0 10px;
   ${MEDIA_QUERY.desktop} {
-    max-height: ${({ $isOpen }) => ($isOpen ? '390px' : '0px')};
+    max-height: ${({ $isOpen }) => ($isOpen ? '50vh' : '0px')};
   }
 `
 const CartInfo = styled.div`
@@ -77,10 +93,10 @@ export default function CartMenu({ handleHover, $isOpen }) {
 
   return (
     <RestyledHoverArea
-      onMouseOver={() => {
+      onMouseEnter={() => {
         handleHover('cart')
       }}
-      onMouseOut={() => {
+      onMouseLeave={() => {
         handleHover('')
       }}
       $isOpen={$isOpen}

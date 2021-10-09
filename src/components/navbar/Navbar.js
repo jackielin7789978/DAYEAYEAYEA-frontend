@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined'
@@ -28,6 +28,12 @@ export default function Navbar() {
     if (window.innerWidth < 1200) return
     setMenu(name)
   }
+
+  // 待修：只有 mobile 和 tablet 需要這個效果
+  useEffect(() => {
+    if (menu) return (document.body.style.overflow = 'hidden')
+    if (!menu) return (document.body.style.overflow = 'scroll')
+  }, [menu])
 
   return (
     <>
@@ -84,10 +90,10 @@ export default function Navbar() {
               onClick={() => {
                 setMenu('cart')
               }}
-              onMouseOver={() => {
+              onMouseEnter={() => {
                 handleHover('cart')
               }}
-              onMouseOut={() => {
+              onMouseLeave={() => {
                 handleHover('')
               }}
             >
