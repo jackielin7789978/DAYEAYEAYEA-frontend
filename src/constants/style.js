@@ -23,6 +23,7 @@ export const COLOR = {
   border_primary_dark: '#9A8B66',
   border_grey: '#cecece',
   border_light_grey: '#e5e5e5',
+  border_super_light: '#eee',
   border_light: '#fff',
   border_dark: '#333'
 }

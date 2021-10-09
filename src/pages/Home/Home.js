@@ -55,7 +55,7 @@ export default function Home() {
       <FullWidth>
         <Carousel
           style={{
-            'z-index': '0'
+            zIndex: '0'
           }}
         >
           <Carousel.Item>

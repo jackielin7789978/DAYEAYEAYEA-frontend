@@ -20,7 +20,7 @@ const RestyledHoverArea = styled(HoverArea)`
   }
 `
 const ItemsContainer = styled.div`
-  max-height: ${({ $isOpen }) => ($isOpen ? '50vh' : '0px')};
+  max-height: ${({ $isOpen }) => ($isOpen ? '70vh' : '0px')};
   overflow: scroll;
   &::-webkit-scrollbar {
     width: 3px;
@@ -36,7 +36,7 @@ const ItemsContainer = styled.div`
   }
   padding: 0 10px;
   ${MEDIA_QUERY.desktop} {
-    max-height: ${({ $isOpen }) => ($isOpen ? '50vh' : '0px')};
+    max-height: ${({ $isOpen }) => ($isOpen ? '60vh' : '0px')};
   }
 `
 const CartInfo = styled.div`
@@ -75,7 +75,7 @@ export default function CartMenu({ handleHover, $isOpen }) {
         return res.json()
       })
       .then((res) => {
-        setItems(res.data.filter((data) => data.id < 8))
+        setItems(res.data.filter((data) => data.id < 20))
       })
       .catch((e) => {
         console.log(e)
