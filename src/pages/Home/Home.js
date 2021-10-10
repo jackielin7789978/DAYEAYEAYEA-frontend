@@ -3,7 +3,6 @@ import Carousel from 'react-bootstrap/Carousel'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import styled from 'styled-components'
 import { PageWidth, FullWidth, ImgAnchor } from '../../components/general'
-import Card from '../../components/Card_test/Card'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import { FullModal, GeneralModal } from '../../components/Modal'
 import {
@@ -106,18 +105,6 @@ export default function Home() {
           {/* <Link style={{ width: '100%' }} to='/info/join'>
             <ShoppingCarWhiteBtn />
           </Link> */}
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
         </CardContainer>
         <PaginatorDiv>
           <PaginatorButton $active={pathname === '/'} page='1' to='/' />
