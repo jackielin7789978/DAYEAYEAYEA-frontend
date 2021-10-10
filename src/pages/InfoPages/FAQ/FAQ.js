@@ -1,23 +1,24 @@
-import styled from "styled-components";
-import { useState } from "react";
-import { PageWidth } from "../../../components/general";
-import { COLOR, FONT_SIZE, MEDIA_QUERY } from "../../../constants/style";
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import QA from "./questions";
+import styled from 'styled-components'
+import { useState, useEffect } from 'react'
+import { PageWidth } from '../../../components/general'
+import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../../constants/style'
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded'
+import getFAQs from '../../../webAPI/faq'
+import { IsLoadingComponent } from '../../../components/IsLoading'
 
 const Title = styled.div`
   margin-top: 40px;
   font-size: ${FONT_SIZE.lg};
   font-weight: bold;
   ${MEDIA_QUERY.tablet} {
-    margin-top: 80px;
+    margin-top: 60px;
     font-size: ${FONT_SIZE.xl};
   }
   ${MEDIA_QUERY.desktop} {
     margin-top: 80px;
     font-size: ${FONT_SIZE.xxl};
   }
-`;
+`
 const Container = styled.div`
   width: 90%;
   margin: 10px auto;
@@ -29,17 +30,17 @@ const Container = styled.div`
     margin-bottom: 60px;
   }
   ${MEDIA_QUERY.desktop} {
-    width: 70%;
+    width: 60%;
     margin: 10px auto;
     margin-bottom: 80px;
   }
-`;
+`
 const Q = styled.div`
-  padding: 14px;
+  padding: 22px 18px;
   display: flex;
   justify-content: space-between;
   border-bottom: ${({ $isOpen }) =>
-    $isOpen ? "none" : `2px solid ${COLOR.border_light_grey}`};
+    $isOpen ? 'none' : `2px solid ${COLOR.border_super_light}`};
   div {
     font-size: ${FONT_SIZE.sm};
     font-weight: bold;
@@ -52,10 +53,10 @@ const Q = styled.div`
       font-size: ${FONT_SIZE.lg};
     }
   }
-`;
+`
 const A = styled.div`
-  padding: 14px;
-  display: ${({ $isOpen }) => ($isOpen ? "block" : "none")};
+  padding: 18px;
+  display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
   text-align: left;
   font-size: ${FONT_SIZE.sm};
   border-bottom: ${({ $isOpen }) =>
@@ -70,40 +71,63 @@ const A = styled.div`
   ${MEDIA_QUERY.desktop} {
     font-size: ${FONT_SIZE.md};
   }
-`;
+`
 const Toggle = styled(KeyboardArrowDownRoundedIcon)`
   cursor: pointer;
   transition: all 0.2s;
-  transform: ${({ $isOpen }) => ($isOpen ? "rotate(180deg)" : "none")};
-`;
+  transform: ${({ $isOpen }) => ($isOpen ? 'rotate(180deg)' : 'none')};
+`
 
 // 問題：要怎麼限制一次只能展開一個答案？
-function Item({ qa }) {
-  const [isOpen, setIsOpen] = useState(false);
+function Item({ faq }) {
+  const [isOpen, setIsOpen] = useState(false)
   const toggleOpen = () => {
-    setIsOpen(!isOpen);
-  };
+    setIsOpen(!isOpen)
+  }
   return (
     <>
       <Q $isOpen={isOpen}>
-        <div>{qa.question}</div>
+        <div>{faq.question}</div>
         <Toggle onClick={toggleOpen} $isOpen={isOpen} />
       </Q>
       <A $isOpen={isOpen}>
-        <div>{qa.answer}</div>
+        <div>{faq.answer}</div>
       </A>
     </>
-  );
+  )
 }
 export default function FAQ() {
+  const [faqs, setFaqs] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  useEffect(() => {
+    async function fetchFAQs() {
+      let res
+      try {
+        res = await getFAQs()
+        if (res.ok) {
+          setFaqs(res.data)
+          setIsLoading(false)
+        }
+      } catch (e) {
+        console.log(e)
+      }
+    }
+    fetchFAQs()
+  }, [])
+
   return (
-    <PageWidth>
-      <Title>常見問題</Title>
-      <Container>
-        {QA.map((qa) => (
-          <Item key={qa.id} qa={qa} />
-        ))}
-      </Container>
-    </PageWidth>
-  );
+    <>
+      {isLoading && <IsLoadingComponent />}
+      {!isLoading && (
+        <PageWidth>
+          <Title>常見問題</Title>
+          <Container>
+            {faqs.map((faq) => (
+              <Item key={faq.id} faq={faq} />
+            ))}
+          </Container>
+        </PageWidth>
+      )}
+    </>
+  )
 }
