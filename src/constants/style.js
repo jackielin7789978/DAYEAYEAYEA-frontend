@@ -16,6 +16,7 @@ export const COLOR = {
   text_warning: '#ffb22e',
   text_light: '#fff',
   text_dark: '#333',
+  text_black: '#000',
   text_grey: '#999',
   text_placeholder: '#CECECE',
 

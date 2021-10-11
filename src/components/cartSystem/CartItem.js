@@ -14,7 +14,7 @@ const ItemContainer = styled.div`
   }
 `
 const Pic = styled.div`
-  width: 70px;
+  min-width: 70px;
   height: 70px;
   background: url(${({ $img }) => ($img ? $img : $img)});
 `
@@ -60,10 +60,7 @@ export default function CartItem({ id, name, img, price, handleRemove }) {
   return (
     <ItemContainer>
       <Pic $img={img}>
-        <ImgAnchor
-          to={`/products/${id}`}
-          style={{ width: '70px', height: '70px' }}
-        />
+        <ImgAnchor to={`/products/${id}`} style={{ height: '70px' }} />
       </Pic>
       <Info>
         <Name to={`/products/${id}`}>{name}</Name>
