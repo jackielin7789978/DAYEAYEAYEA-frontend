@@ -120,12 +120,12 @@ const DiscountPriceStyle = styled(PriceStyle)`
   }
 `
 
-export function ProductCard({ title, price, imgUrl, discountPrice }) {
+export function ProductCard({ id, title, price, imgUrl, discountPrice }) {
   const isDesktop = useMediaQuery('(min-width: 1200px)')
   let hasDiscount = price !== discountPrice ? true : false
   return (
     <CardContainerDiv>
-      <CardLink>
+      <CardLink to={`/products/${id}`}>
         <ImgContainer style={{ backgroundImage: `url(${imgUrl})` }} />
         <TitleContainer>{title}</TitleContainer>
         <PriceContainer>

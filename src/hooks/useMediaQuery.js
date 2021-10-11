@@ -9,8 +9,8 @@ const useMediaQuery = (query) => {
       setMediaMatch(media.matches)
     }
     const mediaListener = () => setMediaMatch(media.matches)
-    window.addEventListener('relize', mediaListener)
-    return () => window.removeEventListener('relize', mediaListener)
+    window.addEventListener('resize', mediaListener)
+    return () => window.removeEventListener('resize', mediaListener)
   }, [mediaMatch, query])
 
   return mediaMatch

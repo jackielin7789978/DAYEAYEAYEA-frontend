@@ -38,6 +38,8 @@ export default function Categories() {
   const isMobile = useMediaQuery('(max-width: 768px)')
   const pathname = useLocation().pathname
   const { slug, page } = useParams()
+
+  // 簡化寫法
   useEffect(() => {
     setIsLoading((isLoading) => true)
     if (slug === 'all') {
@@ -65,6 +67,7 @@ export default function Categories() {
             : Product_imgs[length - 1].imgUrlMd
           return (
             <ProductCard
+              id={id}
               key={id}
               imgUrl={imgUrl}
               title={name}

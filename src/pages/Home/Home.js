@@ -2,11 +2,11 @@ import Carousel from 'react-bootstrap/Carousel'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import styled from 'styled-components'
 import { useState, useEffect, useContext } from 'react'
-import { COLOR } from '../../constants/style'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { LoadingContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
 import { PageWidth, FullWidth, ImgAnchor } from '../../components/general'
+import { COLOR } from '../../constants/style'
 import { Link } from 'react-router-dom'
 import { ProductCard } from '../../components/ProductCard'
 import { getCategoryProducts } from '../../webAPI/productsAPI'
@@ -63,6 +63,7 @@ const showProductsInComponent = (data, MediaQuery) => {
       : Product_imgs[length - 1].imgUrlMd
     return (
       <ProductCard
+        id={id}
         key={id}
         imgUrl={imgUrl}
         title={name}
@@ -119,7 +120,10 @@ export default function Home() {
       <PageWidth>
         {isLoading && <IsLoadingComponent />}
         <ProductContainer>
-          <IndexImg imgUrl='https://i.imgur.com/WjvyBCB.jpg' color='#333'>
+          <IndexImg
+            imgUrl='https://i.imgur.com/WjvyBCB.jpg'
+            color={COLOR.text_dark}
+          >
             居家生活
           </IndexImg>
           <CardContainer>
@@ -127,7 +131,10 @@ export default function Home() {
           </CardContainer>
         </ProductContainer>
         <ProductContainer>
-          <IndexImg imgUrl='https://i.imgur.com/5mNsAzg.jpg' color='#333'>
+          <IndexImg
+            imgUrl='https://i.imgur.com/5mNsAzg.jpg'
+            color={COLOR.text_dark}
+          >
             服飾配件
           </IndexImg>
           <CardContainer>
@@ -135,7 +142,10 @@ export default function Home() {
           </CardContainer>
         </ProductContainer>
         <ProductContainer>
-          <IndexImg imgUrl='https://i.imgur.com/kBR54ha.jpg' color='white'>
+          <IndexImg
+            imgUrl='https://i.imgur.com/kBR54ha.jpg'
+            color={COLOR.text_light}
+          >
             廚房餐具
           </IndexImg>
           <CardContainer>
@@ -159,7 +169,10 @@ export default function Home() {
           </CardContainer>
         </ProductContainer>
         <ProductContainer>
-          <IndexImg imgUrl='https://i.imgur.com/TrmCL9e.jpg' color='#333'>
+          <IndexImg
+            imgUrl='https://i.imgur.com/TrmCL9e.jpg'
+            color={COLOR.text_dark}
+          >
             休閒戶外
           </IndexImg>
           <CardContainer>
