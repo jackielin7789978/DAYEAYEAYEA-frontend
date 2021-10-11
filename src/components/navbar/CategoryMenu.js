@@ -11,7 +11,7 @@ const CategoryContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: all 0.3s;
+  transition: ease 0.3s;
   z-index: 1;
   ${MEDIA_QUERY.desktop} {
     flex-direction: row;

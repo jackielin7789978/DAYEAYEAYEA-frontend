@@ -1,166 +1,128 @@
-import styled from "styled-components";
+import { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import SearchIcon from '@mui/icons-material/Search'
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined'
+import MenuIcon from '@mui/icons-material/Menu'
+import CloseIcon from '@mui/icons-material/Close'
+import CategoryMenu from './CategoryMenu'
+import CartMenu from '../cartSystem/CartMenu'
+import AccountMenu from './AccountMenu'
+import SearchMenu from './SearchMenu'
 import {
-  COLOR,
-  FONT,
-  FONT_SIZE,
-  EFFECT,
-  MEDIA_QUERY,
-} from "../../constants/style";
-import { Link } from "react-router-dom";
-import SearchIcon from "@mui/icons-material/Search";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import Menu from "./Menu";
-import Burger from "./Burger";
-import { useState } from "react";
-
-const DesktopBar = styled.div`
-  ${MEDIA_QUERY.desktop} {
-    position: fixed;
-    width: 100%;
-    display: static;
-    height: 40px;
-    background: ${COLOR.primary_light};
-    z-index: 1;
-  }
-`;
-const DesktopContainer = styled.div`
-  ${MEDIA_QUERY.desktop} {
-    background: ${COLOR.light};
-    position: fixed;
-    top: 40px;
-    width: 100%;
-    height: 90px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    box-shadow: ${EFFECT.shadow_dark};
-    z-index: 2;
-  }
-`;
-const Nav = styled.nav`
-  background: ${COLOR.primary_light};
-  position: fixed;
-  width: 100%;
-  height: 50px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  z-index: 2;
-  p {
-    margin: 0 5%;
-    width: 100px;
-    display: flex;
-    justify-content: space-around;
-
-    ${MEDIA_QUERY.desktop} {
-      width: 0;
-      margin: 0;
-    }
-  }
-  ${MEDIA_QUERY.desktop} {
-    position: static;
-    width: unset;
-    background: transparent;
-    font-family: ${FONT.logo};
-    top: 30px;
-    height: 90px;
-    box-shadow: none;
-  }
-`;
-const LOGO = styled(Link)`
-  text-decoration: none;
-  font-size: ${FONT_SIZE.lg};
-  color: ${COLOR.text_dark};
-  font-family: ${FONT.logo};
-  &:hover {
-    color: ${COLOR.text_dark};
-  }
-  ${MEDIA_QUERY.tablet} {
-    font-size: ${FONT_SIZE.xxl};
-  }
-  ${MEDIA_QUERY.desktop} {
-    font-size: ${FONT_SIZE.xxxl};
-    position: relative;
-  }
-`;
-
-const SearchBTN = styled(SearchIcon)`
-  cursor: pointer;
-  ${MEDIA_QUERY.desktop} {
-    position: absolute;
-    top: -32px;
-    right: 19vw;
-  }
-`;
-const AccountBTN = styled(AccountCircleOutlinedIcon)`
-  cursor: pointer;
-  ${MEDIA_QUERY.desktop} {
-    position: absolute;
-    top: -32px;
-    right: 16vw;
-  }
-`;
-const CartBTN = styled(ShoppingCartOutlinedIcon)`
-  cursor: pointer;
-  ${MEDIA_QUERY.desktop} {
-    position: absolute;
-    top: -32px;
-    right: 13vw;
-  }
-`;
-function Search() {
-  return (
-    <SearchBTN>
-      <SearchIcon />
-    </SearchBTN>
-  );
-}
-function Account() {
-  return (
-    <AccountBTN>
-      <AccountCircleOutlinedIcon />
-    </AccountBTN>
-  );
-}
-function Cart() {
-  return (
-    <CartBTN>
-      <ShoppingCartOutlinedIcon />
-    </CartBTN>
-  );
-}
+  DesktopBar,
+  DesktopContainer,
+  Nav,
+  LeftIcons,
+  RightIcons,
+  LOGO,
+  BurgerBTN,
+  CloseBTN,
+  SearchBTN,
+  AccountBTN,
+  CartBTN
+} from './NavbarStyled'
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const handleOpen = () => {
-    setIsOpen(true);
-  };
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  const [menu, setMenu] = useState('')
+  const handleHover = (name) => {
+    if (window.innerWidth < 1200) return
+    setMenu(name)
+  }
+  const { pathname } = useLocation()
+  useEffect(() => {
+    setMenu('')
+  }, [pathname, setMenu])
+
+  // 待修：只有 mobile 和 tablet 需要這個效果
+  useEffect(() => {
+    if (menu) return (document.body.style.overflowY = 'hidden')
+    if (!menu) return (document.body.style.overflowY = 'scroll')
+  }, [menu])
 
   return (
     <>
       <DesktopBar />
       <DesktopContainer>
         <Nav>
-          <p>
-            <Burger
-              $isOpen={isOpen}
-              handleOpen={handleOpen}
-              handleClose={handleClose}
-            />
-            <Search />
-          </p>
-          <LOGO to="/">DAYEAYEAYEA</LOGO>
-          <p>
-            <Account />
-            <Cart />
-          </p>
+          <LeftIcons>
+            <BurgerBTN
+              onClick={() => {
+                setMenu('category')
+              }}
+              $isClicked={menu === 'category' ? true : false}
+            >
+              <MenuIcon />
+            </BurgerBTN>
+            <CloseBTN
+              onClick={() => {
+                setMenu('')
+              }}
+              $isClicked={menu !== '' ? true : false}
+            >
+              <CloseIcon />
+            </CloseBTN>
+            <SearchBTN
+              onClick={() => {
+                setMenu('search')
+              }}
+              onMouseOver={() => {
+                handleHover('search')
+              }}
+              onMouseOut={() => {
+                handleHover('')
+              }}
+            >
+              <SearchIcon />
+            </SearchBTN>
+          </LeftIcons>
+          <LOGO to='/'>DAYEAYEAYEA</LOGO>
+          <RightIcons>
+            <AccountBTN
+              onClick={() => {
+                setMenu('account')
+              }}
+              onMouseOver={() => {
+                handleHover('account')
+              }}
+              onMouseOut={() => {
+                handleHover('')
+              }}
+            >
+              <AccountCircleOutlinedIcon />
+            </AccountBTN>
+            <CartBTN
+              onClick={() => {
+                setMenu('cart')
+              }}
+              onMouseEnter={() => {
+                handleHover('cart')
+              }}
+              onMouseLeave={() => {
+                handleHover('')
+              }}
+            >
+              <ShoppingCartOutlinedIcon />
+            </CartBTN>
+          </RightIcons>
         </Nav>
-        <Menu $isOpen={isOpen} />
+        <CategoryMenu $isOpen={menu === 'category' ? true : false} />
+        <CartMenu
+          handleHover={handleHover}
+          $isOpen={menu === 'cart' ? true : false}
+          $menu={menu}
+        />
+        <AccountMenu
+          handleHover={handleHover}
+          $isOpen={menu === 'account' ? true : false}
+          $menu={menu}
+        />
+        <SearchMenu
+          handleHover={handleHover}
+          $isOpen={menu === 'search' ? true : false}
+          $menu={menu}
+        />
       </DesktopContainer>
     </>
-  );
+  )
 }

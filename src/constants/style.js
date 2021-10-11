@@ -23,6 +23,7 @@ export const COLOR = {
   border_primary_dark: '#9A8B66',
   border_grey: '#cecece',
   border_light_grey: '#e5e5e5',
+  border_super_light: '#eee',
   border_light: '#fff',
   border_dark: '#333'
 }
@@ -48,5 +49,6 @@ export const EFFECT = {
 
 export const MEDIA_QUERY = {
   desktop: '@media screen and (min-width: 1200px)',
-  tablet: '@media screen and (min-width: 768px) and (max-width: 1200px)'
+  tablet: '@media screen and (min-width: 768px) and (max-width: 1200px)',
+  widescreen: '@media screen and (min-width: 2560px)'
 }

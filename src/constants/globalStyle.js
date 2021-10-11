@@ -1,5 +1,5 @@
-import { createGlobalStyle } from "styled-components";
-import { COLOR } from "./style";
+import { createGlobalStyle } from 'styled-components'
+import { COLOR } from './style'
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -15,6 +15,18 @@ const GlobalStyle = createGlobalStyle`
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+  }
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    background: rgb(219,219,219);
   }
   h1, h2, h3, h4, h5, h6 {
     margin: 0;
@@ -53,6 +65,6 @@ const GlobalStyle = createGlobalStyle`
   img {
     height: 600px;
   }
-`;
+`
 
-export default GlobalStyle;
+export default GlobalStyle
