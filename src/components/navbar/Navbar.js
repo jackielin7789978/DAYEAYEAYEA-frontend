@@ -25,6 +25,7 @@ import {
 
 export default function Navbar() {
   const [menu, setMenu] = useState('')
+
   const handleHover = (name) => {
     if (window.innerWidth < 1200) return
     setMenu(name)
