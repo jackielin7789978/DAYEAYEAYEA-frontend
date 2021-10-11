@@ -1,12 +1,12 @@
 import styled from 'styled-components'
-import { PageWidth, FullWidth, ImgAnchor } from '../../../components/general'
+import { PageWidth, FullWidth } from '../../../components/general'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../../constants/style'
 
 const Img = styled.div`
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  height: 180px;
+  height: 200px;
 
   ${MEDIA_QUERY.tablet} {
     height: 360px;
@@ -17,10 +17,24 @@ const Img = styled.div`
 `
 const ContentDiv = styled.div`
   margin: 40px auto;
-  width: 80%;
-  text-align: center;
+  width: 85%;
+  text-align: left;
   white-space: pre-wrap;
   line-height: 2em;
+`
+
+const Title = styled.p`
+  font-size: ${FONT_SIZE.xxl};
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  ${MEDIA_QUERY.tablet} {
+    margin-top: 15px;
+  }
+  ${MEDIA_QUERY.desktop} {
+    margin-top: 15px;
+  }
 `
 
 const TitleBorder = styled.div`
@@ -35,14 +49,6 @@ const TitleBorder = styled.div`
   }
 `
 
-const Title = styled.p`
-  font-size: ${FONT_SIZE.xxl};
-  font-weight: bold;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`
-
 const AboutImg = styled(Img)`
   opacity: 0.8;
   background-image: url('https://images.unsplash.com/photo-1565581406026-a79f239d1b61?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=870&q=80');
@@ -50,7 +56,7 @@ const AboutImg = styled(Img)`
 
 export default function Brand() {
   const content =
-    '不確定從哪一刻開始，我們更想把時間用來和重視的人相處。\n不確定從哪一刻開始，我們更想把時間用來和重視的人相處。不確定從哪一刻開始，我們更想把時間用來和重視的人相處。不確定從哪一刻開始，我們更想把時間用來和重視的人相處。不確定從哪一刻開始，我們更想把時間用來和重視的人相處。不確定從哪一刻開始，我們更想把時間用來和重視的人相處。'
+    '不確定從哪一刻開始，我們更想把時間用來和重視的人相處。\n不確定從哪一刻開始，我們更想把時間用來和重視的人相處。不確定從哪一刻開始，我們更想把時間用來和重視的人相處。不確定從哪一刻開始，我們更想把時間用來和重視的人相處。不確定從哪一刻開始，我們更想把時間用來和重視的人相處。不確定從哪一刻開始，我們更想把時間用來和重視的人相處。\n不確定從哪一刻開始，我們更想把時間用來和重視的人相處。不確定從哪一刻開始，我們更想把時間用來和重視的人相處。不確定從哪一刻開始，我們更想把時間用來和重視的人相處。不確定從哪一刻開始，我們更想把時間用來和重視的人相處。不確定從哪一刻開始，我們更想把時間用來和重視的人相處。'
 
   return (
     <>

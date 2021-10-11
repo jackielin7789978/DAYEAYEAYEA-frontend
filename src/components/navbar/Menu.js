@@ -1,12 +1,12 @@
-import styled from "styled-components";
-import { COLOR, FONT_SIZE, MEDIA_QUERY } from "../../constants/style";
-import { Link } from "react-router-dom";
+import styled from 'styled-components'
+import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
+import { Link, useLocation } from 'react-router-dom'
 
 const CategoryContainer = styled.div`
   position: fixed;
   height: 100vh;
   width: 100vw;
-  top: ${({ $isOpen }) => ($isOpen ? "50px" : "-100vh")};
+  top: ${({ $isOpen }) => ($isOpen ? '50px' : '-100vh')};
   background: ${COLOR.primary_light};
   display: flex;
   flex-direction: column;
@@ -20,7 +20,7 @@ const CategoryContainer = styled.div`
     height: 90px;
     width: unset;
   }
-`;
+`
 const Category = styled(Link)`
   text-decoration: none;
   text-align: center;
@@ -36,6 +36,13 @@ const Category = styled(Link)`
   &:hover {
     color: ${COLOR.text_primary_dark};
   }
+
+  ${(props) =>
+    props.$active &&
+    `
+    font-weight: bold;
+  `}
+
   ${MEDIA_QUERY.tablet} {
     font-size: ${FONT_SIZE.lg};
   }
@@ -44,18 +51,55 @@ const Category = styled(Link)`
     font-size: ${FONT_SIZE.md};
     padding: 0 22px;
   }
-`;
+`
 
 export default function Menu({ $isOpen }) {
+  const pathname = useLocation().pathname
+
   return (
     <CategoryContainer $isOpen={$isOpen}>
-      <Category to="/">所有商品</Category>
-      <Category to="/">居家生活</Category>
-      <Category to="/">服飾配件</Category>
-      <Category to="/">廚房餐具</Category>
-      <Category to="/">食材雜貨</Category>
-      <Category to="/">設計文具</Category>
-      <Category to="/">休閒戶外</Category>
+      <Category
+        to='/categories/all/1'
+        $active={pathname.includes('/categories/all')}
+      >
+        所有商品
+      </Category>
+      <Category
+        to='/categories/home/1'
+        $active={pathname.includes('/categories/home')}
+      >
+        居家生活
+      </Category>
+      <Category
+        to='/categories/apparel/1'
+        $active={pathname.includes('/categories/apparel')}
+      >
+        服飾配件
+      </Category>
+      <Category
+        to='/categories/kitchenware/1'
+        $active={pathname.includes('/categories/kitchenware')}
+      >
+        廚房餐具
+      </Category>
+      <Category
+        to='/categories/food/1'
+        $active={pathname.includes('/categories/food')}
+      >
+        食材雜貨
+      </Category>
+      <Category
+        to='/categories/stationery/1'
+        $active={pathname.includes('/categories/stationery')}
+      >
+        設計文具
+      </Category>
+      <Category
+        to='/categories/outdoor/1'
+        $active={pathname.includes('/categories/outdoor')}
+      >
+        休閒戶外
+      </Category>
     </CategoryContainer>
-  );
+  )
 }

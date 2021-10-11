@@ -18,7 +18,6 @@ const ButtonStyle = styled.button`
   ${(props) =>
     props.color === 'primary' &&
     `background: ${COLOR.primary_light};
-
       &:hover {
         background: ${COLOR.primary_light_hover};
       }
