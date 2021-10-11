@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+
 const ITEMS_NAME = 'cartItems'
 
 export function ScrollToTop() {
