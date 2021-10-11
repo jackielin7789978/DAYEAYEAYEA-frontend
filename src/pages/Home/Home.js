@@ -1,54 +1,96 @@
-/* eslint-disable */
 import Carousel from 'react-bootstrap/Carousel'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import styled from 'styled-components'
-import { PageWidth, FullWidth, ImgAnchor } from '../../components/general'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
-import { FullModal, GeneralModal } from '../../components/Modal'
-import {
-  ShoppingCarBtn,
-  ShoppingCarWhiteBtn,
-  ArrowBtn,
-  EditBtn,
-  GeneralBtn
-} from '../../components/Button'
+import { useState, useEffect, useContext } from 'react'
+import useMediaQuery from '../../hooks/useMediaQuery'
+import { LoadingContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
-import { PaginatorButton } from '../../components/Paginator'
-import { Link, useLocation } from 'react-router-dom'
+import { PageWidth, FullWidth, ImgAnchor } from '../../components/general'
+import { COLOR } from '../../constants/style'
+import { ProductCard } from '../../components/ProductCard'
+import { getCategoryProducts } from '../../webAPI/productsAPI'
+import { IndexImg } from './HomeImg'
 
 const Img = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 `
-const OutdoorImg = styled(Img)`
+const OutdoorArticleImg = styled(Img)`
   background-image: url('https://i.imgur.com/SdIsgaD.jpg');
 `
-const DiningImg = styled(Img)`
+const DiningArticleImg = styled(Img)`
   background-image: url('https://i.imgur.com/jrOqpOa.jpg');
 `
-const FragranceImg = styled(Img)`
+const FragranceArticleImg = styled(Img)`
   background-image: url('https://i.imgur.com/yx6JDOZ.jpg');
   background-position: bottom;
 `
+
 const ImgLink = styled(ImgAnchor)`
   height: 520px;
 `
 
-// 測試用
+const ProductContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 30px;
+`
+
 const CardContainer = styled.div`
   display: flex;
   justify-content: space-around;
-  margin: 40px 0px;
+  margin: 20px 0px;
   flex-wrap: wrap;
 `
 
-const PaginatorDiv = styled.div`
-  margin: 20px auto 40px auto;
-`
+const getProductsByCategory = (category, setProducts, isLoading) => {
+  isLoading(true)
+  getCategoryProducts(category).then((products) => {
+    setProducts(products.data.slice(0, 4))
+    isLoading(false)
+  })
+}
+
+const showProductsInComponent = (data, MediaQuery) => {
+  const isMobile = MediaQuery('(max-width: 767px)')
+  return data.map(({ id, name, price, Product_imgs, discountPrice }) => {
+    const length = Product_imgs.length
+    const imgUrl = isMobile
+      ? Product_imgs[length - 1].imgUrlSm
+      : Product_imgs[length - 1].imgUrlMd
+    return (
+      <ProductCard
+        id={id}
+        key={id}
+        imgUrl={imgUrl}
+        title={name}
+        price={price}
+        discountPrice={discountPrice}
+      />
+    )
+  })
+}
 
 export default function Home() {
-  const pathname = useLocation().pathname
+  const [homeProducts, setHomeProducts] = useState([])
+  const [apparelProducts, setApparelProducts] = useState([])
+  const [kitchenwareProducts, setKitchenProducts] = useState([])
+  const [foodProducts, setFoodProducts] = useState([])
+  const [stationeryProducts, setStationeryProducts] = useState([])
+  const [outdoorProducts, setOutdoorProducts] = useState([])
+  const { isLoading, setIsLoading } = useContext(LoadingContext)
+
+  useEffect(() => {
+    getProductsByCategory('home', setHomeProducts, setIsLoading)
+    getProductsByCategory('apparel', setApparelProducts, setIsLoading)
+    getProductsByCategory('kitchenware', setKitchenProducts, setIsLoading)
+    getProductsByCategory('food', setFoodProducts, setIsLoading)
+    getProductsByCategory('stationery', setStationeryProducts, setIsLoading)
+    getProductsByCategory('outdoor', setOutdoorProducts, setIsLoading)
+  }, [setIsLoading])
+
   return (
     <>
       <FullWidth>
@@ -58,60 +100,84 @@ export default function Home() {
           }}
         >
           <Carousel.Item>
-            <OutdoorImg>
+            <OutdoorArticleImg>
               <ImgLink to='/info/notice'>Link</ImgLink>
-            </OutdoorImg>
+            </OutdoorArticleImg>
           </Carousel.Item>
           <Carousel.Item>
-            <DiningImg>
+            <DiningArticleImg>
               <ImgLink to='/info/FAQ'>Link</ImgLink>
-            </DiningImg>
+            </DiningArticleImg>
           </Carousel.Item>
           <Carousel.Item>
-            <FragranceImg>
+            <FragranceArticleImg>
               <ImgLink to='/info/join'>Link</ImgLink>
-            </FragranceImg>
+            </FragranceArticleImg>
           </Carousel.Item>
         </Carousel>
       </FullWidth>
       <PageWidth>
-        {/* <IsLoadingComponent /> */}
-        {/* <FullModal
-          buttonOne={
-            <ShoppingCarBtn
-              color='primary'
-              marginStyle={{ marginRight: '8px' }}
-            >
-              結帳
-            </ShoppingCarBtn>
-          }
-          buttonTwo={<EditBtn color='accent'>編輯</EditBtn>}
-        >
-          已成功加入購物車!
-        </FullModal> */}
-        {/* <GeneralModal
-          buttonOne={
-            <ArrowBtn marginStyle={{ marginRight: '8px' }} color='primary' />
-          }
-          buttonTwo={<EditBtn color='accent'>編輯</EditBtn>}
-        >
-          確定要取消此訂單?
-        </GeneralModal> */}
-        <CardContainer>
-          {/* <ArrowBtn>註冊</ArrowBtn>
-          <EditBtn color="accent">編輯</EditBtn>
-          <ShoppingCarBtn color="primary">前往結帳</ShoppingCarBtn> */}
-          <GeneralBtn>取消訂單</GeneralBtn>
-          {/* <Link style={{ width: '100%' }} to='/info/join'>
-            <ShoppingCarWhiteBtn />
-          </Link> */}
-        </CardContainer>
-        <PaginatorDiv>
-          <PaginatorButton $active={pathname === '/'} page='1' to='/' />
-          <PaginatorButton page='5' to='/info/join' />
-          <PaginatorButton page='10' to='/info/join' />
-          <PaginatorButton page='11' to='/info/join' />
-        </PaginatorDiv>
+        {isLoading && <IsLoadingComponent />}
+        <ProductContainer>
+          <IndexImg
+            imgUrl='https://i.imgur.com/WjvyBCB.jpg'
+            color={COLOR.text_dark}
+          >
+            居家生活
+          </IndexImg>
+          <CardContainer>
+            {showProductsInComponent(homeProducts, useMediaQuery)}
+          </CardContainer>
+        </ProductContainer>
+        <ProductContainer>
+          <IndexImg
+            imgUrl='https://i.imgur.com/5mNsAzg.jpg'
+            color={COLOR.text_dark}
+          >
+            服飾配件
+          </IndexImg>
+          <CardContainer>
+            {showProductsInComponent(apparelProducts, useMediaQuery)}
+          </CardContainer>
+        </ProductContainer>
+        <ProductContainer>
+          <IndexImg
+            imgUrl='https://i.imgur.com/kBR54ha.jpg'
+            color={COLOR.text_light}
+          >
+            廚房餐具
+          </IndexImg>
+          <CardContainer>
+            {showProductsInComponent(kitchenwareProducts, useMediaQuery)}
+          </CardContainer>
+        </ProductContainer>
+        <ProductContainer>
+          <IndexImg imgUrl='https://i.imgur.com/3qTh9JZ.jpg' color='black'>
+            食材雜貨
+          </IndexImg>
+          <CardContainer>
+            {showProductsInComponent(foodProducts, useMediaQuery)}
+          </CardContainer>
+        </ProductContainer>
+        <ProductContainer>
+          <IndexImg imgUrl='https://i.imgur.com/db1W1Ne.jpg' color='black'>
+            設計文具
+          </IndexImg>
+          <CardContainer>
+            {showProductsInComponent(stationeryProducts, useMediaQuery)}
+          </CardContainer>
+        </ProductContainer>
+        <ProductContainer>
+          <IndexImg
+            imgUrl='https://i.imgur.com/TrmCL9e.jpg'
+            color={COLOR.text_dark}
+          >
+            休閒戶外
+          </IndexImg>
+          <CardContainer>
+            {showProductsInComponent(outdoorProducts, useMediaQuery)}
+          </CardContainer>
+        </ProductContainer>
       </PageWidth>
     </>
   )
