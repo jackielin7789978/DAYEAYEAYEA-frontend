@@ -3,7 +3,7 @@ import {
   Input,
   ErrorMsg,
   SendPassword
-} from '../../components/loginSystem/style'
+} from '../../components/loginSystem/loginCard'
 import { ArrowBtn } from '../../components/Button'
 import { useForm } from 'react-hook-form'
 export default function SignInForm() {

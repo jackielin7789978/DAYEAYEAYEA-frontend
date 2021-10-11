@@ -4,7 +4,7 @@ import {
   Title,
   FormWrapper,
   AbsoluteCenter
-} from '../../components/loginSystem/style'
+} from '../../components/loginSystem/loginCard'
 import { Tabs } from '../../components/Tab'
 import SignInForm from './SignInForm'
 import SignUpForm from './SignUpForm'
