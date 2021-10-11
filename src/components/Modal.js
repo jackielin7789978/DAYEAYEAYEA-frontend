@@ -60,7 +60,7 @@ const CancelRoundedColorIcon = styled(CancelRoundedIcon)`
   position: absolute;
   top: 12px;
   left: 15px;
-  fill: #cecece;
+  fill: ${COLOR.grey};
   font-size: 32px;
   cursor: pointer;
 `

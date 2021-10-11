@@ -15,16 +15,16 @@ const PaginatorButtonStyle = styled(Link)`
   }
 
   ${(props) =>
-    props.active &&
+    props.$active &&
     `
   font-weight: bold;
   border-bottom: 1px solid ${COLOR.text_primary_dark};
   `}
 `
 
-export function PaginatorButton({ to, page, $active }) {
+export function PaginatorButton({ to, page, active }) {
   return (
-    <PaginatorButtonStyle key={page} to={to} active={$active}>
+    <PaginatorButtonStyle key={page} to={to} $active={active}>
       {page}
     </PaginatorButtonStyle>
   )
