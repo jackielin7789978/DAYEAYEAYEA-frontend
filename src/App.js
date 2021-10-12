@@ -13,11 +13,18 @@ import {
   ModifyInfo,
   OrderDetail,
   Orders,
-  Products
+  Products,
+  NotFound
 } from './pages/index'
+import { AdminOrders, AdminMembers, AdminProducts } from './pages/AdminPages'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
 import { PageHeight } from './components/general'
-import { HashRouter as Router, Route, Switch } from 'react-router-dom'
+import {
+  HashRouter as Router,
+  Route,
+  Switch,
+  useRouteMatch
+} from 'react-router-dom'
 import { ScrollToTop } from './utils'
 import { LoadingContext } from './context'
 
@@ -27,68 +34,130 @@ export default function App() {
     <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
       <Router basename='/'>
         <ScrollToTop />
-        <Navbar />
-        <PageHeight>
-          <Switch>
-            <Route path='/articles/:slug'>
-              <Articles />
-            </Route>
-            <Route path='/checkout/step1'>
-              <Step1 />
-            </Route>
-            <Route path='/checkout/step2'>
-              <Step2 />
-            </Route>
-            <Route path='/checkout/step3'>
-              <Step3 />
-            </Route>
-            <Route path='/categories/:slug/:page'>
-              <Categories />
-            </Route>
-            <Route path='/login'>
-              <Login />
-            </Route>
-            <Route path='/member/me'>
-              {/* 會員首頁 */}
-              <Me />
-            </Route>
-            <Route path='/member/modify-info'>
-              {/* 修改資料頁面 */}
-              <ModifyInfo />
-            </Route>
-            <Route path='/member/orders/order-detail'>
-              {/* 訂單詳細資料頁面 */}
-              <OrderDetail />
-            </Route>
-            <Route path='/member/orders'>
-              {/* 訂單頁面 */}
-              <Orders />
-            </Route>
-            <Route path='/products/:id'>
-              <Products />
-            </Route>
-            <Route path='/info/brand'>
-              <Brand />
-            </Route>
-            <Route path='/info/faq'>
-              <FAQ />
-            </Route>
-            <Route path='/info/join'>
-              <Join />
-            </Route>
-            <Route path='/info/notice'>
-              <Notice />
-            </Route>
-            <Route path='/info/privacy'>
-              <Privacy />
-            </Route>
-            <Route exact path='/'>
-              <Home />
-            </Route>
-          </Switch>
-        </PageHeight>
-        <Footer />
+        <Switch>
+          <Route path='/admin'>
+            <AdminRoutes />
+          </Route>
+          <Route path='/'>
+            <Shop />
+          </Route>
+        </Switch>
       </Router>
     </LoadingContext.Provider>
+  )
+}
+function AdminRoutes() {
+  const { path } = useRouteMatch()
+  return (
+    <Switch>
+      <Route path={`${path}/orders`}>
+        <AdminOrders />
+      </Route>
+      <Route path={`${path}/products`}>
+        <AdminProducts />
+      </Route>
+      <Route path={`${path}/members`}>
+        <AdminMembers />
+      </Route>
+    </Switch>
+  )
+}
+
+function Shop() {
+  return (
+    <>
+      <Navbar />
+      <PageHeight>
+        <Switch>
+          <Route path='/articles/:slug'>
+            <Articles />
+          </Route>
+          <Route path='/checkout'>
+            <CheckoutRoutes />
+          </Route>
+          <Route path='/categories/:slug/:page'>
+            <Categories />
+          </Route>
+          <Route path='/login'>
+            <Login />
+          </Route>
+          <Route path='/member/'>
+            <MemberRoutes />
+          </Route>
+          <Route path='/products/:id'>
+            <Products />
+          </Route>
+          <Route path='/info'>
+            <InfoRoutes />
+          </Route>
+          <Route exact path='/'>
+            <Home />
+          </Route>
+          <Route path='*'>
+            <NotFound />
+          </Route>
+        </Switch>
+      </PageHeight>
+      <Footer />
+    </>
+  )
+}
+
+function CheckoutRoutes() {
+  const { path } = useRouteMatch()
+  return (
+    <Switch>
+      <Route path={`${path}/step1`}>
+        <Step1 />
+      </Route>
+      <Route path={`${path}/step2`}>
+        <Step2 />
+      </Route>
+      <Route path={`${path}/step3`}>
+        <Step3 />
+      </Route>
+    </Switch>
+  )
+}
+
+function MemberRoutes() {
+  const { path } = useRouteMatch()
+  return (
+    <Switch>
+      <Route path={`${path}/me`}>
+        <Me />
+      </Route>
+      <Route path={`${path}/modify-info`}>
+        <ModifyInfo />
+      </Route>
+      <Route path={`${path}/orders/order-detail`}>
+        <OrderDetail />
+      </Route>
+      <Route path={`${path}/orders`}>
+        <Orders />
+      </Route>
+    </Switch>
+  )
+}
+function InfoRoutes() {
+  const { path } = useRouteMatch()
+  return (
+    <Switch>
+      <Route path={`${path}/brand`}>
+        <Brand />
+      </Route>
+      <Route path={`${path}/faq`}>
+        <FAQ />
+      </Route>
+      <Route path={`${path}/join`}>
+        <Join />
+      </Route>
+      <Route path={`${path}/notice`}>
+        <Notice />
+      </Route>
+      <Route path={`${path}/privacy`}>
+        <Privacy />
+      </Route>
+    </Switch>
   )
 }
