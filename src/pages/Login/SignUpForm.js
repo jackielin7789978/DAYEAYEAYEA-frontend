@@ -1,4 +1,4 @@
-import { Form, Input, ErrorMsg } from '../../components/loginSystem/style'
+import { Form, Input, ErrorMsg } from '../../components/loginSystem/loginCard'
 import { ArrowBtn } from '../../components/Button'
 import { useForm } from 'react-hook-form'
 export default function SignUpForm() {

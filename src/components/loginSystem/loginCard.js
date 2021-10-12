@@ -3,7 +3,7 @@ import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../constants/style'
 import { Link } from 'react-router-dom'
 import { PageWidth } from '../general'
 const PageWidthHeight = styled(PageWidth)`
-  min-height: 500px;
+  min-height: 600px;
   height: 100%;
 `
 const AbsoluteCenter = styled.div`
