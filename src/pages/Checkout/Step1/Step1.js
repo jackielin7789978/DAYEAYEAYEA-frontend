@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { PageWidth } from '../../../components/general'
-import { ItemCounter } from '../../../components/Counter'
 import {
   Title,
   Steps,
@@ -9,22 +8,15 @@ import {
   TitleGroup,
   CarTitles,
   CarTitle,
-  Item,
-  ItemImg,
-  ItemName,
-  ItemPrice,
-  ItemContent,
-  ItemDelete,
-  ItemInfo,
   TotalPrice,
   BtnFlex,
   LinkStyle
 } from '../../../components/checkoutSystem/Step'
 import { setCartItems, getCartItems } from '../../../utils'
 import { GeneralBtn } from '../../../components/Button'
-
+import { Cart } from './Cart'
 export default function Step1() {
-  const [itemList, setItemList] = useState(() => {
+  const [cart, setCart] = useState(() => {
     if (getCartItems()) {
       let itemData = getCartItems()
       return JSON.parse(itemData)
@@ -37,8 +29,8 @@ export default function Step1() {
     fetch(`https://api.coolizz.tw/products/${random}`)
       .then((res) => res.json())
       .then((res) =>
-        setItemList([
-          ...itemList,
+        setCart([
+          ...cart,
           {
             id: res.data.id,
             name: res.data.name,
@@ -50,40 +42,38 @@ export default function Step1() {
       )
   }
   useEffect(() => {
-    setCartItems(JSON.stringify(itemList))
+    setCartItems(JSON.stringify(cart))
     setTotalPrice(
-      itemList.reduce((total, item) => {
+      cart.reduce((total, item) => {
         return total + item.price * item.count
       }, 0)
     )
-  }, [itemList])
+  }, [cart])
 
   const handleItemDelete = (id) => {
-    setItemList(itemList.filter((item) => item.id !== id))
+    setCart(cart.filter((item) => item.id !== id))
   }
-
-  const handleUpdateCount = (value, id) => {
-    if (value < 1) {
-      return setItemList(itemList.filter((item) => item.id !== id))
+  const handleUpdateCount = useCallback((count, id) => {
+    if (count < 1) {
+      return setCart((c) => c.filter((item) => item.id !== id))
     }
-    setItemList(
-      itemList.map((item) => {
+    setCart((c) =>
+      c.map((item) => {
         if (item.id !== id) return item
         return {
           ...item,
-          count: value
+          count
         }
       })
     )
-  }
-
+  }, [])
   return (
     <PageWidth>
       <div onClick={handleAddProduct}>
         <GeneralBtn color='primary' children='加入購物車' />
       </div>
       <Steps />
-      <Title>{`購物車( ${itemList.length} 件)`}</Title>
+      <Title>{`購物車( ${cart.length} 件)`}</Title>
       <CarTitles>
         <TitleWidth />
         <TitleGroup>
@@ -92,28 +82,13 @@ export default function Step1() {
           <CarTitle>數量</CarTitle>
         </TitleGroup>
       </CarTitles>
-
-      {itemList.map((item) => (
-        <Item key={item.id}>
-          <ItemImg img={item.imgUrl} to={`/products/${item.id}`} />
-          <ItemInfo>
-            <ItemName children={item.name} to={`/products/${item.id}`} />
-            <ItemContent>
-              <ItemPrice children={`NT$ ${item.price}`} />
-              <ItemCounter
-                marginStyle={{ marginRight: '25px' }}
-                value={parseInt(item.count)}
-                handleUpdateCount={handleUpdateCount}
-                id={item.id}
-              />
-            </ItemContent>
-          </ItemInfo>
-          <ItemDelete
-            onClick={() => {
-              handleItemDelete(item.id)
-            }}
-          />
-        </Item>
+      {cart.map((item) => (
+        <Cart
+          key={item.id}
+          item={item}
+          handleItemDelete={handleItemDelete}
+          handleUpdateCount={handleUpdateCount}
+        />
       ))}
       <TotalPrice>{`總金額 NT$ ${totalPrice}`}</TotalPrice>
       <BtnFlex>
