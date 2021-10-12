@@ -28,7 +28,11 @@ export const COLOR = {
   border_light: '#fff',
   border_dark: '#333'
 }
-
+export const ADMIN_COLOR = {
+  light_grey: '#E2E5E7',
+  editBtn_grey: '#999',
+  editBtn_grey_hover: '#888'
+}
 // 要用什麼字體？
 export const FONT = {
   logo: "'Karla', sans-serif;"

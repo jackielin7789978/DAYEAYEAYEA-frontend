@@ -12,6 +12,11 @@ export const PageHeight = styled.div`
     margin-top: 121px;
   }
 `
+export const AdminPageWidth = styled.div`
+  position: relative;
+  width: 90%;
+  margin: 0 auto;
+`
 
 // 非滿版用 PageWidth 包
 export const PageWidth = styled.div`

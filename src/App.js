@@ -18,7 +18,7 @@ import {
 } from './pages/index'
 import { AdminOrders, AdminMembers, AdminProducts } from './pages/AdminPages'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
-import { PageHeight } from './components/general'
+import { PageHeight, AdminPageWidth } from './components/general'
 import {
   HashRouter as Router,
   Route,
@@ -50,15 +50,17 @@ function AdminRoutes() {
   const { path } = useRouteMatch()
   return (
     <Switch>
-      <Route path={`${path}/orders`}>
-        <AdminOrders />
-      </Route>
-      <Route path={`${path}/products`}>
-        <AdminProducts />
-      </Route>
-      <Route path={`${path}/members`}>
-        <AdminMembers />
-      </Route>
+      <AdminPageWidth>
+        <Route path={`${path}/orders`}>
+          <AdminOrders />
+        </Route>
+        <Route path={`${path}/products`}>
+          <AdminProducts />
+        </Route>
+        <Route path={`${path}/members`}>
+          <AdminMembers />
+        </Route>
+      </AdminPageWidth>
     </Switch>
   )
 }

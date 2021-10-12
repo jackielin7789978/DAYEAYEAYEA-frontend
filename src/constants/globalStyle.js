@@ -43,6 +43,7 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
   }
   button {
+    box-sizing: border-box;
     border: none;
     cursor: pointer;
     background: transparent;
