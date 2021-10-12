@@ -32,7 +32,8 @@ const CardLink = styled(Link)`
   justify-content: center;
   align-items: center;
   ${MEDIA_QUERY.tablet} {
-    height: 90%;
+    height: 80%;
+    margin-bottom: 10px;
   }
   ${MEDIA_QUERY.desktop} {
     height: 90%;
@@ -65,7 +66,7 @@ const TitleContainer = styled.div`
   ${MEDIA_QUERY.tablet} {
     font-size: ${FONT_SIZE.md};
     height: 12%;
-    margin-top: 20px;
+    margin-top: 15px;
   }
   ${MEDIA_QUERY.desktop} {
     font-size: ${FONT_SIZE.md};
