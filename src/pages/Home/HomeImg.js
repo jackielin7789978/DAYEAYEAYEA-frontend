@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
-import { Link } from 'react-router-dom'
+import { FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 
 const CategoryImg = styled.div`
   background-size: cover;

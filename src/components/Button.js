@@ -71,18 +71,18 @@ const BorderColorIcon = styled(BorderColorOutlinedIcon)`
   font-size: large;
 `
 
-function ShoppingCarBtn({ color, children, marginStyle }) {
+function ShoppingCarBtn({ color, children, marginStyle, id, onClick }) {
   return (
-    <ButtonStyle color={color} style={marginStyle}>
+    <ButtonStyle id={id} color={color} style={marginStyle} onClick={onClick}>
       <ShoppingCardIcon />
       {children}
     </ButtonStyle>
   )
 }
 
-function ShoppingCarWhiteBtn({ children, marginStyle }) {
+function ShoppingCarWhiteBtn({ children, marginStyle, id, onClick }) {
   return (
-    <ButtonStyle color='white' style={marginStyle}>
+    <ButtonStyle id={id} color='white' style={marginStyle} onClick={onClick}>
       <ColorShoppingCardIcon />
       {children}
     </ButtonStyle>
