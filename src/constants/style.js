@@ -29,6 +29,7 @@ export const COLOR = {
   border_dark: '#333'
 }
 export const ADMIN_COLOR = {
+  table_blue: '#3689c9',
   light_grey: '#E2E5E7',
   editBtn_grey: '#999',
   editBtn_grey_hover: '#888'

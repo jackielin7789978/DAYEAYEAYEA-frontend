@@ -8,7 +8,7 @@ const Wrapper = styled.div`
 const ColumnHeader = styled.div`
   display: flex;
   justify-content: space-around;
-  background: #3689c9;
+  background: ${ADMIN_COLOR.table_blue};
   padding: 10px 0px 10px 40px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
@@ -16,7 +16,7 @@ const ColumnHeader = styled.div`
 const Header = styled.div`
   color: ${COLOR.text_light};
   font-weight: bold;
-  width: 15%;
+  width: ${({ $name }) => ($name === 'Email' ? '320px' : '15%')};
 `
 const TableItemContainer = styled.div`
   background: ${ADMIN_COLOR.light_grey};
@@ -58,16 +58,14 @@ function TableItem() {
     </Container>
   )
 }
-export default function Table() {
+
+export default function Table({ headerNames }) {
   return (
     <Wrapper>
       <ColumnHeader>
-        <Header>訂單狀態</Header>
-        <Header>訂單編號</Header>
-        <Header style={{ width: '320px' }}>Email</Header>
-        <Header>付款狀態</Header>
-        <Header>訂單金額</Header>
-        <Header>Edit</Header>
+        {headerNames.map((name) => (
+          <Header $name={name}>{name}</Header>
+        ))}
       </ColumnHeader>
       <TableItemContainer>
         <TableItem />
