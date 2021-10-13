@@ -1,4 +1,4 @@
-import { useMemo, useContext } from 'react'
+import { useContext } from 'react'
 import { LocalStorageContext } from '../../context'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -64,16 +64,7 @@ const EmptyCart = styled.div`
 `
 
 export default function CartMenu({ handleHover, $isOpen }) {
-  const { cartItems } = useContext(LocalStorageContext)
-
-  const totalPrice = useMemo(() => {
-    let sum = 0
-    for (const cartItem of cartItems) {
-      sum += cartItem.price
-    }
-    return sum
-  }, [cartItems])
-  const totalItems = useMemo(() => cartItems.length, [cartItems])
+  const { cartItems, totalItems, totalPrice } = useContext(LocalStorageContext)
 
   return (
     <RestyledHoverArea

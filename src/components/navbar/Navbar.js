@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
+import { LocalStorageContext } from '../../context'
 import { useLocation } from 'react-router-dom'
 import SearchIcon from '@mui/icons-material/Search'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
@@ -25,6 +26,7 @@ import {
 
 export default function Navbar() {
   const [menu, setMenu] = useState('')
+  const { totalItems } = useContext(LocalStorageContext)
 
   const handleHover = (name) => {
     if (window.innerWidth < 1200) return
@@ -36,7 +38,7 @@ export default function Navbar() {
   }, [pathname, setMenu])
 
   useEffect(() => {
-    if (window.matchMedia('min-width: 1200px')) return
+    if (window.innerWidth > 1200) return
     if (menu) return (document.body.style.overflowY = 'hidden')
     if (!menu) return (document.body.style.overflowY = 'scroll')
   }, [menu])
@@ -107,6 +109,7 @@ export default function Navbar() {
               $shouldHide={menu ? true : false}
             >
               <ShoppingCartOutlinedIcon />
+              {totalItems ? <span>{totalItems}</span> : null}
             </CartBTN>
           </RightIcons>
         </Nav>

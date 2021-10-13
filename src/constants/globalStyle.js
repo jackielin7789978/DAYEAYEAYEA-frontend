@@ -17,16 +17,16 @@ const GlobalStyle = createGlobalStyle`
     flex-direction: column;
   }
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
   }
   ::-webkit-scrollbar-track {
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
+    -webkit-border-radius: 24px;
+    border-radius: 24px;
   }
   ::-webkit-scrollbar-thumb {
     -webkit-border-radius: 4px;
     border-radius: 4px;
-    background: rgb(219,219,219);
+    background: rgb(204,204,204);
   }
   h1, h2, h3, h4, h5, h6 {
     margin: 0;

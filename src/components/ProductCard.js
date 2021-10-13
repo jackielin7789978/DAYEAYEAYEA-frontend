@@ -138,7 +138,7 @@ export function ProductCard({ id, name, price, imgUrl, discountPrice, imgs }) {
     }),
     [name, price, discountPrice, imgs]
   )
-  // 這邊要立即變更 CartItems State，才能及時更新購物車資料。
+  // 這邊要立即變更 CartItems State，才能及時更新購物車資料。Push 之前先刪掉
   const { setCartItems } = useContext(LocalStorageContext)
   const handleAddProductInCart = () => {
     AddItemsInLocalStorage(id, productInfo)

@@ -146,9 +146,24 @@ const AccountBTN = styled.div`
   }
 `
 const CartBTN = styled.div`
+  position: relative;
   cursor: pointer;
   margin: 0 2vw;
   opacity: ${({ $shouldHide }) => ($shouldHide ? 0 : 1)};
+  span {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    display: inline-block;
+    width: 20px;
+    text-align: center;
+    border-radius: 50%;
+    background: #8a3f1a;
+    background: ${COLOR.warning_hover};
+    color: ${COLOR.text_light};
+    font-size: ${FONT_SIZE.xs};
+    line-height: 20px;
+  }
   ${MEDIA_QUERY.desktop} {
     opacity: 1;
     margin-right: 30px;
@@ -156,6 +171,12 @@ const CartBTN = styled.div`
     position: absolute;
     top: -37px;
     right: 60px;
+    span {
+      font-size: ${FONT_SIZE.sm};
+      line-height: 18px;
+      top: 0px;
+      right: -8px;
+    }
   }
   ${MEDIA_QUERY.widescreen} {
     right: 16vw;
