@@ -1,10 +1,11 @@
 import styled from 'styled-components'
-import { useMemo } from 'react'
+import { useMemo, useContext } from 'react'
 import useMediaQuery from '../hooks/useMediaQuery'
 import { Link } from 'react-router-dom'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../constants/style'
 import { ShoppingCarBtn, ShoppingCarWhiteBtn } from '../components/Button'
 import { AddItemsInLocalStorage } from '../utils'
+import { ModalContext } from '../context'
 
 const CardContainerDiv = styled.div`
   margin: 8px 4px;
@@ -142,6 +143,8 @@ const DiscountPriceStyle = styled(PriceStyle)`
 export function ProductCard({ id, name, price, imgUrl, discountPrice, imgs }) {
   let hasDiscount = price !== discountPrice ? true : false
   const isDesktop = useMediaQuery('(min-width: 1200px)')
+  // eslint-disable-next-line no-unused-vars
+  const { isModalOpen, setIsModalOpen } = useContext(ModalContext)
   const quantity = 1
   const productInfo = useMemo(
     () => ({
@@ -155,7 +158,9 @@ export function ProductCard({ id, name, price, imgUrl, discountPrice, imgs }) {
   )
   const handleAddProductInCart = () => {
     AddItemsInLocalStorage(id, productInfo)
+    setIsModalOpen(true)
   }
+
   return (
     <CardContainerDiv>
       <CardLink to={`/products/${id}`}>

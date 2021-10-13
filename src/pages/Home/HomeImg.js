@@ -25,10 +25,10 @@ const CategoryImg = styled.div`
   }
 `
 
-export function IndexImg({ children, imgUrl, color }) {
+export function IndexImg({ category, imgUrl, color }) {
   return (
     <CategoryImg style={{ backgroundImage: `url(${imgUrl})`, color: color }}>
-      {children}
+      {category}
     </CategoryImg>
   )
 }

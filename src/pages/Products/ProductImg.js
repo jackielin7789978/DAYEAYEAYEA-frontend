@@ -5,89 +5,95 @@ import useMediaQuery from '../../hooks/useMediaQuery'
 
 const ProductImgContainer = styled.div`
   width: 100%;
+  height: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 15px 0px;
 
   ${MEDIA_QUERY.tablet} {
+    width: 55%;
+    height: 100%;
     flex-direction: row;
-    justify-content: space-around;
     align-items: flex-start;
-    width: 50%;
     margin: 0px;
   }
 
   ${MEDIA_QUERY.desktop} {
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: flex-start;
     width: 50%;
+    height: 100%;
+    flex-direction: row;
+    align-items: flex-start;
     margin: 0px;
   }
 `
-const ThumbnailContainer = styled.aside`
-  width: 95%;
+const ThumbnailContainer = styled.div`
+  width: 85%;
+  height: 25%;
   display: flex;
   flex-direction: row;
 
   ${MEDIA_QUERY.tablet} {
     flex-direction: column;
-    align-items: flex-start;
+    justify-content: flex-start;
     width: 25%;
+    height: 100%;
   }
 
   ${MEDIA_QUERY.desktop} {
     flex-direction: column;
-    align-items: flex-start;
+    justify-content: flex-start;
     width: 25%;
+    height: 100%;
   }
 `
 
 const ThumbnailImgDiv = styled.div`
-  width: 30%;
-  padding-bottom:25%; 
-  height：0；
+  width: 32%;
+  height: 100% !important;
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center center;
-  margin: 0px 0px 0px 10px;
+  background-position: center;
+  margin: 0px 10px 0px 0px;
   cursor: pointer;
 
   &:hover {
     transform: scale(1.1);
     transition: linear 0.3s;
   }
+
   ${MEDIA_QUERY.tablet} {
-    width: 80%;
-    padding-bottom:72%; 
-    margin: 0px 0px 15px 0px;
+    width: 100%;
+    height: 26% !important;
+    margin: 0px 0px 12px 0px;
   }
 
   ${MEDIA_QUERY.desktop} {
-    width: 80%;
-    padding-bottom:72%; 
-    margin: 0px 0px 10px 0px;
+    width: 100%;
+    height: 26% !important;
+    margin: 0px 0px 8px 0px;
   }
 `
 
 const LargeImgDiv = styled.div`
-  width: 90%;
-  padding-bottom: 75%;
-  height：0；
+  width: 85%;
+  height: 75%;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   margin-bottom: 30px;
-  margin-right: 0px;
   ${MEDIA_QUERY.tablet} {
     width: 80%;
-    padding-bottom: 55%;
+    height: 80%;
+    margin: 0;
+    margin-left: 10px;
   }
 
   ${MEDIA_QUERY.desktop} {
     width: 80%;
-    padding-bottom: 55%;
+    height: 80%;
+    margin: 0;
+    margin-left: 10px;
   }
 `
 

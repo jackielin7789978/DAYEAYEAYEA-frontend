@@ -1,15 +1,16 @@
 import Carousel from 'react-bootstrap/Carousel'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import styled from 'styled-components'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useCallback } from 'react'
 import useMediaQuery from '../../hooks/useMediaQuery'
-import { LoadingContext } from '../../context'
+import { LoadingContext, ModalContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
 import { PageWidth, FullWidth, ImgAnchor } from '../../components/general'
 import { COLOR, MEDIA_QUERY } from '../../constants/style'
 import { ProductCard } from '../../components/ProductCard'
 import { getCategoryProducts } from '../../webAPI/productsAPI'
 import { IndexImg } from './HomeImg'
+import { FullModal } from '../../components/Modal'
 
 const Img = styled.div`
   background-size: cover;
@@ -57,16 +58,16 @@ const CardContainer = styled.div`
   }
 `
 
-const getProductsByCategory = (category, setProducts, isLoading) => {
-  isLoading(true)
+const getProductsByCategory = (category, setProducts, setIsLoading) => {
+  setIsLoading(true)
   getCategoryProducts(category).then((products) => {
     if (products.ok === 0) return
     setProducts(products.data.slice(0, 4))
-    isLoading(false)
+    setIsLoading(false)
   })
 }
 
-const showProductsInComponent = (data, MediaQuery) => {
+const showProductsInComponent = (data, MediaQuery, setIsModalOpen) => {
   const isMobile = MediaQuery('(max-width: 767px)')
   return data.map(({ id, name, price, Product_imgs, discountPrice }) => {
     const length = Product_imgs.length
@@ -95,6 +96,7 @@ export default function Home() {
   const [stationeryProducts, setStationeryProducts] = useState([])
   const [outdoorProducts, setOutdoorProducts] = useState([])
   const { isLoading, setIsLoading } = useContext(LoadingContext)
+  const { isModalOpen, setIsModalOpen } = useContext(ModalContext)
 
   useEffect(() => {
     getProductsByCategory('home', setHomeProducts, setIsLoading)
@@ -104,6 +106,10 @@ export default function Home() {
     getProductsByCategory('stationery', setStationeryProducts, setIsLoading)
     getProductsByCategory('outdoor', setOutdoorProducts, setIsLoading)
   }, [setIsLoading])
+
+  const handleModalClose = useCallback(() => {
+    setIsModalOpen((isModalOpen) => false)
+  }, [setIsModalOpen])
 
   return (
     <>
@@ -132,13 +138,17 @@ export default function Home() {
       </FullWidth>
       <PageWidth>
         {isLoading && <IsLoadingComponent />}
+        <FullModal
+          open={isModalOpen}
+          content='已成功加入購物車 ! '
+          onClose={handleModalClose}
+        />
         <ProductContainer>
           <IndexImg
             imgUrl='https://i.imgur.com/WjvyBCB.jpg'
             color={COLOR.text_dark}
-          >
-            居家生活
-          </IndexImg>
+            category={'居家生活'}
+          />
           <CardContainer>
             {showProductsInComponent(homeProducts, useMediaQuery)}
           </CardContainer>
@@ -147,9 +157,8 @@ export default function Home() {
           <IndexImg
             imgUrl='https://i.imgur.com/5mNsAzg.jpg'
             color={COLOR.text_dark}
-          >
-            服飾配件
-          </IndexImg>
+            category={'服飾配件'}
+          />
           <CardContainer>
             {showProductsInComponent(apparelProducts, useMediaQuery)}
           </CardContainer>
@@ -158,25 +167,28 @@ export default function Home() {
           <IndexImg
             imgUrl='https://i.imgur.com/kBR54ha.jpg'
             color={COLOR.text_light}
-          >
-            廚房餐具
-          </IndexImg>
+            category={'廚房餐具'}
+          />
           <CardContainer>
             {showProductsInComponent(kitchenwareProducts, useMediaQuery)}
           </CardContainer>
         </ProductContainer>
         <ProductContainer>
-          <IndexImg imgUrl='https://i.imgur.com/3qTh9JZ.jpg' color='black'>
-            食材雜貨
-          </IndexImg>
+          <IndexImg
+            imgUrl='https://i.imgur.com/3qTh9JZ.jpg'
+            color={COLOR.text_black}
+            category={'食材雜貨'}
+          />
           <CardContainer>
             {showProductsInComponent(foodProducts, useMediaQuery)}
           </CardContainer>
         </ProductContainer>
         <ProductContainer>
-          <IndexImg imgUrl='https://i.imgur.com/db1W1Ne.jpg' color='black'>
-            設計文具
-          </IndexImg>
+          <IndexImg
+            imgUrl='https://i.imgur.com/db1W1Ne.jpg'
+            color={COLOR.text_black}
+            category={'設計文具'}
+          />
           <CardContainer>
             {showProductsInComponent(stationeryProducts, useMediaQuery)}
           </CardContainer>
@@ -185,9 +197,8 @@ export default function Home() {
           <IndexImg
             imgUrl='https://i.imgur.com/TrmCL9e.jpg'
             color={COLOR.text_dark}
-          >
-            休閒戶外
-          </IndexImg>
+            category={'休閒戶外'}
+          />
           <CardContainer>
             {showProductsInComponent(outdoorProducts, useMediaQuery)}
           </CardContainer>
