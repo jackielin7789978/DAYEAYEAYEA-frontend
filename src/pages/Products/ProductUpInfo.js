@@ -162,7 +162,7 @@ export function ProductUpInfoComponent({
           ? setWarningMessage((warningMessage) => '已達商品數量上限')
           : setQuantity(quantity + 1)
       } else {
-        if (quantity === 1) return
+        if (quantity <= 1) return setQuantity((quantity) => 1)
         setQuantity(quantity - 1)
         if (quantity <= totalQuantity) setWarningMessage((warningMessage) => '')
       }
@@ -172,12 +172,12 @@ export function ProductUpInfoComponent({
 
   const handleChange = useCallback(
     (e) => {
-      const changeQuantity = e.target.value ? parseInt(e.target.value) : 1
+      const changeQuantity = e.target.value ? parseInt(e.target.value) : ''
       if (changeQuantity >= totalQuantity) {
         setQuantity((quantity) => totalQuantity)
         return setWarningMessage((warningMessage) => '已達商品數量上限')
       }
-      changeQuantity < 1
+      changeQuantity && changeQuantity < 1
         ? setQuantity((quantity) => 1)
         : setQuantity((quantity) => changeQuantity)
       setWarningMessage((warningMessage) => '')
