@@ -10,6 +10,7 @@ import {
   CSSTriangle,
   Title
 } from '../navbar/MenuStyles'
+import { getProductItems } from '../../utils'
 
 const RestyledHoverArea = styled(HoverArea)`
   ${MEDIA_QUERY.desktop} {
@@ -64,22 +65,12 @@ const EmptyCart = styled.div`
 
 export default function CartMenu({ handleHover, $isOpen }) {
   const [items, setItems] = useState([])
-  const BASE_URL = 'https://api.coolizz.tw'
   const handleRemove = (id) => {
     setItems(items.filter((item) => item.id !== id))
   }
 
   useEffect(() => {
-    return fetch(`${BASE_URL}/products`)
-      .then((res) => {
-        return res.json()
-      })
-      .then((res) => {
-        setItems(res.data.filter((data) => data.id < 20))
-      })
-      .catch((e) => {
-        console.log(e)
-      })
+    setItems(JSON.parse(getProductItems()))
   }, [])
 
   const totalPrice = useMemo(() => {
@@ -119,8 +110,9 @@ export default function CartMenu({ handleHover, $isOpen }) {
                     key={item.id}
                     id={item.id}
                     name={item.name}
-                    img={item.Product_imgs[0].imgUrlSm}
+                    img={item.img}
                     price={item.price}
+                    quantity={item.quantity}
                     handleRemove={handleRemove}
                   />
                 )

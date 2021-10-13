@@ -95,8 +95,7 @@ const LOGO = styled(Link)`
 const BurgerBTN = styled.div`
   cursor: pointer;
   margin: 0 2vw;
-
-  display: ${({ $isClicked }) => ($isClicked ? 'none' : 'inline-block')};
+  display: ${({ $shouldHide }) => ($shouldHide ? 'none' : 'inline-block')};
   ${MEDIA_QUERY.desktop} {
     padding: 5px;
     position: absolute;
@@ -117,8 +116,9 @@ const CloseBTN = styled.div`
 const SearchBTN = styled.div`
   cursor: pointer;
   margin: 0 2vw;
-
+  opacity: ${({ $shouldHide }) => ($shouldHide ? 0 : 1)};
   ${MEDIA_QUERY.desktop} {
+    opacity: 1;
     margin-right: 30px;
     padding: 5px;
     position: absolute;
@@ -132,7 +132,9 @@ const SearchBTN = styled.div`
 const AccountBTN = styled.div`
   cursor: pointer;
   margin: 0 2vw;
+  opacity: ${({ $shouldHide }) => ($shouldHide ? 0 : 1)};
   ${MEDIA_QUERY.desktop} {
+    opacity: 1;
     margin-right: 30px;
     padding: 5px;
     position: absolute;
@@ -146,7 +148,9 @@ const AccountBTN = styled.div`
 const CartBTN = styled.div`
   cursor: pointer;
   margin: 0 2vw;
+  opacity: ${({ $shouldHide }) => ($shouldHide ? 0 : 1)};
   ${MEDIA_QUERY.desktop} {
+    opacity: 1;
     margin-right: 30px;
     padding: 5px;
     position: absolute;

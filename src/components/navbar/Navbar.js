@@ -35,8 +35,8 @@ export default function Navbar() {
     setMenu('')
   }, [pathname, setMenu])
 
-  // 待修：只有 mobile 和 tablet 需要這個效果
   useEffect(() => {
+    if (window.matchMedia('min-width: 1200px')) return
     if (menu) return (document.body.style.overflowY = 'hidden')
     if (!menu) return (document.body.style.overflowY = 'scroll')
   }, [menu])
@@ -52,6 +52,7 @@ export default function Navbar() {
                 setMenu('category')
               }}
               $isClicked={menu === 'category' ? true : false}
+              $shouldHide={menu ? true : false}
             >
               <MenuIcon />
             </BurgerBTN>
@@ -73,6 +74,7 @@ export default function Navbar() {
               onMouseOut={() => {
                 handleHover('')
               }}
+              $shouldHide={menu ? true : false}
             >
               <SearchIcon />
             </SearchBTN>
@@ -89,6 +91,7 @@ export default function Navbar() {
               onMouseOut={() => {
                 handleHover('')
               }}
+              $shouldHide={menu ? true : false}
             >
               <AccountCircleOutlinedIcon />
             </AccountBTN>
@@ -102,6 +105,7 @@ export default function Navbar() {
               onMouseLeave={() => {
                 handleHover('')
               }}
+              $shouldHide={menu ? true : false}
             >
               <ShoppingCartOutlinedIcon />
             </CartBTN>

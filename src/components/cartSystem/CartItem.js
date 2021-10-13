@@ -56,7 +56,14 @@ const RemoveBtn = styled(DeleteOutlinedIcon)`
   }
 `
 
-export default function CartItem({ id, name, img, price, handleRemove }) {
+export default function CartItem({
+  id,
+  name,
+  img,
+  price,
+  quantity,
+  handleRemove
+}) {
   return (
     <ItemContainer>
       <Pic $img={img}>
@@ -64,7 +71,9 @@ export default function CartItem({ id, name, img, price, handleRemove }) {
       </Pic>
       <Info>
         <Name to={`/products/${id}`}>{name}</Name>
-        <NumPrice>1 x NT${price}</NumPrice>
+        <NumPrice>
+          {quantity} x NT${price}
+        </NumPrice>
         <RemoveBtn
           onClick={() => {
             handleRemove(id)
