@@ -81,12 +81,12 @@ const LargeImgDiv = styled.div`
   margin-bottom: 30px;
   margin-right: 0px;
   ${MEDIA_QUERY.tablet} {
-    width: 70%;
+    width: 80%;
     padding-bottom: 55%;
   }
 
   ${MEDIA_QUERY.desktop} {
-    width: 70%;
+    width: 80%;
     padding-bottom: 55%;
   }
 `

@@ -49,6 +49,13 @@ const Shortdesc = styled(InfoStyle)`
   white-space: pre-wrap;
   font-size: ${FONT_SIZE.sm};
   color: ${FONT_SIZE.text_dark};
+  ${MEDIA_QUERY.tablet} {
+    font-size: ${FONT_SIZE.md};
+  }
+
+  ${MEDIA_QUERY.desktop} {
+    font-size: ${FONT_SIZE.md};
+  }
 `
 
 const PriceContainer = styled.div`

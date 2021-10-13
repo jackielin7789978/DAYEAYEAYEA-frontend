@@ -6,7 +6,7 @@ import useMediaQuery from '../../hooks/useMediaQuery'
 import { LoadingContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
 import { PageWidth, FullWidth, ImgAnchor } from '../../components/general'
-import { COLOR } from '../../constants/style'
+import { COLOR, MEDIA_QUERY } from '../../constants/style'
 import { ProductCard } from '../../components/ProductCard'
 import { getCategoryProducts } from '../../webAPI/productsAPI'
 import { IndexImg } from './HomeImg'
@@ -35,14 +35,26 @@ const ProductContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-top: 30px;
+  margin-top: 20px;
+  ${MEDIA_QUERY.tablet} {
+    margin-top: 30px;
+  }
+  ${MEDIA_QUERY.desktop} {
+    margin-top: 30px;
+  }
 `
 
 const CardContainer = styled.div`
   display: flex;
   justify-content: space-around;
-  margin: 20px 0px;
+  margin: 10px 0px;
   flex-wrap: wrap;
+  ${MEDIA_QUERY.tablet} {
+    margin: 20px 0px;
+  }
+  ${MEDIA_QUERY.desktop} {
+    margin: 20px 0px;
+  }
 `
 
 const getProductsByCategory = (category, setProducts, isLoading) => {
