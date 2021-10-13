@@ -23,7 +23,7 @@ const ContentDiv = styled.div`
   line-height: 2em;
 `
 
-const Title = styled.p`
+const Title = styled.div`
   font-size: ${FONT_SIZE.xxl};
   font-weight: bold;
   display: flex;

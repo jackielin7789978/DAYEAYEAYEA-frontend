@@ -1,16 +1,24 @@
 import styled from 'styled-components'
 import { useState, useEffect, useContext } from 'react'
 import { useParams } from 'react-router-dom'
-import useMediaQuery from '../../hooks/useMediaQuery'
-import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
+import { MEDIA_QUERY } from '../../constants/style'
 import { LoadingContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
 import { ProductImgsComponent } from './ProductImg'
-import { ProductInfoComponent } from './ProductInfo'
+import { ProductUpInfoComponent } from './ProductUpInfo'
+import { ProductBottomInfoComponent } from './ProductBottomInfo'
 import { PageWidth } from '../../components/general'
 import { getProductById } from '../../webAPI/productsAPI'
 
-const ProductContainerDiv = styled.div`
+const ProductPageDiv = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const ProductTopContainer = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -19,11 +27,13 @@ const ProductContainerDiv = styled.div`
   ${MEDIA_QUERY.tablet} {
     flex-direction: row;
     justify-content: center;
+    margin: 60px auto 30px auto;
   }
 
   ${MEDIA_QUERY.desktop} {
     flex-direction: row;
     justify-content: center;
+    margin: 40px auto;
   }
 `
 
@@ -36,6 +46,7 @@ export default function Products() {
   useEffect(() => {
     setIsLoading((isLoading) => true)
     getProductById(id).then((result) => {
+      if (result.ok === 0) return setIsLoading((isLoading) => false)
       setProduct(result.data)
       setProductImgs(result.data.Product_imgs)
       setIsLoading((isLoading) => false)
@@ -43,22 +54,26 @@ export default function Products() {
   }, [setIsLoading, id])
 
   const { name, shortDesc, longDesc, price, discountPrice } = product
-
   let hasDiscount = price !== discountPrice ? true : false
+
   return (
     <PageWidth>
       {isLoading && <IsLoadingComponent />}
-      <ProductContainerDiv>
-        <ProductImgsComponent imgs={productImgs} />
-        <ProductInfoComponent
-          name={name}
-          shortDesc={shortDesc}
-          longDesc={longDesc}
-          price={price}
-          discountPrice={discountPrice}
-          hasDiscount={hasDiscount}
-        />
-      </ProductContainerDiv>
+      <ProductPageDiv>
+        <ProductTopContainer>
+          <ProductImgsComponent imgs={productImgs} />
+          <ProductUpInfoComponent
+            id={id}
+            name={name}
+            shortDesc={shortDesc}
+            imgs={productImgs}
+            price={price}
+            discountPrice={discountPrice}
+            hasDiscount={hasDiscount}
+          />
+        </ProductTopContainer>
+        <ProductBottomInfoComponent longDesc={longDesc} />
+      </ProductPageDiv>
     </PageWidth>
   )
 }

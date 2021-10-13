@@ -1,8 +1,10 @@
 import styled from 'styled-components'
+import { useMemo } from 'react'
 import useMediaQuery from '../hooks/useMediaQuery'
 import { Link } from 'react-router-dom'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../constants/style'
 import { ShoppingCarBtn, ShoppingCarWhiteBtn } from '../components/Button'
+import { AddItemsInLocalStorage } from '../utils'
 
 const CardContainerDiv = styled.div`
   margin: 4px;
@@ -121,14 +123,28 @@ const DiscountPriceStyle = styled(PriceStyle)`
   }
 `
 
-export function ProductCard({ id, title, price, imgUrl, discountPrice }) {
-  const isDesktop = useMediaQuery('(min-width: 1200px)')
+export function ProductCard({ id, name, price, imgUrl, discountPrice, imgs }) {
   let hasDiscount = price !== discountPrice ? true : false
+  const isDesktop = useMediaQuery('(min-width: 1200px)')
+  const quantity = 1
+  const productInfo = useMemo(
+    () => ({
+      name,
+      price,
+      discountPrice,
+      imgs,
+      quantity
+    }),
+    [name, price, discountPrice, imgs]
+  )
+  const handleAddProductInCart = () => {
+    AddItemsInLocalStorage(id, productInfo)
+  }
   return (
     <CardContainerDiv>
       <CardLink to={`/products/${id}`}>
         <ImgContainer style={{ backgroundImage: `url(${imgUrl})` }} />
-        <TitleContainer>{title}</TitleContainer>
+        <TitleContainer>{name}</TitleContainer>
         <PriceContainer>
           <PriceStyle discount={hasDiscount}>NT. {price}</PriceStyle>
           {hasDiscount && (
@@ -136,7 +152,11 @@ export function ProductCard({ id, title, price, imgUrl, discountPrice }) {
           )}
         </PriceContainer>
       </CardLink>
-      {isDesktop ? <ShoppingCarBtn color='primary' /> : <ShoppingCarWhiteBtn />}
+      {isDesktop ? (
+        <ShoppingCarBtn color='primary' onClick={handleAddProductInCart} />
+      ) : (
+        <ShoppingCarWhiteBtn onClick={handleAddProductInCart} />
+      )}
     </CardContainerDiv>
   )
 }

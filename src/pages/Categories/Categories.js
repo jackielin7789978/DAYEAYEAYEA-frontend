@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useCallback } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import {
   getAllProductsByPage,
@@ -39,23 +39,28 @@ export default function Categories() {
   const pathname = useLocation().pathname
   const { slug, page } = useParams()
 
-  // 簡化寫法
+  const setAPIResult = useCallback(
+    (result) => {
+      if (result.ok === 0) return setIsLoading((isLoading) => false)
+      setTotalPage((totalPage) => setPageInArray(result.totalPage))
+      setProducts(result.data)
+      setIsLoading((isLoading) => false)
+    },
+    [setIsLoading]
+  )
+
   useEffect(() => {
     setIsLoading((isLoading) => true)
     if (slug === 'all') {
       getAllProductsByPage(page).then((result) => {
-        setTotalPage((totalPage) => setPageInArray(result.totalPage))
-        setProducts(result.data)
-        setIsLoading((isLoading) => false)
+        setAPIResult(result)
       })
     } else {
       getCategoryProductsByPage(slug, page).then((result) => {
-        setTotalPage((totalPage) => setPageInArray(result.totalPage))
-        setProducts(result.data)
-        setIsLoading((isLoading) => false)
+        setAPIResult(result)
       })
     }
-  }, [setIsLoading, slug, page])
+  }, [setIsLoading, slug, page, setAPIResult])
   return (
     <PageWidth>
       {isLoading && <IsLoadingComponent />}
@@ -70,7 +75,7 @@ export default function Categories() {
               id={id}
               key={id}
               imgUrl={imgUrl}
-              title={name}
+              name={name}
               price={price}
               discountPrice={discountPrice}
             />
