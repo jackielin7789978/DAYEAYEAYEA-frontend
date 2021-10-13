@@ -48,6 +48,7 @@ const CardContainer = styled.div`
 const getProductsByCategory = (category, setProducts, isLoading) => {
   isLoading(true)
   getCategoryProducts(category).then((products) => {
+    if (products.ok === 0) return
     setProducts(products.data.slice(0, 4))
     isLoading(false)
   })
@@ -65,7 +66,8 @@ const showProductsInComponent = (data, MediaQuery) => {
         id={id}
         key={id}
         imgUrl={imgUrl}
-        title={name}
+        imgs={Product_imgs}
+        name={name}
         price={price}
         discountPrice={discountPrice}
       />
