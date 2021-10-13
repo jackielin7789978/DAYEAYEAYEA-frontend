@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+import { LocalStorageContext } from '../../context'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
@@ -56,14 +58,8 @@ const RemoveBtn = styled(DeleteOutlinedIcon)`
   }
 `
 
-export default function CartItem({
-  id,
-  name,
-  img,
-  price,
-  quantity,
-  handleRemove
-}) {
+export default function CartItem({ id, name, img, price, quantity }) {
+  const { handleRemoveCartItem } = useContext(LocalStorageContext)
   return (
     <ItemContainer>
       <Pic $img={img}>
@@ -76,7 +72,7 @@ export default function CartItem({
         </NumPrice>
         <RemoveBtn
           onClick={() => {
-            handleRemove(id)
+            handleRemoveCartItem(id)
           }}
         />
       </Info>

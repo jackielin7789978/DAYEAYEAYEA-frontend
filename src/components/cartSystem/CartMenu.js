@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useMemo, useContext } from 'react'
+import { LocalStorageContext } from '../../context'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
@@ -10,7 +11,6 @@ import {
   CSSTriangle,
   Title
 } from '../navbar/MenuStyles'
-import { getProductItems } from '../../utils'
 
 const RestyledHoverArea = styled(HoverArea)`
   ${MEDIA_QUERY.desktop} {
@@ -64,23 +64,16 @@ const EmptyCart = styled.div`
 `
 
 export default function CartMenu({ handleHover, $isOpen }) {
-  const [items, setItems] = useState([])
-  const handleRemove = (id) => {
-    setItems(items.filter((item) => item.id !== id))
-  }
-
-  useEffect(() => {
-    setItems(JSON.parse(getProductItems()))
-  }, [])
+  const { cartItems } = useContext(LocalStorageContext)
 
   const totalPrice = useMemo(() => {
     let sum = 0
-    for (const item of items) {
-      sum += item.price
+    for (const cartItem of cartItems) {
+      sum += cartItem.price
     }
     return sum
-  }, [items])
-  const totalItems = useMemo(() => items.length, [items])
+  }, [cartItems])
+  const totalItems = useMemo(() => cartItems.length, [cartItems])
 
   return (
     <RestyledHoverArea
@@ -104,7 +97,7 @@ export default function CartMenu({ handleHover, $isOpen }) {
           <>
             <Title>購物車</Title>
             <ItemsContainer $isOpen={$isOpen}>
-              {items.map((item) => {
+              {cartItems.map((item) => {
                 return (
                   <CartItem
                     key={item.id}
@@ -113,7 +106,6 @@ export default function CartMenu({ handleHover, $isOpen }) {
                     img={item.img}
                     price={item.price}
                     quantity={item.quantity}
-                    handleRemove={handleRemove}
                   />
                 )
               })}

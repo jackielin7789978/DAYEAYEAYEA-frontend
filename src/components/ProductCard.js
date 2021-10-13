@@ -1,10 +1,11 @@
 import styled from 'styled-components'
-import { useMemo } from 'react'
+import { useMemo, useContext } from 'react'
+import { LocalStorageContext } from '../context'
 import useMediaQuery from '../hooks/useMediaQuery'
 import { Link } from 'react-router-dom'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../constants/style'
 import { ShoppingCarBtn, ShoppingCarWhiteBtn } from '../components/Button'
-import { AddItemsInLocalStorage } from '../utils'
+import { AddItemsInLocalStorage, getProductItems } from '../utils'
 
 const CardContainerDiv = styled.div`
   margin: 4px;
@@ -137,8 +138,11 @@ export function ProductCard({ id, name, price, imgUrl, discountPrice, imgs }) {
     }),
     [name, price, discountPrice, imgs]
   )
+  // 這邊要立即變更 CartItems State，才能及時更新購物車資料。
+  const { setCartItems } = useContext(LocalStorageContext)
   const handleAddProductInCart = () => {
     AddItemsInLocalStorage(id, productInfo)
+    setCartItems(JSON.parse(getProductItems()))
   }
   return (
     <CardContainerDiv>

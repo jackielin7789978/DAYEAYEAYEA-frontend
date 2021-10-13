@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Navbar from './components/navbar/Navbar'
 import Footer from './components/Footer'
 import {
@@ -25,24 +25,28 @@ import {
   Switch,
   useRouteMatch
 } from 'react-router-dom'
-import { ScrollToTop } from './utils'
-import { LoadingContext } from './context'
+import { ScrollToTop, getProductItems, setProductItems } from './utils'
+import { LoadingContext, ModalContext, LocalStorageContext } from './context'
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   return (
     <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
-      <Router basename='/'>
-        <ScrollToTop />
-        <Switch>
-          <Route path='/admin'>
-            <AdminRoutes />
-          </Route>
-          <Route path='/'>
-            <Shop />
-          </Route>
-        </Switch>
-      </Router>
+      <ModalContext.Provider value={{ isModalOpen, setIsModalOpen }}>
+        <Router basename='/'>
+          <ScrollToTop />
+          <Switch>
+            <Route path='/admin'>
+              <AdminRoutes />
+            </Route>
+            <Route path='/'>
+              <Shop />
+            </Route>
+          </Switch>
+        </Router>
+      </ModalContext.Provider>
     </LoadingContext.Provider>
   )
 }
@@ -66,8 +70,18 @@ function AdminRoutes() {
 }
 
 function Shop() {
+  const [cartItems, setCartItems] = useState(JSON.parse(getProductItems()))
+  const handleRemoveCartItem = (id) => {
+    setProductItems(cartItems.filter((item) => item.id !== id))
+    setCartItems(cartItems.filter((item) => item.id !== id))
+  }
+  useEffect(() => {
+    setCartItems(JSON.parse(getProductItems()))
+  }, [])
   return (
-    <>
+    <LocalStorageContext.Provider
+      value={{ cartItems, setCartItems, handleRemoveCartItem }}
+    >
       <Navbar />
       <PageHeight>
         <Switch>
@@ -93,7 +107,7 @@ function Shop() {
             <InfoRoutes />
           </Route>
           <Route exact path='/'>
-            <Home />
+            <Home setCartItems={setCartItems} />
           </Route>
           <Route path='*'>
             <NotFound />
@@ -101,7 +115,7 @@ function Shop() {
         </Switch>
       </PageHeight>
       <Footer />
-    </>
+    </LocalStorageContext.Provider>
   )
 }
 

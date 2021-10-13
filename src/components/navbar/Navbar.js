@@ -51,7 +51,6 @@ export default function Navbar() {
               onClick={() => {
                 setMenu('category')
               }}
-              $isClicked={menu === 'category' ? true : false}
               $shouldHide={menu ? true : false}
             >
               <MenuIcon />
