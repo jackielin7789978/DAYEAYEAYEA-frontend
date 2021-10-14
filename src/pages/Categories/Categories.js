@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useState, useEffect, useContext, useCallback } from 'react'
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams, useLocation, useHistory } from 'react-router-dom'
 import {
   getAllProductsByPage,
   getCategoryProductsByPage
@@ -40,15 +40,19 @@ export default function Categories() {
   const isMobile = useMediaQuery('(max-width: 767px)')
   const pathname = useLocation().pathname
   const { slug, page } = useParams()
+  let history = useHistory()
 
   const setAPIResult = useCallback(
     (result) => {
-      if (result.ok === 0) return setIsLoading((isLoading) => false)
+      if (result.ok === 0) {
+        history.push('/')
+        return setIsLoading(false)
+      }
       setTotalPage((totalPage) => setPageInArray(result.totalPage))
       setProducts(result.data)
       setIsLoading((isLoading) => false)
     },
-    [setIsLoading]
+    [setIsLoading, history]
   )
 
   const handleModalClose = useCallback(() => {

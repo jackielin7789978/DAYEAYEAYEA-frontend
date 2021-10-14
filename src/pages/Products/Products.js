@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useState, useEffect, useContext, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import { MEDIA_QUERY } from '../../constants/style'
 import { LoadingContext, ModalContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
@@ -47,16 +47,20 @@ export default function Products() {
   const { isLoading, setIsLoading } = useContext(LoadingContext)
   const { isModalOpen, setIsModalOpen } = useContext(ModalContext)
   const { id } = useParams()
+  let history = useHistory()
 
   useEffect(() => {
     setIsLoading((isLoading) => true)
     getProductById(id).then((result) => {
-      if (result.ok === 0) return setIsLoading((isLoading) => false)
+      if (result.ok === 0) {
+        history.push('/')
+        return setIsLoading(false)
+      }
       setProduct(result.data)
       setProductImgs(result.data.Product_imgs)
       setIsLoading((isLoading) => false)
     })
-  }, [setIsLoading, id])
+  }, [setIsLoading, id, history])
 
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
