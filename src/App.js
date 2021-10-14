@@ -18,7 +18,6 @@ import {
 } from './pages/index'
 import { AdminOrders, AdminMembers, AdminProducts } from './pages/AdminPages'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
-<<<<<<< HEAD
 import { PageHeight, AdminPageWidth } from './components/general'
 import {
   HashRouter as Router,
@@ -28,12 +27,6 @@ import {
 } from 'react-router-dom'
 import { ScrollToTop, getProductItems, setProductItems } from './utils'
 import { LoadingContext, ModalContext, LocalStorageContext } from './context'
-=======
-import { PageHeight } from './components/general'
-import { HashRouter as Router, Route, Switch } from 'react-router-dom'
-import { ScrollToTop } from './utils'
-import { LoadingContext, ModalContext } from './context'
->>>>>>> 335b579e6016fa4a10af550c9c99e85a35b482a0
 
 export default function App() {
   return (
@@ -62,7 +55,6 @@ function AdminRoutes() {
 function Shop() {
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
-<<<<<<< HEAD
   const [cartItems, setCartItems] = useState(JSON.parse(getProductItems()))
   const totalPrice = useMemo(() => {
     let sum = 0
@@ -81,13 +73,10 @@ function Shop() {
   useEffect(() => {
     setCartItems(JSON.parse(getProductItems()))
   }, [])
-=======
->>>>>>> 335b579e6016fa4a10af550c9c99e85a35b482a0
 
   return (
     <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
       <ModalContext.Provider value={{ isModalOpen, setIsModalOpen }}>
-<<<<<<< HEAD
         <LocalStorageContext.Provider
           value={{
             cartItems,
@@ -113,72 +102,6 @@ function Shop() {
           </PageHeight>
           <Footer />
         </LocalStorageContext.Provider>
-=======
-        <Router basename='/'>
-          <ScrollToTop />
-          <Navbar />
-          <PageHeight>
-            <Switch>
-              <Route path='/articles/:slug'>
-                <Articles />
-              </Route>
-              <Route path='/checkout/step1'>
-                <Step1 />
-              </Route>
-              <Route path='/checkout/step2'>
-                <Step2 />
-              </Route>
-              <Route path='/checkout/step3'>
-                <Step3 />
-              </Route>
-              <Route path='/categories/:slug/:page'>
-                <Categories />
-              </Route>
-              <Route path='/login'>
-                <Login />
-              </Route>
-              <Route path='/member/me'>
-                {/* 會員首頁 */}
-                <Me />
-              </Route>
-              <Route path='/member/modify-info'>
-                {/* 修改資料頁面 */}
-                <ModifyInfo />
-              </Route>
-              <Route path='/member/orders/order-detail'>
-                {/* 訂單詳細資料頁面 */}
-                <OrderDetail />
-              </Route>
-              <Route path='/member/orders'>
-                {/* 訂單頁面 */}
-                <Orders />
-              </Route>
-              <Route path='/products/:id'>
-                <Products />
-              </Route>
-              <Route path='/info/brand'>
-                <Brand />
-              </Route>
-              <Route path='/info/faq'>
-                <FAQ />
-              </Route>
-              <Route path='/info/join'>
-                <Join />
-              </Route>
-              <Route path='/info/notice'>
-                <Notice />
-              </Route>
-              <Route path='/info/privacy'>
-                <Privacy />
-              </Route>
-              <Route exact path='/'>
-                <Home />
-              </Route>
-            </Switch>
-          </PageHeight>
-          <Footer />
-        </Router>
->>>>>>> 335b579e6016fa4a10af550c9c99e85a35b482a0
       </ModalContext.Provider>
     </LoadingContext.Provider>
   )
