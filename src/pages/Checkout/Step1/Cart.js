@@ -9,14 +9,12 @@ import {
   ItemInfo
 } from '../../../components/checkoutSystem/Step'
 import { ItemCounter } from '../../../components/Counter'
-export const Cart = ({ item, handleItemDelete, handleUpdateCount }) => {
-  const [count, setCount] = useState(item.count)
-
+export const Cart = ({ item, handleRemoveCartItem, handleUpdateCount }) => {
+  const [count, setCount] = useState(item.quantity)
   const handleCount = (type) => {
     return type === 'increment' ? setCount(count + 1) : setCount(count - 1)
   }
-
-  const handleChange = (e) => {
+  function handleChange(e) {
     setCount(parseInt(e.target.value))
   }
   useEffect(() => {
@@ -24,7 +22,7 @@ export const Cart = ({ item, handleItemDelete, handleUpdateCount }) => {
   }, [count, handleUpdateCount, item.id])
   return (
     <Item key={item.id}>
-      <ItemImg img={item.imgUrl} to={`/products/${item.id}`} />
+      <ItemImg img={item.img} to={`/products/${item.id}`} />
       <ItemInfo>
         <ItemName children={item.name} to={`/products/${item.id}`} />
         <ItemContent>
@@ -39,7 +37,7 @@ export const Cart = ({ item, handleItemDelete, handleUpdateCount }) => {
       </ItemInfo>
       <ItemDelete
         onClick={() => {
-          handleItemDelete(item.id)
+          handleRemoveCartItem(item.id)
         }}
       />
     </Item>
