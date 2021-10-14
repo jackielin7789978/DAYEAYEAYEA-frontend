@@ -19,6 +19,7 @@ export const ItemCounter = ({
   marginStyle,
   handleCount,
   handleChange,
+  handleOnBlur,
   count
 }) => {
   return (
@@ -28,7 +29,7 @@ export const ItemCounter = ({
         type='number'
         value={count}
         onChange={handleChange}
-        onBlur={handleChange}
+        onBlur={handleOnBlur}
       />
       <AddIcon onClick={() => handleCount('increment')} />
     </Counter>

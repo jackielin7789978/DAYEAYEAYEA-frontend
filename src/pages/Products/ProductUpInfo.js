@@ -174,12 +174,22 @@ export function ProductUpInfoComponent({
     (e) => {
       const changeQuantity = e.target.value ? parseInt(e.target.value) : ''
       if (changeQuantity >= totalQuantity) {
-        setQuantity((quantity) => totalQuantity)
-        return setWarningMessage((warningMessage) => '已達商品數量上限')
+        return setQuantity((quantity) => totalQuantity)
       }
       changeQuantity && changeQuantity < 1
         ? setQuantity((quantity) => 1)
         : setQuantity((quantity) => changeQuantity)
+    },
+    [totalQuantity]
+  )
+
+  const handleOnBlur = useCallback(
+    (e) => {
+      const changeQuantity = e.target.value ? parseInt(e.target.value) : ''
+      if (changeQuantity === totalQuantity) {
+        return setWarningMessage((warningMessage) => '已達商品數量上限')
+      }
+      if (!changeQuantity || changeQuantity < 1) setQuantity((quantity) => 1)
       setWarningMessage((warningMessage) => '')
     },
     [totalQuantity]
@@ -199,6 +209,7 @@ export function ProductUpInfoComponent({
         marginStyle={{ marginTop: '20px' }}
         handleCount={handleCount}
         handleChange={handleChange}
+        handleOnBlur={handleOnBlur}
         count={quantity}
       />
       {warningMessage && <WarningMessage>{warningMessage}</WarningMessage>}
