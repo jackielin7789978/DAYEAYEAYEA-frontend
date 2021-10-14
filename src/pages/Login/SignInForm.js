@@ -16,13 +16,18 @@ export default function SignInForm() {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Input
+        type='text'
         placeholder='帳號名稱'
         {...register('username', { required: true })}
       />
       <ErrorMsg>
         {errors.username?.type === 'required' && '請填寫名稱'}
       </ErrorMsg>
-      <Input placeholder='密碼' {...register('password', { required: true })} />
+      <Input
+        type='password'
+        placeholder='密碼'
+        {...register('password', { required: true })}
+      />
       <ErrorMsg>
         {errors.password?.type === 'required' && '請填寫密碼'}
       </ErrorMsg>
