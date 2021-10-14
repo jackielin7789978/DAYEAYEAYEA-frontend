@@ -11,13 +11,13 @@ import {
 export const OrderItem = ({ item }) => {
   return (
     <Item key={item.id}>
-      <ItemImg img={item.imgUrl} to={`/products/${item.id}`} />
+      <ItemImg img={item.img} to={`/products/${item.id}`} />
       <ItemInfo>
         <ItemName children={item.name} to={`/products/${item.id}`} />
         <ItemContent>
           <ItemPriceHidden children={`NT$ ${item.price}`} />
-          <ItemCountHidden children={item.count} />
-          <ItemCountMobile children={`${item.count} x NT$ ${item.price}`} />
+          <ItemCountHidden children={item.quantity} />
+          <ItemCountMobile children={`${item.quantity} x NT$ ${item.price}`} />
         </ItemContent>
       </ItemInfo>
     </Item>
