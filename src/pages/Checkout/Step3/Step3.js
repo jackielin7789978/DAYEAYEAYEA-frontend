@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { PageWidth } from '../../../components/general'
 import {
@@ -16,7 +16,7 @@ import { getCartItems } from '../../../utils'
 import { GeneralBtn } from '../../../components/Button'
 import { OrderItem } from './OrderItem'
 export default function Step3() {
-  const [cart, setCart] = useState(() => {
+  const [cart] = useState(() => {
     if (getCartItems()) {
       let itemData = getCartItems()
       return JSON.parse(itemData)

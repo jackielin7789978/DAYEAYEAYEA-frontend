@@ -23,8 +23,7 @@ export default function SignUpForm() {
   } = useForm()
   const onSubmit = (submitData) => {
     const { username, email, password } = submitData
-    console.log(username)
-    // signUp()
+    signUp(username, email, password)
   }
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>

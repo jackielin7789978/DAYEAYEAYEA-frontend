@@ -1,4 +1,3 @@
-import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { PageWidth } from '../../../components/general'
 import {
@@ -8,15 +7,11 @@ import {
   Form,
   InputWrapper,
   Label,
-  RadioControl,
   RadionLabel,
   InputTitle,
   Input,
-  ErrorMsg,
-  BtnFlexCenter,
-  LinkStyle
+  BtnFlexCenter
 } from '../../../components/checkoutSystem/Step'
-import { getCartItems } from '../../../utils'
 import { GeneralBtn } from '../../../components/Button'
 
 export default function Step2() {
