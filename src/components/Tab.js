@@ -21,8 +21,8 @@ const Tab = styled.div`
   `};
 `
 // preset 預設顯示 tab
-export const Tabs = ({ tabs, tabsPanel, preset }) => {
-  const [activeTab, setActiveTab] = useState(preset)
+export const Tabs = ({ tabs, tabsPanel, presetTab }) => {
+  const [activeTab, setActiveTab] = useState(presetTab)
   return (
     <>
       <TabWrapper>
@@ -37,7 +37,7 @@ export const Tabs = ({ tabs, tabsPanel, preset }) => {
           />
         ))}
       </TabWrapper>
-      {tabsPanel.map((tabPanel, index) => activeTab === index && tabPanel)}
+      {tabsPanel[activeTab]}
     </>
   )
 }

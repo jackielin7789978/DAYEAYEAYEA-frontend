@@ -13,18 +13,31 @@ const Counter = styled.div`
 const Number = styled.input`
   text-align: center;
   width: 100%;
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+  &[type='number'] {
+    -moz-appearance: textfield;
+  }
 `
 
 export const ItemCounter = ({
   marginStyle,
   handleCount,
   handleChange,
+  handleOnBlur,
   count
 }) => {
   return (
     <Counter style={marginStyle}>
       <RemoveIcon onClick={() => handleCount('decrement')} />
-      <Number type='number' value={count} onChange={handleChange} />
+      <Number
+        type='number'
+        value={count}
+        onChange={handleChange}
+        onBlur={handleOnBlur}
+      />
       <AddIcon onClick={() => handleCount('increment')} />
     </Counter>
   )
