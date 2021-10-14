@@ -58,3 +58,8 @@ export const MEDIA_QUERY = {
   tablet: '@media screen and (min-width: 768px) and (max-width: 1200px)',
   widescreen: '@media screen and (min-width: 2560px)'
 }
+export const ADMIN_MEDIA_QUERY = {
+  sm: '@media screen and (min-width: 1000px) and (max-width: 1400px)',
+  md: '@media screen and (min-width: 1400px) and (max-width: 2560px)',
+  lg: '@media screen and (min-width: 2560px)'
+}
