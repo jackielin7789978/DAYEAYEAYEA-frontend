@@ -1,32 +1,43 @@
 import styled from 'styled-components'
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useContext } from 'react'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import { ShoppingCarBtn } from '../../components/Button'
 import { ItemCounter } from '../../components/Counter'
 import { AddItemsInLocalStorage } from '../../utils'
+import { ModalContext } from '../../context'
 
 const ProductInfoContainer = styled.div`
   width: 100%;
+  height: 40%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   padding: 0px 30px;
-  margin: 15px 0px;
+  margin: 10px 0px;
   ${MEDIA_QUERY.tablet} {
-    width: 50%;
+    width: 45%;
     margin: 0px;
+    height: 100%;
   }
 
   ${MEDIA_QUERY.desktop} {
     width: 50%;
     margin: 0px;
+    height: 100%;
   }
 `
 
 const InfoStyle = styled.div`
   width: 100%;
   word-wrap: break-word;
-  text-align: left;
+  text-align: center;
+  ${MEDIA_QUERY.tablet} {
+    text-align: left;
+  }
+
+  ${MEDIA_QUERY.desktop} {
+    text-align: left;
+  }
 `
 
 const ProductName = styled(InfoStyle)`
@@ -35,6 +46,7 @@ const ProductName = styled(InfoStyle)`
   color: ${FONT_SIZE.text_dark};
   ${MEDIA_QUERY.tablet} {
     font-size: ${FONT_SIZE.xl};
+    margin-bottom: 10px;
   }
 
   ${MEDIA_QUERY.desktop} {
@@ -49,19 +61,26 @@ const Shortdesc = styled(InfoStyle)`
   white-space: pre-wrap;
   font-size: ${FONT_SIZE.sm};
   color: ${FONT_SIZE.text_dark};
+  ${MEDIA_QUERY.tablet} {
+    font-size: ${FONT_SIZE.md};
+  }
+
+  ${MEDIA_QUERY.desktop} {
+    font-size: ${FONT_SIZE.md};
+  }
 `
 
 const PriceContainer = styled.div`
   width: 100%;
   margin: 6px 0px;
-  text-align: left;
   flex-wrap: wrap;
+  text-align: center;
   ${MEDIA_QUERY.tablet} {
-    margin: 15px 0px;
+    text-align: left;
   }
 
   ${MEDIA_QUERY.desktop} {
-    margin: 15px 0px;
+    text-align: left;
   }
 `
 
@@ -97,6 +116,14 @@ const DiscountPriceStyle = styled(PriceStyle)`
     font-size: ${FONT_SIZE.lg};
   }
 `
+
+const WarningMessage = styled.p`
+  font-size: ${FONT_SIZE.sm};
+  color: ${COLOR.warning};
+  margin-top: 8px;
+  font-weight: bold;
+`
+
 export function ProductUpInfoComponent({
   id,
   name,
@@ -104,9 +131,13 @@ export function ProductUpInfoComponent({
   price,
   discountPrice,
   imgs,
-  hasDiscount
+  hasDiscount,
+  totalQuantity
 }) {
   const [quantity, setQuantity] = useState(1)
+  const [warningMessage, setWarningMessage] = useState('')
+  // eslint-disable-next-line no-unused-vars
+  const { isModalOpen, setIsModalOpen } = useContext(ModalContext)
   const productInfo = useMemo(
     () => ({
       name,
@@ -121,20 +152,49 @@ export function ProductUpInfoComponent({
   const handleAddProductInCart = (e) => {
     const targetId = Number(e.target.id)
     AddItemsInLocalStorage(targetId, productInfo)
+    setIsModalOpen(true)
   }
 
   const handleCount = useCallback(
     (type) => {
-      return type === 'increment'
-        ? setQuantity(quantity + 1)
-        : setQuantity(quantity - 1)
+      if (type === 'increment') {
+        return quantity === totalQuantity
+          ? setWarningMessage((warningMessage) => '已達商品數量上限')
+          : setQuantity(quantity + 1)
+      } else {
+        if (quantity <= 1) return setQuantity((quantity) => 1)
+        setQuantity(quantity - 1)
+        if (quantity <= totalQuantity) setWarningMessage((warningMessage) => '')
+      }
     },
-    [quantity]
+    [quantity, totalQuantity]
   )
 
-  const handleChange = useCallback((e) => {
-    setQuantity(parseInt(e.target.value))
-  }, [])
+  const handleChange = useCallback(
+    (e) => {
+      const changeQuantity = e.target.value ? parseInt(e.target.value) : ''
+      if (changeQuantity >= totalQuantity) {
+        setQuantity((quantity) => totalQuantity)
+        return setWarningMessage((warningMessage) => '已達商品數量上限')
+      }
+      changeQuantity && changeQuantity < 1
+        ? setQuantity((quantity) => 1)
+        : setQuantity((quantity) => changeQuantity)
+    },
+    [totalQuantity]
+  )
+
+  const handleOnBlur = useCallback(
+    (e) => {
+      const changeQuantity = e.target.value ? parseInt(e.target.value) : ''
+      if (changeQuantity === totalQuantity) {
+        return setWarningMessage((warningMessage) => '已達商品數量上限')
+      }
+      if (!changeQuantity || changeQuantity < 1) setQuantity((quantity) => 1)
+      setWarningMessage((warningMessage) => '')
+    },
+    [totalQuantity]
+  )
 
   return (
     <ProductInfoContainer>
@@ -150,8 +210,10 @@ export function ProductUpInfoComponent({
         marginStyle={{ marginTop: '20px' }}
         handleCount={handleCount}
         handleChange={handleChange}
+        handleOnBlur={handleOnBlur}
         count={quantity}
       />
+      {warningMessage && <WarningMessage>{warningMessage}</WarningMessage>}
       <ShoppingCarBtn
         id={id}
         color='primary'

@@ -39,3 +39,11 @@ export const getProductById = async (id) => {
       console.log(err.toString())
     })
 }
+
+export const getProductByArticle = async (articleSort) => {
+  return await fetch(`${BASE_URL}/products/article/${articleSort}`)
+    .then((res) => res.json())
+    .catch((err) => {
+      console.log(err.toString())
+    })
+}

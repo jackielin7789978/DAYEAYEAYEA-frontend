@@ -9,7 +9,7 @@ const FixedBackground = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
 `
@@ -65,6 +65,10 @@ const CancelRoundedColorIcon = styled(CancelRoundedIcon)`
   cursor: pointer;
 `
 
+function CloseButton({ onClick }) {
+  return <CancelRoundedColorIcon onClick={onClick} />
+}
+
 function ModalIcon({ icon }) {
   return <ModalIconDiv>{icon}</ModalIconDiv>
 }
@@ -78,26 +82,28 @@ function ModalButton({ buttonOne, buttonTwo }) {
   )
 }
 
-function GeneralModal({ icon, children, buttonOne, buttonTwo }) {
+function GeneralModal({ icon, content, buttonOne, buttonTwo, open, onClose }) {
+  if (!open) return null
   return (
     <ModalContent>
-      <CancelRoundedColorIcon />
+      <CloseButton onClick={onClose} />
       <ModalIcon icon={icon} />
-      <ModalContentDiv>{children}</ModalContentDiv>
+      <ModalContentDiv>{content}</ModalContentDiv>
       <ModalButton buttonOne={buttonOne} buttonTwo={buttonTwo}></ModalButton>
     </ModalContent>
   )
 }
 
-function FullModal({ icon, children, buttonOne, buttonTwo }) {
+function FullModal({ icon, content, buttonOne, buttonTwo, open, onClose }) {
+  if (!open) return null
   return (
     <FixedBackground>
-      <GeneralModal
-        icon={icon}
-        children={children}
-        buttonOne={buttonOne}
-        buttonTwo={buttonTwo}
-      />
+      <ModalContent>
+        <CloseButton onClick={onClose} />
+        <ModalIcon icon={icon} />
+        <ModalContentDiv>{content}</ModalContentDiv>
+        <ModalButton buttonOne={buttonOne} buttonTwo={buttonTwo}></ModalButton>
+      </ModalContent>
     </FixedBackground>
   )
 }

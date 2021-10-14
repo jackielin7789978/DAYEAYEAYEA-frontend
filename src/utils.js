@@ -33,7 +33,10 @@ export const getProductItems = () => {
 export const AddItemsInLocalStorage = (targetId, productInfo) => {
   const { imgs, name, price, discountPrice, quantity } = productInfo
   let storageProductItems = JSON.parse(getProductItems()) || []
-  let imgUrlSm = imgs.length > 0 ? imgs[0].imgUrlSm : ''
+  let imgUrlSm
+  if (imgs) {
+    imgUrlSm = imgs.length > 0 ? imgs[0].imgUrlSm : ''
+  }
   const checkHasProducts =
     storageProductItems.length >= 1
       ? storageProductItems.filter((item) => item.id === targetId)
