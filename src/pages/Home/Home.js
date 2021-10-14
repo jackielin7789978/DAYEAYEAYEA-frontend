@@ -1,36 +1,16 @@
-import Carousel from 'react-bootstrap/Carousel'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import styled from 'styled-components'
 import { useState, useEffect, useContext, useCallback } from 'react'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { LoadingContext, ModalContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
-import { PageWidth, FullWidth, ImgAnchor } from '../../components/general'
+import { PageWidth } from '../../components/general'
 import { COLOR, MEDIA_QUERY } from '../../constants/style'
-import { ProductCard } from '../../components/ProductCard'
+import { ProductCard } from '../../components/productSystem/ProductCard'
 import { getCategoryProducts } from '../../webAPI/productsAPI'
-import { IndexImg } from './HomeImg'
+import { HomeCategoriesImg } from './HomeCategoriesImg'
+import { HomeArticlesImg } from './HomeArticlesImg'
 import { FullModal } from '../../components/Modal'
-
-const Img = styled.div`
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-`
-const OutdoorArticleImg = styled(Img)`
-  background-image: url('https://i.imgur.com/SdIsgaD.jpg');
-`
-const DiningArticleImg = styled(Img)`
-  background-image: url('https://i.imgur.com/jrOqpOa.jpg');
-`
-const FragranceArticleImg = styled(Img)`
-  background-image: url('https://i.imgur.com/yx6JDOZ.jpg');
-  background-position: bottom;
-`
-
-const ImgLink = styled(ImgAnchor)`
-  height: 520px;
-`
 
 const ProductContainer = styled.div`
   display: flex;
@@ -113,29 +93,7 @@ export default function Home() {
 
   return (
     <>
-      <FullWidth>
-        <Carousel
-          style={{
-            zIndex: '0'
-          }}
-        >
-          <Carousel.Item>
-            <OutdoorArticleImg>
-              <ImgLink to='/info/notice'>Link</ImgLink>
-            </OutdoorArticleImg>
-          </Carousel.Item>
-          <Carousel.Item>
-            <DiningArticleImg>
-              <ImgLink to='/info/FAQ'>Link</ImgLink>
-            </DiningArticleImg>
-          </Carousel.Item>
-          <Carousel.Item>
-            <FragranceArticleImg>
-              <ImgLink to='/info/join'>Link</ImgLink>
-            </FragranceArticleImg>
-          </Carousel.Item>
-        </Carousel>
-      </FullWidth>
+      <HomeArticlesImg />
       <PageWidth>
         {isLoading && <IsLoadingComponent />}
         <FullModal
@@ -144,7 +102,7 @@ export default function Home() {
           onClose={handleModalClose}
         />
         <ProductContainer>
-          <IndexImg
+          <HomeCategoriesImg
             imgUrl='https://i.imgur.com/WjvyBCB.jpg'
             color={COLOR.text_dark}
             category={'居家生活'}
@@ -154,7 +112,7 @@ export default function Home() {
           </CardContainer>
         </ProductContainer>
         <ProductContainer>
-          <IndexImg
+          <HomeCategoriesImg
             imgUrl='https://i.imgur.com/5mNsAzg.jpg'
             color={COLOR.text_dark}
             category={'服飾配件'}
@@ -164,7 +122,7 @@ export default function Home() {
           </CardContainer>
         </ProductContainer>
         <ProductContainer>
-          <IndexImg
+          <HomeCategoriesImg
             imgUrl='https://i.imgur.com/kBR54ha.jpg'
             color={COLOR.text_light}
             category={'廚房餐具'}
@@ -174,7 +132,7 @@ export default function Home() {
           </CardContainer>
         </ProductContainer>
         <ProductContainer>
-          <IndexImg
+          <HomeCategoriesImg
             imgUrl='https://i.imgur.com/3qTh9JZ.jpg'
             color={COLOR.text_black}
             category={'食材雜貨'}
@@ -184,7 +142,7 @@ export default function Home() {
           </CardContainer>
         </ProductContainer>
         <ProductContainer>
-          <IndexImg
+          <HomeCategoriesImg
             imgUrl='https://i.imgur.com/db1W1Ne.jpg'
             color={COLOR.text_black}
             category={'設計文具'}
@@ -194,7 +152,7 @@ export default function Home() {
           </CardContainer>
         </ProductContainer>
         <ProductContainer>
-          <IndexImg
+          <HomeCategoriesImg
             imgUrl='https://i.imgur.com/TrmCL9e.jpg'
             color={COLOR.text_dark}
             category={'休閒戶外'}

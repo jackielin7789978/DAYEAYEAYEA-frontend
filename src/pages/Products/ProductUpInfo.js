@@ -174,7 +174,8 @@ export function ProductUpInfoComponent({
     (e) => {
       const changeQuantity = e.target.value ? parseInt(e.target.value) : ''
       if (changeQuantity >= totalQuantity) {
-        return setQuantity((quantity) => totalQuantity)
+        setQuantity((quantity) => totalQuantity)
+        return setWarningMessage((warningMessage) => '已達商品數量上限')
       }
       changeQuantity && changeQuantity < 1
         ? setQuantity((quantity) => 1)

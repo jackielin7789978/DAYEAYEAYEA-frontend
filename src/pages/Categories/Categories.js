@@ -5,12 +5,13 @@ import {
   getAllProductsByPage,
   getCategoryProductsByPage
 } from '../../webAPI/productsAPI'
-import { LoadingContext } from '../../context'
+import { LoadingContext, ModalContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { PageWidth } from '../../components/general'
-import { ProductCard } from '../../components/ProductCard'
+import { ProductCard } from '../../components/productSystem/ProductCard'
 import { PaginatorButton } from '../../components/Paginator'
+import { FullModal } from '../../components/Modal'
 
 const CardContainer = styled.div`
   display: flex;
@@ -35,7 +36,8 @@ export default function Categories() {
   const [products, setProducts] = useState([])
   const [totalPage, setTotalPage] = useState([])
   const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const isMobile = useMediaQuery('(max-width: 768px)')
+  const { isModalOpen, setIsModalOpen } = useContext(ModalContext)
+  const isMobile = useMediaQuery('(max-width: 767px)')
   const pathname = useLocation().pathname
   const { slug, page } = useParams()
 
@@ -49,6 +51,10 @@ export default function Categories() {
     [setIsLoading]
   )
 
+  const handleModalClose = useCallback(() => {
+    setIsModalOpen((isModalOpen) => false)
+  }, [setIsModalOpen])
+
   useEffect(() => {
     setIsLoading((isLoading) => true)
     if (slug === 'all') {
@@ -61,9 +67,15 @@ export default function Categories() {
       })
     }
   }, [setIsLoading, slug, page, setAPIResult])
+
   return (
     <PageWidth>
       {isLoading && <IsLoadingComponent />}
+      <FullModal
+        open={isModalOpen}
+        content='已成功加入購物車 ! '
+        onClose={handleModalClose}
+      />
       <CardContainer>
         {products.map(({ id, name, price, Product_imgs, discountPrice }) => {
           const length = Product_imgs.length

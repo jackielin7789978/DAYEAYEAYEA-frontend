@@ -1,11 +1,11 @@
 import styled from 'styled-components'
 import { useMemo, useContext } from 'react'
-import useMediaQuery from '../hooks/useMediaQuery'
+import useMediaQuery from '../../hooks/useMediaQuery'
 import { Link } from 'react-router-dom'
-import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../constants/style'
-import { ShoppingCarBtn, ShoppingCarWhiteBtn } from '../components/Button'
-import { AddItemsInLocalStorage } from '../utils'
-import { ModalContext } from '../context'
+import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
+import { ShoppingCarBtn, ShoppingCarWhiteBtn } from '../Button'
+import { AddItemsInLocalStorage } from '../../utils'
+import { ModalContext } from '../../context'
 
 const CardContainerDiv = styled.div`
   margin: 8px 4px;
