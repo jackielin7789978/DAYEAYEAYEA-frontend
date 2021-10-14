@@ -45,7 +45,7 @@ export default function Categories() {
   const setAPIResult = useCallback(
     (result) => {
       if (result.ok === 0) {
-        history.push('/')
+        history.push('/404')
         return setIsLoading(false)
       }
       setTotalPage((totalPage) => setPageInArray(result.totalPage))

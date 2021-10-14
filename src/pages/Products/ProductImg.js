@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { MEDIA_QUERY } from '../../constants/style'
+import { COLOR, MEDIA_QUERY } from '../../constants/style'
 import { useState, useEffect, useCallback } from 'react'
 import useMediaQuery from '../../hooks/useMediaQuery'
 
@@ -58,9 +58,13 @@ const ThumbnailImgDiv = styled.div`
   cursor: pointer;
 
   &:hover {
-    transform: scale(1.1);
-    transition: linear 0.3s;
+    transform: scale(1.05);
+    transition: linear 0.2s;
   }
+
+  ${(props) => !props.$isSelected && `opacity: 0.5;`};
+  ${(props) =>
+    props.$isSelected && `border: 2px solid ${COLOR.border_primary};`};
 
   ${MEDIA_QUERY.tablet} {
     width: 100%;
@@ -101,6 +105,7 @@ export function ProductImgsComponent({ imgs }) {
   const [showLargeImg, setShowLargeImg] = useState([])
   const [showThumbnailImage, setShowThumbnailImage] = useState([])
   const isMobile = useMediaQuery('(max-width: 767px)')
+  const selectedId = showLargeImg?.id
 
   useEffect(() => {
     setShowLargeImg(imgs[0])
@@ -126,6 +131,7 @@ export function ProductImgsComponent({ imgs }) {
       {imgs.length > 1 && (
         <ThumbnailContainer>
           {showThumbnailImage?.map(({ id, imgUrlSm }) => {
+            let $isSelected = id === selectedId ? true : false
             return (
               <ThumbnailImgDiv
                 key={id}
@@ -134,6 +140,7 @@ export function ProductImgsComponent({ imgs }) {
                   backgroundImage: `url(${imgUrlSm}})`
                 }}
                 onClick={handleThumbnailClick}
+                $isSelected={$isSelected}
               />
             )
           })}

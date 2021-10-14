@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useState, useEffect, useContext, useCallback } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useHistory, useLocation } from 'react-router-dom'
 import { getArticlesById } from '../../webAPI/articlesAPI'
 import { getProductByArticle } from '../../webAPI/productsAPI'
 import { LoadingContext, ModalContext } from '../../context'
@@ -10,6 +10,7 @@ import { ProductCard } from '../../components/productSystem/ProductCard'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { PageWidth, FullWidth } from '../../components/general'
 import { FullModal } from '../../components/Modal'
+import { PaginatorButton } from '../../components/Paginator'
 
 const ArticleImgContainer = styled.div`
   background-repeat: no-repeat;
@@ -65,43 +66,73 @@ const ProductCardsContainer = styled.div`
   margin: 40px 0px;
   flex-wrap: wrap;
 `
+const PaginatorDiv = styled.div`
+  margin: 20px auto 40px auto;
+`
+
+function setPageInArray(totalPageNum) {
+  const pagesArray = []
+  for (let i = 1; i <= totalPageNum; i++) {
+    pagesArray.push(i)
+  }
+  return pagesArray
+}
 
 export default function Articles() {
-  const { slug } = useParams()
+  const { id, page } = useParams()
+  const pathname = useLocation().pathname
   const [articleData, setArticleData] = useState([])
   const [articleProducts, setArticleProducts] = useState([])
+  const [totalPage, setTotalPage] = useState([])
   const { isLoading, setIsLoading } = useContext(LoadingContext)
   const { isModalOpen, setIsModalOpen } = useContext(ModalContext)
-
   const isMobile = useMediaQuery('(max-width: 767px)')
   let history = useHistory()
   let articleSort
-  if (slug) {
-    if (slug === '1') {
+  if (id) {
+    if (id === '1') {
       articleSort = 'fragrance'
     } else {
-      articleSort = slug === '2' ? 'dining' : 'camping'
+      articleSort = id === '2' ? 'dining' : 'camping'
     }
   }
 
-  useEffect(() => {
-    setIsLoading(true)
-    getArticlesById(parseInt(slug)).then((result) => {
-      if (result.ok === 0) {
-        history.push('/')
+  const PageIsFound = useCallback(
+    (result) => {
+      let isFound = false
+      if (result === 0) {
+        history.push('/404')
         return setIsLoading(false)
       }
-      setArticleData((articleData) => result.data)
-      getProductByArticle(articleSort).then((result) => {
-        if (result.ok === 1) setArticleProducts(result.data)
-      })
-      setIsLoading(false)
-    })
-  }, [setIsLoading, slug, articleSort, history])
-  const { imgUrl, title, content } = articleData
+      if (result === 1) isFound = true
+      return isFound
+    },
+    [history, setIsLoading]
+  )
+
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
   }, [setIsModalOpen])
+
+  useEffect(() => {
+    setIsLoading(true)
+    getArticlesById(parseInt(id)).then((result) => {
+      const isResultOk = PageIsFound(result.ok)
+      if (isResultOk) {
+        getProductByArticle(articleSort, parseInt(page)).then((result) => {
+          const isResultOk = PageIsFound(result.ok)
+          if (isResultOk) {
+            setArticleProducts(result.data)
+            setTotalPage((totalPage) => setPageInArray(result.totalPage))
+          }
+        })
+        setArticleData((articleData) => result.data)
+        setIsLoading(false)
+      }
+    })
+  }, [setIsLoading, id, page, articleSort, history, PageIsFound])
+  const { imgUrl, title, content } = articleData
+
   return (
     <>
       <FullWidth>
@@ -140,21 +171,21 @@ export default function Articles() {
             }
           )}
         </ProductCardsContainer>
-        {/* {totalPage.length > 1 && (
-        <PaginatorDiv>
-          {totalPage.map((singlePage) => {
-            const linkDirection = `/categories/${slug}/${singlePage}`
-            return (
-              <PaginatorButton
-                key={singlePage}
-                page={singlePage}
-                to={linkDirection}
-                active={pathname === linkDirection}
-              ></PaginatorButton>
-            )
-          })}
-        </PaginatorDiv>
-      )} */}
+        {totalPage.length > 1 && (
+          <PaginatorDiv>
+            {totalPage.map((singlePage) => {
+              const linkDirection = `/articles/${id}/${singlePage}`
+              return (
+                <PaginatorButton
+                  key={singlePage}
+                  page={singlePage}
+                  to={linkDirection}
+                  active={pathname === linkDirection}
+                ></PaginatorButton>
+              )
+            })}
+          </PaginatorDiv>
+        )}
       </PageWidth>
     </>
   )

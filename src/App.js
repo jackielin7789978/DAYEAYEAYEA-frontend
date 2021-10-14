@@ -136,7 +136,7 @@ function Shop() {
           <Navbar />
           <PageHeight>
             <Switch>
-              <Route path='/articles/:slug' component={Articles} />
+              <Route path='/articles/:id/:page' component={Articles} />
               <Route path='/checkout' component={CheckoutRoutes} />
               <Route path='/categories/:slug/:page' component={Categories} />
               <Route path='/login' component={Login} />

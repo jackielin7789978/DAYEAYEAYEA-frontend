@@ -53,7 +53,7 @@ export default function Products() {
     setIsLoading((isLoading) => true)
     getProductById(id).then((result) => {
       if (result.ok === 0) {
-        history.push('/')
+        history.push('/404')
         return setIsLoading(false)
       }
       setProduct(result.data)

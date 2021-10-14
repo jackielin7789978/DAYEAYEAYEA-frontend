@@ -66,7 +66,7 @@ export function HomeArticlesImg() {
       <Carousel style={{ zIndex: '0' }}>
         {articles.map((article) => {
           const { id, title, imgUrl } = article
-          const linkDirection = `/articles/${id}`
+          const linkDirection = `/articles/${id}/1`
           return (
             <Carousel.Item key={id}>
               <ArticleImg
