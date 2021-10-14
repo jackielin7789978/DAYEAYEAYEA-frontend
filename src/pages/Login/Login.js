@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   PageWidthHeight,
   Title,
@@ -18,7 +17,7 @@ export default function Login() {
           <Tabs
             tabs={['註冊', '登入']}
             tabsPanel={[<SignUpForm />, <SignInForm />]}
-            preset={1}
+            presetTab={1}
           ></Tabs>
         </FormWrapper>
       </AbsoluteCenter>

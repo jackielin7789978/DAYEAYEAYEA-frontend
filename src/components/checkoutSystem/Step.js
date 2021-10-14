@@ -83,7 +83,7 @@ const Title = styled.div`
     padding: 0px 20px;
   }
 `
-const CarTitles = styled.div`
+const CartTitles = styled.div`
   display: none;
   ${MEDIA_QUERY.desktop} {
     display: flex;
@@ -111,7 +111,7 @@ const TitleGroup = styled.div`
     }
   }
 `
-const CarTitle = styled.div`
+const CartTitle = styled.div`
   color: ${COLOR.text_light};
   font-weight: bold;
   padding: 10px;
@@ -172,7 +172,7 @@ const ItemName = styled(Link)`
 
 const ItemContent = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   flex-direction: row-reverse;
   align-items: center;
   width: 100%;
@@ -210,7 +210,45 @@ const ItemPrice = styled.div`
     }
   }
 `
-
+const ItemPriceHidden = styled(ItemPrice)`
+  display: none;
+  ${MEDIA_QUERY.tablet} {
+    display: initial;
+  }
+  ${MEDIA_QUERY.desktop} {
+    display: initial;
+  }
+`
+const ItemCount = styled.div`
+  width: 100%;
+  ${MEDIA_QUERY.tablet} {
+    margin-right: 25px;
+    width: 250px;
+  }
+  ${MEDIA_QUERY.desktop} {
+    margin-right: 25px;
+    width: 250px;
+  }
+`
+const ItemCountHidden = styled(ItemCount)`
+  display: none;
+  ${MEDIA_QUERY.tablet} {
+    display: initial;
+  }
+  ${MEDIA_QUERY.desktop} {
+    display: initial;
+  }
+`
+const ItemCountMobile = styled(ItemCount)`
+  display: initial;
+  text-align: left;
+  ${MEDIA_QUERY.tablet} {
+    display: none;
+  }
+  ${MEDIA_QUERY.desktop} {
+    display: none;
+  }
+`
 const ItemDelete = styled(DeleteOutlineIcon)`
   position: absolute;
   right: 5px;
@@ -234,19 +272,144 @@ const BtnFlex = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 50px;
+  & a{
+    maxWidth: '200px',
+  width: '45%',
+  margin: '20px 0px'
+  }
+`
+const BtnFlexCenter = styled(BtnFlex)`
+  justify-content: center;
+  & a {
+    max-width: initial;
+    width: 100%;
+  }
+  ${MEDIA_QUERY.desktop} {
+    & a {
+      max-width: 200px;
+      width: 45%;
+    }
+  }
+  ${MEDIA_QUERY.tablet} {
+    & a {
+      max-width: 200px;
+      width: 45%;
+    }
+  }
 `
 const LinkStyle = {
   maxWidth: '200px',
   width: '45%',
   margin: '20px 0px'
 }
+
+const FormTitle = styled(Title)`
+  padding: 0;
+`
+const FormWrapper = styled.div`
+  margin: 30px auto;
+  display: flex;
+  flex-direction: column;
+  ${MEDIA_QUERY.desktop} {
+    flex-direction: row;
+  }
+`
+
+const Form = styled.form`
+  padding: 20px;
+  width: 100%;
+  margin-bottom: 20px;
+  border: 1px solid ${COLOR.border_light_grey};
+  ${MEDIA_QUERY.desktop} {
+    padding: 20px 50px;
+    margin: 20px;
+  }
+`
+const InputWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 30px 0px;
+  justify-content: flex-start;
+`
+const InputTitle = styled.div``
+const RadionLabel = styled.span`
+  position: relative;
+  &:before {
+    content: '';
+    display: block;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    border: 0.1em solid ${COLOR.warning};
+    position: absolute;
+    left: -2em;
+    top: 0.2em;
+  }
+`
+const Input = styled.input`
+  display: block;
+  border: solid 1px ${COLOR.border_grey};
+  padding: 10px;
+  flex: 1 1 0;
+  border-radius: 3px;
+  margin-left: 20px;
+  ::placeholder {
+    color: ${COLOR.text_placeholder};
+  }
+  &:focus {
+    border: solid 1px ${COLOR.border_grey};
+  }
+  ${(props) =>
+    props.type === 'radio' &&
+    `
+    opacity: 0;
+    width: 0;
+    height: 0;
+    flex: initial;
+    margin-right: 20px;
+    &:checked + span {
+      transform: translateX(2.5px) scale(1.05);
+      font-weight: bold;
+    }
+    &:checked + span:before {
+      background: ${COLOR.warning};
+      
+    }
+  `}
+`
+const Label = styled.label`
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  cursor: pointer;
+`
+const RadioControl = styled.span`
+  display: block;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  border: 0.1em solid ${COLOR.warning};
+  transform: translateX(-1em);
+`
+
+const ErrorMsg = styled.p`
+  margin-top: 10px;
+  color: ${COLOR.text_warning};
+  font-weight: bold;
+  text-align: left;
+`
+const DeliveryData = styled.div`
+  text-align: left;
+  padding: 10px 20px;
+`
+
 export {
   Steps,
   Title,
   TitleWidth,
   TitleGroup,
-  CarTitles,
-  CarTitle,
+  CartTitles,
+  CartTitle,
   Item,
   ItemInfo,
   ItemImg,
@@ -254,7 +417,23 @@ export {
   ItemContent,
   ItemPrice,
   ItemDelete,
+  ItemCount,
+  ItemPriceHidden,
+  ItemCountHidden,
+  ItemCountMobile,
   TotalPrice,
   BtnFlex,
-  LinkStyle
+  BtnFlexCenter,
+  LinkStyle,
+  FormTitle,
+  FormWrapper,
+  Form,
+  InputWrapper,
+  Label,
+  RadioControl,
+  RadionLabel,
+  InputTitle,
+  Input,
+  ErrorMsg,
+  DeliveryData
 }

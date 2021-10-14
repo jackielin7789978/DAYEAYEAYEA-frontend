@@ -6,8 +6,8 @@ import {
   Steps,
   TitleWidth,
   TitleGroup,
-  CarTitles,
-  CarTitle,
+  CartTitles,
+  CartTitle,
   TotalPrice,
   BtnFlex,
   LinkStyle
@@ -74,14 +74,14 @@ export default function Step1() {
       </div>
       <Steps />
       <Title>{`購物車( ${cart.length} 件)`}</Title>
-      <CarTitles>
+      <CartTitles>
         <TitleWidth />
         <TitleGroup>
-          <CarTitle>購買項目</CarTitle>
-          <CarTitle>金額</CarTitle>
-          <CarTitle>數量</CarTitle>
+          <CartTitle>購買項目</CartTitle>
+          <CartTitle>金額</CartTitle>
+          <CartTitle>數量</CartTitle>
         </TitleGroup>
-      </CarTitles>
+      </CartTitles>
       {cart.map((item) => (
         <Cart
           key={item.id}
