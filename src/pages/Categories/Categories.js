@@ -87,6 +87,7 @@ export default function Categories() {
               id={id}
               key={id}
               imgUrl={imgUrl}
+              imgs={Product_imgs}
               name={name}
               price={price}
               discountPrice={discountPrice}

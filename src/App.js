@@ -25,7 +25,11 @@ import {
   Switch,
   useRouteMatch
 } from 'react-router-dom'
-import { ScrollToTop, getProductItems, setProductItems } from './utils'
+import {
+  ScrollToTop,
+  addItemsToLocalStorage,
+  getItemsFromLocalStorage
+} from './utils'
 import { LoadingContext, ModalContext, LocalStorageContext } from './context'
 
 export default function App() {
@@ -55,23 +59,65 @@ function AdminRoutes() {
 function Shop() {
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [cartItems, setCartItems] = useState(JSON.parse(getProductItems()))
+  const [cartItems, setCartItems] = useState(
+    JSON.parse(getItemsFromLocalStorage())
+  )
   const totalPrice = useMemo(() => {
+    if (!cartItems) return
     let sum = 0
     for (const cartItem of cartItems) {
       sum += cartItem.price
     }
     return sum
   }, [cartItems])
-  const totalItems = useMemo(() => cartItems.length, [cartItems])
+  const totalItems = useMemo(() => {
+    if (!cartItems) return
+    return cartItems.length
+  }, [cartItems])
 
+  const handleAddCartItem = (targetId, productInfo) => {
+    const { imgs, name, price, discountPrice, quantity } = productInfo
+    let storageProductItems = JSON.parse(getItemsFromLocalStorage()) || []
+    let imgUrlSm
+    if (imgs) {
+      imgUrlSm = imgs.length > 0 ? imgs[0].imgUrlSm : ''
+    }
+    const checkHasProducts =
+      storageProductItems.length >= 1
+        ? storageProductItems.filter((item) => item.id === targetId)
+        : []
+    let productList
+    if (checkHasProducts.length < 1) {
+      productList = [
+        ...storageProductItems,
+        {
+          id: targetId,
+          img: imgUrlSm,
+          name,
+          price,
+          discountPrice,
+          quantity
+        }
+      ]
+    } else {
+      productList = storageProductItems.map((item) => {
+        if (item.id !== targetId) return item
+        return {
+          ...item,
+          quantity: item.quantity + quantity
+        }
+      })
+    }
+    addItemsToLocalStorage(productList)
+    setCartItems(productList)
+  }
   const handleRemoveCartItem = (id) => {
-    setProductItems(cartItems.filter((item) => item.id !== id))
+    addItemsToLocalStorage(cartItems.filter((item) => item.id !== id))
     setCartItems(cartItems.filter((item) => item.id !== id))
   }
 
   useEffect(() => {
-    setCartItems(JSON.parse(getProductItems()))
+    setCartItems(JSON.parse(getItemsFromLocalStorage()))
   }, [])
 
   return (
@@ -83,6 +129,7 @@ function Shop() {
             totalPrice,
             totalItems,
             setCartItems,
+            handleAddCartItem,
             handleRemoveCartItem
           }}
         >

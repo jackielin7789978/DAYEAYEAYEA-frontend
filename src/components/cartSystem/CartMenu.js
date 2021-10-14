@@ -84,7 +84,7 @@ export default function CartMenu({ handleHover, $isOpen }) {
             <EmptyCart>您的購物車是空的</EmptyCart>
           </>
         )}
-        {totalItems !== 0 && (
+        {totalItems ? (
           <>
             <Title>購物車</Title>
             <ItemsContainer $isOpen={$isOpen}>
@@ -110,6 +110,8 @@ export default function CartMenu({ handleHover, $isOpen }) {
               <ShoppingCarBtn color={'primary'}>訂單結帳</ShoppingCarBtn>
             </BtnWrapper>
           </>
+        ) : (
+          <></>
         )}
       </MenuContainer>
     </RestyledHoverArea>

@@ -68,9 +68,8 @@ export function HomeArticlesImg() {
           const { id, title, imgUrl } = article
           const linkDirection = `/articles/${id}`
           return (
-            <Carousel.Item>
+            <Carousel.Item key={id}>
               <ArticleImg
-                key={id}
                 title={title}
                 imgUrl={imgUrl}
                 color={COLOR.text_light}

@@ -1,14 +1,15 @@
 import styled from 'styled-components'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useCallback } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { getArticlesById } from '../../webAPI/articlesAPI'
 import { getProductByArticle } from '../../webAPI/productsAPI'
-import { LoadingContext } from '../../context'
+import { LoadingContext, ModalContext } from '../../context'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import { IsLoadingComponent } from '../../components/IsLoading'
 import { ProductCard } from '../../components/productSystem/ProductCard'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { PageWidth, FullWidth } from '../../components/general'
+import { FullModal } from '../../components/Modal'
 
 const ArticleImgContainer = styled.div`
   background-repeat: no-repeat;
@@ -70,6 +71,8 @@ export default function Articles() {
   const [articleData, setArticleData] = useState([])
   const [articleProducts, setArticleProducts] = useState([])
   const { isLoading, setIsLoading } = useContext(LoadingContext)
+  const { isModalOpen, setIsModalOpen } = useContext(ModalContext)
+
   const isMobile = useMediaQuery('(max-width: 767px)')
   let history = useHistory()
   let articleSort
@@ -96,6 +99,9 @@ export default function Articles() {
     })
   }, [setIsLoading, slug, articleSort, history])
   const { imgUrl, title, content } = articleData
+  const handleModalClose = useCallback(() => {
+    setIsModalOpen((isModalOpen) => false)
+  }, [setIsModalOpen])
   return (
     <>
       <FullWidth>
@@ -103,6 +109,11 @@ export default function Articles() {
       </FullWidth>
       <PageWidth>
         {isLoading && <IsLoadingComponent />}
+        <FullModal
+          open={isModalOpen}
+          content='已成功加入購物車 ! '
+          onClose={handleModalClose}
+        />
         <Title>
           {title}
           <TitleBorder />
@@ -119,6 +130,7 @@ export default function Articles() {
                 <ProductCard
                   id={id}
                   key={id}
+                  imgs={Product_imgs}
                   imgUrl={imgUrl}
                   name={name}
                   price={price}

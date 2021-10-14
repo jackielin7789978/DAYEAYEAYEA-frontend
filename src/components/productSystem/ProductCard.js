@@ -4,8 +4,7 @@ import useMediaQuery from '../../hooks/useMediaQuery'
 import { Link } from 'react-router-dom'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import { ShoppingCarBtn, ShoppingCarWhiteBtn } from '../Button'
-import { AddItemsInLocalStorage } from '../../utils'
-import { ModalContext } from '../../context'
+import { ModalContext, LocalStorageContext } from '../../context'
 
 const CardContainerDiv = styled.div`
   margin: 8px 4px;
@@ -145,6 +144,7 @@ export function ProductCard({ id, name, price, imgUrl, discountPrice, imgs }) {
   const isDesktop = useMediaQuery('(min-width: 1200px)')
   // eslint-disable-next-line no-unused-vars
   const { isModalOpen, setIsModalOpen } = useContext(ModalContext)
+  const { handleAddCartItem } = useContext(LocalStorageContext)
   const quantity = 1
   const productInfo = useMemo(
     () => ({
@@ -157,7 +157,7 @@ export function ProductCard({ id, name, price, imgUrl, discountPrice, imgs }) {
     [name, price, discountPrice, imgs]
   )
   const handleAddProductInCart = () => {
-    AddItemsInLocalStorage(id, productInfo)
+    handleAddCartItem(id, productInfo)
     setIsModalOpen(true)
   }
 

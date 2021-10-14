@@ -3,8 +3,7 @@ import { useState, useCallback, useMemo, useContext } from 'react'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import { ShoppingCarBtn } from '../../components/Button'
 import { ItemCounter } from '../../components/Counter'
-import { AddItemsInLocalStorage } from '../../utils'
-import { ModalContext } from '../../context'
+import { ModalContext, LocalStorageContext } from '../../context'
 
 const ProductInfoContainer = styled.div`
   width: 100%;
@@ -138,6 +137,8 @@ export function ProductUpInfoComponent({
   const [warningMessage, setWarningMessage] = useState('')
   // eslint-disable-next-line no-unused-vars
   const { isModalOpen, setIsModalOpen } = useContext(ModalContext)
+  const { handleAddCartItem } = useContext(LocalStorageContext)
+
   const productInfo = useMemo(
     () => ({
       name,
@@ -151,7 +152,7 @@ export function ProductUpInfoComponent({
 
   const handleAddProductInCart = (e) => {
     const targetId = Number(e.target.id)
-    AddItemsInLocalStorage(targetId, productInfo)
+    handleAddCartItem(targetId, productInfo)
     setIsModalOpen(true)
   }
 
