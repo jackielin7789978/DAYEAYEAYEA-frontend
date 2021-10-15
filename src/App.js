@@ -16,7 +16,7 @@ import {
   Products,
   NotFound
 } from './pages/index'
-import { AdminOrders, AdminMembers, AdminProducts } from './pages/AdminPages'
+import { AdminOrders, AdminOrderDetail } from './pages/AdminPages/AdminOrders'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
 import { PageHeight, AdminPageWidth } from './components/general'
 import {
@@ -31,10 +31,12 @@ import {
   getItemsFromLocalStorage
 } from './utils'
 import { LoadingContext, ModalContext, LocalStorageContext } from './context'
+import GlobalStyle from './constants/globalStyle'
 
 export default function App() {
   return (
     <Router basename='/'>
+      <GlobalStyle />
       <ScrollToTop />
       <Switch>
         <Route path='/admin' component={AdminRoutes} />
@@ -46,12 +48,15 @@ export default function App() {
 
 function AdminRoutes() {
   const { path } = useRouteMatch()
+
   return (
     <Switch>
       <AdminPageWidth>
-        <Route path={`${path}/orders`} component={AdminOrders} />
-        <Route path={`${path}/products`} component={AdminProducts} />
-        <Route path={`${path}/members`} component={AdminMembers} />
+        <Route path={`${path}/orders/:id`} component={AdminOrderDetail} />
+        <Route exact path={`${path}/orders`} component={AdminOrders} />
+        {/* 以下尚未 import */}
+        {/* <Route path={`${path}/products`} component={AdminProducts} /> */}
+        {/* <Route path={`${path}/members`} component={AdminMembers} /> */}
       </AdminPageWidth>
     </Switch>
   )

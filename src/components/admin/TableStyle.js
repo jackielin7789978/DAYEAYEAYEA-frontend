@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Link } from 'react-router-dom'
 import { COLOR, ADMIN_COLOR, ADMIN_MEDIA_QUERY } from '../../constants/style'
 
 export const Wrapper = styled.div`
@@ -40,13 +41,14 @@ export const Container = styled.div`
 export const Cell = styled.span`
   width: 15%;
 `
-export const EditBtn = styled.button`
+export const EditBtn = styled(Link)`
   background: ${ADMIN_COLOR.editBtn_grey};
   color: ${COLOR.text_light};
-  padding: 4px 10px;
+  padding: 6px 10px;
   border-radius: 3px;
-  transition: ease 0.2s;
+  transition: background 0.2s ease;
   &:hover {
     background: ${ADMIN_COLOR.editBtn_grey_hover};
+    color: ${COLOR.text_light};
   }
 `

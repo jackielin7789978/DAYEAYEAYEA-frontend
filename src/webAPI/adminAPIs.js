@@ -37,3 +37,20 @@ export const getAllOrders = async () => {
   }
   return await res.json()
 }
+
+export const getOrder = async (id) => {
+  const token = getTokenFromLocalStorage()
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/orders/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+  } catch (e) {
+    return console.log(e)
+  }
+  return await res.json()
+}

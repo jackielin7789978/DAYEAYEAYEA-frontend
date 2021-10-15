@@ -30,10 +30,13 @@ export const COLOR = {
 }
 export const ADMIN_COLOR = {
   table_blue: '#3689c9',
-  light_grey: '#E2E5E7',
-  editBtn_grey: '#999',
-  editBtn_grey_hover: '#888'
+  light_grey: '#EDF1F4',
+  Btn_grey: '#aaa',
+  Btn_grey_hover: '#888',
+  Btn_blue: '#3689c9',
+  Btn_blue_hover: '#1971b5'
 }
+
 // 要用什麼字體？
 export const FONT = {
   logo: "'Karla', sans-serif;"
