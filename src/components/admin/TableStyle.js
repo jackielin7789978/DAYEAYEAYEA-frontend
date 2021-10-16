@@ -4,7 +4,7 @@ import { COLOR, ADMIN_COLOR, ADMIN_MEDIA_QUERY } from '../../constants/style'
 
 export const Wrapper = styled.div`
   width: 80vw;
-  margin: 120px auto;
+  margin: 0px auto;
   ${ADMIN_MEDIA_QUERY.md} {
     width: 70vw;
     max-width: 1200px;

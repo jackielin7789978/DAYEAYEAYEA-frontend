@@ -26,7 +26,7 @@ function TableItem({ item }) {
   return (
     <Container>
       <Cell>{item.status}</Cell>
-      <Cell>{item.createdAt}</Cell>
+      <Cell>{item.id}</Cell>
       <Cell style={{ width: '40%' }}>jackielin1234567899112@gmail.com</Cell>
       <Cell>NT $5990</Cell>
       <Cell>

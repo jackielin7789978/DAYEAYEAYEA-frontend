@@ -34,7 +34,9 @@ export const ADMIN_COLOR = {
   Btn_grey: '#aaa',
   Btn_grey_hover: '#888',
   Btn_blue: '#3689c9',
-  Btn_blue_hover: '#1971b5'
+  Btn_blue_hover: '#1971b5',
+  border_grey: '#BBC5D1',
+  border_dark_grey: '#555'
 }
 
 // 要用什麼字體？
