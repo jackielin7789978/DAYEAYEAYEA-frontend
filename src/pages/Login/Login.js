@@ -11,8 +11,10 @@ import SignInForm from './SignInForm'
 import SignUpForm from './SignUpForm'
 import { addTokenToLocalStorage } from '../../utils'
 import { getMe } from '../../webAPI/loginAPI'
-import { UserContext } from '../../context'
+import { LoadingContext, UserContext } from '../../context'
+import { IsLoadingComponent } from '../../components/IsLoading'
 export default function Login() {
+  const { isLoading } = useContext(LoadingContext)
   const location = useHistory()
   const [errMessage, setErrMessage] = useState()
   const { setUser } = useContext(UserContext)
@@ -28,6 +30,7 @@ export default function Login() {
   }
   return (
     <PageWidthHeight>
+      {isLoading && <IsLoadingComponent />}
       <AbsoluteCenter>
         <Title children={'會員專區'} />
         <FormWrapper>

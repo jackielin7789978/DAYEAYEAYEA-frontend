@@ -54,13 +54,6 @@ const Input = styled.input`
   &:focus {
     border: solid 1px ${COLOR.border_primary_dark};
   }
-  ${(props) =>
-    props.type === 'password' &&
-    `
-    ::-ms-reveal,::-ms-clear{
-      display: none;
-    }
-  `}
 `
 
 const ErrorMsg = styled.p`

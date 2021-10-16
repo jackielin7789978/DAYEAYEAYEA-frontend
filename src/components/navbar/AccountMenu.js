@@ -40,7 +40,7 @@ export default function AccountMenu({ handleHover, $isOpen, $setMenu }) {
 
         {user ? (
           <>
-            <AccountTitle to=''>會員專區</AccountTitle>
+            <AccountTitle to='/member/me'>會員專區</AccountTitle>
             <AccountTitle
               to=''
               onClick={() => {

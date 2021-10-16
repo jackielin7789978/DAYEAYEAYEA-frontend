@@ -1,37 +1,33 @@
-import { useState } from 'react'
+import { useContext } from 'react'
 import {
   Form,
   Input,
   ErrorMsg,
-  PasswordInput,
-  EyeIcon,
-  VisibilityIcon,
-  VisibilityOffIcon
+  PasswordInput
 } from '../../components/loginSystem/loginCard'
 import { ArrowBtn } from '../../components/Button'
 import { useForm } from 'react-hook-form'
 import { signIn, signUp } from '../../webAPI/loginAPI'
+import { LoadingContext } from '../../context'
 export default function SignUpForm({
   tokenCheck,
   $errMessage,
   $setErrMessage
 }) {
-  // const [passwordShow, setPasswordShow] = useState(false)
-  // const togglePasswordvisibility = () => {
-  //   setPasswordShow(passwordShow ? false : true)
-  // }
+  const { setIsLoading } = useContext(LoadingContext)
   const {
     register,
     formState: { errors },
     handleSubmit
   } = useForm()
   const onSubmit = (submitData) => {
+    setIsLoading(true)
     const { username, email, password } = submitData
     signUp(username, email, password).then((data) => {
       if (data.ok === 0) {
-        return $setErrMessage(data.message)
+        setIsLoading(false)
+        return $setErrMessage('該帳號或信箱已被註冊')
       }
-
       signIn(username, password).then((data) => {
         if (data.ok === 0) {
           return $setErrMessage(data.message)
@@ -66,9 +62,6 @@ export default function SignUpForm({
             pattern: /^(?=.*[a-z])(?=.*\d)[a-z\d]{6,}$/
           })}
         />
-        {/* <EyeIcon onClick={togglePasswordvisibility}>
-          {passwordShow ? <VisibilityIcon /> : <VisibilityOffIcon />}
-        </EyeIcon> */}
       </PasswordInput>
       <ErrorMsg>
         {errors.password?.type === 'required' && '請填寫密碼'}
@@ -80,7 +73,9 @@ export default function SignUpForm({
         children='註冊'
         marginStyle={{ marginTop: '20px' }}
       />
-      {$errMessage && <ErrorMsg>{$setErrMessage}</ErrorMsg>}
+      {$errMessage && (
+        <ErrorMsg style={{ textAlign: 'center' }}>{$errMessage}</ErrorMsg>
+      )}
     </Form>
   )
 }
