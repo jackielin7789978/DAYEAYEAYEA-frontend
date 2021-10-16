@@ -1,18 +1,41 @@
+import { useState } from 'react'
 import {
   Form,
   Input,
   ErrorMsg,
-  SendPassword
+  SendPassword,
+  PasswordInput,
+  EyeIcon,
+  VisibilityIcon,
+  VisibilityOffIcon
 } from '../../components/loginSystem/loginCard'
 import { ArrowBtn } from '../../components/Button'
 import { useForm } from 'react-hook-form'
-export default function SignInForm() {
+import { signIn } from '../../webAPI/loginAPI'
+export default function SignInForm({
+  tokenCheck,
+  $errMessage,
+  $setErrMessage
+}) {
+  // const [passwordShow, setPasswordShow] = useState(false)
+  // const togglePasswordvisibility = () => {
+  //   setPasswordShow(passwordShow ? false : true)
+  // }
   const {
     register,
     formState: { errors },
     handleSubmit
   } = useForm()
-  const onSubmit = (data) => console.log(data)
+  const onSubmit = (submitData) => {
+    const { username, password } = submitData
+    signIn(username, password).then((data) => {
+      if (data.ok === 0) {
+        return $setErrMessage(data.message)
+      }
+      $setErrMessage(null)
+      tokenCheck(data.token)
+    })
+  }
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Input
@@ -23,11 +46,16 @@ export default function SignInForm() {
       <ErrorMsg>
         {errors.username?.type === 'required' && '請填寫名稱'}
       </ErrorMsg>
-      <Input
-        type='password'
-        placeholder='密碼'
-        {...register('password', { required: true })}
-      />
+      <PasswordInput>
+        <Input
+          type='password'
+          placeholder='密碼'
+          {...register('password', { required: true })}
+        />
+        {/* <EyeIcon onClick={togglePasswordvisibility}>
+          {passwordShow ? <VisibilityIcon /> : <VisibilityOffIcon />}
+        </EyeIcon> */}
+      </PasswordInput>
       <ErrorMsg>
         {errors.password?.type === 'required' && '請填寫密碼'}
       </ErrorMsg>
@@ -37,6 +65,7 @@ export default function SignInForm() {
         children='登入'
         marginStyle={{ marginTop: '20px' }}
       />
+      {$errMessage && <ErrorMsg>{$errMessage}</ErrorMsg>}
     </Form>
   )
 }

@@ -1,17 +1,30 @@
+import { useContext } from 'react'
 import styled from 'styled-components'
-import { HoverArea, MenuContainer, CSSTriangle, Title } from './MenuStyles'
+import {
+  HoverArea,
+  MenuContainer,
+  CSSTriangle,
+  AccountTitle
+} from './MenuStyles'
 import { MEDIA_QUERY } from '../../constants/style'
-
+import { UserContext } from '../../context'
+import { addTokenToLocalStorage } from '../../utils'
 const RestyledHoverArea = styled(HoverArea)`
   ${MEDIA_QUERY.desktop} {
     right: 110px;
+    width: 180px;
   }
   ${MEDIA_QUERY.widescreen} {
     right: 18vw;
   }
 `
-
-export default function AccountMenu({ handleHover, $isOpen }) {
+const RestyledMenuContainer = styled(MenuContainer)`
+  ${MEDIA_QUERY.desktop} {
+    padding: 5px 16px;
+  }
+`
+export default function AccountMenu({ handleHover, $isOpen, $setMenu }) {
+  const { user, setUser } = useContext(UserContext)
   return (
     <RestyledHoverArea
       onMouseOver={() => {
@@ -22,11 +35,27 @@ export default function AccountMenu({ handleHover, $isOpen }) {
       }}
       $isOpen={$isOpen}
     >
-      <MenuContainer $isOpen={$isOpen}>
+      <RestyledMenuContainer $isOpen={$isOpen}>
         <CSSTriangle $isOpen={$isOpen} />
-        <Title>會員專區</Title>
-        {/* TODO */}
-      </MenuContainer>
+
+        {user ? (
+          <>
+            <AccountTitle to=''>會員專區</AccountTitle>
+            <AccountTitle
+              to=''
+              onClick={() => {
+                addTokenToLocalStorage('')
+                setUser(null)
+                $setMenu('')
+              }}
+            >
+              登出
+            </AccountTitle>
+          </>
+        ) : (
+          <AccountTitle to='/login'>登入</AccountTitle>
+        )}
+      </RestyledMenuContainer>
     </RestyledHoverArea>
   )
 }

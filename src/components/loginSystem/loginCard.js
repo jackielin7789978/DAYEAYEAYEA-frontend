@@ -43,7 +43,7 @@ const Form = styled.form`
 `
 const Input = styled.input`
   display: block;
-  border: solid 1px ${COLOR.border_grey};
+  border: solid 1px ${COLOR.border_primary};
   width: 100%;
   padding: 10px;
   border-radius: 3px;
@@ -52,7 +52,7 @@ const Input = styled.input`
     color: ${COLOR.text_placeholder};
   }
   &:focus {
-    border: solid 1px ${COLOR.border_grey};
+    border: solid 1px ${COLOR.border_primary_dark};
   }
   ${(props) =>
     props.type === 'password' &&

@@ -17,6 +17,7 @@ export const Cart = ({ item, handleRemoveCartItem, handleUpdateCount }) => {
   function handleChange(e) {
     setCount(parseInt(e.target.value))
   }
+
   useEffect(() => {
     handleUpdateCount(count, item.id)
   }, [count, handleUpdateCount, item.id])
