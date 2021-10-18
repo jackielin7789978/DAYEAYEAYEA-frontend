@@ -28,8 +28,8 @@ export default function Step1() {
     addItemsToLocalStorage(cartItems)
   }, [cartItems])
   const handleUpdateCount = useCallback(
-    (count, id) => {
-      if (count < 1) {
+    (quantity, id) => {
+      if (quantity < 1) {
         return setCartItems((c) => c.filter((item) => item.id !== id))
       }
       setCartItems((c) =>
@@ -37,7 +37,7 @@ export default function Step1() {
           if (item.id !== id) return item
           return {
             ...item,
-            quantity: count
+            quantity: quantity
           }
         })
       )

@@ -4,7 +4,7 @@ import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 
-const StepsWrapper = styled.div`
+export const StepsWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -14,7 +14,7 @@ const StepsWrapper = styled.div`
     width: 70%;
   }
 `
-const Step = styled.div`
+export const Step = styled.div`
   transition: 0.2s;
   color: ${COLOR.text_primary_light};
   display: flex;
@@ -30,7 +30,7 @@ const Step = styled.div`
     flex-direction: row;
   }
 `
-const StepTitle = styled.div`
+export const StepTitle = styled.div`
   border: 3px solid;
   border-radius: 50%;
   color: inherit;
@@ -39,7 +39,7 @@ const StepTitle = styled.div`
   line-height: 35px;
   font-weight: bold;
 `
-const StepContent = styled.div`
+export const StepContent = styled.div`
   color: inherit;
   font-weight: bold;
   margin: 10px 0px;
@@ -47,10 +47,10 @@ const StepContent = styled.div`
     margin: 0px 10px;
   }
 `
-const StepArrow = styled(ArrowForwardIosIcon)`
+export const StepArrow = styled(ArrowForwardIosIcon)`
   fill: ${COLOR.text_primary_light};
 `
-const Steps = () => {
+export const Steps = () => {
   const location = useLocation()
   return (
     <StepsWrapper>
@@ -71,7 +71,7 @@ const Steps = () => {
     </StepsWrapper>
   )
 }
-const Title = styled.div`
+export const Title = styled.div`
   font-size: ${FONT_SIZE.lg};
   margin: 20px 0px;
   font-weight: bold;
@@ -83,7 +83,7 @@ const Title = styled.div`
     padding: 0px 20px;
   }
 `
-const CartTitles = styled.div`
+export const CartTitles = styled.div`
   display: none;
   ${MEDIA_QUERY.desktop} {
     display: flex;
@@ -95,10 +95,10 @@ const CartTitles = styled.div`
     justify-content: space-around;
   }
 `
-const TitleWidth = styled.div`
+export const TitleWidth = styled.div`
   width: 100px;
 `
-const TitleGroup = styled.div`
+export const TitleGroup = styled.div`
   display: flex;
   justify-content: space-around;
   width: 100%;
@@ -111,13 +111,13 @@ const TitleGroup = styled.div`
     }
   }
 `
-const CartTitle = styled.div`
+export const CartTitle = styled.div`
   color: ${COLOR.text_light};
   font-weight: bold;
   padding: 10px;
 `
 
-const Item = styled.div`
+export const Item = styled.div`
   position: relative;
   display: flex;
   justify-content: space-around;
@@ -131,7 +131,7 @@ const Item = styled.div`
     padding: 20px;
   }
 `
-const ItemInfo = styled.div`
+export const ItemInfo = styled.div`
   display: flex;
   width: 100%;
   align-items: cneter;
@@ -147,13 +147,13 @@ const ItemInfo = styled.div`
     justify-content: space-around;
   }
 `
-const ItemImg = styled(Link)`
+export const ItemImg = styled(Link)`
   min-width: 100px;
   height: 100px;
   background: url(${(props) => props.img}) center;
 `
 
-const ItemName = styled(Link)`
+export const ItemName = styled(Link)`
   text-align: left;
   margin-right: 30px;
   color: ${COLOR.text_dark};
@@ -170,7 +170,7 @@ const ItemName = styled(Link)`
   }
 `
 
-const ItemContent = styled.div`
+export const ItemContent = styled.div`
   display: flex;
   justify-content: flex-end;
   flex-direction: row-reverse;
@@ -189,7 +189,7 @@ const ItemContent = styled.div`
     margin-right: 10px;
   }
 `
-const ItemPrice = styled.div`
+export const ItemPrice = styled.div`
   width: 100%;
   position: relative;
   &:before {
@@ -210,7 +210,7 @@ const ItemPrice = styled.div`
     }
   }
 `
-const ItemPriceHidden = styled(ItemPrice)`
+export const ItemPriceHidden = styled(ItemPrice)`
   display: none;
   ${MEDIA_QUERY.tablet} {
     display: initial;
@@ -219,7 +219,7 @@ const ItemPriceHidden = styled(ItemPrice)`
     display: initial;
   }
 `
-const ItemCount = styled.div`
+export const ItemCount = styled.div`
   width: 100%;
   ${MEDIA_QUERY.tablet} {
     margin-right: 25px;
@@ -230,7 +230,7 @@ const ItemCount = styled.div`
     width: 250px;
   }
 `
-const ItemCountHidden = styled(ItemCount)`
+export const ItemCountHidden = styled(ItemCount)`
   display: none;
   ${MEDIA_QUERY.tablet} {
     display: initial;
@@ -239,7 +239,7 @@ const ItemCountHidden = styled(ItemCount)`
     display: initial;
   }
 `
-const ItemCountMobile = styled(ItemCount)`
+export const ItemCountMobile = styled(ItemCount)`
   display: initial;
   text-align: left;
   ${MEDIA_QUERY.tablet} {
@@ -249,7 +249,7 @@ const ItemCountMobile = styled(ItemCount)`
     display: none;
   }
 `
-const ItemDelete = styled(DeleteOutlineIcon)`
+export const ItemDelete = styled(DeleteOutlineIcon)`
   position: absolute;
   right: 5px;
   top: 20px;
@@ -264,11 +264,11 @@ const ItemDelete = styled(DeleteOutlineIcon)`
     right: 10px;
   }
 `
-const TotalPrice = styled.div`
+export const TotalPrice = styled.div`
   text-align: right;
   padding: 10px;
 `
-const BtnFlex = styled.div`
+export const BtnFlex = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 50px;
@@ -278,61 +278,70 @@ const BtnFlex = styled.div`
   margin: '20px 0px'
   }
 `
-const BtnFlexCenter = styled(BtnFlex)`
+export const BtnFlexCenter = styled(BtnFlex)`
   justify-content: center;
-  & a {
+  & button {
     max-width: initial;
     width: 100%;
   }
   ${MEDIA_QUERY.desktop} {
-    & a {
+    & button {
       max-width: 200px;
       width: 45%;
     }
   }
   ${MEDIA_QUERY.tablet} {
-    & a {
+    & button {
       max-width: 200px;
       width: 45%;
     }
   }
 `
-const LinkStyle = {
+export const LinkStyle = {
   maxWidth: '200px',
   width: '45%',
   margin: '20px 0px'
 }
 
-const FormTitle = styled(Title)`
+export const FormTitle = styled(Title)`
   padding: 0;
 `
-const FormWrapper = styled.div`
-  margin: 30px auto;
-  display: flex;
-  flex-direction: column;
-  ${MEDIA_QUERY.desktop} {
-    flex-direction: row;
-  }
-`
-
-const Form = styled.form`
-  padding: 20px;
+export const FormWrapper = styled.div`
   width: 100%;
-  margin-bottom: 20px;
   border: 1px solid ${COLOR.border_light_grey};
+  padding: 20px;
+  margin: 10px auto;
   ${MEDIA_QUERY.desktop} {
     padding: 20px 50px;
     margin: 20px;
   }
 `
-const InputWrapper = styled.div`
+
+export const Form = styled.form`
+  margin: 30px auto;
+  display: flex;
+  flex-direction: column;
+  ${MEDIA_QUERY.desktop} {
+    & > div {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+    }
+  }
+  width: 100%;
+  margin-bottom: 20px;
+  ${MEDIA_QUERY.desktop} {
+    margin: 20px;
+  }
+`
+export const InputWrapper = styled.div`
   display: flex;
   align-items: center;
   margin: 30px 0px;
   justify-content: flex-start;
 `
-const InputTitle = styled.div``
-const RadionLabel = styled.span`
+export const InputTitle = styled.div``
+export const RadionLabel = styled.span`
   position: relative;
   &:before {
     content: '';
@@ -346,7 +355,7 @@ const RadionLabel = styled.span`
     top: 0.2em;
   }
 `
-const Input = styled.input`
+export const Input = styled.input`
   display: block;
   border: solid 1px ${COLOR.border_grey};
   padding: 10px;
@@ -377,13 +386,13 @@ const Input = styled.input`
     }
   `}
 `
-const Label = styled.label`
+export const Label = styled.label`
   display: flex;
   align-items: center;
   margin: 20px 0;
   cursor: pointer;
 `
-const RadioControl = styled.span`
+export const RadioControl = styled.span`
   display: block;
   width: 1em;
   height: 1em;
@@ -392,48 +401,34 @@ const RadioControl = styled.span`
   transform: translateX(-1em);
 `
 
-const ErrorMsg = styled.p`
+export const ErrorMsg = styled.p`
   margin-top: 10px;
   color: ${COLOR.text_warning};
   font-weight: bold;
   text-align: left;
 `
-const DeliveryData = styled.div`
+export const DeliveryData = styled.div`
   text-align: left;
   padding: 10px 20px;
 `
-
-export {
-  Steps,
-  Title,
-  TitleWidth,
-  TitleGroup,
-  CartTitles,
-  CartTitle,
-  Item,
-  ItemInfo,
-  ItemImg,
-  ItemName,
-  ItemContent,
-  ItemPrice,
-  ItemDelete,
-  ItemCount,
-  ItemPriceHidden,
-  ItemCountHidden,
-  ItemCountMobile,
-  TotalPrice,
-  BtnFlex,
-  BtnFlexCenter,
-  LinkStyle,
-  FormTitle,
-  FormWrapper,
-  Form,
-  InputWrapper,
-  Label,
-  RadioControl,
-  RadionLabel,
-  InputTitle,
-  Input,
-  ErrorMsg,
-  DeliveryData
-}
+export const WarningMessage = styled.p`
+  font-size: ${FONT_SIZE.sm};
+  color: ${COLOR.warning};
+  margin-top: 8px;
+  font-weight: bold;
+  ${MEDIA_QUERY.desktop} {
+    position: absolute;
+    right: 8%;
+    top: 65%;
+  }
+  ${MEDIA_QUERY.tablet} {
+    position: absolute;
+    right: 8%;
+    top: 65%;
+  }
+`
+export const MsgTitle = styled.div`
+  font-size: ${FONT_SIZE.lg};
+  margin-top: 30px;
+  font-weight: bold;
+`

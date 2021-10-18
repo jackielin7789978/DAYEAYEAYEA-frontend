@@ -27,7 +27,6 @@ import {
 export default function Navbar() {
   const [menu, setMenu] = useState('')
   const { totalItems } = useContext(LocalStorageContext)
-
   const handleHover = (name) => {
     if (window.innerWidth < 1200) return
     setMenu(name)
@@ -123,6 +122,7 @@ export default function Navbar() {
           handleHover={handleHover}
           $isOpen={menu === 'account' ? true : false}
           $menu={menu}
+          $setMenu={setMenu}
         />
         <SearchMenu
           handleHover={handleHover}
