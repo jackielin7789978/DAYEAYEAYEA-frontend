@@ -97,14 +97,15 @@ function GeneralModal({ icon, content, buttonOne, buttonTwo, open, onClose }) {
 function FullModal({ icon, content, buttonOne, buttonTwo, open, onClose }) {
   if (!open) return null
   return (
-    <FixedBackground>
+    <div>
+      <FixedBackground onClick={onClose} />
       <ModalContent>
         <CloseButton onClick={onClose} />
         <ModalIcon icon={icon} />
         <ModalContentDiv>{content}</ModalContentDiv>
         <ModalButton buttonOne={buttonOne} buttonTwo={buttonTwo}></ModalButton>
       </ModalContent>
-    </FixedBackground>
+    </div>
   )
 }
 

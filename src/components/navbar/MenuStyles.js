@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 
@@ -71,6 +72,30 @@ export const Title = styled.div`
   font-size: ${FONT_SIZE.md};
   font-weight: bold;
   margin-bottom: 10px;
+`
+export const AccountTitle = styled(Link)`
+  font-size: ${FONT_SIZE.sm};
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  font-size: ${FONT_SIZE.md};
+  padding: 20px;
+  font-weight: bold;
+  color: ${COLOR.text_dark};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 12%;
+  & + & {
+    border-top: 2px solid ${COLOR.border_grey};
+  }
+
+  &:hover {
+    color: ${COLOR.text_primary_dark};
+  }
+  ${MEDIA_QUERY.desktop} {
+    padding: 10px;
+  }
 `
 export function CSSTriangle({ $isOpen }) {
   return (

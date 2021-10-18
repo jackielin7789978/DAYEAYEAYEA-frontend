@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 import Navbar from './components/navbar/Navbar'
 import Footer from './components/Footer'
 import {
@@ -7,6 +7,7 @@ import {
   Step2,
   Step3,
   Categories,
+  Search,
   Home,
   Login,
   Me,
@@ -28,9 +29,16 @@ import {
 import {
   ScrollToTop,
   addItemsToLocalStorage,
-  getItemsFromLocalStorage
+  getItemsFromLocalStorage,
+  getTokenFromLocalStorage
 } from './utils'
-import { LoadingContext, ModalContext, LocalStorageContext } from './context'
+import {
+  LoadingContext,
+  ModalContext,
+  LocalStorageContext,
+  UserContext
+} from './context'
+import { getMe } from './webAPI/loginAPI'
 import GlobalStyle from './constants/globalStyle'
 
 export default function App() {
@@ -67,6 +75,22 @@ function Shop() {
   const [cartItems, setCartItems] = useState(
     JSON.parse(getItemsFromLocalStorage())
   )
+
+  const [user, setUser] = useState(() => {
+    const localToken = getTokenFromLocalStorage()
+    return localToken
+      ? getMe().then((res) => {
+          if (res.ok) {
+            setUser(res.data)
+          }
+        })
+      : null
+  })
+
+  const handleModalClose = useCallback(() => {
+    setIsModalOpen((isModalOpen) => false)
+  }, [setIsModalOpen])
+
   const totalPrice = useMemo(() => {
     if (!cartItems) return
     let sum = 0
@@ -126,36 +150,41 @@ function Shop() {
   }, [])
 
   return (
-    <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
-      <ModalContext.Provider value={{ isModalOpen, setIsModalOpen }}>
-        <LocalStorageContext.Provider
-          value={{
-            cartItems,
-            totalPrice,
-            totalItems,
-            setCartItems,
-            handleAddCartItem,
-            handleRemoveCartItem
-          }}
+    <UserContext.Provider value={{ user, setUser }}>
+      <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
+        <ModalContext.Provider
+          value={{ isModalOpen, setIsModalOpen, handleModalClose }}
         >
-          <Navbar />
-          <PageHeight>
-            <Switch>
-              <Route path='/articles/:slug' component={Articles} />
-              <Route path='/checkout' component={CheckoutRoutes} />
-              <Route path='/categories/:slug/:page' component={Categories} />
-              <Route path='/login' component={Login} />
-              <Route path='/member/' component={MemberRoutes} />
-              <Route path='/products/:id' component={Products} />
-              <Route path='/info' component={InfoRoutes} />
-              <Route exact path='/' component={Home} />
-              <Route path='*' component={NotFound} />
-            </Switch>
-          </PageHeight>
-          <Footer />
-        </LocalStorageContext.Provider>
-      </ModalContext.Provider>
-    </LoadingContext.Provider>
+          <LocalStorageContext.Provider
+            value={{
+              cartItems,
+              totalPrice,
+              totalItems,
+              setCartItems,
+              handleAddCartItem,
+              handleRemoveCartItem
+            }}
+          >
+            <Navbar />
+            <PageHeight>
+              <Switch>
+                <Route path='/articles/:slug' component={Articles} />
+                <Route path='/checkout' component={CheckoutRoutes} />
+                <Route path='/categories/:slug/:page' component={Categories} />
+                <Route path='/search' component={Search} />
+                <Route path='/login' component={Login} />
+                <Route path='/member/' component={MemberRoutes} />
+                <Route path='/products/:id' component={Products} />
+                <Route path='/info' component={InfoRoutes} />
+                <Route exact path='/' component={Home} />
+                <Route path='*' component={NotFound} />
+              </Switch>
+            </PageHeight>
+            <Footer />
+          </LocalStorageContext.Provider>
+        </ModalContext.Provider>
+      </LoadingContext.Provider>
+    </UserContext.Provider>
   )
 }
 function CheckoutRoutes() {
