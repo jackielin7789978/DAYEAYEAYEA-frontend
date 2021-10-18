@@ -5,7 +5,7 @@ const CategoryImg = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  height: 50vh;
+  height: 50vw;
   width: 100%;
   opacity: 0.7;
   font-size: ${FONT_SIZE.xxl};

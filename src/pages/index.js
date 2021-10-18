@@ -4,6 +4,7 @@ import Step1 from './Checkout/Step1'
 import Step2 from './Checkout/Step2'
 import Step3 from './Checkout/Step3'
 import Categories from './Categories'
+import Search from './Search'
 import Home from './Home'
 import Login from './Login'
 import Me from './MemberPages/Me'
@@ -19,6 +20,7 @@ export {
   Step2,
   Step3,
   Categories,
+  Search,
   Home,
   Login,
   Me,

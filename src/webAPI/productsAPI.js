@@ -47,3 +47,11 @@ export const getProductByArticle = async (articleSort, page) => {
       console.log(err.toString())
     })
 }
+
+export const getProductByKeywords = async (keywords) => {
+  return await fetch(`${BASE_URL}/products/${keywords}`)
+    .then((res) => res.json())
+    .catch((err) => {
+      console.log(err.toString())
+    })
+}

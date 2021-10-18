@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useState, useEffect, useContext, useCallback } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { MEDIA_QUERY } from '../../constants/style'
 import { LoadingContext, ModalContext } from '../../context'
@@ -45,7 +45,7 @@ export default function Products() {
   const [product, setProduct] = useState([])
   const [productImgs, setProductImgs] = useState([])
   const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, setIsModalOpen } = useContext(ModalContext)
+  const { isModalOpen, handleModalClose } = useContext(ModalContext)
   const { id } = useParams()
   let history = useHistory()
 
@@ -61,10 +61,6 @@ export default function Products() {
       setIsLoading((isLoading) => false)
     })
   }, [setIsLoading, id, history])
-
-  const handleModalClose = useCallback(() => {
-    setIsModalOpen((isModalOpen) => false)
-  }, [setIsModalOpen])
 
   const { name, shortDesc, longDesc, price, discountPrice, quantity } = product
   let hasDiscount = price !== discountPrice ? true : false

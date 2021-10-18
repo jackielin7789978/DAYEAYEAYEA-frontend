@@ -9,7 +9,11 @@ import { LoadingContext, ModalContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { PageWidth } from '../../components/general'
-import { ProductCard } from '../../components/productSystem/ProductCard'
+import {
+  ProductCard,
+  WhiteCard
+} from '../../components/productSystem/ProductCard'
+import { countWhiteCardAmount, setPageInArray } from '../../utils'
 import { PaginatorButton } from '../../components/Paginator'
 import { FullModal } from '../../components/Modal'
 
@@ -24,20 +28,13 @@ const PaginatorDiv = styled.div`
   margin: 20px auto 40px auto;
 `
 
-function setPageInArray(totalPageNum) {
-  const pagesArray = []
-  for (let i = 1; i <= totalPageNum; i++) {
-    pagesArray.push(i)
-  }
-  return pagesArray
-}
-
 export default function Categories() {
   const [products, setProducts] = useState([])
   const [totalPage, setTotalPage] = useState([])
   const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, setIsModalOpen } = useContext(ModalContext)
+  const { isModalOpen, handleModalClose } = useContext(ModalContext)
   const isMobile = useMediaQuery('(max-width: 767px)')
+  const isDesktop = useMediaQuery('(min-width: 1200px)')
   const pathname = useLocation().pathname
   const { slug, page } = useParams()
   let history = useHistory()
@@ -55,10 +52,6 @@ export default function Categories() {
     [setIsLoading, history]
   )
 
-  const handleModalClose = useCallback(() => {
-    setIsModalOpen((isModalOpen) => false)
-  }, [setIsModalOpen])
-
   useEffect(() => {
     setIsLoading((isLoading) => true)
     if (slug === 'all') {
@@ -72,6 +65,11 @@ export default function Categories() {
     }
   }, [setIsLoading, slug, page, setAPIResult])
 
+  const whiteCardAmount = countWhiteCardAmount(
+    products.length,
+    parseInt(page),
+    isDesktop
+  )
   return (
     <PageWidth>
       {isLoading && <IsLoadingComponent />}
@@ -98,6 +96,10 @@ export default function Categories() {
             />
           )
         })}
+        {whiteCardAmount.length > 0 &&
+          whiteCardAmount.map((amount) => {
+            return <WhiteCard key={amount} />
+          })}
       </CardContainer>
       {totalPage.length > 1 && (
         <PaginatorDiv>

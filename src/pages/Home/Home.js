@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import styled from 'styled-components'
-import { useState, useEffect, useContext, useCallback } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { LoadingContext, ModalContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
@@ -76,7 +76,7 @@ export default function Home() {
   const [stationeryProducts, setStationeryProducts] = useState([])
   const [outdoorProducts, setOutdoorProducts] = useState([])
   const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, setIsModalOpen } = useContext(ModalContext)
+  const { isModalOpen, handleModalClose } = useContext(ModalContext)
 
   useEffect(() => {
     getProductsByCategory('home', setHomeProducts, setIsLoading)
@@ -86,10 +86,6 @@ export default function Home() {
     getProductsByCategory('stationery', setStationeryProducts, setIsLoading)
     getProductsByCategory('outdoor', setOutdoorProducts, setIsLoading)
   }, [setIsLoading])
-
-  const handleModalClose = useCallback(() => {
-    setIsModalOpen((isModalOpen) => false)
-  }, [setIsModalOpen])
 
   return (
     <>

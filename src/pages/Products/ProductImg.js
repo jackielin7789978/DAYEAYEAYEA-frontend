@@ -29,7 +29,7 @@ const ProductImgContainer = styled.div`
 `
 const ThumbnailContainer = styled.div`
   width: 85%;
-  height: 25%;
+  height: 20%;
   display: flex;
   flex-direction: row;
 
@@ -62,7 +62,13 @@ const ThumbnailImgDiv = styled.div`
     transition: linear 0.2s;
   }
 
-  ${(props) => !props.$isSelected && `opacity: 0.5;`};
+  ${(props) =>
+    !props.$isSelected &&
+    `
+  opacity: 0.5;
+  transition: opacity ease 0.5s;
+  `};
+
   ${(props) =>
     props.$isSelected && `border: 2px solid ${COLOR.border_primary};`};
 

@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 import Navbar from './components/navbar/Navbar'
 import Footer from './components/Footer'
 import {
@@ -7,6 +7,7 @@ import {
   Step2,
   Step3,
   Categories,
+  Search,
   Home,
   Login,
   Me,
@@ -62,6 +63,11 @@ function Shop() {
   const [cartItems, setCartItems] = useState(
     JSON.parse(getItemsFromLocalStorage())
   )
+
+  const handleModalClose = useCallback(() => {
+    setIsModalOpen((isModalOpen) => false)
+  }, [setIsModalOpen])
+
   const totalPrice = useMemo(() => {
     if (!cartItems) return
     let sum = 0
@@ -122,7 +128,9 @@ function Shop() {
 
   return (
     <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
-      <ModalContext.Provider value={{ isModalOpen, setIsModalOpen }}>
+      <ModalContext.Provider
+        value={{ isModalOpen, setIsModalOpen, handleModalClose }}
+      >
         <LocalStorageContext.Provider
           value={{
             cartItems,
@@ -139,6 +147,7 @@ function Shop() {
               <Route path='/articles/:id/:page' component={Articles} />
               <Route path='/checkout' component={CheckoutRoutes} />
               <Route path='/categories/:slug/:page' component={Categories} />
+              <Route path='/search' component={Search} />
               <Route path='/login' component={Login} />
               <Route path='/member/' component={MemberRoutes} />
               <Route path='/products/:id' component={Products} />

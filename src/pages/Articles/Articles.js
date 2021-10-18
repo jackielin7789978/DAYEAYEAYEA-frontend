@@ -6,11 +6,15 @@ import { getProductByArticle } from '../../webAPI/productsAPI'
 import { LoadingContext, ModalContext } from '../../context'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import { IsLoadingComponent } from '../../components/IsLoading'
-import { ProductCard } from '../../components/productSystem/ProductCard'
+import {
+  ProductCard,
+  WhiteCard
+} from '../../components/productSystem/ProductCard'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { PageWidth, FullWidth } from '../../components/general'
 import { FullModal } from '../../components/Modal'
 import { PaginatorButton } from '../../components/Paginator'
+import { setPageInArray, countWhiteCardAmount } from '../../utils'
 
 const ArticleImgContainer = styled.div`
   background-repeat: no-repeat;
@@ -70,14 +74,6 @@ const PaginatorDiv = styled.div`
   margin: 20px auto 40px auto;
 `
 
-function setPageInArray(totalPageNum) {
-  const pagesArray = []
-  for (let i = 1; i <= totalPageNum; i++) {
-    pagesArray.push(i)
-  }
-  return pagesArray
-}
-
 export default function Articles() {
   const { id, page } = useParams()
   const pathname = useLocation().pathname
@@ -85,8 +81,9 @@ export default function Articles() {
   const [articleProducts, setArticleProducts] = useState([])
   const [totalPage, setTotalPage] = useState([])
   const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, setIsModalOpen } = useContext(ModalContext)
+  const { isModalOpen, handleModalClose } = useContext(ModalContext)
   const isMobile = useMediaQuery('(max-width: 767px)')
+  const isDesktop = useMediaQuery('(min-width: 1200px)')
   let history = useHistory()
   let articleSort
   if (id) {
@@ -110,10 +107,6 @@ export default function Articles() {
     [history, setIsLoading]
   )
 
-  const handleModalClose = useCallback(() => {
-    setIsModalOpen((isModalOpen) => false)
-  }, [setIsModalOpen])
-
   useEffect(() => {
     setIsLoading(true)
     getArticlesById(parseInt(id)).then((result) => {
@@ -131,7 +124,13 @@ export default function Articles() {
       }
     })
   }, [setIsLoading, id, page, articleSort, history, PageIsFound])
+
   const { imgUrl, title, content } = articleData
+  const whiteCardAmount = countWhiteCardAmount(
+    articleProducts.length,
+    parseInt(page),
+    isDesktop
+  )
 
   return (
     <>
@@ -170,6 +169,10 @@ export default function Articles() {
               )
             }
           )}
+          {whiteCardAmount.length > 0 &&
+            whiteCardAmount.map((amount) => {
+              return <WhiteCard key={amount} />
+            })}
         </ProductCardsContainer>
         {totalPage.length > 1 && (
           <PaginatorDiv>
