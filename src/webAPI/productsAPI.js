@@ -40,8 +40,16 @@ export const getProductById = async (id) => {
     })
 }
 
-export const getProductByArticle = async (articleSort) => {
-  return await fetch(`${BASE_URL}/products/article/${articleSort}`)
+export const getProductByArticle = async (articleSort, page) => {
+  return await fetch(`${BASE_URL}/products/article/${articleSort}/${page}`)
+    .then((res) => res.json())
+    .catch((err) => {
+      console.log(err.toString())
+    })
+}
+
+export const getProductByKeywords = async (keywords) => {
+  return await fetch(`${BASE_URL}/products/${keywords}`)
     .then((res) => res.json())
     .catch((err) => {
       console.log(err.toString())

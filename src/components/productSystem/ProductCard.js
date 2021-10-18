@@ -185,3 +185,7 @@ export function ProductCard({ id, name, price, imgUrl, discountPrice, imgs }) {
     </CardContainerDiv>
   )
 }
+
+export function WhiteCard() {
+  return <CardContainerDiv></CardContainerDiv>
+}
