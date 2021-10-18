@@ -30,10 +30,15 @@ export const COLOR = {
 }
 export const ADMIN_COLOR = {
   table_blue: '#3689c9',
-  light_grey: '#E2E5E7',
-  editBtn_grey: '#999',
-  editBtn_grey_hover: '#888'
+  light_grey: '#EDF1F4',
+  Btn_grey: '#aaa',
+  Btn_grey_hover: '#888',
+  Btn_blue: '#3689c9',
+  Btn_blue_hover: '#1971b5',
+  border_grey: '#BBC5D1',
+  border_dark_grey: '#555'
 }
+
 // 要用什麼字體？
 export const FONT = {
   logo: "'Karla', sans-serif;"
@@ -57,4 +62,9 @@ export const MEDIA_QUERY = {
   desktop: '@media screen and (min-width: 1200px)',
   tablet: '@media screen and (min-width: 768px) and (max-width: 1200px)',
   widescreen: '@media screen and (min-width: 2560px)'
+}
+export const ADMIN_MEDIA_QUERY = {
+  sm: '@media screen and (min-width: 1000px) and (max-width: 1400px)',
+  md: '@media screen and (min-width: 1400px) and (max-width: 2560px)',
+  lg: '@media screen and (min-width: 2560px)'
 }

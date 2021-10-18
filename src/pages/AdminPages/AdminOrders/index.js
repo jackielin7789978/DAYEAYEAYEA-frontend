@@ -1,1 +1,4 @@
-export { default } from './AdminOrders'
+import AdminOrders from './AdminOrders'
+import AdminOrderDetail from './AdminOrderDetail'
+
+export { AdminOrders, AdminOrderDetail }

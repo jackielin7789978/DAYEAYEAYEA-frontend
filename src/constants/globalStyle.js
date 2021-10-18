@@ -36,6 +36,9 @@ const GlobalStyle = createGlobalStyle`
   a {
     text-decoration: none;
     cursor: pointer;
+    &:hover {
+      color: ${COLOR.text_dark};
+    }
   }
   ul, li {
     list-style: none;
