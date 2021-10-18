@@ -24,7 +24,7 @@ export const ColumnHeader = styled.div`
 export const Header = styled.div`
   color: ${COLOR.text_light};
   font-weight: bold;
-  width: ${({ $name }) => ($name === 'Email' ? '40%' : '15%')};
+  width: unset;
 `
 export const TableItemContainer = styled.div`
   background: ${ADMIN_COLOR.light_grey};
@@ -39,7 +39,7 @@ export const Container = styled.div`
   border-top: 4px solid ${COLOR.light};
 `
 export const Cell = styled.span`
-  width: 15%;
+  width: unset;
 `
 export const EditBtn = styled(Link)`
   background: ${ADMIN_COLOR.editBtn_grey};
