@@ -2,7 +2,6 @@ import { useState, useContext } from 'react'
 import { useHistory } from 'react-router'
 import {
   PageWidthHeight,
-  Title,
   FormWrapper,
   AbsoluteCenter
 } from '../../components/loginSystem/loginCard'
@@ -13,7 +12,7 @@ import { addTokenToLocalStorage } from '../../utils'
 import { getMe } from '../../webAPI/loginAPI'
 import { LoadingContext, UserContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
-export default function Login() {
+export default function Login({ $location = '/' }) {
   const { isLoading } = useContext(LoadingContext)
   const location = useHistory()
   const [errMessage, setErrMessage] = useState()
@@ -25,14 +24,13 @@ export default function Login() {
         setErrMessage(res.message)
       }
       setUser(res.data)
-      location.push('/')
+      location.push($location)
     })
   }
   return (
     <PageWidthHeight>
       {isLoading && <IsLoadingComponent />}
       <AbsoluteCenter>
-        <Title children={'會員專區'} />
         <FormWrapper>
           <Tabs
             tabs={['註冊', '登入']}

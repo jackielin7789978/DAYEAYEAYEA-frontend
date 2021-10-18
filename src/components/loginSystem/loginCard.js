@@ -1,13 +1,14 @@
 import styled from 'styled-components'
-import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../constants/style'
+import { COLOR, MEDIA_QUERY } from '../../constants/style'
 import { Link } from 'react-router-dom'
 import { PageWidth } from '../general'
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined'
 
 const PageWidthHeight = styled(PageWidth)`
-  min-height: 600px;
+  min-height: 550px;
   height: 100%;
+  position: relative;
 `
 const AbsoluteCenter = styled.div`
   position: absolute;
@@ -15,11 +16,6 @@ const AbsoluteCenter = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 90%;
-`
-const Title = styled.div`
-  font-size: ${FONT_SIZE.lg};
-  margin-top: 30px;
-  font-weight: bold;
 `
 const FormWrapper = styled.div`
   transition: 1.5s;
@@ -96,7 +92,6 @@ const VisibilityOffIcon = styled(VisibilityOffOutlinedIcon)`
 
 export {
   PageWidthHeight,
-  Title,
   FormWrapper,
   Form,
   Input,

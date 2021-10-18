@@ -68,16 +68,16 @@ function Shop() {
   const [cartItems, setCartItems] = useState(
     JSON.parse(getItemsFromLocalStorage())
   )
-  const [user, setUser] = useState(null)
-  useEffect(() => {
-    if (getTokenFromLocalStorage()) {
-      getMe().then((res) => {
-        if (res.ok) {
-          setUser(res.data)
-        }
-      })
-    }
-  }, [])
+  const [user, setUser] = useState(() => {
+    const localToken = getTokenFromLocalStorage()
+    return localToken
+      ? getMe().then((res) => {
+          if (res.ok) {
+            setUser(res.data)
+          }
+        })
+      : null
+  })
   const totalPrice = useMemo(() => {
     if (!cartItems) return
     let sum = 0

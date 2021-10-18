@@ -8,7 +8,6 @@ import {
 } from './MenuStyles'
 import { MEDIA_QUERY } from '../../constants/style'
 import { UserContext } from '../../context'
-import { addTokenToLocalStorage } from '../../utils'
 const RestyledHoverArea = styled(HoverArea)`
   ${MEDIA_QUERY.desktop} {
     right: 110px;
@@ -44,7 +43,7 @@ export default function AccountMenu({ handleHover, $isOpen, $setMenu }) {
             <AccountTitle
               to=''
               onClick={() => {
-                addTokenToLocalStorage('')
+                localStorage.removeItem('token')
                 setUser(null)
                 $setMenu('')
               }}
