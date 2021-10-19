@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { COLOR, FONT_SIZE } from '../constants/style'
+import { COLOR, FONT_SIZE, ADMIN_COLOR } from '../constants/style'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
@@ -44,6 +44,20 @@ const ButtonStyle = styled.button`
      border: 1.5px solid ${COLOR.border_primary};
      color: ${COLOR.primary_light}
   `};
+  ${(props) =>
+    props.color === 'admin_blue' &&
+    `background: ${ADMIN_COLOR.Btn_blue};
+      &:hover {
+        background: ${ADMIN_COLOR.Btn_blue_hover};
+      }
+    `};
+  ${(props) =>
+    props.color === 'admin_grey' &&
+    `background: ${ADMIN_COLOR.Btn_grey};
+      &:hover {
+        background: ${ADMIN_COLOR.Btn_grey_hover};
+      }
+    `};
 `
 
 const ShoppingCardIcon = styled(ShoppingCartOutlinedIcon)`
