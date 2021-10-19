@@ -72,7 +72,6 @@ export default function Search() {
   const currentPage = Number(qs.parse(keywords, { ignoreQueryPrefix: true }).p)
   const perPageSliceStart = (currentPage - 1) * 12
   const perPageSliceEnd = currentPage * 12
-  console.log(keywords)
 
   useEffect(() => {
     setIsLoading((isLoading) => true)
