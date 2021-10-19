@@ -18,6 +18,7 @@ import {
   NotFound
 } from './pages/index'
 import { AdminOrders, AdminOrderDetail } from './pages/AdminPages/AdminOrders'
+import AdminProducts from './pages/AdminPages/AdminProducts'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
 import { PageHeight, AdminPageWidth } from './components/general'
 import {
@@ -62,8 +63,8 @@ function AdminRoutes() {
       <AdminPageWidth>
         <Route path={`${path}/orders/:id`} component={AdminOrderDetail} />
         <Route exact path={`${path}/orders`} component={AdminOrders} />
+        <Route exact path={`${path}/products`} component={AdminProducts} />
         {/* 以下尚未 import */}
-        {/* <Route path={`${path}/products`} component={AdminProducts} /> */}
         {/* <Route path={`${path}/members`} component={AdminMembers} /> */}
       </AdminPageWidth>
     </Switch>
@@ -168,7 +169,7 @@ function Shop() {
             <Navbar />
             <PageHeight>
               <Switch>
-                <Route path='/articles/:slug' component={Articles} />
+                <Route path='/articles/:id/:page' component={Articles} />
                 <Route path='/checkout' component={CheckoutRoutes} />
                 <Route path='/categories/:slug/:page' component={Categories} />
                 <Route path='/search' component={Search} />
