@@ -63,7 +63,11 @@ function AdminRoutes() {
       <AdminPageWidth>
         <Route path={`${path}/orders/:id`} component={AdminOrderDetail} />
         <Route exact path={`${path}/orders`} component={AdminOrders} />
-        <Route exact path={`${path}/products`} component={AdminProducts} />
+        <Route
+          exact
+          path={`${path}/products/:slug/:page`}
+          component={AdminProducts}
+        />
         {/* 以下尚未 import */}
         {/* <Route path={`${path}/members`} component={AdminMembers} /> */}
       </AdminPageWidth>
