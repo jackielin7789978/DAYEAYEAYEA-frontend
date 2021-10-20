@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useState, useCallback, useMemo, useContext } from 'react'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
-import { ShoppingCarBtn } from '../../components/Button'
+import { ShoppingCarBtn, GeneralBtn } from '../../components/Button'
 import { ItemCounter } from '../../components/Counter'
 import { ModalContext, LocalStorageContext } from '../../context'
 
@@ -123,6 +123,10 @@ const WarningMessage = styled.p`
   font-weight: bold;
 `
 
+function SoldOutBtn() {
+  return <GeneralBtn>商品售完待補貨</GeneralBtn>
+}
+
 export function ProductUpInfoComponent({
   id,
   name,
@@ -131,7 +135,8 @@ export function ProductUpInfoComponent({
   discountPrice,
   imgs,
   hasDiscount,
-  totalQuantity
+  totalQuantity,
+  status
 }) {
   const [quantity, setQuantity] = useState(1)
   const [warningMessage, setWarningMessage] = useState('')
@@ -197,6 +202,19 @@ export function ProductUpInfoComponent({
     [totalQuantity]
   )
 
+  function AddProductToCart() {
+    return (
+      <ShoppingCarBtn
+        id={id}
+        color='primary'
+        marginStyle={{ marginTop: '20px' }}
+        onClick={handleAddProductInCart}
+      >
+        加入購物車
+      </ShoppingCarBtn>
+    )
+  }
+
   return (
     <ProductInfoContainer>
       <ProductName>{name}</ProductName>
@@ -215,14 +233,8 @@ export function ProductUpInfoComponent({
         count={quantity}
       />
       {warningMessage && <WarningMessage>{warningMessage}</WarningMessage>}
-      <ShoppingCarBtn
-        id={id}
-        color='primary'
-        marginStyle={{ marginTop: '20px' }}
-        onClick={handleAddProductInCart}
-      >
-        加入購物車
-      </ShoppingCarBtn>
+      {status === 'off' && <SoldOutBtn />}
+      {status === 'on' && <AddProductToCart />}
     </ProductInfoContainer>
   )
 }

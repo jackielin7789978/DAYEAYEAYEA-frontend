@@ -62,7 +62,8 @@ export default function Products() {
     })
   }, [setIsLoading, id, history])
 
-  const { name, shortDesc, longDesc, price, discountPrice, quantity } = product
+  const { name, shortDesc, longDesc, price, discountPrice, quantity, status } =
+    product
   let hasDiscount = price !== discountPrice ? true : false
 
   return (
@@ -85,6 +86,7 @@ export default function Products() {
             discountPrice={discountPrice}
             hasDiscount={hasDiscount}
             totalQuantity={quantity}
+            status={status}
           />
         </ProductTopContainer>
         <ProductBottomInfoComponent longDesc={longDesc} />
