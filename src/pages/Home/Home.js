@@ -49,23 +49,26 @@ const getProductsByCategory = (category, setProducts, setIsLoading) => {
 
 const showProductsInComponent = (data, MediaQuery, setIsModalOpen) => {
   const isMobile = MediaQuery('(max-width: 767px)')
-  return data.map(({ id, name, price, Product_imgs, discountPrice }) => {
-    const length = Product_imgs.length
-    const imgUrl = isMobile
-      ? Product_imgs[length - 1].imgUrlSm
-      : Product_imgs[length - 1].imgUrlMd
-    return (
-      <ProductCard
-        id={id}
-        key={id}
-        imgUrl={imgUrl}
-        imgs={Product_imgs}
-        name={name}
-        price={price}
-        discountPrice={discountPrice}
-      />
-    )
-  })
+  return data.map(
+    ({ id, name, price, Product_imgs, discountPrice, status }) => {
+      const length = Product_imgs.length
+      const imgUrl = isMobile
+        ? Product_imgs[length - 1].imgUrlSm
+        : Product_imgs[length - 1].imgUrlMd
+      return (
+        <ProductCard
+          id={id}
+          key={id}
+          imgUrl={imgUrl}
+          imgs={Product_imgs}
+          name={name}
+          price={price}
+          discountPrice={discountPrice}
+          status={status}
+        />
+      )
+    }
+  )
 }
 
 export default function Home() {

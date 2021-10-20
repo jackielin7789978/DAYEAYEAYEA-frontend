@@ -124,7 +124,9 @@ const WarningMessage = styled.p`
 `
 
 function SoldOutBtn() {
-  return <GeneralBtn>商品售完待補貨</GeneralBtn>
+  return (
+    <GeneralBtn marginStyle={{ marginTop: '40px' }}>商品售完待補貨</GeneralBtn>
+  )
 }
 
 export function ProductUpInfoComponent({
@@ -225,13 +227,15 @@ export function ProductUpInfoComponent({
           <DiscountPriceStyle>售價: NT. {discountPrice}</DiscountPriceStyle>
         )}
       </PriceContainer>
-      <ItemCounter
-        marginStyle={{ marginTop: '20px' }}
-        handleCount={handleCount}
-        handleChange={handleChange}
-        handleOnBlur={handleOnBlur}
-        count={quantity}
-      />
+      {status === 'on' && (
+        <ItemCounter
+          marginStyle={{ marginTop: '20px' }}
+          handleCount={handleCount}
+          handleChange={handleChange}
+          handleOnBlur={handleOnBlur}
+          count={quantity}
+        />
+      )}
       {warningMessage && <WarningMessage>{warningMessage}</WarningMessage>}
       {status === 'off' && <SoldOutBtn />}
       {status === 'on' && <AddProductToCart />}

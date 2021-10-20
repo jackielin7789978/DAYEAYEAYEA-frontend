@@ -201,7 +201,10 @@ export function ProductCard({
   return (
     <CardContainerDiv status={status}>
       <CardLink to={`/products/${id}`}>
-        <ImgContainer style={{ backgroundImage: `url(${imgUrl})` }}>
+        <ImgContainer
+          style={{ backgroundImage: `url(${imgUrl})` }}
+          status={status}
+        >
           {status === 'off' && <SoldOut>售完</SoldOut>}
         </ImgContainer>
         <ProductInfoContainer>
