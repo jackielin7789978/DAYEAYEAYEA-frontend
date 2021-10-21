@@ -229,7 +229,7 @@ export function ProductUpInfoComponent({
       </PriceContainer>
       {status === 'on' && (
         <ItemCounter
-          marginStyle={{ marginTop: '20px' }}
+          buttonStyle={{ marginTop: '20px' }}
           handleCount={handleCount}
           handleChange={handleChange}
           handleOnBlur={handleOnBlur}
