@@ -27,18 +27,20 @@ export const ItemCounter = ({
   handleCount,
   handleChange,
   handleOnBlur,
-  count
+  count,
+  id
 }) => {
   return (
     <Counter style={marginStyle}>
-      <RemoveIcon onClick={() => handleCount('decrement')} />
+      <RemoveIcon onClick={() => handleCount('decrement', id)} />
       <Number
+        id={id}
         type='number'
         value={count}
         onChange={handleChange}
         onBlur={handleOnBlur}
       />
-      <AddIcon onClick={() => handleCount('increment')} />
+      <AddIcon onClick={() => handleCount('increment', id)} />
     </Counter>
   )
 }

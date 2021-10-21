@@ -3,7 +3,7 @@ import { useMemo, useContext } from 'react'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { Link } from 'react-router-dom'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
-import { ShoppingCarBtn, ShoppingCarWhiteBtn } from '../Button'
+import { ShoppingCarBtn, ShoppingCarWhiteBtn, GeneralBtn } from '../Button'
 import { ModalContext, LocalStorageContext } from '../../context'
 
 const CardContainerDiv = styled.div`
@@ -217,13 +217,20 @@ export function ProductCard({
           </PriceContainer>
         </ProductInfoContainer>
       </CardLink>
-      <ButtonContainer>
-        {isDesktop ? (
-          <ShoppingCarBtn color='primary' onClick={handleAddProductInCart} />
-        ) : (
-          <ShoppingCarWhiteBtn onClick={handleAddProductInCart} />
-        )}
-      </ButtonContainer>
+      {status === 'on' && (
+        <ButtonContainer>
+          {isDesktop ? (
+            <ShoppingCarBtn color='primary' onClick={handleAddProductInCart} />
+          ) : (
+            <ShoppingCarWhiteBtn onClick={handleAddProductInCart} />
+          )}
+        </ButtonContainer>
+      )}
+      {status === 'off' && (
+        <ButtonContainer>
+          <GeneralBtn>售完</GeneralBtn>
+        </ButtonContainer>
+      )}
     </CardContainerDiv>
   )
 }

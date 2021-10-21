@@ -85,45 +85,45 @@ const BorderColorIcon = styled(BorderColorOutlinedIcon)`
   font-size: large;
 `
 
-function ShoppingCarBtn({ color, children, marginStyle, id, onClick }) {
+function ShoppingCarBtn({ color, children, buttonStyle, id, onClick }) {
   return (
-    <ButtonStyle id={id} color={color} style={marginStyle} onClick={onClick}>
+    <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       <ShoppingCardIcon />
       {children}
     </ButtonStyle>
   )
 }
 
-function ShoppingCarWhiteBtn({ children, marginStyle, id, onClick }) {
+function ShoppingCarWhiteBtn({ children, buttonStyle, id, onClick }) {
   return (
-    <ButtonStyle id={id} color='white' style={marginStyle} onClick={onClick}>
+    <ButtonStyle id={id} color='white' style={buttonStyle} onClick={onClick}>
       <ColorShoppingCardIcon />
       {children}
     </ButtonStyle>
   )
 }
 
-function ArrowBtn({ color, children, marginStyle }) {
+function ArrowBtn({ color, children, buttonStyle }) {
   return (
-    <ButtonStyle color={color} style={marginStyle}>
+    <ButtonStyle color={color} style={buttonStyle}>
       {children}
       <WhiteArrowForwardIcon />
     </ButtonStyle>
   )
 }
 
-function EditBtn({ color, children, marginStyle }) {
+function EditBtn({ color, children, buttonStyle }) {
   return (
-    <ButtonStyle color={color} style={marginStyle}>
+    <ButtonStyle color={color} style={buttonStyle}>
       {children}
       <BorderColorIcon />
     </ButtonStyle>
   )
 }
 
-function GeneralBtn({ color, children, marginStyle }) {
+function GeneralBtn({ color, children, buttonStyle, id }) {
   return (
-    <ButtonStyle color={color} style={marginStyle}>
+    <ButtonStyle color={color} style={buttonStyle} id={id}>
       {children}
     </ButtonStyle>
   )

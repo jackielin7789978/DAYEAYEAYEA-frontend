@@ -125,7 +125,7 @@ const WarningMessage = styled.p`
 
 function SoldOutBtn() {
   return (
-    <GeneralBtn marginStyle={{ marginTop: '40px' }}>商品售完待補貨</GeneralBtn>
+    <GeneralBtn buttonStyle={{ marginTop: '40px' }}>商品售完待補貨</GeneralBtn>
   )
 }
 
@@ -209,7 +209,7 @@ export function ProductUpInfoComponent({
       <ShoppingCarBtn
         id={id}
         color='primary'
-        marginStyle={{ marginTop: '20px' }}
+        buttonStyle={{ marginTop: '20px' }}
         onClick={handleAddProductInCart}
       >
         加入購物車
