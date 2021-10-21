@@ -23,7 +23,7 @@ const RestyledCell = styled(Cell)`
 export default function TableItem({ order }) {
   const calTotalPrice = (order) => {
     let format = 'NT$ X'
-    let total = 0
+    let total = 80
     order.Order_items.forEach((item) => {
       total += item.Product.price
     })
@@ -36,7 +36,7 @@ export default function TableItem({ order }) {
       <RestyledCell style={{ width: '38%' }}>{order.orderEmail}</RestyledCell>
       <RestyledCell>{calTotalPrice(order)}</RestyledCell>
       <RestyledCell>
-        <Btn to={`/admin/orders/${order.id}`}>
+        <Btn to={`/admin/orders/${order.ticketNo}`}>
           <GeneralBtn children={'訂單詳情'} />
         </Btn>
       </RestyledCell>

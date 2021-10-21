@@ -11,8 +11,8 @@ import { PaginatorButton } from '../../../components/admin/PaginatorStyle'
 import { GeneralBtn } from '../../../components/Button'
 import { adminLogin } from '../../../webAPI/adminAPIs'
 import {
-  getAllProducts,
-  adminProductsSearch
+  getAllProducts
+  // adminProductsSearch
 } from '../../../webAPI/adminProductsAPI'
 import { setAdminProductsPageInArray } from '../../../utils'
 

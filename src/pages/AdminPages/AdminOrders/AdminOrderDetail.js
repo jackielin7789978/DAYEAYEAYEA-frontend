@@ -154,16 +154,16 @@ function Item() {
   )
 }
 export default function AdminOrderDetail() {
-  const { id } = useParams()
+  const { ticketNo } = useParams()
   const [order, setOrder] = useState({})
 
   useEffect(() => {
     ;(async () => {
-      const data = await getOrder(id)
+      const data = await getOrder(ticketNo)
       if (!data.ok) return alert('發生錯誤：' + data.message)
       setOrder(data)
     })()
-  }, [id])
+  }, [ticketNo])
 
   const [isOpen, setIsOpen] = useState(false)
 
