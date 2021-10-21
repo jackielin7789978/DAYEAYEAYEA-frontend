@@ -50,7 +50,7 @@ export const getOrder = async (id) => {
       }
     })
   } catch (e) {
-    return console.log(e)
+    return console.log(res.message)
   }
   return await res.json()
 }
