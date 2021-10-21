@@ -156,11 +156,15 @@ function Item() {
 export default function AdminOrderDetail() {
   const { id } = useParams()
   const [order, setOrder] = useState({})
+
   useEffect(() => {
-    getOrder(id).then((res) => {
-      setOrder(res.data)
-    })
+    ;(async () => {
+      const data = await getOrder(id)
+      if (!data.ok) return alert('發生錯誤：' + data.message)
+      setOrder(data)
+    })()
   }, [id])
+
   const [isOpen, setIsOpen] = useState(false)
 
   // 資料等 API 修改完成再補上

@@ -38,9 +38,16 @@ export function Search() {
   )
 }
 
-export function Filter() {
+export function Filter({ handleFilter }) {
   return (
-    <Dropdown name='filter' id='filter'>
+    <Dropdown
+      name='filter'
+      id='filter'
+      onChange={(e) => {
+        handleFilter(e.target.value)
+      }}
+    >
+      <option value='所有訂單'>所有訂單</option>
       <option value='處理中'>處理中</option>
       <option value='已出貨'>已出貨</option>
       <option value='已取消'>已取消</option>
