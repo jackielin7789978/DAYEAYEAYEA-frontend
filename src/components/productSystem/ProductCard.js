@@ -3,7 +3,7 @@ import { useMemo, useContext } from 'react'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { Link } from 'react-router-dom'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
-import { ShoppingCarBtn, ShoppingCarWhiteBtn } from '../Button'
+import { ShoppingCarBtn, ShoppingCarWhiteBtn, GeneralBtn } from '../Button'
 import { ModalContext, LocalStorageContext } from '../../context'
 
 const CardContainerDiv = styled.div`
@@ -14,6 +14,11 @@ const CardContainerDiv = styled.div`
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+  ${(props) =>
+    props.status === 'off' &&
+    `
+    opacity: 0.5;
+  `}
   ${MEDIA_QUERY.tablet} {
     margin: 8px 4px;
     width: 44%;
@@ -55,6 +60,7 @@ const ImgContainer = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  position: relative;
   ${MEDIA_QUERY.tablet} {
     height: 70%;
   }
@@ -68,6 +74,7 @@ const ProductInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
   ${MEDIA_QUERY.tablet} {
     height: 30%;
   }
@@ -126,6 +133,28 @@ const PriceStyle = styled.span`
     text-decoration: line-through;
   `}
 `
+const SoldOut = styled.div`
+  background: ${COLOR.grey};
+  color: ${COLOR.text_light};
+  font-size: ${FONT_SIZE.sm};
+  text-align: center;
+  width: 35%;
+  height: 16%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  ${MEDIA_QUERY.tablet} {
+    font-size: ${FONT_SIZE.md};
+    height: 13%;
+  }
+  ${MEDIA_QUERY.desktop} {
+    font-size: ${FONT_SIZE.md};
+    height: 13%;
+  }
+`
 
 const DiscountPriceStyle = styled(PriceStyle)`
   color: ${COLOR.warning};
@@ -139,7 +168,15 @@ const DiscountPriceStyle = styled(PriceStyle)`
   }
 `
 
-export function ProductCard({ id, name, price, imgUrl, discountPrice, imgs }) {
+export function ProductCard({
+  id,
+  name,
+  price,
+  imgUrl,
+  discountPrice,
+  imgs,
+  status
+}) {
   let hasDiscount = price !== discountPrice ? true : false
   const isDesktop = useMediaQuery('(min-width: 1200px)')
   // eslint-disable-next-line no-unused-vars
@@ -162,9 +199,14 @@ export function ProductCard({ id, name, price, imgUrl, discountPrice, imgs }) {
   }
 
   return (
-    <CardContainerDiv>
+    <CardContainerDiv status={status}>
       <CardLink to={`/products/${id}`}>
-        <ImgContainer style={{ backgroundImage: `url(${imgUrl})` }} />
+        <ImgContainer
+          style={{ backgroundImage: `url(${imgUrl})` }}
+          status={status}
+        >
+          {status === 'off' && <SoldOut>售完</SoldOut>}
+        </ImgContainer>
         <ProductInfoContainer>
           <TitleContainer>{name}</TitleContainer>
           <PriceContainer>
@@ -175,13 +217,20 @@ export function ProductCard({ id, name, price, imgUrl, discountPrice, imgs }) {
           </PriceContainer>
         </ProductInfoContainer>
       </CardLink>
-      <ButtonContainer>
-        {isDesktop ? (
-          <ShoppingCarBtn color='primary' onClick={handleAddProductInCart} />
-        ) : (
-          <ShoppingCarWhiteBtn onClick={handleAddProductInCart} />
-        )}
-      </ButtonContainer>
+      {status === 'on' && (
+        <ButtonContainer>
+          {isDesktop ? (
+            <ShoppingCarBtn color='primary' onClick={handleAddProductInCart} />
+          ) : (
+            <ShoppingCarWhiteBtn onClick={handleAddProductInCart} />
+          )}
+        </ButtonContainer>
+      )}
+      {status === 'off' && (
+        <ButtonContainer>
+          <GeneralBtn>售完</GeneralBtn>
+        </ButtonContainer>
+      )}
     </CardContainerDiv>
   )
 }

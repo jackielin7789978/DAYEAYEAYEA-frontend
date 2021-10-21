@@ -62,3 +62,13 @@ export const setSearchPageInArray = (totalNum) => {
   }
   return { totalPage, pagesArray }
 }
+
+export const setAdminProductsPageInArray = (totalNum) => {
+  const productsAmountPerPage = 10
+  const totalPage = Math.ceil(totalNum / productsAmountPerPage)
+  const pagesArray = []
+  for (let i = 1; i <= totalPage; i++) {
+    pagesArray.push(i)
+  }
+  return { totalPage, pagesArray }
+}

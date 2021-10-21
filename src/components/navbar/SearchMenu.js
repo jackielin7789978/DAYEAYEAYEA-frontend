@@ -64,7 +64,7 @@ const keywordsSearch = (history, setInputValue, keyword) => {
 
 export default function SearchMenu({ handleHover, $isOpen }) {
   const [inputValue, setInputValue] = useState('')
-  const keyword = inputValue.trim('').replace(/ /g, '+')
+  const keyword = inputValue.trim('').replace(/ /g, '%2B')
   const history = useHistory()
   const handleOnChange = useCallback((e) => {
     setInputValue(e.target.value)

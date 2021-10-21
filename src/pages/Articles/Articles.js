@@ -151,7 +151,7 @@ export default function Articles() {
         <ContentDiv>{content}</ContentDiv>
         <ProductCardsContainer>
           {articleProducts.map(
-            ({ id, name, price, Product_imgs, discountPrice }) => {
+            ({ id, name, price, Product_imgs, discountPrice, status }) => {
               const length = Product_imgs.length
               const imgUrl = isMobile
                 ? Product_imgs[length - 1].imgUrlSm
@@ -165,6 +165,7 @@ export default function Articles() {
                   name={name}
                   price={price}
                   discountPrice={discountPrice}
+                  status={status}
                 />
               )
             }

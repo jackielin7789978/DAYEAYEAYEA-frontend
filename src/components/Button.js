@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { COLOR, FONT_SIZE } from '../constants/style'
+import { COLOR, FONT_SIZE, ADMIN_COLOR } from '../constants/style'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
@@ -44,6 +44,20 @@ const ButtonStyle = styled.button`
      border: 1.5px solid ${COLOR.border_primary};
      color: ${COLOR.primary_light}
   `};
+  ${(props) =>
+    props.color === 'admin_blue' &&
+    `background: ${ADMIN_COLOR.Btn_blue};
+      &:hover {
+        background: ${ADMIN_COLOR.Btn_blue_hover};
+      }
+    `};
+  ${(props) =>
+    props.color === 'admin_grey' &&
+    `background: ${ADMIN_COLOR.Btn_grey};
+      &:hover {
+        background: ${ADMIN_COLOR.Btn_grey_hover};
+      }
+    `};
 `
 
 const ShoppingCardIcon = styled(ShoppingCartOutlinedIcon)`
@@ -71,45 +85,45 @@ const BorderColorIcon = styled(BorderColorOutlinedIcon)`
   font-size: large;
 `
 
-function ShoppingCarBtn({ color, children, marginStyle, id, onClick }) {
+function ShoppingCarBtn({ color, children, buttonStyle, id, onClick }) {
   return (
-    <ButtonStyle id={id} color={color} style={marginStyle} onClick={onClick}>
+    <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       <ShoppingCardIcon />
       {children}
     </ButtonStyle>
   )
 }
 
-function ShoppingCarWhiteBtn({ children, marginStyle, id, onClick }) {
+function ShoppingCarWhiteBtn({ children, buttonStyle, id, onClick }) {
   return (
-    <ButtonStyle id={id} color='white' style={marginStyle} onClick={onClick}>
+    <ButtonStyle id={id} color='white' style={buttonStyle} onClick={onClick}>
       <ColorShoppingCardIcon />
       {children}
     </ButtonStyle>
   )
 }
 
-function ArrowBtn({ color, children, marginStyle }) {
+function ArrowBtn({ color, children, buttonStyle }) {
   return (
-    <ButtonStyle color={color} style={marginStyle}>
+    <ButtonStyle color={color} style={buttonStyle}>
       {children}
       <WhiteArrowForwardIcon />
     </ButtonStyle>
   )
 }
 
-function EditBtn({ color, children, marginStyle }) {
+function EditBtn({ color, children, buttonStyle }) {
   return (
-    <ButtonStyle color={color} style={marginStyle}>
+    <ButtonStyle color={color} style={buttonStyle}>
       {children}
       <BorderColorIcon />
     </ButtonStyle>
   )
 }
 
-function GeneralBtn({ color, children, marginStyle }) {
+function GeneralBtn({ color, children, buttonStyle, id }) {
   return (
-    <ButtonStyle color={color} style={marginStyle}>
+    <ButtonStyle color={color} style={buttonStyle} id={id}>
       {children}
     </ButtonStyle>
   )
