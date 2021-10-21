@@ -85,7 +85,6 @@ function Shop() {
     setIsModalOpen((isModalOpen) => false)
   }, [setIsModalOpen])
 
-
   const totalPrice = useMemo(() => {
     if (!cartItems) return
     let sum = 0
@@ -145,10 +144,11 @@ function Shop() {
   }, [])
 
   return (
-
     <UserContext.Provider value={{ user, setUser }}>
       <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
-        <ModalContext.Provider value={{ isModalOpen, setIsModalOpen, handleModalClose }}>
+        <ModalContext.Provider
+          value={{ isModalOpen, setIsModalOpen, handleModalClose }}
+        >
           <LocalStorageContext.Provider
             value={{
               cartItems,
@@ -187,7 +187,7 @@ function CheckoutRoutes() {
     <Switch>
       <Route path={`${path}/step1`} component={Step1} />
       <Route path={`${path}/step2`} component={Step2} />
-      <Route path={`${path}/step3`} component={Step3} />
+      <Route path={`${path}/step3/:ticket`} component={Step3} />
     </Switch>
   )
 }

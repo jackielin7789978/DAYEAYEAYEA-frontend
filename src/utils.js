@@ -23,14 +23,13 @@ export const getItemsFromLocalStorage = () => {
   return localStorage.getItem(CARTTITLE_NAME)
 }
 
-
 export const getTokenFromLocalStorage = () => {
   return localStorage.getItem(TOKEN)
 }
 
 export const addTokenToLocalStorage = (token) => {
   localStorage.setItem(TOKEN, token)
-
+}
 export const countWhiteCardAmount = (length, page, isDesktop) => {
   let perWrap = isDesktop ? 4 : 2
   const totalPage = Math.ceil(length / 12)
