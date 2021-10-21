@@ -21,17 +21,16 @@ export default function SignInForm({
     formState: { errors },
     handleSubmit
   } = useForm()
-  const onSubmit = (submitData) => {
+  const onSubmit = async (submitData) => {
     setIsLoading(true)
     const { username, password } = submitData
-    signIn(username, password).then((data) => {
-      if (data.ok === 0) {
-        setIsLoading(false)
-        return $setErrMessage('帳號或密碼不正確')
-      }
-      $setErrMessage(null)
-      tokenCheck(data.token)
-    })
+    const result = await signIn(username, password)
+    if (result.ok === 0) {
+      setIsLoading(false)
+      return $setErrMessage('帳號或密碼不正確')
+    }
+    $setErrMessage(null)
+    tokenCheck(result.token)
   }
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
