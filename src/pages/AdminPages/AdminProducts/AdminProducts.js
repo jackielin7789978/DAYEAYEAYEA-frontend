@@ -70,16 +70,16 @@ export default function AdminProducts() {
         setProducts(result.data)
       })
     }
-    if (slug === 'search' && keywords) {
-      adminProductsSearch(keywords).then((result) => {
-        if (result.ok === 0) {
-          history.push('/404')
-          // return setIsLoading((isLoading) => false)
-        }
-        setProducts(result.data)
-        // setIsLoading((isLoading) => false)
-      })
-    }
+    // if (slug === 'search' && keywords) {
+    //   adminProductsSearch(keywords).then((result) => {
+    //     if (result.ok === 0) {
+    //       history.push('/404')
+    //       // return setIsLoading((isLoading) => false)
+    //     }
+    //     setProducts(result.data)
+    //     // setIsLoading((isLoading) => false)
+    //   })
+    // }
   }, [slug, keywords, history])
 
   const handleShowAllClick = useCallback(() => {
