@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { adminLogin, getAllOrders } from '../../../webAPI/adminAPIs'
+import { getAllOrders } from '../../../webAPI/adminAPIs'
 import { Search, Filter } from '../../../components/admin/orderManage/Search'
 import styled from 'styled-components'
 import { ADMIN_MEDIA_QUERY } from '../../../constants/style'
@@ -47,7 +47,6 @@ export default function AdminOrders() {
   }
 
   useEffect(() => {
-    adminLogin('admin01', 'Admin1357')
     getAllOrders().then((res) => {
       setOrders(res.data)
     })

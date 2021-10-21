@@ -1,7 +1,9 @@
-import { useEffect } from 'react'
+import { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { ArrowBtn } from '../../../components/Button'
 import { COLOR, ADMIN_COLOR, FONT_SIZE } from '../../../constants/style'
+import { adminLogin } from '../../../webAPI/adminAPIs'
 
 const Wrapper = styled.div`
   position: absolute;
@@ -41,21 +43,68 @@ const Input = styled.input`
   width: 80%;
   height: 50px;
   padding: 8px;
+  margin: 6px 0;
   border-radius: 3px;
-  border: 1px solid ${COLOR.border_dark_grey};
+  border: 1px solid ${COLOR.border_grey};
   &:focus {
     border: 1px solid ${COLOR.text_black};
   }
 `
+const Err = styled.p`
+  width: 77%;
+  text-align: left;
+  margin: -14px;
+  padding: 0;
+  height: 12px;
+  line-height: 4px;
+  color: rgb(210, 30, 30);
+  font-size: ${FONT_SIZE.sm};
+`
 
 export default function AdminLogin() {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [errMsg, setErrMsg] = useState('')
+  let history = useHistory()
+
+  const handleLogin = (e) => {
+    e.preventDefault()
+    if (!username || !password) return setErrMsg('缺少帳號或密碼')
+    ;(async () => {
+      let res
+      try {
+        res = await adminLogin(username, password)
+        res.message === 'Login Fail' && setErrMsg('帳號或密碼錯誤')
+        if (res.ok) {
+          alert('登入成功')
+          history.push('/admin/orders')
+        }
+      } catch (e) {
+        return console.log(e)
+      }
+    })()
+  }
+
   return (
     <Wrapper>
       <Title>DAYEAYEAYEA 生活選物</Title>
-      <FormContainer>
+      <FormContainer onSubmit={handleLogin}>
         <FormTitle>登入管理後臺</FormTitle>
-        <Input placeholder='電郵'></Input>
-        <Input placeholder='密碼'></Input>
+        <Input
+          placeholder='帳號'
+          onChange={(e) => {
+            setErrMsg('')
+            setUsername(e.target.value)
+          }}
+        ></Input>
+        <Input
+          placeholder='密碼'
+          onChange={(e) => {
+            setErrMsg('')
+            setPassword(e.target.value)
+          }}
+        ></Input>
+        <Err>{errMsg}</Err>
         <ArrowBtn
           buttonStyle={{
             background: ADMIN_COLOR.Btn_darkgrey,

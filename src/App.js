@@ -62,7 +62,7 @@ function AdminRoutes() {
   return (
     <Switch>
       <AdminPageWidth>
-        <Route exact path={`${path}`} component={AdminLogin} />
+        <Route exact path={`${path}/login`} component={AdminLogin} />
         <Route path={`${path}/orders/:id`} component={AdminOrderDetail} />
         <Route exact path={`${path}/orders`} component={AdminOrders} />
         <Route
