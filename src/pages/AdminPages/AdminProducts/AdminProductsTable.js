@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { useState, useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import {
   changeProductStatus,
   changeProductQuantity
@@ -17,18 +18,30 @@ import {
 const NameHeader = styled(Header)`
   text-align: center;
   width: 22%;
+  margin: 0px 3px;
 `
 const ProductHeader = styled(Header)`
   text-align: center;
-  width: 13%;
+  width: 12%;
+  margin: 0px 3px;
 `
 const NameCell = styled(Cell)`
   text-align: center;
   width: 22%;
+  margin: 0px 3px;
 `
 const ProductCell = styled(Cell)`
   text-align: center;
-  width: 13%;
+  width: 12%;
+  margin: 0px 3px;
+`
+const ImgCell = styled(Cell)`
+  width: 12%;
+  height: 80px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: 0px 3px;
 `
 const QuantityCounter = styled(ItemCounter)`
   background-color: transparent;
@@ -48,10 +61,21 @@ function StatusButton({ id, status }) {
 }
 
 function TableItem({ product }) {
-  const { id, name, price, discountPrice, quantity, article, status } = product
+  const {
+    id,
+    name,
+    price,
+    discountPrice,
+    quantity,
+    article,
+    status,
+    Product_imgs
+  } = product
   const [productQuantity, setProductQuantity] = useState(quantity)
   const [productStatus, setProductStatus] = useState(status)
-
+  const [productImg, setProductImg] = useState(
+    Product_imgs && Product_imgs[0].imgUrlSm
+  )
   const handleCount = useCallback(
     (type, id) => {
       let changeQuantity
@@ -95,6 +119,7 @@ function TableItem({ product }) {
 
   return (
     <Container>
+      <ImgCell style={{ backgroundImage: `url(${productImg})` }}></ImgCell>
       <NameCell>{name}</NameCell>
       <ProductCell>NT. {price}</ProductCell>
       <ProductCell>NT. {discountPrice}</ProductCell>
@@ -116,7 +141,9 @@ function TableItem({ product }) {
       </ProductCell>
       <ProductCell>
         <ButtonContainer>
-          <GeneralBtn color='admin_grey'>商品詳情</GeneralBtn>
+          <Link to={`/admin/products/detail/${id}`}>
+            <GeneralBtn color='admin_grey'>商品詳情</GeneralBtn>
+          </Link>
         </ButtonContainer>
       </ProductCell>
     </Container>
@@ -125,6 +152,7 @@ function TableItem({ product }) {
 
 export default function Table({ products }) {
   const headerNames = [
+    '商品預覽',
     '商品名稱',
     '商品售價',
     '特價價格',
@@ -137,8 +165,9 @@ export default function Table({ products }) {
   return (
     <Wrapper>
       <ColumnHeader>
-        <NameHeader>{headerNames[0]}</NameHeader>
-        {headerNames.slice(1).map((name) => (
+        <ProductHeader>{headerNames[0]}</ProductHeader>
+        <NameHeader>{headerNames[1]}</NameHeader>
+        {headerNames.slice(2).map((name) => (
           <ProductHeader key={name}>{name}</ProductHeader>
         ))}
       </ColumnHeader>

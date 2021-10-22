@@ -82,3 +82,20 @@ export const searchProductsFromAdmin = async (keywords) => {
     return console.log(e)
   }
 }
+
+export const getProductById = async (id) => {
+  const token = getTokenFromLocalStorage()
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/products/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+  } catch (e) {
+    return console.log(e)
+  }
+  return await res.json()
+}
