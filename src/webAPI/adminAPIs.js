@@ -14,11 +14,13 @@ export const adminLogin = async (username, password) => {
         password
       })
     })
+
+    const data = await res.json()
+    addTokenToLocalStorage(data.token)
+    return data
   } catch (e) {
-    return console.log(e)
+    console.log(e)
   }
-  const data = await res.json()
-  addTokenToLocalStorage(data.token)
 }
 
 export const getAllOrders = async () => {
@@ -32,10 +34,10 @@ export const getAllOrders = async () => {
         Authorization: `Bearer ${token}`
       }
     })
+    return await res.json()
   } catch (e) {
     return console.log(e)
   }
-  return await res.json()
 }
 
 export const getOrder = async (id) => {
@@ -49,8 +51,8 @@ export const getOrder = async (id) => {
         Authorization: `Bearer ${token}`
       }
     })
+    return await res.json()
   } catch (e) {
-    return console.log(e)
+    return console.log(res.message)
   }
-  return await res.json()
 }
