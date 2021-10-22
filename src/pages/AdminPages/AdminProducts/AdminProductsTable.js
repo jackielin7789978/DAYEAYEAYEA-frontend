@@ -15,14 +15,11 @@ import {
   Container,
   Cell
 } from '../../../components/admin/TableStyle'
+
 const NameHeader = styled(Header)`
   text-align: center;
-  width: 22%;
-  margin: 0px 3px;
-`
-const ProductHeader = styled(Header)`
-  text-align: center;
   width: 12%;
+  width: ${({ $name }) => $name === '商品名稱' && '22%'};
   margin: 0px 3px;
 `
 const NameCell = styled(Cell)`
@@ -165,10 +162,10 @@ export default function Table({ products }) {
   return (
     <Wrapper>
       <ColumnHeader>
-        <ProductHeader>{headerNames[0]}</ProductHeader>
-        <NameHeader>{headerNames[1]}</NameHeader>
-        {headerNames.slice(2).map((name) => (
-          <ProductHeader key={name}>{name}</ProductHeader>
+        {headerNames.map((name) => (
+          <NameHeader key={name} $name={name}>
+            {name}
+          </NameHeader>
         ))}
       </ColumnHeader>
       <TableItemContainer>
