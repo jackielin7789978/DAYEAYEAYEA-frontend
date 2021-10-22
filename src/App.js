@@ -178,7 +178,7 @@ function Shop() {
                 <Route path='/categories/:slug/:page' component={Categories} />
                 <Route path='/search' component={Search} />
                 <Route path='/login' component={Login} />
-                <Route path='/member/' component={MemberRoutes} />
+                <Route path='/member' component={MemberRoutes} />
                 <Route path='/products/:id' component={Products} />
                 <Route path='/info' component={InfoRoutes} />
                 <Route exact path='/' component={Home} />
@@ -207,9 +207,9 @@ function MemberRoutes() {
   return (
     <Switch>
       <Route path={`${path}/me`} component={Me} />
-      <Route path={`${path}/modify-info`} component={ModifyInfo} />
-      <Route path={`${path}/orders/order-detail`} component={OrderDetail} />
-      <Route path={`${path}/orders`} component={Orders} />
+      <Route path={`${path}/modify-info`} component={Me} />
+      <Route path={`${path}/orders/order-detail`} component={Me} />
+      <Route path={`${path}/orders`} component={Me} />
     </Switch>
   )
 }
