@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, useMemo } from 'react'
 import { useHistory } from 'react-router'
 import { PageWidth } from '../../../components/general'
 import { ErrorMsg } from '../../../components/loginSystem/loginCard'
@@ -29,7 +29,7 @@ export default function Step2() {
   const location = useHistory()
   useEffect(() => {
     if (!cartItems.length) location.push('/')
-  }, [cartItems.length, location])
+  }, [cartItems, location])
   const {
     register,
     formState: { errors },
@@ -49,6 +49,13 @@ export default function Step2() {
       setValue('orderPhone', '')
     }
   }
+  const subTotal = useMemo(() => {
+    if (!cartItems.length) return
+    return cartItems
+      .map((item) => item.price * item.quantity)
+      .reduce((total, num) => total + num)
+  }, [cartItems])
+  console.log(subTotal)
   const onSubmit = async (submitData) => {
     const orderItem = cartItems.map((item) => ({
       productId: item.id,
@@ -61,7 +68,9 @@ export default function Step2() {
       submitData.orderPhone,
       submitData.payment,
       submitData.shipping,
-      orderItem
+      orderItem,
+      subTotal,
+      0 //isDelete
     )
     if (result.ok === 0) {
       setErrMsg(result.message)

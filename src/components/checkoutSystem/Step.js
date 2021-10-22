@@ -418,12 +418,14 @@ export const WarningMessage = styled.p`
   font-weight: bold;
   ${MEDIA_QUERY.desktop} {
     position: absolute;
-    right: 8%;
+    right: 7%;
+    width: 150px;
     top: 65%;
   }
   ${MEDIA_QUERY.tablet} {
     position: absolute;
-    right: 8%;
+    right: 7%;
+    width: 150px;
     top: 65%;
   }
 `

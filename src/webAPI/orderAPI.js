@@ -8,7 +8,9 @@ export const createOrder = async (
   orderPhone,
   payment,
   shipping,
-  orderItem
+  orderItem,
+  subTotal,
+  isDeleted
 ) => {
   try {
     return await fetch(`${BASE_URL}/orders`, {
@@ -24,7 +26,9 @@ export const createOrder = async (
         orderPhone,
         payment,
         shipping,
-        orderItem
+        orderItem,
+        subTotal,
+        isDeleted
       })
     }).then((res) => res.json())
   } catch (e) {
