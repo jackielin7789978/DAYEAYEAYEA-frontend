@@ -87,13 +87,13 @@ function Shop() {
     const localToken = getTokenFromLocalStorage()
     return localToken
       ? getMe().then((res) => {
-          if (res.ok) {
-            setUser(res.data)
+          if (!res.ok) {
+            console.log(res.message)
           }
+          setUser(res.data)
         })
       : null
   })
-
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
   }, [setIsModalOpen])

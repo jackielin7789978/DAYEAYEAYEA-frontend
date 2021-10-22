@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { Link, useParams, useHistory } from 'react-router-dom'
 import { PageWidth } from '../../../components/general'
 import {
@@ -28,11 +28,8 @@ export default function Step3() {
       return setOrderData(result.data)
     })()
   })
-  const totalPrice = useMemo(() => {
-    return orderData?.Order_items.map(
-      (item) => item.Product.price * item.quantity
-    ).reduce((total, num) => total + num)
-  }, [orderData?.Order_items])
+  console.log(orderData)
+
   return (
     <PageWidth>
       <Steps />
@@ -62,7 +59,7 @@ export default function Step3() {
           {orderData.Order_items.map((item) => (
             <OrderItem key={item.productId} item={item} />
           ))}
-          <TotalPrice>{`總金額 NT$ ${totalPrice}`}</TotalPrice>
+          <TotalPrice>{`總金額 NT$ ${orderData.subTotal}`}</TotalPrice>
         </>
       )}
       <Link to='/'>
