@@ -202,8 +202,8 @@ export default function AdminOrderDetail() {
       <Container>
         <Title>訂單資料</Title>
         <OrderInfo>
-          <div>訂單狀態：{order.status}</div>
-          <div>訂單編號：{order.id}</div>
+          {/* <div>訂單狀態：{order.status}</div> */}
+          {/* <div>訂單編號：{order.id}</div> */}
           <div>訂購人姓名：神恩佐</div>
           <div>寄送地址：台北市士林區中山北路六段178號2樓</div>
           <div>聯絡信箱：enzo721986091734@gmail.com</div>
@@ -212,13 +212,13 @@ export default function AdminOrderDetail() {
           <div>運送方式：宅配</div>
         </OrderInfo>
         <Buttons>
-          {order.status === '處理中' && (
+          {/* {order.status === '處理中' && (
             <>
               <GeneralBtn children={'出貨'} />
               <GeneralBtn children={'取消訂單'} />
             </>
           )}
-          {order.status === '已出貨' && <GeneralBtn children={'完成訂單'} />}
+          {order.status === '已出貨' && <GeneralBtn children={'完成訂單'} />} */}
         </Buttons>
       </Container>
     </PageWrapper>

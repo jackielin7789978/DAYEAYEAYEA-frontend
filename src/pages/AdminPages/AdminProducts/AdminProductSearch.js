@@ -1,14 +1,18 @@
-import { Search } from '../../../components/admin/productManage/SearchStyle'
+import {
+  Wrapper,
+  StyledSearchIcon,
+  Input
+} from '../../../components/admin/productManage/SearchStyle'
 import { useState, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 
 const keywordsSearch = (history, setInputValue, keyword) => {
-  history.push(`/admin/search/1?search=${keyword}`)
+  history.push(`/admin/products/1?search=${keyword}`)
   setInputValue((inputValue) => '')
 }
 
-export default function SearchMenu() {
-  const [inputValue, setInputValue] = useState([])
+export default function Search() {
+  const [inputValue, setInputValue] = useState('')
   const keyword = inputValue.trim('').replace(/ /g, '%2B')
   const history = useHistory()
 
@@ -16,23 +20,29 @@ export default function SearchMenu() {
     setInputValue(e.target.value)
   }, [])
 
-  // const handleOnClick = useCallback(() => {
-  //   keywordsSearch(history, setInputValue, keyword)
-  // }, [history, keyword])
+  const handleOnClick = useCallback(() => {
+    keywordsSearch(history, setInputValue, keyword)
+  }, [history, keyword])
 
-  // const handleKeyDown = useCallback(
-  //   (e) => {
-  //     if (e.keyCode !== 13) return
-  //     keywordsSearch(history, setInputValue, keyword)
-  //   },
-  //   [history, keyword]
-  // )
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (e.keyCode !== 13) return
+      keywordsSearch(history, setInputValue, keyword)
+    },
+    [history, keyword]
+  )
 
   return (
-    <Search
-      onChange={handleOnChange}
-      // onKeyDown={handleKeyDown}
-      // onClick={handleOnClick}
-    />
+    <Wrapper>
+      <StyledSearchIcon onClick={handleOnClick} />
+      <Input
+        placeholder='搜尋商品'
+        type='text'
+        name='search'
+        value={inputValue}
+        onChange={handleOnChange}
+        onKeyDown={handleKeyDown}
+      ></Input>
+    </Wrapper>
   )
 }
