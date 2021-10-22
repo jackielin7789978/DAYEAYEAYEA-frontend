@@ -13,7 +13,7 @@ export const getAllProducts = async () => {
       }
     })
   } catch (e) {
-    return console.log(e)
+    console.log(e)
   }
   return await res.json()
 }
@@ -38,7 +38,7 @@ export const changeProductStatus = async (id, newStatus, product) => {
     })
     return await res.json().then((result) => alert(result.message))
   } catch (e) {
-    return console.log(e)
+    console.log(e)
   }
 }
 
@@ -62,7 +62,7 @@ export const changeProductQuantity = async (id, newQuantity, product) => {
     })
     return await res.json().then((result) => alert(result.message))
   } catch (e) {
-    return console.log(e)
+    console.log(e)
   }
 }
 
@@ -79,7 +79,7 @@ export const searchProductsFromAdmin = async (keywords) => {
     })
     return await res.json()
   } catch (e) {
-    return console.log(e)
+    console.log(e)
   }
 }
 
@@ -95,7 +95,7 @@ export const getProductById = async (id) => {
       }
     })
   } catch (e) {
-    return console.log(e)
+    console.log(e)
   }
   return await res.json()
 }
