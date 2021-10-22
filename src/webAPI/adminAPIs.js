@@ -19,7 +19,7 @@ export const adminLogin = async (username, password) => {
     addTokenToLocalStorage(data.token)
     return data
   } catch (e) {
-    return console.log(e)
+    console.log(e)
   }
 }
 

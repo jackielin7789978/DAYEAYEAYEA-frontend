@@ -180,7 +180,7 @@ function Shop() {
                 <Route path='/categories/:slug/:page' component={Categories} />
                 <Route path='/search' component={Search} />
                 <Route path='/login' component={Login} />
-                <Route path='/member/' component={MemberRoutes} />
+                <Route path='/member' component={MemberRoutes} />
                 <Route path='/products/:id' component={Products} />
                 <Route path='/info' component={InfoRoutes} />
                 <Route exact path='/' component={Home} />

@@ -57,7 +57,7 @@ const Err = styled.p`
   padding: 0;
   height: 12px;
   line-height: 4px;
-  color: rgb(210, 30, 30);
+  color: ${ADMIN_COLOR.warning};
   font-size: ${FONT_SIZE.sm};
 `
 
@@ -71,16 +71,11 @@ export default function AdminLogin() {
     e.preventDefault()
     if (!username || !password) return setErrMsg('缺少帳號或密碼')
     ;(async () => {
-      let res
-      try {
-        res = await adminLogin(username, password)
-        res.message === 'Login Fail' && setErrMsg('帳號或密碼錯誤')
-        if (res.ok) {
-          alert('登入成功')
-          history.push('/admin/orders')
-        }
-      } catch (e) {
-        return console.log(e)
+      const res = await adminLogin(username, password)
+      res.message === 'Login Fail' && setErrMsg('帳號或密碼錯誤')
+      if (res.ok) {
+        alert('登入成功')
+        history.push('/admin/orders')
       }
     })()
   }
@@ -98,6 +93,7 @@ export default function AdminLogin() {
           }}
         ></Input>
         <Input
+          type='password'
           placeholder='密碼'
           onChange={(e) => {
             setErrMsg('')

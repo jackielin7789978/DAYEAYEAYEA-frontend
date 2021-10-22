@@ -51,9 +51,7 @@ export default function AdminOrders() {
       setOrders(res.data)
     })
   }, [])
-  useEffect(() => {
-    console.log(orders)
-  }, [orders])
+
   return (
     <PageWrapper>
       <SearchContainer>
