@@ -11,9 +11,6 @@ import {
   Home,
   Login,
   Me,
-  ModifyInfo,
-  OrderDetail,
-  Orders,
   Products,
   NotFound
 } from './pages/index'
@@ -207,9 +204,7 @@ function MemberRoutes() {
   return (
     <Switch>
       <Route path={`${path}/me`} component={Me} />
-      <Route path={`${path}/modify-info`} component={Me} />
-      <Route path={`${path}/orders/order-detail`} component={Me} />
-      <Route path={`${path}/orders`} component={Me} />
+      <Route path={`${path}/order/:ticket`} component={Me} />
     </Switch>
   )
 }

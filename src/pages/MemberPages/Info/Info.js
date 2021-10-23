@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-import { GeneralBtn } from '../../../components/Button'
-import ItemTable from '../../../components/memberSystem/ItemTable'
+import { EditBtn } from '../../../components/Button'
 
 const Container = styled.div`
   width: 90%;
@@ -35,20 +34,18 @@ const Button = ({ children }) => {
     right: '20px',
     width: '120px'
   }
-  return <GeneralBtn color={'accent'} buttonStyle={style} children={children}/>
+  return <EditBtn color={'accent'} buttonStyle={style} children={children}/>
 }
 
 
-const testArray = [1, 2, 3, 4, 5, 6]
-
-const OrderDetail = () => {
+const ModifyInfo = () => {
   return (
     <Container>
       <InfoWrapper>
-        <Button>取消訂單</Button>
+        <Button>編輯</Button>
         <Field>
-          <h5>訂單狀態:</h5>
-          <p>處理中</p>
+          <h5>帳號:</h5>
+          <p>username</p>
         </Field>
         <Field>
           <h5>電郵:</h5>
@@ -67,9 +64,8 @@ const OrderDetail = () => {
           <p>0912345678</p>
         </Field>
       </InfoWrapper>
-      <ItemTable order={testArray} />
     </Container>
   )
 }
 
-export default OrderDetail
+export default ModifyInfo

@@ -18,8 +18,8 @@ const OrderTable = ({ orders }) => {
         </tr>
       </thead>
       <tbody>
-        { orders.map((order) => (
-            <tr>
+        { orders.map((order, index) => (
+            <tr key={index+10}>
               <td>處理中</td>
               <td>20210922-kw168</td>
               <td>$1380</td>

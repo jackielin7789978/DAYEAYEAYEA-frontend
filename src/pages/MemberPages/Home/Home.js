@@ -38,7 +38,7 @@ const Button = ({ children }) => {
   const style = {
     width: '120px'
   }
-  return <LogoutBtn color={'primary'} marginStyle={style} children={children}/>
+  return <LogoutBtn color={'primary'} buttonStyle={style} children={children}/>
 }
 
 const Home = () => {
