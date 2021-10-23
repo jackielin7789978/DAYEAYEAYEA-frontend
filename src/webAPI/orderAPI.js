@@ -1,6 +1,6 @@
 import { getTokenFromLocalStorage } from '../utils'
 const BASE_URL = 'https://api.coolizz.tw'
-const token = getTokenFromLocalStorage()
+
 export const createOrder = async (
   orderAddress,
   orderEmail,
@@ -13,6 +13,7 @@ export const createOrder = async (
   isDeleted
 ) => {
   try {
+    const token = getTokenFromLocalStorage()
     return await fetch(`${BASE_URL}/orders`, {
       method: 'POST',
       headers: {
@@ -37,6 +38,7 @@ export const createOrder = async (
 }
 export const getOrderOne = async (ticket) => {
   try {
+    const token = getTokenFromLocalStorage()
     return await fetch(`${BASE_URL}/orders/me/${ticket}`, {
       method: 'GET',
       headers: { authorization: `Bearer ${token}` }
@@ -47,6 +49,7 @@ export const getOrderOne = async (ticket) => {
 }
 export const getOrderAll = async () => {
   try {
+    const token = getTokenFromLocalStorage()
     return await fetch(`${BASE_URL}/orders/me`, {
       method: 'GET',
       headers: { authorization: `Bearer ${token}` }

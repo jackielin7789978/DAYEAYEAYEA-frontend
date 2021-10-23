@@ -80,7 +80,8 @@ function Shop() {
     JSON.parse(getItemsFromLocalStorage())
   )
 
-  const [user, setUser] = useState(() => {
+  const [user, setUser] = useState()
+  useEffect(() => {
     const localToken = getTokenFromLocalStorage()
     if (!localToken) return null
     let decoded = jwt_decode(localToken)
@@ -92,7 +93,8 @@ function Shop() {
           setUser(res.data)
         })
       : null
-  })
+  }, [])
+
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
   }, [setIsModalOpen])

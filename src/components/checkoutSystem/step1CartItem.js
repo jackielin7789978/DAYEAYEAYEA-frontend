@@ -57,7 +57,10 @@ export const Cart = ({
       : $setNotAllowed(false)
   }, [$setNotAllowed, quantity, warningMessage])
   useEffect(() => {
-    getProductById(item.id).then((res) => setTotalQuantity(res.data.quantity))
+    ;(async () => {
+      const result = await getProductById(item.id)
+      return setTotalQuantity(result.data.quantity)
+    })()
     handleUpdateCount(quantity, item.id)
   }, [quantity, handleUpdateCount, item.id, totalQuantity])
   return (

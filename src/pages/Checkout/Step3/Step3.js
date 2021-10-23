@@ -24,12 +24,11 @@ export default function Step3() {
       const result = await getOrderOne(ticket)
       if (result.ok === 0) {
         console.log(result.message)
-        // return location.push('/')
+        return location.push('/')
       }
       return setOrderData(result.data)
     })()
   })
-
   return (
     <PageWidth>
       <Steps />
