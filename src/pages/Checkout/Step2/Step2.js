@@ -55,7 +55,7 @@ export default function Step2() {
       .map((item) => item.price * item.quantity)
       .reduce((total, num) => total + num)
   }, [cartItems])
-  console.log(subTotal)
+
   const onSubmit = async (submitData) => {
     const orderItem = cartItems.map((item) => ({
       productId: item.id,
