@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
-import { ArrowBtn } from '../../../components/Button'
+import { LoginBtn } from '../../../components/Button'
 import { COLOR, ADMIN_COLOR, FONT_SIZE } from '../../../constants/style'
 import { adminLogin } from '../../../webAPI/adminAPIs'
 
@@ -101,7 +101,7 @@ export default function AdminLogin() {
           }}
         ></Input>
         <Err>{errMsg}</Err>
-        <ArrowBtn
+        <LoginBtn
           buttonStyle={{
             background: ADMIN_COLOR.Btn_darkgrey,
             width: '80%',
@@ -109,7 +109,7 @@ export default function AdminLogin() {
           }}
         >
           登入
-        </ArrowBtn>
+        </LoginBtn>
       </FormContainer>
     </Wrapper>
   )
