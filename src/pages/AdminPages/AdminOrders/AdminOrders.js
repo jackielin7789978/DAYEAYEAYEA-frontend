@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
 import { UserContext } from '../../../context'
-import { useHistory } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { getAllOrders } from '../../../webAPI/adminAPIs'
 import { Search, Filter } from '../../../components/admin/orderManage/Search'
 import styled from 'styled-components'
@@ -45,16 +45,21 @@ export default function AdminOrders() {
   const [filter, setFilter] = useState('所有訂單')
   const history = useHistory()
   const { user } = useContext(UserContext)
-  // !user && history.push('/admin/login')
-
   const handleFilter = (name) => {
     setFilter(name)
   }
 
   useEffect(() => {
-    getAllOrders().then((res) => {
-      setOrders(res.data)
-    })
+    if (!user) {
+      history.push('./login')
+    }
+  })
+
+  useEffect(() => {
+    user &&
+      getAllOrders().then((res) => {
+        setOrders(res.data)
+      })
   }, [history, user])
 
   return (
