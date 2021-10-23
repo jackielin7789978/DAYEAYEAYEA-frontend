@@ -34,7 +34,7 @@ const Dropdown = styled.select`
 export function Search() {
   return (
     <Wrapper>
-      <StyledSearchIcon icon={faSearch} />
+      <StyledSearchIcon icon={faSearch} style={{ color: 'white' }} />
       <Input placeholder={'搜尋訂單'}></Input>
     </Wrapper>
   )
