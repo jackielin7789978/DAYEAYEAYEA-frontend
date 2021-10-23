@@ -11,6 +11,7 @@ import {
 } from './Step'
 import { ItemCounter } from '../Counter'
 import { getProductById } from '../../webAPI/productsAPI'
+import { faTrashAlt as farTrashAlt } from '@fortawesome/free-regular-svg-icons'
 export const Cart = ({
   item,
   handleRemoveCartItem,
@@ -76,6 +77,7 @@ export const Cart = ({
         {warningMessage && <WarningMessage>{warningMessage}</WarningMessage>}
       </ItemInfo>
       <ItemDelete
+        icon={farTrashAlt}
         onClick={() => {
           handleRemoveCartItem(item.id)
         }}

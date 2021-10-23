@@ -1,9 +1,8 @@
 import { useLocation, Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 export const StepsWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -47,8 +46,10 @@ export const StepContent = styled.div`
     margin: 0px 10px;
   }
 `
-export const StepArrow = styled(ArrowForwardIosIcon)`
-  fill: ${COLOR.text_primary_light};
+export const StepArrow = styled(FontAwesomeIcon)`
+  & path {
+    color: ${COLOR.text_primary_light};
+  }
 `
 export const Steps = () => {
   const location = useLocation()
@@ -58,12 +59,12 @@ export const Steps = () => {
         <StepTitle children={1} />
         <StepContent children={'購物車明細'} />
       </Step>
-      <StepArrow />
+      <StepArrow icon={faChevronRight} />
       <Step $active={location.pathname.includes('step2')}>
         <StepTitle children={2} />
         <StepContent children={'填寫寄送資料'} />
       </Step>
-      <StepArrow />
+      <StepArrow icon={faChevronRight} />
       <Step $active={location.pathname.includes('step3')}>
         <StepTitle children={3} />
         <StepContent children={'訂單完成'} />
@@ -249,7 +250,8 @@ export const ItemCountMobile = styled(ItemCount)`
     display: none;
   }
 `
-export const ItemDelete = styled(DeleteOutlineIcon)`
+export const ItemDelete = styled(FontAwesomeIcon)`
+  cursor: pointer;
   position: absolute;
   right: 5px;
   top: 20px;
