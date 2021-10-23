@@ -3,6 +3,7 @@ import { COLOR, FONT_SIZE, ADMIN_COLOR } from '../constants/style'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const ButtonStyle = styled.button`
   display: inline-block;
@@ -85,6 +86,13 @@ const BorderColorIcon = styled(BorderColorOutlinedIcon)`
   font-size: large;
 `
 
+const LogoutColorIcon = styled(LogoutIcon)`
+  fill: ${COLOR.light} !important;
+  margin-left: 6px;
+  margin-bottom: 1px;
+  font-size: large;
+`
+
 function ShoppingCarBtn({ color, children, buttonStyle, id, onClick }) {
   return (
     <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
@@ -121,6 +129,16 @@ function EditBtn({ color, children, buttonStyle }) {
   )
 }
 
+
+function LogoutBtn({ color, children, marginStyle, id, onClick }) {
+  return (
+    <ButtonStyle id={id} color={color} style={marginStyle}>
+      {children}
+      <LogoutColorIcon />
+    </ButtonStyle>
+  )
+}
+
 function GeneralBtn({ color, children, buttonStyle, id }) {
   return (
     <ButtonStyle color={color} style={buttonStyle} id={id}>
@@ -129,4 +147,4 @@ function GeneralBtn({ color, children, buttonStyle, id }) {
   )
 }
 
-export { ShoppingCarBtn, ArrowBtn, EditBtn, GeneralBtn, ShoppingCarWhiteBtn }
+export { ShoppingCarBtn, ArrowBtn, EditBtn, GeneralBtn, ShoppingCarWhiteBtn, LogoutBtn }

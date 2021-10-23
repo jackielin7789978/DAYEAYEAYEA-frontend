@@ -209,9 +209,9 @@ function MemberRoutes() {
   return (
     <Switch>
       <Route path={`${path}/me`} component={Me} />
-      <Route path={`${path}/modify-info`} component={ModifyInfo} />
-      <Route path={`${path}/orders/order-detail`} component={OrderDetail} />
-      <Route path={`${path}/orders`} component={Orders} />
+      <Route path={`${path}/modify-info`} component={Me} />
+      <Route path={`${path}/orders/order-detail`} component={Me} />
+      <Route path={`${path}/orders`} component={Me} />
     </Switch>
   )
 }
