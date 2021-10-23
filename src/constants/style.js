@@ -31,7 +31,7 @@ export const COLOR = {
 export const ADMIN_COLOR = {
   table_blue: '#3689c9',
   light_grey: '#EDF1F4',
-  grey: '#ddd',
+  grey: '#ececec',
   Btn_grey: '#aaa',
   Btn_grey_hover: '#888',
   Btn_darkgrey: '#333',
