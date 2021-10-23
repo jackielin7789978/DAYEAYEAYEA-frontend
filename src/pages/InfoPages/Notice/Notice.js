@@ -1,24 +1,53 @@
 import styled from 'styled-components'
-import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
+import { MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import { PageWidth } from '../../../components/general'
 
 
 const Container = styled.div`
-  margin: 60px auto 0;
-  width: 80%;
-  min-width: 450px;
+  margin: 60px auto 60px;
+  padding: 0 8px;
+  width: 90%;
+  ${MEDIA_QUERY.desktop} {
+    width: 80%;
+  }
 `
 
 const Title = styled.div`
+  margin-top: 40px;
   font-size: ${FONT_SIZE.lg};
-  margin-top: 30px;
   font-weight: bold;
+  ${MEDIA_QUERY.tablet} {
+    margin-top: 60px;
+    font-size: ${FONT_SIZE.xl};
+  }
+  ${MEDIA_QUERY.desktop} {
+    margin-top: 80px;
+    font-size: ${FONT_SIZE.xxl};
+  }
 `
 
 const Content = styled.div`
+  width: 100%;
   text-align: left;
   h3 {
-    margin: 32px 0 12px;
+    margin: 48px 0 12px;
+    font-size: ${FONT_SIZE.lg};
+    ${MEDIA_QUERY.tablet} {
+      font-size: ${FONT_SIZE.lg};
+    }
+    ${MEDIA_QUERY.desktop} {
+      font-size: ${FONT_SIZE.xl};
+    }
+  }
+
+  p {
+    margin: 0;
+    ${MEDIA_QUERY.tablet} {
+      font-size: ${FONT_SIZE.md};
+    }
+    ${MEDIA_QUERY.desktop} {
+      font-size: ${FONT_SIZE.md};
+    }
   }
 
   p + p {
@@ -26,12 +55,11 @@ const Content = styled.div`
   }
 `
 
-
 export default function Notice() {
   return (
     <PageWidth>
       <Container>
-        <Title>隱私權條款</Title>
+        <Title>購物需知</Title>
         <Content>
           <h3>免責聲明</h3>
           <p>當您使用本站，代表您了解並遵守以下規章：</p>
@@ -41,7 +69,8 @@ export default function Notice() {
 
           <h3>退貨政策</h3>
           <p>台灣境內交易七天鑑賞期</p>
-          <p>台灣境內交易，根據台灣消保法第十九條規範，享有收到商品後隔日起算七天內無條件退換貨的服務，且商品退回運費由賣方承擔。 請保持商品包裝完整寄回，經賣方確認無誤後，即可申請退款。</p>
+          <p>本賣場非七天猶豫期商店，不接受個人因素，如：不喜歡、尺寸不合、不符合個人期待等...理由退換貨</p>
+          <p>當您確認購買後，即代表您同意本賣場購買規則。如不接受者，請勿隨意下單。</p>
         </Content>
       </Container>
     </PageWidth>
