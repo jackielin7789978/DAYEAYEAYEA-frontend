@@ -14,6 +14,7 @@ import {
   Products,
   NotFound
 } from './pages/index'
+import AdminLogin from './pages/AdminPages/AdminLogin'
 import { AdminOrders, AdminOrderDetail } from './pages/AdminPages/AdminOrders'
 import AdminProducts from './pages/AdminPages/AdminProducts'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
@@ -58,6 +59,7 @@ function AdminRoutes() {
   return (
     <Switch>
       <AdminPageWidth>
+        <Route exact path={`${path}/login`} component={AdminLogin} />
         <Route path={`${path}/orders/:id`} component={AdminOrderDetail} />
         <Route exact path={`${path}/orders`} component={AdminOrders} />
         <Route
