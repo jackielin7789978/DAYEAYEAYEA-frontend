@@ -37,9 +37,9 @@ import {
   LocalStorageContext,
   UserContext
 } from './context'
-import { getMe } from './webAPI/loginAPI'
 import GlobalStyle from './constants/globalStyle'
-
+import jwt_decode from 'jwt-decode'
+import { getMe } from './webAPI/loginAPI'
 export default function App() {
   return (
     <Router basename='/'>
@@ -82,7 +82,8 @@ function Shop() {
 
   const [user, setUser] = useState(() => {
     const localToken = getTokenFromLocalStorage()
-    return localToken
+    let decoded = jwt_decode(localToken)
+    return decoded.id
       ? getMe().then((res) => {
           if (!res.ok) {
             console.log(res.message)
@@ -206,7 +207,9 @@ function MemberRoutes() {
   return (
     <Switch>
       <Route path={`${path}/me`} component={Me} />
-      <Route path={`${path}/order/:ticket`} component={Me} />
+      <Route path={`${path}/modify-info`} component={Me} />
+      <Route path={`${path}/orders/order-detail`} component={Me} />
+      <Route path={`${path}/orders`} component={Me} />
     </Switch>
   )
 }

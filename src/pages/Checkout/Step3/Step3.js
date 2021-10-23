@@ -23,12 +23,12 @@ export default function Step3() {
     ;(async () => {
       const result = await getOrderOne(ticket)
       if (result.ok === 0) {
+        console.log(result.message)
         return location.push('/')
       }
       return setOrderData(result.data)
     })()
   })
-  console.log(orderData)
 
   return (
     <PageWidth>
@@ -67,7 +67,7 @@ export default function Step3() {
           <GeneralBtn
             color='primary'
             children='回到首頁'
-            marginStyle={{ marginTop: '20px' }}
+            buttonStyle={{ marginTop: '20px' }}
           />
         </BtnFlexCenter>
       </Link>

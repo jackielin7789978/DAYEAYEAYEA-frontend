@@ -71,7 +71,7 @@ export default function SignUpForm({
       <ArrowBtn
         color='accent'
         children='註冊'
-        marginStyle={{ marginTop: '20px' }}
+        buttonStyle={{ marginTop: '20px' }}
       />
       {$errMessage && (
         <ErrorMsg style={{ textAlign: 'center' }}>{$errMessage}</ErrorMsg>
