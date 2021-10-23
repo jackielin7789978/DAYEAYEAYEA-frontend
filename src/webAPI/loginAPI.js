@@ -39,6 +39,7 @@ export const getMe = async () => {
   try {
     return await fetch(`${BASE_URL}/members/me`, {
       headers: {
+        'Content-Type': 'application/json',
         authorization: `Bearer ${token}`
       }
     }).then((res) => res.json())

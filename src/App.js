@@ -17,6 +17,7 @@ import {
 import AdminLogin from './pages/AdminPages/AdminLogin'
 import { AdminOrders, AdminOrderDetail } from './pages/AdminPages/AdminOrders'
 import AdminProducts from './pages/AdminPages/AdminProducts'
+import AdminMembers from './pages/AdminPages/AdminMembers'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
 import { PageHeight, AdminPageWidth } from './components/general'
 import {
@@ -67,8 +68,7 @@ function AdminRoutes() {
           component={AdminProducts}
         />
         <Route exact path={`${path}/products`} component={AdminOrders} />
-        {/* 以下尚未 import */}
-        {/* <Route path={`${path}/members`} component={AdminMembers} /> */}
+        <Route path={`${path}/members`} component={AdminMembers} />
       </AdminPageWidth>
     </Switch>
   )
@@ -82,6 +82,7 @@ function Shop() {
 
   const [user, setUser] = useState(() => {
     const localToken = getTokenFromLocalStorage()
+    if (!localToken) return null
     let decoded = jwt_decode(localToken)
     return decoded.id
       ? getMe().then((res) => {

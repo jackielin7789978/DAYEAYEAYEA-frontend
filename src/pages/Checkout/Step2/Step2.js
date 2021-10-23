@@ -73,7 +73,7 @@ export default function Step2() {
       0 //isDelete
     )
     if (result.ok === 0) {
-      setErrMsg(result.message)
+      return setErrMsg(result.message)
     }
     localStorage.removeItem('cartItemsList')
     location.push(`/checkout/step3/${result.ticketNo}`)
