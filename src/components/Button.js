@@ -80,7 +80,7 @@ const WhiteArrowForwardIcon = styled(ArrowForwardIcon)`
 `
 
 const BorderColorIcon = styled(BorderColorOutlinedIcon)`
-  fill: ${COLOR.light};
+  fill: ${COLOR.light} !important;
   margin-left: 6px;
   margin-bottom: 1px;
   font-size: large;
@@ -130,9 +130,9 @@ function EditBtn({ color, children, buttonStyle }) {
 }
 
 
-function LogoutBtn({ color, children, marginStyle, id, onClick }) {
+function LogoutBtn({ color, children, buttonStyle}) {
   return (
-    <ButtonStyle id={id} color={color} style={marginStyle}>
+    <ButtonStyle color={color} style={buttonStyle}>
       {children}
       <LogoutColorIcon />
     </ButtonStyle>

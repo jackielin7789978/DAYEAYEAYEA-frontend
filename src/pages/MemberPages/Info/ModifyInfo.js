@@ -38,7 +38,7 @@ const Button = ({ children }) => {
 }
 
 
-const Info = () => {
+const ModifyInfo = () => {
   return (
     <Container>
       <InfoWrapper>
@@ -49,23 +49,23 @@ const Info = () => {
         </Field>
         <Field>
           <h5>電郵:</h5>
-          <p>1234@gmail.com</p>
+          <input type="text" value="1234@gmail.com"/>
         </Field>
         <Field>
           <h5>姓名:</h5>
-          <p>fullname</p>
+          <input type="text" value="fullname"/>
         </Field>
         <Field>
           <h5>地址:</h5>
-          <p>台北市信義區吳興街111巷32號</p>
+          <input type="text" value="台北市信義區吳興街111巷32號"/>
         </Field>
         <Field>
           <h5>電話:</h5>
-          <p>0912345678</p>
+          <input type="text" value="0912345678"/>
         </Field>
       </InfoWrapper>
     </Container>
   )
 }
 
-export default Info
+export default ModifyInfo

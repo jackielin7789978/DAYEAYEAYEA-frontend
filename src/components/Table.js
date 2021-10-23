@@ -7,7 +7,7 @@ const Button = ({ children }) => {
   const style = {
     width: '50%'
   }
-  return <GeneralBtn color={'accent'} marginStyle={style} children={children}/>
+  return <GeneralBtn color={'accent'} buttonStyle={style} children={children}/>
 }
 
 
