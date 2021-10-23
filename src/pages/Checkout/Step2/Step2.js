@@ -189,7 +189,7 @@ export default function Step2() {
           <BtnFlexCenter>
             <GeneralBtn
               color='primary'
-              marginStyle={{ marginTop: '20px' }}
+              buttonStyle={{ marginTop: '20px' }}
               children='送出訂單'
             />
           </BtnFlexCenter>
@@ -204,7 +204,7 @@ export default function Step2() {
           <BtnFlexCenter>
             <GeneralBtn
               color='light_grey'
-              marginStyle={{ cursor: 'not-allowed' }}
+              buttonStyle={{ cursor: 'not-allowed' }}
               children='送出訂單'
             />
           </BtnFlexCenter>

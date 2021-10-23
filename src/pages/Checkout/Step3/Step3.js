@@ -67,7 +67,7 @@ export default function Step3() {
           <GeneralBtn
             color='primary'
             children='回到首頁'
-            marginStyle={{ marginTop: '20px' }}
+            buttonStyle={{ marginTop: '20px' }}
           />
         </BtnFlexCenter>
       </Link>
