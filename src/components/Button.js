@@ -3,8 +3,10 @@ import { COLOR, FONT_SIZE, ADMIN_COLOR } from '../constants/style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faShoppingCart,
-  faArrowRight,
-  faEdit
+  faSignInAlt,
+  faSignOutAlt,
+  faEdit,
+  faArrowRight
 } from '@fortawesome/free-solid-svg-icons'
 
 const ButtonStyle = styled.button`
@@ -81,7 +83,7 @@ const ColorShoppingCardIcon = styled(FontAwesomeIcon)`
   }
 `
 
-const WhiteArrowForwardIcon = styled(FontAwesomeIcon)`
+const LoginIcon = styled(FontAwesomeIcon)`
   margin-left: 6px;
   margin-top: 1px;
 
@@ -90,7 +92,25 @@ const WhiteArrowForwardIcon = styled(FontAwesomeIcon)`
   }
 `
 
-const EditColorIcon = styled(FontAwesomeIcon)`
+const ArrowIcon = styled(FontAwesomeIcon)`
+  margin-left: 6px;
+  margin-top: 1px;
+
+  & path {
+    color: ${COLOR.light};
+  }
+`
+
+const EditIcon = styled(FontAwesomeIcon)`
+  margin-left: 6px;
+  margin-top: 1px;
+
+  & path {
+    color: ${COLOR.light};
+  }
+`
+
+const LogoutIcon = styled(FontAwesomeIcon)`
   margin-left: 6px;
   margin-top: 1px;
 
@@ -121,7 +141,25 @@ function ArrowBtn({ color, children, buttonStyle }) {
   return (
     <ButtonStyle color={color} style={buttonStyle}>
       {children}
-      <WhiteArrowForwardIcon icon={faArrowRight} />
+      <ArrowIcon icon={faArrowRight} />
+    </ButtonStyle>
+  )
+}
+
+function LoginBtn({ color, children, buttonStyle }) {
+  return (
+    <ButtonStyle color={color} style={buttonStyle}>
+      {children}
+      <LoginIcon icon={faSignInAlt} />
+    </ButtonStyle>
+  )
+}
+
+function LogoutBtn({ color, children, buttonStyle, id, onClick }) {
+  return (
+    <ButtonStyle id={id} color={color} style={buttonStyle}>
+      {children}
+      <LogoutIcon icon={faSignOutAlt} />
     </ButtonStyle>
   )
 }
@@ -130,7 +168,7 @@ function EditBtn({ color, children, buttonStyle }) {
   return (
     <ButtonStyle color={color} style={buttonStyle}>
       {children}
-      <EditColorIcon icon={faEdit} />
+      <EditIcon icon={faEdit} />
     </ButtonStyle>
   )
 }
@@ -143,4 +181,12 @@ function GeneralBtn({ color, children, buttonStyle, id }) {
   )
 }
 
-export { ShoppingCarBtn, ArrowBtn, EditBtn, GeneralBtn, ShoppingCarWhiteBtn }
+export {
+  ShoppingCarBtn,
+  EditBtn,
+  GeneralBtn,
+  ShoppingCarWhiteBtn,
+  LoginBtn,
+  LogoutBtn,
+  ArrowBtn
+}
