@@ -58,22 +58,34 @@ export default function App() {
 
 function AdminRoutes() {
   const { path } = useRouteMatch()
+  // 前後臺可以共用這個 context 嗎？
+  const [user, setUser] = useState(() => {
+    const token = getTokenFromLocalStorage()
+    return token ? true : false
+  })
+
+  useEffect(() => {
+    const token = getTokenFromLocalStorage()
+    return token ? true : false
+  }, [])
 
   return (
-    <Switch>
-      <AdminPageWidth>
-        <Route exact path={`${path}/login`} component={AdminLogin} />
-        <Route path={`${path}/orders/:id`} component={AdminOrderDetail} />
-        <Route exact path={`${path}/orders`} component={AdminOrders} />
-        <Route
-          path={`${path}/products/:slug/:page`}
-          component={AdminProducts}
-        />
-        <Route exact path={`${path}/products`} component={AdminOrders} />
-        {/* 以下尚未 import */}
-        {/* <Route path={`${path}/members`} component={AdminMembers} /> */}
-      </AdminPageWidth>
-    </Switch>
+    <UserContext.Provider value={{ user, setUser }}>
+      <Switch>
+        <AdminPageWidth>
+          <Route path={`${path}/login`} component={AdminLogin} />
+          <Route path={`${path}/orders/:id`} component={AdminOrderDetail} />
+          <Route path={`${path}/orders`} component={AdminOrders} />
+          <Route
+            path={`${path}/products/:slug/:page`}
+            component={AdminProducts}
+          />
+          <Route path={`${path}/products`} component={AdminOrders} />
+          {/* 以下尚未 import */}
+          {/* <Route path={`${path}/members`} component={AdminMembers} /> */}
+        </AdminPageWidth>
+      </Switch>
+    </UserContext.Provider>
   )
 }
 function Shop() {

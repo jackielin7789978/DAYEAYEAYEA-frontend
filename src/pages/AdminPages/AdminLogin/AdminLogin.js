@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useContext, useEffect } from 'react'
+import { UserContext } from '../../../context'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { ArrowBtn } from '../../../components/Button'
@@ -66,6 +67,11 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('')
   const [errMsg, setErrMsg] = useState('')
   let history = useHistory()
+  const { user } = useContext(UserContext)
+
+  useEffect(() => {
+    user && history.push('/admin/orders')
+  }, [user, history])
 
   const handleLogin = (e) => {
     e.preventDefault()
@@ -75,6 +81,7 @@ export default function AdminLogin() {
       res.message === 'Login Fail' && setErrMsg('帳號或密碼錯誤')
       if (res.ok) {
         alert('登入成功')
+        console.log('成功了沒')
         history.push('/admin/orders')
       }
     })()
