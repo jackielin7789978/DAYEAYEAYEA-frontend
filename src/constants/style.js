@@ -31,12 +31,16 @@ export const COLOR = {
 export const ADMIN_COLOR = {
   table_blue: '#3689c9',
   light_grey: '#EDF1F4',
+  grey: '#e5e5e5',
   Btn_grey: '#aaa',
   Btn_grey_hover: '#888',
+  Btn_darkgrey: '#333',
+  Btn_darkgrey_hover: '#2a2a2a',
   Btn_blue: '#3689c9',
   Btn_blue_hover: '#1971b5',
   border_grey: '#BBC5D1',
-  border_dark_grey: '#555'
+  border_dark_grey: '#555',
+  warning: 'rgb(210, 30, 30)'
 }
 
 // 要用什麼字體？

@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import SearchIcon from '@mui/icons-material/Search'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { ADMIN_COLOR } from '../../../constants/style'
 
 const Wrapper = styled.div`
@@ -13,10 +14,11 @@ const Input = styled.input`
     border: 1px solid ${ADMIN_COLOR.border_dark_grey};
   }
 `
-const StyledSearchIcon = styled(SearchIcon)`
+const StyledSearchIcon = styled(FontAwesomeIcon)`
+  font-size: 14px;
   position: absolute;
   top: 50%;
-  left: 10px;
+  left: 12px;
   transform: translate(0, -50%);
 `
 const Dropdown = styled.select`
@@ -32,15 +34,22 @@ const Dropdown = styled.select`
 export function Search() {
   return (
     <Wrapper>
-      <StyledSearchIcon />
+      <StyledSearchIcon icon={faSearch} />
       <Input placeholder={'搜尋訂單'}></Input>
     </Wrapper>
   )
 }
 
-export function Filter() {
+export function Filter({ handleFilter }) {
   return (
-    <Dropdown name='filter' id='filter'>
+    <Dropdown
+      name='filter'
+      id='filter'
+      onChange={(e) => {
+        handleFilter(e.target.value)
+      }}
+    >
+      <option value='所有訂單'>所有訂單</option>
       <option value='處理中'>處理中</option>
       <option value='已出貨'>已出貨</option>
       <option value='已取消'>已取消</option>

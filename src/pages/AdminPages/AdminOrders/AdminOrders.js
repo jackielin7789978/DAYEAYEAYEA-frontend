@@ -1,9 +1,15 @@
 import { useState, useEffect } from 'react'
-import { adminLogin, getAllOrders } from '../../../webAPI/adminAPIs'
-import Table from '../../../components/admin/orderManage/Table'
+import { getAllOrders } from '../../../webAPI/adminAPIs'
 import { Search, Filter } from '../../../components/admin/orderManage/Search'
 import styled from 'styled-components'
 import { ADMIN_MEDIA_QUERY } from '../../../constants/style'
+import {
+  Wrapper,
+  ColumnHeader,
+  Header,
+  TableItemContainer
+} from '../../../components/admin/TableStyle'
+import TableItem from '../../../components/admin/orderManage/TableItem'
 
 const PageWrapper = styled.div`
   height: 100vh;
@@ -25,24 +31,52 @@ const SearchContainer = styled.div`
     max-width: 1180px;
   }
 `
-
+const RestyleHeader = styled(Header)`
+  width: 12%;
+  width: ${({ $name }) => $name === 'Email' && '38%'};
+  width: ${({ $name }) => $name === '訂單編號' && '26%'};
+`
 const headerNames = ['訂單狀態', '訂單編號', 'Email', '訂單金額', 'Edit']
+
 export default function AdminOrders() {
   const [orders, setOrders] = useState([])
+  const [filter, setFilter] = useState('所有訂單')
+
+  const handleFilter = (name) => {
+    setFilter(name)
+  }
 
   useEffect(() => {
-    adminLogin('admin01', 'Admin1357')
     getAllOrders().then((res) => {
       setOrders(res.data)
     })
   }, [])
+
   return (
     <PageWrapper>
       <SearchContainer>
         <Search />
-        <Filter />
+        <Filter handleFilter={handleFilter} />
       </SearchContainer>
-      <Table headerNames={headerNames} data={orders}></Table>
+      <Wrapper>
+        <ColumnHeader>
+          {headerNames.map((name) => (
+            <RestyleHeader key={name} $name={name}>
+              {name}
+            </RestyleHeader>
+          ))}
+        </ColumnHeader>
+        <TableItemContainer>
+          {orders
+            .filter((order) =>
+              filter === '所有訂單' ? order : order.status === filter
+            )
+            .sort((a, b) => b.id - a.id)
+            .map((order) => (
+              <TableItem key={order.id} order={order} />
+            ))}
+        </TableItemContainer>
+      </Wrapper>
     </PageWrapper>
   )
 }

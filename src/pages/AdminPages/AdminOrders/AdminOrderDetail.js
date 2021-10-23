@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { ADMIN_COLOR, COLOR, FONT_SIZE } from '../../../constants/style'
 import { Wrapper } from '../../../components/admin/TableStyle'
 // import { ImgAnchor } from '../../../components/general'
 import { GeneralBtn } from '../../../components/Button'
-import { getOrder } from '../../../webAPI/adminAPIs'
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded'
 
 const PageWrapper = styled.div`
@@ -125,7 +124,7 @@ const Buttons = styled.div`
   button {
     padding: 0 20px;
     margin: 0 8px;
-    tranistion: 0.2s ease;
+    transition: 0.2s ease;
   }
   button:last-child {
     &:hover {
@@ -154,13 +153,7 @@ function Item() {
   )
 }
 export default function AdminOrderDetail() {
-  const { id } = useParams()
-  const [order, setOrder] = useState({})
-  useEffect(() => {
-    getOrder(id).then((res) => {
-      setOrder(res.data)
-    })
-  }, [id])
+  const [order] = useState({})
   const [isOpen, setIsOpen] = useState(false)
 
   // 資料等 API 修改完成再補上
