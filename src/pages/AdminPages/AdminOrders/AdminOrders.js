@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { UserContext } from '../../../context'
+import { useHistory } from 'react-router-dom'
 import { getAllOrders } from '../../../webAPI/adminAPIs'
 import { Search, Filter } from '../../../components/admin/orderManage/Search'
 import styled from 'styled-components'
@@ -41,16 +43,24 @@ const headerNames = ['訂單狀態', '訂單編號', 'Email', '訂單金額', 'E
 export default function AdminOrders() {
   const [orders, setOrders] = useState([])
   const [filter, setFilter] = useState('所有訂單')
-
+  const history = useHistory()
+  const { user } = useContext(UserContext)
   const handleFilter = (name) => {
     setFilter(name)
   }
 
   useEffect(() => {
-    getAllOrders().then((res) => {
-      setOrders(res.data)
-    })
-  }, [])
+    if (!user) {
+      history.push('./login')
+    }
+  })
+
+  useEffect(() => {
+    user &&
+      getAllOrders().then((res) => {
+        setOrders(res.data)
+      })
+  }, [history, user])
 
   return (
     <PageWrapper>
