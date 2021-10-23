@@ -23,7 +23,8 @@ import {
   HashRouter as Router,
   Route,
   Switch,
-  useRouteMatch
+  useRouteMatch,
+  Redirect
 } from 'react-router-dom'
 import {
   ScrollToTop,
@@ -39,6 +40,7 @@ import {
 } from './context'
 import { getMe } from './webAPI/loginAPI'
 import GlobalStyle from './constants/globalStyle'
+import jwtDecode from 'jwt-decode'
 
 export default function App() {
   return (
@@ -54,34 +56,36 @@ export default function App() {
 }
 
 function AdminRoutes() {
-  const { path } = useRouteMatch()
-  // 前後臺可以共用這個 context 嗎？
   const [user, setUser] = useState(() => {
     const token = getTokenFromLocalStorage()
-    return token ? true : false
+    if (!token) return false
+    const jwt = jwtDecode(token)
+    if (jwt) return jwt.hasOwnProperty('role')
   })
-
-  useEffect(() => {
-    const token = getTokenFromLocalStorage()
-    return token ? true : false
-  }, [])
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <Switch>
-        <AdminPageWidth>
-          <Route path={`${path}/login`} component={AdminLogin} />
-          <Route path={`${path}/orders/:id`} component={AdminOrderDetail} />
-          <Route path={`${path}/orders`} component={AdminOrders} />
+      <AdminPageWidth>
+        <Switch>
+          <Route path={'/admin/login'}>
+            {user ? <Redirect to='/admin/orders' /> : <AdminLogin />}
+          </Route>
+          <Route path={'/admin/orders/:slug'}>
+            {user ? <AdminOrderDetail /> : <Redirect to='/admin/login' />}
+          </Route>
+          <Route path={'/admin/orders'}>
+            {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
+          </Route>
           <Route
-            path={`${path}/products/:slug/:page`}
+            path={'/admin/products/:slug/:page'}
             component={AdminProducts}
           />
-          <Route path={`${path}/products`} component={AdminOrders} />
+          <Route path={'/admin/products'} component={AdminProducts} />
+
           {/* 以下尚未 import */}
           {/* <Route path={`${path}/members`} component={AdminMembers} /> */}
-        </AdminPageWidth>
-      </Switch>
+        </Switch>
+      </AdminPageWidth>
     </UserContext.Provider>
   )
 }
