@@ -3,7 +3,8 @@ import { useState, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { HoverArea, MenuContainer, CSSTriangle, Title } from './MenuStyles'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
-import SearchIcon from '@mui/icons-material/Search'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 
 const RestyledHoverArea = styled(HoverArea)`
   ${MEDIA_QUERY.desktop} {
@@ -39,11 +40,14 @@ const SearchInput = styled.input`
   }
 }
 `
-const SearchButton = styled(SearchIcon)`
+const SearchButton = styled(FontAwesomeIcon)`
   display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
   margin-left: 8px;
-  fill: ${COLOR.grey};
   cursor: pointer;
+
+  & path {
+    color: ${COLOR.grey};
+  }
 `
 const SearchDiv = styled.div`
   display: ${({ $isOpen }) => ($isOpen ? 'inline-block' : 'none')};
@@ -105,7 +109,11 @@ export default function SearchMenu({ handleHover, $isOpen }) {
             onChange={handleOnChange}
             onKeyDown={handleKeyDown}
           />
-          <SearchButton $isOpen={$isOpen} onClick={handleOnClick} />
+          <SearchButton
+            $isOpen={$isOpen}
+            onClick={handleOnClick}
+            icon={faSearch}
+          />
         </SearchDiv>
       </SearchMenuContainer>
     </RestyledHoverArea>
