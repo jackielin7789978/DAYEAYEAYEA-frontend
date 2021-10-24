@@ -32,7 +32,6 @@ export const changeProductStatus = async (id, newStatus, product) => {
         Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
-        ...product,
         status: newStatus
       })
     })
@@ -56,7 +55,6 @@ export const changeProductQuantity = async (id, newQuantity, product) => {
         Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
-        ...product,
         quantity: newQuantity
       })
     })
@@ -98,4 +96,40 @@ export const getProductById = async (id) => {
     console.log(e)
   }
   return await res.json()
+}
+
+export const changeProductInfoById = async (id, newInfo) => {
+  const token = getTokenFromLocalStorage()
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/products/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(newInfo)
+    })
+    return await res.json().then((result) => alert(result.message))
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const changeProductImgById = async (id, newImgs) => {
+  const token = getTokenFromLocalStorage()
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/products/img/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(newImgs)
+    })
+    return await res.json().then((result) => alert(result.message))
+  } catch (e) {
+    console.log(e)
+  }
 }
