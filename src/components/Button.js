@@ -6,7 +6,8 @@ import {
   faSignInAlt,
   faSignOutAlt,
   faEdit,
-  faArrowRight
+  faArrowRight,
+  faSave
 } from '@fortawesome/free-solid-svg-icons'
 
 const ButtonStyle = styled.button`
@@ -92,6 +93,15 @@ const LoginIcon = styled(FontAwesomeIcon)`
   }
 `
 
+const SaveIcon = styled(FontAwesomeIcon)`
+  margin-left: 6px;
+  margin-top: 1px;
+
+  & path {
+    color: ${COLOR.light};
+  }
+`
+
 const ArrowIcon = styled(FontAwesomeIcon)`
   margin-left: 6px;
   margin-top: 1px;
@@ -119,7 +129,7 @@ const LogoutIcon = styled(FontAwesomeIcon)`
   }
 `
 
-function ShoppingCarBtn({ color, children, buttonStyle, id, onClick }) {
+function ShoppingCarBtn({ id, color, children, buttonStyle, onClick }) {
   return (
     <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       <ShoppingCardIcon icon={faShoppingCart} />
@@ -128,7 +138,7 @@ function ShoppingCarBtn({ color, children, buttonStyle, id, onClick }) {
   )
 }
 
-function ShoppingCarWhiteBtn({ children, buttonStyle, id, onClick }) {
+function ShoppingCarWhiteBtn({ id, children, buttonStyle, onClick }) {
   return (
     <ButtonStyle id={id} color='white' style={buttonStyle} onClick={onClick}>
       <ColorShoppingCardIcon icon={faShoppingCart} />
@@ -137,45 +147,54 @@ function ShoppingCarWhiteBtn({ children, buttonStyle, id, onClick }) {
   )
 }
 
-function ArrowBtn({ color, children, buttonStyle }) {
+function ArrowBtn({ id, color, children, buttonStyle, onClick }) {
   return (
-    <ButtonStyle color={color} style={buttonStyle}>
+    <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       {children}
       <ArrowIcon icon={faArrowRight} />
     </ButtonStyle>
   )
 }
 
-function LoginBtn({ color, children, buttonStyle }) {
+function LoginBtn({ id, color, children, buttonStyle, onClick }) {
   return (
-    <ButtonStyle color={color} style={buttonStyle}>
+    <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       {children}
       <LoginIcon icon={faSignInAlt} />
     </ButtonStyle>
   )
 }
 
-function LogoutBtn({ color, children, buttonStyle, id, onClick }) {
+function LogoutBtn({ id, color, children, buttonStyle, onClick }) {
   return (
-    <ButtonStyle id={id} color={color} style={buttonStyle}>
+    <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       {children}
       <LogoutIcon icon={faSignOutAlt} />
     </ButtonStyle>
   )
 }
 
-function EditBtn({ color, children, buttonStyle }) {
+function EditBtn({ id, color, children, buttonStyle, onClick }) {
   return (
-    <ButtonStyle color={color} style={buttonStyle}>
+    <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       {children}
       <EditIcon icon={faEdit} />
     </ButtonStyle>
   )
 }
 
-function GeneralBtn({ color, children, buttonStyle, id }) {
+function SaveBtn({ id, color, children, buttonStyle, onClick }) {
   return (
-    <ButtonStyle color={color} style={buttonStyle} id={id}>
+    <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
+      {children}
+      <SaveIcon icon={faSave} />
+    </ButtonStyle>
+  )
+}
+
+function GeneralBtn({ id, color, children, buttonStyle, onClick }) {
+  return (
+    <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       {children}
     </ButtonStyle>
   )
@@ -188,5 +207,6 @@ export {
   ShoppingCarWhiteBtn,
   LoginBtn,
   LogoutBtn,
-  ArrowBtn
+  ArrowBtn,
+  SaveBtn
 }
