@@ -2,7 +2,11 @@ import styled from 'styled-components'
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useLocation, useHistory } from 'react-router'
 import { ADMIN_MEDIA_QUERY } from '../../../constants/style'
-import { Dropdown } from '../../../components/admin/productManage/SearchStyle'
+import {
+  CategoryDropdown,
+  Search
+} from '../../../components/admin/productManage/Search'
+import Table from '../../../components/admin/productManage/Table'
 import { PaginatorButton } from '../../../components/admin/PaginatorStyle'
 import { GeneralBtn } from '../../../components/Button'
 import { adminLogin } from '../../../webAPI/adminAPIs'
@@ -11,8 +15,6 @@ import {
   searchProductsFromAdmin
 } from '../../../webAPI/adminProductsAPI'
 import { setAdminProductsPageInArray } from '../../../utils'
-import Table from './AdminProductsTable'
-import Search from './AdminProductSearch'
 
 const PageWrapper = styled.div`
   height: 100vh;
@@ -43,29 +45,25 @@ const SearchSideContainer = styled.div`
 const PaginatorDiv = styled.div`
   margin: 10px auto;
 `
-function CategoryDropdown() {
-  return (
-    <Dropdown name='filter' id='filter'>
-      <option value='home'>居家生活</option>
-      <option value='apparel'>服飾配件</option>
-      <option value='kitchenware'>廚房餐具</option>
-      <option value='food'>食材雜貨</option>
-      <option value='stationery'>設計文具</option>
-      <option value='outdoor'>休閒戶外</option>
-    </Dropdown>
-  )
-}
 
 export default function AdminProducts() {
   const [products, setProducts] = useState([])
+  const [categoryFilter, setCategoryFilter] = useState('all')
   const { page } = useParams()
   const keywords = useLocation().search
   const history = useHistory()
   const productsPerPage = 10
   const perPageSliceStart = (Number(page) - 1) * productsPerPage
   const perPageSliceEnd = Number(page) * productsPerPage
-  const { pagesArray } = setAdminProductsPageInArray(products.length)
-  const productsByPage = products.slice(perPageSliceStart, perPageSliceEnd)
+  let showProductsList = products.filter((product) =>
+    categoryFilter === 'all' ? product : product.category === categoryFilter
+  )
+  const { pagesArray } = setAdminProductsPageInArray(showProductsList.length)
+  const showProductsByPage = showProductsList.slice(
+    perPageSliceStart,
+    perPageSliceEnd
+  )
+
   useEffect(() => {
     adminLogin('admin01', 'Admin1357')
     if (keywords) {
@@ -83,30 +81,29 @@ export default function AdminProducts() {
     }
   }, [keywords, history])
 
-  const handleShowAllClick = useCallback(() => {
-    history.push('/admin/products/1')
-  }, [history])
+  // fix here
+  const handleDropDownChange = useCallback(
+    (e) => {
+      setCategoryFilter((categoryFilter) => e.target.value)
+      history.push('/admin/products/1')
+    },
+    [history]
+  )
 
   return (
     <PageWrapper>
       <SearchContainer>
         <SearchSideContainer>
           <Search />
-          <CategoryDropdown />
+          <CategoryDropdown onChange={handleDropDownChange} />
         </SearchSideContainer>
         <SearchSideContainer>
-          <div
-            style={{ width: '120px', margin: '6px 0px 0px 10px' }}
-            onClick={handleShowAllClick}
-          >
-            <GeneralBtn color='admin_blue'>顯示所有商品</GeneralBtn>
-          </div>
-          <div style={{ width: '120px', margin: '6px 0px 0px 10px' }}>
+          <div style={{ width: '100px' }}>
             <GeneralBtn color='admin_blue'>新增商品</GeneralBtn>
           </div>
         </SearchSideContainer>
       </SearchContainer>
-      <Table products={productsByPage} />
+      <Table products={showProductsByPage} />
       <PaginatorDiv>
         {pagesArray.map((pageValue) => {
           return (
