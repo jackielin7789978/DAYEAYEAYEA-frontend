@@ -41,21 +41,21 @@ const Button = ({ children }) => {
   return <LogoutBtn color={'primary'} buttonStyle={style} children={children}/>
 }
 
-const Home = () => {
+const Home = ({ user }) => {
   return (
     <Container>
       <Header>
-        <h3>Hi! OOXX</h3>
+        <h3>Hi! {user.fullname}</h3>
         <Button>登出</Button>
       </Header>
       <SubTitle>基本資料</SubTitle>
       <MemberInfo>
-        <p>會員帳號: OOXX</p>
+        <p>會員帳號: {user.username}</p>
         <p>會員等級: 一般會員</p>
-        <p>電郵: 1234@gmail.com</p>
+        <p>電郵: {user.email}</p>
       </MemberInfo>
       <SubTitle>最新訂單</SubTitle>
-      <OrderTable orders={[1]} />
+      <OrderTable orders={[user.Orders[0]]} />
     </Container>
   )
 }

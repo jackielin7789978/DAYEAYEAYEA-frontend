@@ -1,4 +1,6 @@
+import { useEffect, useContext } from 'react'
 import styled from 'styled-components'
+import { UserContext } from '../../../context'
 import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import { Tabs } from '../../../components/Tab'
 import { PageWidth } from '../../../components/general'
@@ -32,6 +34,9 @@ const TabWrapper = styled.div`
 
 
 export default function Me() {
+  const aa = useContext(UserContext)
+  useEffect(() => console.log(aa), [])
+
   return (
     <PageWidthHeight>
       <Container>
@@ -39,7 +44,7 @@ export default function Me() {
         <TabWrapper>
           <Tabs
             tabs={['會員首頁', '訂單紀錄', '會員資料']}
-            tabsPanel={[<Home />, <Orders />, <Info />]}
+            tabsPanel={[<Home user={aa.user} />, <Orders />, <Info />]}
             presetTab={0}
           />
         </TabWrapper>

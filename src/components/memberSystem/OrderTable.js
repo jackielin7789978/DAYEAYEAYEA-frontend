@@ -20,8 +20,8 @@ const OrderTable = ({ orders }) => {
       <tbody>
         { orders.map((order, index) => (
             <tr key={index+10}>
-              <td>處理中</td>
-              <td>20210922-kw168</td>
+              <td>{ order.status }</td>
+              <td>{ order.ticketNo }</td>
               <td>$1380</td>
               <td><Button onClick={handleClick}>查找</Button></td>
             </tr>
