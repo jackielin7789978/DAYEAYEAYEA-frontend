@@ -3,7 +3,7 @@ import { COLOR, FONT_SIZE, ADMIN_COLOR } from '../constants/style'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from '@mui/icons-material/Logout'
 
 const ButtonStyle = styled.button`
   display: inline-block;
@@ -129,8 +129,7 @@ function EditBtn({ color, children, buttonStyle }) {
   )
 }
 
-
-function LogoutBtn({ color, children, buttonStyle}) {
+function LogoutBtn({ color, children, buttonStyle }) {
   return (
     <ButtonStyle color={color} style={buttonStyle}>
       {children}
@@ -139,12 +138,19 @@ function LogoutBtn({ color, children, buttonStyle}) {
   )
 }
 
-function GeneralBtn({ color, children, buttonStyle, id }) {
+function GeneralBtn({ color, children, buttonStyle, id, onClick }) {
   return (
-    <ButtonStyle color={color} style={buttonStyle} id={id}>
+    <ButtonStyle color={color} style={buttonStyle} id={id} onClick={onClick}>
       {children}
     </ButtonStyle>
   )
 }
 
-export { ShoppingCarBtn, ArrowBtn, EditBtn, GeneralBtn, ShoppingCarWhiteBtn, LogoutBtn }
+export {
+  ShoppingCarBtn,
+  ArrowBtn,
+  EditBtn,
+  GeneralBtn,
+  ShoppingCarWhiteBtn,
+  LogoutBtn
+}
