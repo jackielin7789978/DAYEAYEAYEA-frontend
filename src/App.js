@@ -58,8 +58,14 @@ export default function App() {
 function AdminRoutes() {
   const [user, setUser] = useState(() => {
     if (!getTokenFromLocalStorage()) return false
-    const jwt = jwtDecode(getTokenFromLocalStorage())
-    return jwt.hasOwnProperty('role')
+    try {
+      const _info = jwtDecode(getTokenFromLocalStorage())
+      if (_info.exp < Date.now() / 1000 && _info.hasOwnProperty('role')) {
+        return true
+      } else return false
+    } catch (error) {
+      return false
+    }
   })
 
   return (
