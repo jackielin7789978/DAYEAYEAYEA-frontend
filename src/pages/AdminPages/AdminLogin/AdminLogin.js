@@ -1,10 +1,11 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import { UserContext } from '../../../context'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { ArrowBtn } from '../../../components/Button'
 import { COLOR, ADMIN_COLOR, FONT_SIZE } from '../../../constants/style'
 import { adminLogin } from '../../../webAPI/adminAPIs'
+import { addTokenToLocalStorage } from '../../../utils'
 
 const Wrapper = styled.div`
   position: absolute;
@@ -67,23 +68,18 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('')
   const [errMsg, setErrMsg] = useState('')
   let history = useHistory()
-  const { user } = useContext(UserContext)
-
-  useEffect(() => {
-    user && history.push('/admin/orders')
-  }, [user, history])
+  const { setUser } = useContext(UserContext)
 
   const handleLogin = (e) => {
     e.preventDefault()
     if (!username || !password) return setErrMsg('缺少帳號或密碼')
     ;(async () => {
       const res = await adminLogin(username, password)
-      res.message === 'Login Fail' && setErrMsg('帳號或密碼錯誤')
-      if (res.ok) {
-        alert('登入成功')
-        console.log('成功了沒')
-        history.push('/admin/orders')
-      }
+      if (!res.ok) return setErrMsg('帳號或密碼錯誤')
+      alert('登入成功')
+      addTokenToLocalStorage(res.token)
+      setUser(true)
+      history.push('/admin/orders')
     })()
   }
 

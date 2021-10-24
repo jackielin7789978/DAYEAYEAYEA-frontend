@@ -1,6 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
-import { UserContext } from '../../../context'
-import { useHistory } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import { getAllOrders } from '../../../webAPI/adminAPIs'
 import { Search, Filter } from '../../../components/admin/orderManage/Search'
 import styled from 'styled-components'
@@ -14,7 +12,6 @@ import {
 import TableItem from '../../../components/admin/orderManage/TableItem'
 
 const PageWrapper = styled.div`
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -43,24 +40,15 @@ const headerNames = ['訂單狀態', '訂單編號', 'Email', '訂單金額', 'E
 export default function AdminOrders() {
   const [orders, setOrders] = useState([])
   const [filter, setFilter] = useState('所有訂單')
-  const history = useHistory()
-  const { user } = useContext(UserContext)
   const handleFilter = (name) => {
     setFilter(name)
   }
 
   useEffect(() => {
-    if (!user) {
-      history.push('./login')
-    }
-  })
-
-  useEffect(() => {
-    user &&
-      getAllOrders().then((res) => {
-        setOrders(res.data)
-      })
-  }, [history, user])
+    getAllOrders().then((res) => {
+      setOrders(res.data)
+    })
+  }, [])
 
   return (
     <PageWrapper>
