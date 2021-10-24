@@ -80,25 +80,28 @@ function Shop() {
     JSON.parse(getItemsFromLocalStorage())
   )
 
+  const isTokenExpired = (token) => {
+    try {
+      return jwt_decode(token)
+      // const _info = jwt_decode(token)
+      // if (_info.exp < Date.now() / 1000) {
+      //   return true
+      // } else return false
+    } catch (error) {
+      return false
+    }
+  }
+
   const [user, setUser] = useState()
   useEffect(() => {
-    const localToken = getTokenFromLocalStorage()
-    if (!localToken) return null
-    let decoded = jwt_decode(localToken)
-    return decoded.id
-      ? getMe().then((res) => {
-          if (!res.ok) {
-            console.log(res.message)
-          }
-          setUser(res.data)
-        })
-      : null
+    let localToken = getTokenFromLocalStorage()
+    if (!localToken) return false
+    let decoded = isTokenExpired(localToken)
+    return decoded.id ? setUser(decoded) : setUser(null)
   }, [])
-
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
   }, [setIsModalOpen])
-
   const totalPrice = useMemo(() => {
     if (!cartItems) return
     let sum = 0

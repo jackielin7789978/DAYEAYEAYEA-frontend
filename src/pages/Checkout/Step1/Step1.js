@@ -71,7 +71,9 @@ export default function Step1() {
               $setNotAllowed={setNotAllowed}
             />
           ))}
-          <TotalPrice>{`總金額 NT$ ${totalPrice}`}</TotalPrice>
+          <TotalPrice>{`小計 NT$${totalPrice}`}</TotalPrice>
+          <TotalPrice>運費 NT$80</TotalPrice>
+          <TotalPrice>{`總金額 NT$ ${totalPrice + 80}`}</TotalPrice>
           <BtnFlex>
             <Link style={LinkStyle} to='/'>
               <GeneralBtn color='accent' children='繼續購物' />
