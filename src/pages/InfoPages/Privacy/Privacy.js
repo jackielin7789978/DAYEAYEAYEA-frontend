@@ -48,7 +48,7 @@ const Content = styled.div`
       font-size: ${FONT_SIZE.md};
     }
     ${MEDIA_QUERY.desktop} {
-      font-size: ${FONT_SIZE.lg};
+      font-size: ${FONT_SIZE.md};
     }
   }
 
