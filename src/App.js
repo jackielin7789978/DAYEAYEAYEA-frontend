@@ -58,11 +58,14 @@ export default function App() {
 function AdminRoutes() {
   const [user, setUser] = useState(() => {
     if (!getTokenFromLocalStorage()) return false
+    // 尚未加上時效驗證
     try {
       const _info = jwtDecode(getTokenFromLocalStorage())
-      if (_info.exp < Date.now() / 1000 && _info.hasOwnProperty('role')) {
+      if (_info.hasOwnProperty('role')) {
         return true
-      } else return false
+      } else {
+        return false
+      }
     } catch (error) {
       return false
     }
