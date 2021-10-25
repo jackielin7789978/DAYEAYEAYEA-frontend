@@ -4,7 +4,7 @@ import { EditBtn, LogoutBtn, SaveBtn } from '../../../components/Button'
 
 const FormWrapper = styled.div`
   min-height: 850px;
-  height: 100%;
+  height: 850px;
   transition: 1.5s;
   width: 90%;
   margin: 30px auto;

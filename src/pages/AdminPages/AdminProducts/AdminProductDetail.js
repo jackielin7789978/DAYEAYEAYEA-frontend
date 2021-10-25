@@ -20,18 +20,16 @@ export default function AdminProductDetail() {
   }, [id])
 
   return (
-    <AdminPageWidth>
-      <FormWrapper>
-        <Tabs
-          tabs={['商品圖片', '商品敘述', '商品資訊']}
-          tabsPanel={[
-            <ImgForm product={productDetail} />,
-            <DescForm product={productDetail} />,
-            <InfoForm product={productDetail} />
-          ]}
-          presetTab={0}
-        ></Tabs>
-      </FormWrapper>
-    </AdminPageWidth>
+    <FormWrapper>
+      <Tabs
+        tabs={['商品圖片', '商品敘述', '商品資訊']}
+        tabsPanel={[
+          <ImgForm product={productDetail} />,
+          <DescForm product={productDetail} />,
+          <InfoForm product={productDetail} />
+        ]}
+        presetTab={0}
+      ></Tabs>
+    </FormWrapper>
   )
 }
