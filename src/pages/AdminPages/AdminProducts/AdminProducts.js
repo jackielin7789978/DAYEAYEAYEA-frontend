@@ -94,33 +94,31 @@ export default function AdminProducts() {
   )
 
   return (
-    <AdminPageWidth>
-      <PageWrapper>
-        <SearchContainer>
-          <SearchSideContainer>
-            <Search />
-            <CategoryDropdown onChange={handleDropDownChange} />
-          </SearchSideContainer>
-          <SearchSideContainer>
-            <div style={{ width: '100px' }}>
-              <GeneralBtn color='admin_blue'>新增商品</GeneralBtn>
-            </div>
-          </SearchSideContainer>
-        </SearchContainer>
-        <Table products={showProductsByPage} />
-        <PaginatorDiv>
-          {pagesArray.map((pageValue) => {
-            return (
-              <PaginatorButton
-                key={pageValue}
-                page={pageValue}
-                to={`/admin/products/${pageValue}`}
-                active={pageValue === page}
-              ></PaginatorButton>
-            )
-          })}
-        </PaginatorDiv>
-      </PageWrapper>
-    </AdminPageWidth>
+    <PageWrapper>
+      <SearchContainer>
+        <SearchSideContainer>
+          <Search />
+          <CategoryDropdown onChange={handleDropDownChange} />
+        </SearchSideContainer>
+        <SearchSideContainer>
+          <div style={{ width: '100px' }}>
+            <GeneralBtn color='admin_blue'>新增商品</GeneralBtn>
+          </div>
+        </SearchSideContainer>
+      </SearchContainer>
+      <Table products={showProductsByPage} />
+      <PaginatorDiv>
+        {pagesArray.map((pageValue) => {
+          return (
+            <PaginatorButton
+              key={pageValue}
+              page={pageValue}
+              to={`/admin/products/${pageValue}`}
+              active={pageValue === page}
+            ></PaginatorButton>
+          )
+        })}
+      </PaginatorDiv>
+    </PageWrapper>
   )
 }

@@ -18,7 +18,8 @@ import {
   AdminLogin,
   AdminOrders,
   AdminProducts,
-  AdminMembers
+  AdminMembers,
+  AdminProductDetail
 } from './pages/AdminPages'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
 import { PageHeight } from './components/general'
@@ -91,12 +92,6 @@ function AdminRoutes() {
         <Route path={'/admin/orders'}>
           {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
         </Route>
-        <Route path={'/admin/products/:slug/:page'}>
-          {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
-         </Route>
-        <Route path={'/admin/products/'}>
-          {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
-         </Route>
         <Route path={'/admin/members'}>
           {user ? <AdminMembers /> : <Redirect to='/admin/login' />}
         </Route>
