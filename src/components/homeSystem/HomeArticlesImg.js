@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import Carousel from 'react-bootstrap/Carousel'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
-import { FullWidth } from '../../components/general'
+import { FullWidth } from '../general'
 import { Link } from 'react-router-dom'
 import { getAllArticles } from '../../webAPI/articlesAPI'
 
