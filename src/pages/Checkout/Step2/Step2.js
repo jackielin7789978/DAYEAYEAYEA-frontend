@@ -25,7 +25,7 @@ import { createOrder } from '../../../webAPI/orderAPI'
 export default function Step2() {
   const { cartItems, setCartItems } = useContext(LocalStorageContext)
   const { user } = useContext(UserContext)
-  const { errMsg, setErrMsg } = useState()
+  const { errMsg } = useState()
   const location = useHistory()
   useEffect(() => {
     if (!cartItems.length) location.push('/')

@@ -42,7 +42,6 @@ import {
 import GlobalStyle from './constants/globalStyle'
 import jwt_decode from 'jwt-decode'
 
-
 export default function App() {
   return (
     <Router basename='/'>
@@ -90,7 +89,7 @@ function AdminRoutes() {
             component={AdminProducts}
           />
           <Route path={'/admin/products'} component={AdminProducts} />
-          <Route path={'admin/members}>
+          <Route path={'/admin/members'}>
             {user ? <AdminMembers /> : <Redirect to='/admin/login' />}
           </Route>
         </Switch>
