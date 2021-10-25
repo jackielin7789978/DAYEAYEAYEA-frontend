@@ -10,6 +10,7 @@ import {
   TableItemContainer
 } from '../../../components/admin/TableStyle'
 import TableItem from '../../../components/admin/orderManage/TableItem'
+import { addOrderDetailToLocalSotrage } from '../../../utils'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -32,25 +33,45 @@ const SearchContainer = styled.div`
 `
 const RestyleHeader = styled(Header)`
   width: 12%;
-  width: ${({ $name }) => $name === 'Email' && '38%'};
-  width: ${({ $name }) => $name === '訂單編號' && '26%'};
+  width: ${({ $name }) => $name === 'Email' && '36%'};
+  width: ${({ $name }) => $name === '訂單編號' && '28%'};
 `
 const headerNames = ['訂單狀態', '訂單編號', 'Email', '訂單金額', 'Edit']
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState([])
   const [filter, setFilter] = useState('所有訂單')
+  const [isLoading, setIsLoading] = useState(true)
+
   const handleFilter = (name) => {
     setFilter(name)
   }
 
+  const handleOrderDetail = (ticketNo) => {
+    const order = orders.filter((order) => order.ticketNo === ticketNo)
+    addOrderDetailToLocalSotrage(order[0])
+  }
+
   useEffect(() => {
     getAllOrders().then((res) => {
+      setIsLoading(false)
       setOrders(res.data)
     })
   }, [])
 
-  return (
+  return isLoading ? (
+    <div
+      style={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        fontSize: '28px'
+      }}
+    >
+      Loading...
+    </div>
+  ) : (
     <PageWrapper>
       <SearchContainer>
         <Search />
@@ -71,7 +92,11 @@ export default function AdminOrders() {
             )
             .sort((a, b) => b.id - a.id)
             .map((order) => (
-              <TableItem key={order.id} order={order} />
+              <TableItem
+                key={order.id}
+                order={order}
+                handleOrderDetail={handleOrderDetail}
+              />
             ))}
         </TableItemContainer>
       </Wrapper>

@@ -27,7 +27,7 @@ const GlobalStyle = createGlobalStyle`
     border-radius: 4px;
     background: rgb(204,204,204);
   }
-  div, p, span {
+  div, p, span, input, select, option {
     color: ${COLOR.text_dark};
   }
   h1, h2, h3, h4, h5, h6 {

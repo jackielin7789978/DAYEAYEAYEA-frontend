@@ -5,7 +5,14 @@ import { ADMIN_COLOR, COLOR, FONT_SIZE } from '../../../constants/style'
 import { Wrapper } from '../../../components/admin/TableStyle'
 // import { ImgAnchor } from '../../../components/general'
 import { GeneralBtn } from '../../../components/Button'
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import {
+  addOrderDetailToLocalSotrage,
+  getOrderDetailFromLocalStorage,
+  multiplyPrice
+} from '../../../utils'
+import { updateOrderStatus } from '../../../webAPI/adminAPIs'
 
 const PageWrapper = styled.div`
   margin-right: ${({ $isOpen }) => ($isOpen ? '-10px' : '0px')};
@@ -33,10 +40,11 @@ const Subtotal = styled.div`
 `
 const Collapser = styled.div`
   margin-top: 10px;
-  ${({ $isOpen }) => $isOpen && 'transform: rotate(180deg)'};
 `
-const Icon = styled(KeyboardArrowDownRoundedIcon)`
+const Icon = styled(FontAwesomeIcon)`
   cursor: pointer;
+  transition: all 0.2s;
+  ${({ $isOpen }) => $isOpen && 'transform: rotate(180deg)'};
 `
 const Menu = styled.div`
   height: ${({ $isOpen }) => ($isOpen ? 'unset' : 0)};
@@ -126,55 +134,74 @@ const Buttons = styled.div`
     margin: 0 8px;
     transition: 0.2s ease;
   }
-  button:last-child {
-    &:hover {
-      background: ${COLOR.grey};
-    }
-  }
-  button:first-child {
-    background: ${ADMIN_COLOR.Btn_blue};
-    &:hover {
-      background: ${ADMIN_COLOR.Btn_blue_hover};
-    }
-  }
 `
 
-function Item() {
+function Item({ item }) {
   return (
     <ItemContainer>
       <div>
         <Pic />
-        <Name to={`/products/1`}>商品名稱 商品名稱商品名稱</Name>
+        <Name to={`/admin/products/${item.productId}`}>
+          {item.Product.name}
+        </Name>
       </div>
-      <div>NT$1800</div>
-      <div>1</div>
-      <div>NT$1800</div>
+      <div>{item.Product.discountPrice}</div>
+      <div>{item.quantity}</div>
+      <div>{multiplyPrice(item.Product.discountPrice, item.quantity)}</div>
     </ItemContainer>
   )
 }
 export default function AdminOrderDetail() {
-  const [order] = useState({})
   const [isOpen, setIsOpen] = useState(false)
+  const [order, setOrder] = useState(() => {
+    return JSON.parse(getOrderDetailFromLocalStorage())
+  })
 
-  // 待補：用前一頁抓下的全部訂單來抓單筆
+  const handleOrderStatus = (status) => {
+    updateOrderStatus(order.ticketNo, status).then((res) => {
+      if (!res.ok) alert('發生錯誤：' + res.message)
+      let newStatus = ''
+      switch (status) {
+        case 'normal':
+          newStatus = '處理中'
+          break
+        case 'ship':
+          newStatus = '已出貨'
+          break
+        case 'cancel':
+          newStatus = '已取消'
+          break
+        case 'complete':
+          newStatus = '已完成'
+          break
+        default:
+          newStatus = '處理中'
+      }
+      const newOrder = { ...order }
+      newOrder.status = newStatus
+      setOrder(newOrder)
+      alert('變更成功！')
+      addOrderDetailToLocalSotrage(newOrder)
+    })
+  }
+
   return (
     <PageWrapper $isOpen={isOpen}>
       <Container>
         <Title>訂購明細</Title>
         <Subtotal>
           <span>
-            共 <b>3</b> 件商品
+            共 <b>{order.Order_items.length}</b> 件商品
           </span>
           <span>
-            合計：<b>NT$5480</b>
+            合計：<b>{order.subTotal}</b>
           </span>
           <Collapser
             onClick={() => {
               setIsOpen(!isOpen)
             }}
-            $isOpen={isOpen}
           >
-            <Icon />
+            <Icon icon={faChevronDown} $isOpen={isOpen} />
           </Collapser>
         </Subtotal>
         <Menu $isOpen={isOpen}>
@@ -184,9 +211,9 @@ export default function AdminOrderDetail() {
             <Header>數量</Header>
             <Header>小計</Header>
           </TableHeaders>
-          <Item />
-          <Item />
-          <Item />
+          {order.Order_items.map((item) => (
+            <Item key={item.productId} item={item} />
+          ))}
           <PriceDetail>
             <div>
               <span>運費：</span>
@@ -194,7 +221,7 @@ export default function AdminOrderDetail() {
             </div>
             <div>
               <span>合計：</span>
-              <span>NT$5480</span>
+              <span>{order.subTotal}</span>
             </div>
           </PriceDetail>
         </Menu>
@@ -203,22 +230,36 @@ export default function AdminOrderDetail() {
         <Title>訂單資料</Title>
         <OrderInfo>
           <div>訂單狀態：{order.status}</div>
-          <div>訂單編號：{order.id}</div>
-          <div>訂購人姓名：神恩佐</div>
-          <div>寄送地址：台北市士林區中山北路六段178號2樓</div>
-          <div>聯絡信箱：enzo721986091734@gmail.com</div>
-          <div>聯絡電話：0912345678</div>
-          <div>付款方式：信用卡</div>
-          <div>運送方式：宅配</div>
+          <div>訂單編號：{order.ticketNo}</div>
+          <div>訂購人姓名：{order.orderName}</div>
+          <div>寄送地址：{order.orderAddress}</div>
+          <div>聯絡信箱：{order.orderEmail}</div>
+          <div>聯絡電話：{order.orderPhone}</div>
+          <div>付款方式：{order.payment}</div>
+          <div>運送方式：{order.shipping}</div>
         </OrderInfo>
         <Buttons>
           {order.status === '處理中' && (
             <>
-              <GeneralBtn children={'出貨'} />
-              <GeneralBtn children={'取消訂單'} />
+              <GeneralBtn
+                onClick={() => handleOrderStatus('ship')}
+                color={'admin_blue'}
+                children={'出貨'}
+              />
+              <GeneralBtn
+                onClick={() => handleOrderStatus('cancel')}
+                color={'admin_grey'}
+                children={'取消訂單'}
+              />
             </>
           )}
-          {order.status === '已出貨' && <GeneralBtn children={'完成訂單'} />}
+          {order.status === '已出貨' && (
+            <GeneralBtn
+              onClick={() => handleOrderStatus('complete')}
+              color={'admin_grey'}
+              children={'完成訂單'}
+            />
+          )}
         </Buttons>
       </Container>
     </PageWrapper>

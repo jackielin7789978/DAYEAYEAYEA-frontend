@@ -20,7 +20,7 @@ const RestyledCell = styled(Cell)`
   padding: 0 4px;
 `
 
-export default function TableItem({ order }) {
+export default function TableItem({ order, handleOrderDetail }) {
   const calTotalPrice = (order) => {
     let format = 'NT$ X'
     let total = 80
@@ -32,11 +32,16 @@ export default function TableItem({ order }) {
   return (
     <Container>
       <RestyledCell>{order.status}</RestyledCell>
-      <RestyledCell style={{ width: '26%' }}>{order.ticketNo}</RestyledCell>
-      <RestyledCell style={{ width: '38%' }}>{order.orderEmail}</RestyledCell>
+      <RestyledCell style={{ width: '28%' }}>{order.ticketNo}</RestyledCell>
+      <RestyledCell style={{ width: '36%' }}>{order.orderEmail}</RestyledCell>
       <RestyledCell>{calTotalPrice(order)}</RestyledCell>
       <RestyledCell>
-        <Btn to={`/admin/orders/${order.ticketNo}`}>
+        <Btn
+          onClick={() => {
+            handleOrderDetail(order.ticketNo)
+          }}
+          to={`/admin/orders/${order.ticketNo}`}
+        >
           <GeneralBtn children={'訂單詳情'} />
         </Btn>
       </RestyledCell>
