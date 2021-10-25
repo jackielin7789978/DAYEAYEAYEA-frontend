@@ -40,6 +40,7 @@ export const Container = styled.div`
 `
 export const Cell = styled.span`
   width: unset;
+  word-break: break-word;
 `
 export const EditBtn = styled(Link)`
   background: ${ADMIN_COLOR.editBtn_grey};

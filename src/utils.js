@@ -81,3 +81,5 @@ export const formatPrice = (cents) => {
     })
     .replace('.00', '')
 }
+
+export const multiplyPrice = (quantity, price) => quantity * price

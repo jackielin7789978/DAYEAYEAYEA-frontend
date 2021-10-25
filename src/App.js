@@ -13,14 +13,13 @@ import {
   Me,
   Products,
   NotFound
-} from './pages/index'
-import AdminLogin from './pages/AdminPages/AdminLogin'
-import { AdminOrders, AdminOrderDetail } from './pages/AdminPages/AdminOrders'
+} from './pages'
 import {
-  AdminProductDetail,
-  AdminProducts
-} from './pages/AdminPages/AdminProducts'
-import AdminMembers from './pages/AdminPages/AdminMembers'
+  AdminLogin,
+  AdminOrders,
+  AdminProducts,
+  AdminMembers
+} from './pages/AdminPages'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
 import { PageHeight } from './components/general'
 import {
@@ -80,9 +79,6 @@ function AdminRoutes() {
         <Route path={'/admin/login'}>
           {user ? <Redirect to='/admin/orders' /> : <AdminLogin />}
         </Route>
-        <Route path={'/admin/orders/:slug'}>
-          {user ? <AdminOrderDetail /> : <Redirect to='/admin/login' />}
-        </Route>
         <Route path={'/admin/orders'}>
           {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
         </Route>
@@ -92,6 +88,15 @@ function AdminRoutes() {
         <Route path={'/admin/products/:page'}>
           {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
         </Route>
+        <Route path={'/admin/orders'}>
+          {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
+        </Route>
+        <Route path={'/admin/products/:slug/:page'}>
+          {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
+         </Route>
+        <Route path={'/admin/products/'}>
+          {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
+         </Route>
         <Route path={'/admin/members'}>
           {user ? <AdminMembers /> : <Redirect to='/admin/login' />}
         </Route>
