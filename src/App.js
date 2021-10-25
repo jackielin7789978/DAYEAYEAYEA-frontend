@@ -79,14 +79,24 @@ function AdminRoutes() {
         <Route path={'/admin/login'}>
           {user ? <Redirect to='/admin/orders' /> : <AdminLogin />}
         </Route>
-        {/* <Route path={'/admin/orders/:slug'}>
-            {user ? <AdminOrderDetail /> : <Redirect to='/admin/login' />}
-          </Route> */}
         <Route path={'/admin/orders'}>
           {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
         </Route>
-        <Route path={'/admin/products/:slug/:page'} component={AdminProducts} />
-        <Route path={'/admin/products'} component={AdminProducts} />
+        <Route path={'/admin/products/detail/:id'}>
+          {user ? <AdminProductDetail /> : <Redirect to='/admin/login' />}
+        </Route>
+        <Route path={'/admin/products/:page'}>
+          {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
+        </Route>
+        <Route path={'/admin/orders'}>
+          {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
+        </Route>
+        <Route path={'/admin/products/:slug/:page'}>
+          {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
+         </Route>
+        <Route path={'/admin/products/'}>
+          {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
+         </Route>
         <Route path={'/admin/members'}>
           {user ? <AdminMembers /> : <Redirect to='/admin/login' />}
         </Route>

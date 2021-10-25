@@ -14,7 +14,7 @@ import useMediaQuery from '../../hooks/useMediaQuery'
 import { PageWidth, FullWidth } from '../../components/general'
 import { FullModal } from '../../components/Modal'
 import { PaginatorButton } from '../../components/Paginator'
-import { setPageInArray, countWhiteCardAmount } from '../../utils'
+import { setNumInArray, countWhiteCardAmount } from '../../utils'
 
 const ArticleImgContainer = styled.div`
   background-repeat: no-repeat;
@@ -116,7 +116,7 @@ export default function Articles() {
           const isResultOk = PageIsFound(result.ok)
           if (isResultOk) {
             setArticleProducts(result.data)
-            setTotalPage((totalPage) => setPageInArray(result.totalPage))
+            setTotalPage((totalPage) => setNumInArray(result.totalPage))
           }
         })
         setArticleData((articleData) => result.data)

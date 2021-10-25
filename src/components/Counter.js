@@ -11,6 +11,7 @@ const Counter = styled.div`
   padding: 5px;
 `
 const Number = styled.input`
+  background: transparent;
   text-align: center;
   width: 100%;
   &::-webkit-outer-spin-button,

@@ -1,9 +1,14 @@
 import styled from 'styled-components'
 import { COLOR, FONT_SIZE, ADMIN_COLOR } from '../constants/style'
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
-import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined'
-import LogoutIcon from '@mui/icons-material/Logout'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faShoppingCart,
+  faSignInAlt,
+  faSignOutAlt,
+  faEdit,
+  faArrowRight,
+  faSave
+} from '@fortawesome/free-solid-svg-icons'
 
 const ButtonStyle = styled.button`
   display: inline-block;
@@ -60,88 +65,108 @@ const ButtonStyle = styled.button`
       }
     `};
 `
-
-const ShoppingCardIcon = styled(ShoppingCartOutlinedIcon)`
-  fill: ${COLOR.light};
+const ShoppingCardIcon = styled(FontAwesomeIcon)`
+  margin-right: 6px;
+  margin-top: 2px;
+  color: ${COLOR.light};
+`
+const ColorShoppingCardIcon = styled(FontAwesomeIcon)`
   margin-right: 6px;
   margin-bottom: 2px;
+  color: ${COLOR.primary_light};
 `
-
-const ColorShoppingCardIcon = styled(ShoppingCartOutlinedIcon)`
-  fill: ${COLOR.primary_light};
-  margin-right: 6px;
-  margin-bottom: 2px;
-`
-
-const WhiteArrowForwardIcon = styled(ArrowForwardIcon)`
-  fill: ${COLOR.light};
+const LoginIcon = styled(FontAwesomeIcon)`
   margin-left: 6px;
-  margin-bottom: 1px;
+  margin-top: 1px;
+  color: ${COLOR.light};
 `
-
-const BorderColorIcon = styled(BorderColorOutlinedIcon)`
-  fill: ${COLOR.light} !important;
+const SaveIcon = styled(FontAwesomeIcon)`
   margin-left: 6px;
-  margin-bottom: 1px;
-  font-size: large;
+  margin-top: 1px;
+  color: ${COLOR.light};
 `
 
-const LogoutColorIcon = styled(LogoutIcon)`
-  fill: ${COLOR.light} !important;
+const ArrowIcon = styled(FontAwesomeIcon)`
   margin-left: 6px;
-  margin-bottom: 1px;
-  font-size: large;
+  margin-top: 1px;
+  color: ${COLOR.light};
 `
-
-function ShoppingCarBtn({ color, children, buttonStyle, id, onClick }) {
+const EditIcon = styled(FontAwesomeIcon)`
+  margin-left: 6px;
+  margin-top: 1px;
+  color: ${COLOR.light};
+`
+const LogoutIcon = styled(FontAwesomeIcon)`
+  margin-left: 6px;
+  margin-top: 1px;
+  color: ${COLOR.light};
+`
+function ShoppingCarBtn({ id, color, children, buttonStyle, onClick }) {
   return (
     <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
-      <ShoppingCardIcon />
+      <ShoppingCardIcon icon={faShoppingCart} />
       {children}
     </ButtonStyle>
   )
 }
 
-function ShoppingCarWhiteBtn({ children, buttonStyle, id, onClick }) {
+function ShoppingCarWhiteBtn({ id, children, buttonStyle, onClick }) {
   return (
     <ButtonStyle id={id} color='white' style={buttonStyle} onClick={onClick}>
-      <ColorShoppingCardIcon />
+      <ColorShoppingCardIcon icon={faShoppingCart} />
       {children}
     </ButtonStyle>
   )
 }
 
-function ArrowBtn({ color, children, buttonStyle }) {
+function ArrowBtn({ id, color, children, buttonStyle, onClick }) {
   return (
-    <ButtonStyle color={color} style={buttonStyle}>
+    <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       {children}
-      <WhiteArrowForwardIcon />
+      <ArrowIcon icon={faArrowRight} />
     </ButtonStyle>
   )
 }
 
-function EditBtn({ color, children, buttonStyle }) {
+function LoginBtn({ id, color, children, buttonStyle, onClick }) {
   return (
-    <ButtonStyle color={color} style={buttonStyle}>
+    <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       {children}
-      <BorderColorIcon />
+      <LoginIcon icon={faSignInAlt} />
     </ButtonStyle>
   )
 }
 
-function LogoutBtn({ color, children, buttonStyle, onClick }) {
+function LogoutBtn({ id, color, children, buttonStyle, onClick }) {
   return (
-    <ButtonStyle color={color} style={buttonStyle} onClick={onClick}>
+    <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       {children}
-      <LogoutColorIcon />
+      <LogoutIcon icon={faSignOutAlt} />
     </ButtonStyle>
   )
 }
 
-// 加了 onClick 綁定點擊事件
-function GeneralBtn({ color, children, buttonStyle, id, onClick }) {
+function EditBtn({ id, color, children, buttonStyle, onClick }) {
   return (
-    <ButtonStyle color={color} style={buttonStyle} id={id} onClick={onClick}>
+    <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
+      {children}
+      <EditIcon icon={faEdit} />
+    </ButtonStyle>
+  )
+}
+
+function SaveBtn({ id, color, children, buttonStyle, onClick }) {
+  return (
+    <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
+      {children}
+      <SaveIcon icon={faSave} />
+    </ButtonStyle>
+  )
+}
+
+function GeneralBtn({ id, color, children, buttonStyle, onClick }) {
+  return (
+    <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       {children}
     </ButtonStyle>
   )
@@ -149,9 +174,11 @@ function GeneralBtn({ color, children, buttonStyle, id, onClick }) {
 
 export {
   ShoppingCarBtn,
-  ArrowBtn,
   EditBtn,
   GeneralBtn,
   ShoppingCarWhiteBtn,
-  LogoutBtn
+  LoginBtn,
+  LogoutBtn,
+  ArrowBtn,
+  SaveBtn
 }

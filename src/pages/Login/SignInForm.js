@@ -6,7 +6,7 @@ import {
   SendPassword,
   PasswordInput
 } from '../../components/loginSystem/loginCard'
-import { ArrowBtn } from '../../components/Button'
+import { LoginBtn } from '../../components/Button'
 import { useForm } from 'react-hook-form'
 import { signIn } from '../../webAPI/loginAPI'
 import { LoadingContext } from '../../context'
@@ -54,7 +54,7 @@ export default function SignInForm({
       </ErrorMsg>
 
       <SendPassword to='/'>忘記密碼?</SendPassword>
-      <ArrowBtn
+      <LoginBtn
         color='accent'
         children='登入'
         buttonStyle={{ marginTop: '20px' }}
