@@ -180,7 +180,8 @@ export function ProductUpInfoComponent({
 
   const handleChange = useCallback(
     (e) => {
-      const changeQuantity = e.target.value ? parseInt(e.target.value) : ''
+      const targetValue = parseInt(e.target.value.trim(' '))
+      const changeQuantity = targetValue ? targetValue : ''
       if (changeQuantity >= totalQuantity) {
         setQuantity((quantity) => totalQuantity)
         return setWarningMessage((warningMessage) => '已達商品數量上限')

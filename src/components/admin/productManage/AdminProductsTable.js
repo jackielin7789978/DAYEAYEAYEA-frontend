@@ -88,7 +88,8 @@ function TableItem({ product }) {
   )
 
   const handleChange = useCallback((e) => {
-    const changeQuantity = e.target.value ? parseInt(e.target.value) : ''
+    const targetValue = parseInt(e.target.value.trim(' '))
+    const changeQuantity = targetValue ? targetValue : ''
     changeQuantity && changeQuantity < 1
       ? setProductQuantity((productQuantity) => 1)
       : setProductQuantity((productQuantity) => changeQuantity)
