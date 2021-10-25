@@ -46,11 +46,6 @@ export const StepContent = styled.div`
     margin: 0px 10px;
   }
 `
-export const StepArrow = styled(FontAwesomeIcon)`
-  & path {
-    color: ${COLOR.text_primary_light};
-  }
-`
 export const Steps = () => {
   const location = useLocation()
   return (
@@ -59,12 +54,18 @@ export const Steps = () => {
         <StepTitle children={1} />
         <StepContent children={'購物車明細'} />
       </Step>
-      <StepArrow icon={faChevronRight} />
+      <FontAwesomeIcon
+        icon={faChevronRight}
+        color={`${COLOR.text_primary_light}`}
+      />
       <Step $active={location.pathname.includes('step2')}>
         <StepTitle children={2} />
         <StepContent children={'填寫寄送資料'} />
       </Step>
-      <StepArrow icon={faChevronRight} />
+      <FontAwesomeIcon
+        icon={faChevronRight}
+        color={`${COLOR.text_primary_light}`}
+      />
       <Step $active={location.pathname.includes('step3')}>
         <StepTitle children={3} />
         <StepContent children={'訂單完成'} />

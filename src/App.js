@@ -40,7 +40,7 @@ import {
 } from './context'
 import GlobalStyle from './constants/globalStyle'
 import jwt_decode from 'jwt-decode'
-import { getMe } from './webAPI/loginAPI'
+
 export default function App() {
   return (
     <Router basename='/'>
