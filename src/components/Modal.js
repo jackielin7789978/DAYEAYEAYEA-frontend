@@ -31,6 +31,7 @@ const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 
   ${MEDIA_QUERY.tablet} {
     height: 260px;
