@@ -11,7 +11,7 @@ import {
 } from '../../../components/admin/TableStyle'
 import { ADMIN_MEDIA_QUERY } from '../../../constants/style'
 import TableItem from '../../../components/admin/memberManage/TableItem'
-import { Search } from '../../../components/admin/memberManage/Search'
+// import { Search } from '../../../components/admin/memberManage/Search'
 import { getTokenFromLocalStorage } from '../../../utils'
 const PageWrapper = styled.div`
   height: 100vh;
