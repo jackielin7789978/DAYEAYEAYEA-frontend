@@ -76,9 +76,17 @@ const ImgInputContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  height: 100%;
+`
+const ImgInputOutContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
   height: 29%;
   margin-top: 20px;
 `
+
 const ImgContainer = styled.div`
   display: flex;
   width: 70%;
@@ -177,7 +185,7 @@ function ImgInputSet({ productImgUrl, span, id, require }) {
   }, [imgData, require])
 
   return (
-    <ImgInputContainer>
+    <ImgInputOutContainer>
       <ImgPreviewSet
         title='圖片預覽'
         imgUrl={productImgUrl.imgUrlMd}
@@ -220,7 +228,7 @@ function ImgInputSet({ productImgUrl, span, id, require }) {
         </ImgInputContainer>
         {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
       </ImgUrlSetContainer>
-    </ImgInputContainer>
+    </ImgInputOutContainer>
   )
 }
 

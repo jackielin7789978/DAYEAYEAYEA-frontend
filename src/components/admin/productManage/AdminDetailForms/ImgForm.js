@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useCallback, useState, useMemo } from 'react'
+import { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { FONT_SIZE, ADMIN_COLOR } from '../../../../constants/style'
@@ -12,7 +12,6 @@ import {
   InputTitle,
   ErrorMsg,
   ButtonForImgForm,
-  RequireMsg,
   FormTitleComponent
 } from '../FormStyle'
 
@@ -45,13 +44,27 @@ const ImgForm = styled(Form)`
   padding: 30px;
   height: 100%;
 `
+
+const ImgInputOutContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 29%;
+  margin-top: 20px;
+`
+
+const FormContentContainer = styled.div`
+  margin-top: 40px;
+  height: 100%;
+`
+
 const ImgPreviewContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   width: 22%;
   height: 100%;
-  margin-right: 5px;
 `
 const ImgUrlSetContainer = styled.div`
   display: flex;
@@ -64,7 +77,7 @@ const ImgUrlWithTitleContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin: 30px 5px 0px 0px;
+  margin: 43px 5px 0px 0px;
   width: 100%;
 `
 const SmallTitle = styled.div`
@@ -76,13 +89,12 @@ const ImgInputContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 29%;
-  margin-top: 20px;
+  height: 100%;
 `
 const ImgContainer = styled.div`
   display: flex;
-  width: 70%;
-  height: 60%;
+  width: 80%;
+  height: 75%;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -197,15 +209,14 @@ function ImgInputSet({ productImgUrl, span, formData, id, require }) {
   }, [imgData, productImgUrl, require])
 
   return (
-    <ImgInputContainer>
+    <ImgInputOutContainer>
       <ImgPreviewSet
         title='圖片預覽'
         imgUrl={productImgUrl.imgUrlMd}
       ></ImgPreviewSet>
       <ImgUrlSetContainer>
         <InputTitle>
-          圖片 URL
-          <RequireMsg>{span}</RequireMsg>
+          圖片 URL<span>{span}</span>
         </InputTitle>
         <ImgInputContainer>
           <ImgUrlWithTitle
@@ -243,7 +254,7 @@ function ImgInputSet({ productImgUrl, span, formData, id, require }) {
         </ImgInputContainer>
         {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
       </ImgUrlSetContainer>
-    </ImgInputContainer>
+    </ImgInputOutContainer>
   )
 }
 
@@ -262,8 +273,6 @@ export default function DetailImgForm({ product }) {
     }
   }, [product, Product_imgs])
 
-  console.log('state', Product_imgs)
-
   const handleLeaveClick = useCallback(
     (e) => {
       e.preventDefault()
@@ -275,7 +284,7 @@ export default function DetailImgForm({ product }) {
   return (
     <ImgForm>
       <FormTitleComponent title='商品圖片網址' />
-      <div style={{ marginTop: '40px', height: '100%' }}>
+      <FormContentContainer>
         <ImgInputSet
           span='* 必填欄位'
           id={productImgUrlOne.id}
@@ -293,7 +302,7 @@ export default function DetailImgForm({ product }) {
           productImgUrl={productImgUrlThree}
           formData={productImgUrlThree}
         />
-      </div>
+      </FormContentContainer>
       <ButtonForImgForm onLeaveClick={handleLeaveClick} />
     </ImgForm>
   )

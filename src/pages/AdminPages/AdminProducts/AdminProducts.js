@@ -15,6 +15,7 @@ import {
   searchProductsFromAdmin
 } from '../../../webAPI/adminProductsAPI'
 import { setAdminProductsPageInArray } from '../../../utils'
+import { AdminPageWidth } from '../../../components/general'
 
 const PageWrapper = styled.div`
   height: 100vh;
@@ -52,6 +53,7 @@ export default function AdminProducts() {
   const { page } = useParams()
   const keywords = useLocation().search
   const history = useHistory()
+  const location = useLocation()
   const productsPerPage = 10
   const perPageSliceStart = (Number(page) - 1) * productsPerPage
   const perPageSliceEnd = Number(page) * productsPerPage
@@ -85,37 +87,40 @@ export default function AdminProducts() {
   const handleDropDownChange = useCallback(
     (e) => {
       setCategoryFilter((categoryFilter) => e.target.value)
-      history.push('/admin/products/1')
+      if (location.pathname !== '/admin/products/1')
+        history.push('/admin/products/1')
     },
-    [history]
+    [history, location]
   )
 
   return (
-    <PageWrapper>
-      <SearchContainer>
-        <SearchSideContainer>
-          <Search />
-          <CategoryDropdown onChange={handleDropDownChange} />
-        </SearchSideContainer>
-        <SearchSideContainer>
-          <div style={{ width: '100px' }}>
-            <GeneralBtn color='admin_blue'>新增商品</GeneralBtn>
-          </div>
-        </SearchSideContainer>
-      </SearchContainer>
-      <Table products={showProductsByPage} />
-      <PaginatorDiv>
-        {pagesArray.map((pageValue) => {
-          return (
-            <PaginatorButton
-              key={pageValue}
-              page={pageValue}
-              to={`/admin/products/${pageValue}`}
-              active={pageValue === page}
-            ></PaginatorButton>
-          )
-        })}
-      </PaginatorDiv>
-    </PageWrapper>
+    <AdminPageWidth>
+      <PageWrapper>
+        <SearchContainer>
+          <SearchSideContainer>
+            <Search />
+            <CategoryDropdown onChange={handleDropDownChange} />
+          </SearchSideContainer>
+          <SearchSideContainer>
+            <div style={{ width: '100px' }}>
+              <GeneralBtn color='admin_blue'>新增商品</GeneralBtn>
+            </div>
+          </SearchSideContainer>
+        </SearchContainer>
+        <Table products={showProductsByPage} />
+        <PaginatorDiv>
+          {pagesArray.map((pageValue) => {
+            return (
+              <PaginatorButton
+                key={pageValue}
+                page={pageValue}
+                to={`/admin/products/${pageValue}`}
+                active={pageValue === page}
+              ></PaginatorButton>
+            )
+          })}
+        </PaginatorDiv>
+      </PageWrapper>
+    </AdminPageWidth>
   )
 }

@@ -29,9 +29,19 @@ const Input = styled.input`
 `
 const InputTitle = styled.div`
   display: flex;
+  height: 20xp;
   font-size: ${FONT_SIZE.md};
   margin-bottom: 10px;
   word-break: break-all;
+
+  & span {
+    margin-left: 10px;
+    margin-top: 3px;
+    color: ${ADMIN_COLOR.warning};
+    font-size: ${FONT_SIZE.xs};
+    font-weight: bold;
+    text-align: left;
+  }
 `
 const FormTitle = styled.div`
   font-size: ${FONT_SIZE.lg};
@@ -49,15 +59,6 @@ const ErrorMsg = styled.p`
   font-weight: bold;
   text-align: left;
 `
-const RequireMsg = styled.p`
-  margin-left: 10px;
-  margin-top: 3px;
-  color: ${ADMIN_COLOR.warning};
-  font-size: ${FONT_SIZE.xs};
-  font-weight: bold;
-  text-align: left;
-`
-
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -129,17 +130,14 @@ const DropdownStyle = styled.select`
   }
 `
 
-function Dropdown({
-  onChange,
-  dropdownTitle,
-  valueArray,
-  value,
-  productValue,
-  disabled,
-  name
-}) {
+function Dropdown({ onChange, valueArray, productValue, disabled, name }) {
   return (
-    <DropdownStyle name={name} id='filter' onChange={onChange}>
+    <DropdownStyle
+      name={name}
+      id='filter'
+      onChange={onChange}
+      value={productValue}
+    >
       {valueArray.map((value) => {
         let isSelected = productValue === value ? true : false
         return (
@@ -245,7 +243,6 @@ export {
   Input,
   InputTitle,
   ErrorMsg,
-  RequireMsg,
   FormTitle,
   FormTitleBorder,
   FormTitleComponent,

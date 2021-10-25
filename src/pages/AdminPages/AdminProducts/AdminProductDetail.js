@@ -6,6 +6,7 @@ import ImgForm from '../../../components/admin/productManage/AdminDetailForms/Im
 import DescForm from '../../../components/admin/productManage/AdminDetailForms/DescForm'
 import InfoForm from '../../../components/admin/productManage/AdminDetailForms/InfoForm'
 import { getProductById } from '../../../webAPI/adminProductsAPI'
+import { AdminPageWidth } from '../../../components/general'
 
 export default function AdminProductDetail() {
   const [productDetail, setProductDetail] = useState([])
@@ -19,16 +20,18 @@ export default function AdminProductDetail() {
   }, [id])
 
   return (
-    <FormWrapper>
-      <Tabs
-        tabs={['商品圖片', '商品敘述', '商品資訊']}
-        tabsPanel={[
-          <ImgForm product={productDetail} />,
-          <DescForm product={productDetail} />,
-          <InfoForm product={productDetail} />
-        ]}
-        presetTab={0}
-      ></Tabs>
-    </FormWrapper>
+    <AdminPageWidth>
+      <FormWrapper>
+        <Tabs
+          tabs={['商品圖片', '商品敘述', '商品資訊']}
+          tabsPanel={[
+            <ImgForm product={productDetail} />,
+            <DescForm product={productDetail} />,
+            <InfoForm product={productDetail} />
+          ]}
+          presetTab={0}
+        ></Tabs>
+      </FormWrapper>
+    </AdminPageWidth>
   )
 }
