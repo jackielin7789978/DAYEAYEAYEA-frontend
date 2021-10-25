@@ -3,7 +3,7 @@ import { ADMIN_COLOR, COLOR, FONT_SIZE } from '../../../constants/style'
 import { EditBtn, LogoutBtn, SaveBtn } from '../../../components/Button'
 
 const FormWrapper = styled.div`
-  min-height: 900px;
+  min-height: 850px;
   height: 100%;
   transition: 1.5s;
   width: 90%;
@@ -31,13 +31,14 @@ const InputTitle = styled.div`
   display: flex;
   font-size: ${FONT_SIZE.md};
   margin-bottom: 10px;
+  word-break: break-all;
 `
 const FormTitle = styled.div`
   font-size: ${FONT_SIZE.lg};
   color: ${ADMIN_COLOR.table_blue};
-  margin-bottom: 10px;
 `
 const FormTitleBorder = styled.div`
+  margin-top: 5px;
   border-top: 1px solid ${ADMIN_COLOR.border_grey};
 `
 
@@ -102,18 +103,61 @@ function ButtonGroup({
   )
 }
 
+function FormTitleComponent({ title }) {
+  return (
+    <FormTitle>
+      {title}
+      <FormTitleBorder />
+    </FormTitle>
+  )
+}
+
 //InfoForm
+const SelectedComponent = styled.div`
+  width: 33%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+`
 const DropdownStyle = styled.select`
   width: 200px;
   padding: 8px;
+  margin-top: 3px;
   border: 1px solid ${ADMIN_COLOR.border_grey};
-  margin-left: 12px;
   &:focus {
     border: 1px solid ${ADMIN_COLOR.border_dark_grey};
   }
 `
 
-function Dropdown({ onChange, dropdownTitle, valueArray }) {
+function Dropdown({
+  onChange,
+  dropdownTitle,
+  valueArray,
+  value,
+  productValue,
+  disabled,
+  name
+}) {
+  return (
+    <DropdownStyle name={name} id='filter' onChange={onChange}>
+      {valueArray.map((value) => {
+        let isSelected = productValue === value ? true : false
+        return (
+          <option
+            key={value}
+            value={value}
+            selected={isSelected}
+            disabled={disabled}
+          >
+            {value}
+          </option>
+        )
+      })}
+    </DropdownStyle>
+  )
+}
+
+function ForNewDropdown({ onChange, dropdownTitle, valueArray, productValue }) {
   return (
     <DropdownStyle
       name='filter'
@@ -125,11 +169,75 @@ function Dropdown({ onChange, dropdownTitle, valueArray }) {
         {dropdownTitle}
       </option>
       {valueArray.map((value) => {
-        return <option value={value}>{value}</option>
+        return (
+          <option key={value} value={value}>
+            {value}
+          </option>
+        )
       })}
     </DropdownStyle>
   )
 }
+
+const PriceInputContainer = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+`
+
+const InputMark = styled.div`
+  width: 12%;
+  padding: 3px;
+  border-radius: 3px 0px 0px 3px;
+  text-align: center;
+  border: solid 1px ${ADMIN_COLOR.border_grey} !important;
+  border-right: none !important;
+  background-color: ${ADMIN_COLOR.light_grey};
+`
+
+const PriceInputStyle = styled.input`
+  display: block;
+  width: 53%;
+  padding: 3px;
+  border-radius: 0px 3px 3px 0px;
+  border: solid 1px ${ADMIN_COLOR.border_grey};
+  ::placeholder {
+    color: ${COLOR.text_placeholder};
+  }
+  &:focus {
+    border: solid 1px ${ADMIN_COLOR.border_grey};
+  }
+`
+
+function PriceInput({ value, onChange, onBlur, name, disabled }) {
+  return (
+    <PriceInputContainer>
+      <InputMark style={{ border: '1px solid gray' }}>$</InputMark>
+      <PriceInputStyle
+        type='text'
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        name={name}
+        disabled={disabled}
+      ></PriceInputStyle>
+    </PriceInputContainer>
+  )
+}
+
+const QuantityInputStyle = styled.input`
+  display: block;
+  width: 22%;
+  padding: 3px;
+  border-radius: 0px 3px 3px 0px;
+  border: solid 1px ${ADMIN_COLOR.border_grey};
+  ::placeholder {
+    color: ${COLOR.text_placeholder};
+  }
+  &:focus {
+    border: solid 1px ${ADMIN_COLOR.border_grey};
+  }
+`
 
 export {
   FormWrapper,
@@ -140,7 +248,12 @@ export {
   RequireMsg,
   FormTitle,
   FormTitleBorder,
+  FormTitleComponent,
   Dropdown,
+  ForNewDropdown,
   ButtonGroup,
-  ButtonForImgForm
+  ButtonForImgForm,
+  PriceInput,
+  SelectedComponent,
+  QuantityInputStyle
 }

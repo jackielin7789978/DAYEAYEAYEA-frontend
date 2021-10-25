@@ -1,8 +1,5 @@
-import styled from 'styled-components'
-// import { ADMIN_COLOR, COLOR, FONT_SIZE } from '../../../constants/style'
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-
 import { Tabs } from '../../../components/admin/productManage/Tab'
 import { FormWrapper } from '../../../components/admin/productManage/FormStyle'
 import ImgForm from '../../../components/admin/productManage/AdminDetailForms/ImgForm'
@@ -13,10 +10,13 @@ import { getProductById } from '../../../webAPI/adminProductsAPI'
 export default function AdminProductDetail() {
   const [productDetail, setProductDetail] = useState([])
   const { id } = useParams()
+
   useEffect(() => {
-    getProductById(id).then((result) => setProductDetail(result.data))
+    getProductById(id).then((result) => {
+      const data = JSON.parse(JSON.stringify(result.data))
+      setProductDetail(() => data)
+    })
   }, [id])
-  console.log(productDetail)
 
   return (
     <FormWrapper>

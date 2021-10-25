@@ -5,8 +5,8 @@ import {
   changeProductStatus,
   changeProductQuantity
 } from '../../../webAPI/adminProductsAPI'
-import { GeneralBtn } from '../../../components/Button'
-import { ItemCounter } from '../../../components/Counter'
+import { GeneralBtn } from '../../Button'
+import { ItemCounter } from '../../Counter'
 import {
   Wrapper,
   ColumnHeader,

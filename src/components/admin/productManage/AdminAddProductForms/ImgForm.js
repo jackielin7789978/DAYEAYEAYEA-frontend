@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useCallback, useState, useMemo } from 'react'
+import { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { FONT_SIZE, ADMIN_COLOR } from '../../../../constants/style'
@@ -111,16 +111,12 @@ function ImgPreviewSet({ title, imgUrl }) {
 function ImgUrlWithTitle({
   title,
   name,
-  imgUrl,
   placeholder,
   disabled,
   formData,
   setFormData
 }) {
   const [inputValue, setInputValue] = useState('')
-  useEffect(() => {
-    if (imgUrl) setInputValue((inputValue) => imgUrl)
-  }, [imgUrl])
 
   const handleOnChange = (e) => {
     const targetValue = e.target.value.trim(' ')
@@ -154,20 +150,11 @@ function ImgUrlWithTitle({
   )
 }
 
-function ImgInputSet({ productImgUrl, span, formData, id, require }) {
+function ImgInputSet({ productImgUrl, span, id, require }) {
   const [isDisabled, setIsDisabled] = useState(true)
   const [buttonStatus, setButtonStatus] = useState('edit')
   const [errorMsg, setErrorMsg] = useState('')
   const [imgData, setImgData] = useState({})
-  const getImgData = (formData) => {
-    delete formData.id
-    delete formData.createdAt
-    delete formData.updatedAt
-    return formData
-  }
-  useEffect(() => {
-    setImgData((imgData) => getImgData(formData))
-  }, [formData])
 
   const handleEditClick = useCallback(() => {
     setIsDisabled((isDisabled) => !isDisabled)
@@ -177,24 +164,17 @@ function ImgInputSet({ productImgUrl, span, formData, id, require }) {
   // fix
   const handleCheckClick = useCallback(() => {
     const length = Object.keys(imgData).length
-    if (length === 1) {
-      if (require) {
-        return setErrorMsg((errorMsg) => '此欄位為必填欄位')
-      }
-      //刪除圖片API
-    }
+    if (length === 1 && require)
+      return setErrorMsg((errorMsg) => '此欄位為必填欄位')
+
     if (length !== 1 && length !== 4) {
       return setErrorMsg((errorMsg) => '請完整填入三張圖片')
     }
-    if (Object.keys(productImgUrl).length === 0) {
-      //新增圖片 API
-    } else {
-      // changeProductImgById(id, imgData)
-    }
+    //新增圖片 API
     setErrorMsg((errorMsg) => '')
     setIsDisabled((isDisabled) => !isDisabled)
     setButtonStatus((buttonStatus) => 'edit')
-  }, [imgData, productImgUrl, require])
+  }, [imgData, require])
 
   return (
     <ImgInputContainer>
@@ -211,7 +191,6 @@ function ImgInputSet({ productImgUrl, span, formData, id, require }) {
           <ImgUrlWithTitle
             title='Small Size'
             name='imgUrlSm'
-            imgUrl={productImgUrl.imgUrlSm}
             placeholder='small-size ImgURL'
             formData={imgData}
             setFormData={setImgData}
@@ -220,7 +199,6 @@ function ImgInputSet({ productImgUrl, span, formData, id, require }) {
           <ImgUrlWithTitle
             title='Medium Size'
             name='imgUrlMd'
-            imgUrl={productImgUrl.imgUrlMd}
             placeholder='medium-size ImgURL'
             formData={imgData}
             setFormData={setImgData}
@@ -229,7 +207,6 @@ function ImgInputSet({ productImgUrl, span, formData, id, require }) {
           <ImgUrlWithTitle
             title='Large Size'
             name='imgUrlLg'
-            imgUrl={productImgUrl.imgUrlLg}
             placeholder='large-size ImgURL'
             formData={imgData}
             setFormData={setImgData}
@@ -247,22 +224,8 @@ function ImgInputSet({ productImgUrl, span, formData, id, require }) {
   )
 }
 
-export default function DetailImgForm({ product }) {
-  const { Product_imgs } = product
-  const [productImgUrlOne, setProductImgUrlOne] = useState({})
-  const [productImgUrlTwo, setProductImgUrlTwo] = useState({})
-  const [productImgUrlThree, setProductImgUrlThree] = useState({})
+export default function DetailImgForm() {
   const history = useHistory()
-
-  useEffect(() => {
-    if (Product_imgs) {
-      setProductImgUrlOne(Product_imgs[0])
-      setProductImgUrlTwo(Product_imgs[1] || {})
-      setProductImgUrlThree(Product_imgs[2] || {})
-    }
-  }, [product, Product_imgs])
-
-  console.log('state', Product_imgs)
 
   const handleLeaveClick = useCallback(
     (e) => {
@@ -276,23 +239,9 @@ export default function DetailImgForm({ product }) {
     <ImgForm>
       <FormTitleComponent title='商品圖片網址' />
       <div style={{ marginTop: '40px', height: '100%' }}>
-        <ImgInputSet
-          span='* 必填欄位'
-          id={productImgUrlOne.id}
-          require='true'
-          productImgUrl={productImgUrlOne}
-          formData={productImgUrlOne}
-        />
-        <ImgInputSet
-          id={productImgUrlTwo.id}
-          productImgUrl={productImgUrlTwo}
-          formData={productImgUrlTwo}
-        />
-        <ImgInputSet
-          id={productImgUrlThree.id}
-          productImgUrl={productImgUrlThree}
-          formData={productImgUrlThree}
-        />
+        <ImgInputSet span='* 必填欄位' require='true' />
+        <ImgInputSet />
+        <ImgInputSet />
       </div>
       <ButtonForImgForm onLeaveClick={handleLeaveClick} />
     </ImgForm>

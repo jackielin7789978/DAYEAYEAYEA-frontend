@@ -10,7 +10,7 @@ import {
   FormTitleComponent,
   ButtonGroup,
   ErrorMsg
-} from '../FormStyle'
+} from '../../../../components/admin/productManage/FormStyle'
 
 const DescInput = styled(Input)`
   margin-top: 8px;
@@ -68,7 +68,7 @@ export default function DetailDescForm({ product }) {
 
   const handleOnBlur = useCallback((e) => {
     const targetName = e.target.name
-    const targetValue = e.target.value.trim(' ')
+    const targetValue = e.target.value
     const errMsg = '此欄位不得為空'
     targetValue ? setIsValid(true) : setIsValid(false)
     if (targetName === 'name') {
@@ -90,8 +90,7 @@ export default function DetailDescForm({ product }) {
     [history]
   )
 
-  const handleEditClick = useCallback((e) => {
-    e.preventDefault()
+  const handleEditClick = useCallback(() => {
     setIsDisabled((isDisabled) => !isDisabled)
     setButtonStatus((buttonStatus) => 'save')
   }, [])
