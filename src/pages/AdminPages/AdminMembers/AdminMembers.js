@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import { useHistory } from 'react-router'
-import jwt_decode from 'jwt-decode'
 import { getAllMembers } from '../../../webAPI/adminMembersAPI'
 import {
   Wrapper,
@@ -11,8 +10,8 @@ import {
 } from '../../../components/admin/TableStyle'
 import { ADMIN_MEDIA_QUERY } from '../../../constants/style'
 import TableItem from '../../../components/admin/memberManage/TableItem'
-// import { Search } from '../../../components/admin/memberManage/Search'
-import { getTokenFromLocalStorage } from '../../../utils'
+import { Search } from '../../../components/admin/memberManage/Search'
+import AdminMemberDetail from '../../../components/admin/memberManage/AdminMemberDetail'
 const PageWrapper = styled.div`
   height: 100vh;
   display: flex;
@@ -40,22 +39,53 @@ const RestyleHeader = styled(Header)`
 `
 const headerNames = ['帳號名稱', 'Email', '訂單數', '消費總金額', 'Edit']
 export default function AdminMembers() {
-  const location = useHistory()
   const [members, setMembers] = useState(() => {
     ;(async () => {
       const result = await getAllMembers()
       setMembers(result.data)
     })()
   })
+  let { id } = useParams()
+  const [member, setMember] = useState()
   useEffect(() => {
-    let localToken = getTokenFromLocalStorage()
-    if (!localToken) return location.push('/admin/login')
-    let decoded = jwt_decode(localToken)
-    return decoded.id ? location.push('/admin/login') : ''
-  }, [location])
+    id
+      ? setMember(
+          () =>
+            members && members.filter((member) => member.id === Number(id))[0]
+        )
+      : setMember(null)
+  }, [id, members])
   return (
-    <>
-      <div>AdminMembers</div>
-    </>
+    <PageWrapper>
+      {!member && (
+        <SearchContainer>
+          <Search />
+        </SearchContainer>
+      )}
+      <Wrapper>
+        {member && <AdminMemberDetail member={member} $setMember={setMember} />}
+        {!member && (
+          <>
+            <ColumnHeader>
+              {headerNames.map((name) => (
+                <RestyleHeader key={name} $name={name}>
+                  {name}
+                </RestyleHeader>
+              ))}
+            </ColumnHeader>
+            <TableItemContainer>
+              {members &&
+                members.map((member) => (
+                  <TableItem
+                    key={member.id}
+                    member={member}
+                    $setMember={setMember}
+                  />
+                ))}
+            </TableItemContainer>
+          </>
+        )}
+      </Wrapper>
+    </PageWrapper>
   )
 }

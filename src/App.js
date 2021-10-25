@@ -92,7 +92,7 @@ function AdminRoutes() {
         <Route path={'/admin/orders'}>
           {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
         </Route>
-        <Route path={'/admin/members'}>
+        <Route path={['/admin/members/:id', '/admin/members']}>
           {user ? <AdminMembers /> : <Redirect to='/admin/login' />}
         </Route>
       </Switch>
@@ -106,24 +106,16 @@ function Shop() {
     JSON.parse(getItemsFromLocalStorage())
   )
 
-  const isTokenExpired = (token) => {
-    try {
-      return jwt_decode(token)
-      // const _info = jwt_decode(token)
-      // if (_info.exp < Date.now() / 1000) {
-      //   return true
-      // } else return false
-    } catch (error) {
-      return false
-    }
-  }
-
   const [user, setUser] = useState()
   useEffect(() => {
-    let localToken = getTokenFromLocalStorage()
-    if (!localToken) return false
-    let decoded = isTokenExpired(localToken)
-    return decoded.id ? setUser(decoded) : setUser(null)
+    if (!getTokenFromLocalStorage()) return false
+    try {
+      const _info = jwt_decode(getTokenFromLocalStorage())
+      if (_info.hasOwnProperty('id')) return setUser(_info)
+      return setUser(null)
+    } catch (error) {
+      return setUser(null)
+    }
   }, [])
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)

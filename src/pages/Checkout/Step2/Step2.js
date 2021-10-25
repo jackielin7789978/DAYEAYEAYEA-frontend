@@ -57,7 +57,6 @@ export default function Step2() {
         .reduce((total, num) => total + num) + 80
     )
   }, [cartItems])
-  console.log(subTotal)
   const onSubmit = async (submitData) => {
     const orderItem = cartItems.map((item) => ({
       productId: item.id,
