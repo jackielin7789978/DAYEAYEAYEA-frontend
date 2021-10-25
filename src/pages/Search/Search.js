@@ -75,6 +75,10 @@ export default function Search() {
 
   useEffect(() => {
     setIsLoading((isLoading) => true)
+    if (!keywordString) {
+      setSearchResult([])
+      return setIsLoading((isLoading) => false)
+    }
     getProductByKeywords(keywords).then((result) => {
       if (result.ok === 0) {
         history.push('/404')
@@ -83,7 +87,7 @@ export default function Search() {
       setSearchResult(result.data)
       setIsLoading((isLoading) => false)
     })
-  }, [setIsLoading, history, keywords])
+  }, [setIsLoading, history, keywords, keywordString])
   const SearchProductsAmount = searchResult.length
   const { totalPage, pagesArray } = setSearchPageInArray(SearchProductsAmount)
 

@@ -54,12 +54,12 @@ export const countWhiteCardAmount = (length, page, isDesktop) => {
   return whiteCardAmountArray
 }
 
-export const setPageInArray = (totalPageNum) => {
-  const pagesArray = []
-  for (let i = 1; i <= totalPageNum; i++) {
-    pagesArray.push(i)
+export const setNumInArray = (num) => {
+  const NumArray = []
+  for (let i = 1; i <= num; i++) {
+    NumArray.push(i)
   }
-  return pagesArray
+  return NumArray
 }
 
 export const setSearchPageInArray = (totalNum) => {
@@ -90,3 +90,5 @@ export const formatPrice = (cents) => {
     })
     .replace('.00', '')
 }
+
+export const multiplyPrice = (quantity, price) => quantity * price

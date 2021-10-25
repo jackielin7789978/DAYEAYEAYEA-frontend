@@ -1,57 +1,71 @@
 const BASE_URL = 'https://api.coolizz.tw'
 
 export const getAllProducts = async () => {
-  return await fetch(`${BASE_URL}/products`)
-    .then((res) => res.json())
-    .catch((err) => {
-      console.log(err.toString())
-    })
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/products`)
+  } catch (e) {
+    console.log(e)
+  }
+  return await res.json()
 }
 
 export const getCategoryProducts = async (category) => {
-  return await fetch(`${BASE_URL}/products/category/${category}`)
-    .then((res) => res.json())
-    .catch((err) => {
-      console.log(err.toString())
-    })
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/products/category/${category}`)
+  } catch (e) {
+    console.log(e)
+  }
+  return await res.json()
 }
 
 export const getAllProductsByPage = async (page) => {
-  return await fetch(`${BASE_URL}/products/page/${page}`)
-    .then((res) => res.json())
-    .catch((err) => {
-      console.log(err.toString())
-    })
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/products/page/${page}`)
+  } catch (e) {
+    console.log(e)
+  }
+  return await res.json()
 }
 
 export const getCategoryProductsByPage = async (category, page) => {
-  return await fetch(`${BASE_URL}/products/category/${category}/${page}`)
-    .then((res) => res.json())
-    .catch((err) => {
-      console.log(err.toString())
-    })
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/products/category/${category}/${page}`)
+  } catch (e) {
+    console.log(e)
+  }
+  return await res.json()
 }
 
 export const getProductById = async (id) => {
-  return await fetch(`${BASE_URL}/products/${id}`)
-    .then((res) => res.json())
-    .catch((err) => {
-      console.log(err.toString())
-    })
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/products/${id}`)
+  } catch (e) {
+    console.log(e)
+  }
+  return await res.json()
 }
 
 export const getProductByArticle = async (articleSort, page) => {
-  return await fetch(`${BASE_URL}/products/article/${articleSort}/${page}`)
-    .then((res) => res.json())
-    .catch((err) => {
-      console.log(err.toString())
-    })
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/products/article/${articleSort}/${page}`)
+  } catch (e) {
+    console.log(e)
+  }
+  return await res.json()
 }
 
 export const getProductByKeywords = async (keywords) => {
-  return await fetch(`${BASE_URL}/products/${keywords}`)
-    .then((res) => res.json())
-    .catch((err) => {
-      console.log(err.toString())
-    })
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/products/${keywords}`)
+  } catch (e) {
+    console.log(e)
+  }
+  return await res.json()
 }

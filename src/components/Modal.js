@@ -31,6 +31,7 @@ const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 
   ${MEDIA_QUERY.tablet} {
     height: 260px;
@@ -54,6 +55,7 @@ const ModalBtnDiv = styled.div`
 
 const ModalContentDiv = styled.div`
   word-wrap: break-word;
+  text-align: center;
 `
 
 const CancelRoundedColorIcon = styled(CancelRoundedIcon)`

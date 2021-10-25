@@ -26,7 +26,7 @@ export const getAllOrders = async () => {
   const token = getTokenFromLocalStorage()
   let res
   try {
-    res = await fetch(`${BASE_URL}/orders`, {
+    res = await fetch(`${BASE_URL}/orders/active`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -35,15 +35,15 @@ export const getAllOrders = async () => {
     })
     return await res.json()
   } catch (e) {
-    return console.log(e)
+    console.log(e)
   }
 }
 
-export const getOrder = async (id) => {
+export const getOrder = async (ticketNo) => {
   const token = getTokenFromLocalStorage()
   let res
   try {
-    res = await fetch(`${BASE_URL}/orders/${id}`, {
+    res = await fetch(`${BASE_URL}/orders/${ticketNo}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -52,6 +52,23 @@ export const getOrder = async (id) => {
     })
     return await res.json()
   } catch (e) {
-    return console.log(res.message)
+    console.log(res.message)
+  }
+}
+
+export const updateOrderStatus = async (ticketNo, status) => {
+  const token = getTokenFromLocalStorage()
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/orders/${ticketNo}/${status}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return await res.json()
+  } catch (e) {
+    console.log(res.message)
   }
 }

@@ -13,7 +13,7 @@ import {
   ProductCard,
   WhiteCard
 } from '../../components/productSystem/ProductCard'
-import { countWhiteCardAmount, setPageInArray } from '../../utils'
+import { countWhiteCardAmount, setNumInArray } from '../../utils'
 import { PaginatorButton } from '../../components/Paginator'
 import { FullModal } from '../../components/Modal'
 
@@ -45,7 +45,7 @@ export default function Categories() {
         history.push('/404')
         return setIsLoading(false)
       }
-      setTotalPage((totalPage) => setPageInArray(result.totalPage))
+      setTotalPage((totalPage) => setNumInArray(result.totalPage))
       setProducts(result.data)
       setIsLoading((isLoading) => false)
     },

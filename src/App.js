@@ -13,16 +13,16 @@ import {
   Me,
   Products,
   NotFound
-} from './pages/index'
-import AdminLogin from './pages/AdminPages/AdminLogin'
-import { AdminOrders, AdminOrderDetail } from './pages/AdminPages/AdminOrders'
-import AdminProducts from './pages/AdminPages/AdminProducts'
+} from './pages'
 import {
+  AdminLogin,
+  AdminOrders,
+  AdminProducts,
   AdminMembers,
-  AdminMemberDetail
-} from './pages/AdminPages/AdminMembers'
+  AdminProductDetail
+} from './pages/AdminPages'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
-import { PageHeight, AdminPageWidth } from './components/general'
+import { PageHeight } from './components/general'
 import {
   HashRouter as Router,
   Route,
@@ -76,27 +76,26 @@ function AdminRoutes() {
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <AdminPageWidth>
-        <Switch>
-          <Route path={'/admin/login'}>
-            {user ? <Redirect to='/admin/orders' /> : <AdminLogin />}
-          </Route>
-          <Route path={'/admin/orders/:slug'}>
-            {user ? <AdminOrderDetail /> : <Redirect to='/admin/login' />}
-          </Route>
-          <Route path={'/admin/orders'}>
-            {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
-          </Route>
-          <Route
-            path={'/admin/products/:slug/:page'}
-            component={AdminProducts}
-          />
-          <Route path={'/admin/products'} component={AdminProducts} />
-          <Route path={'/admin/members'}>
-            {user ? <AdminMembers /> : <Redirect to='/admin/login' />}
-          </Route>
-        </Switch>
-      </AdminPageWidth>
+      <Switch>
+        <Route path={'/admin/login'}>
+          {user ? <Redirect to='/admin/orders' /> : <AdminLogin />}
+        </Route>
+        <Route path={'/admin/orders'}>
+          {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
+        </Route>
+        <Route path={'/admin/products/detail/:id'}>
+          {user ? <AdminProductDetail /> : <Redirect to='/admin/login' />}
+        </Route>
+        <Route path={'/admin/products/:page'}>
+          {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
+        </Route>
+        <Route path={'/admin/orders'}>
+          {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
+        </Route>
+        <Route path={'/admin/members'}>
+          {user ? <AdminMembers /> : <Redirect to='/admin/login' />}
+        </Route>
+      </Switch>
     </UserContext.Provider>
   )
 }

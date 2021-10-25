@@ -39,7 +39,7 @@ const RestyleHeader = styled(Header)`
   width: ${({ $name }) => $name === '訂單編號' && '26%'};
 `
 const headerNames = ['帳號名稱', 'Email', '訂單數', '消費總金額', 'Edit']
-export function AdminMembers() {
+export default function AdminMembers() {
   const location = useHistory()
   const [members, setMembers] = useState(() => {
     ;(async () => {
