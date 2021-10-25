@@ -12,7 +12,6 @@ import {
 import TableItem from '../../../components/admin/orderManage/TableItem'
 
 const PageWrapper = styled.div`
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -41,7 +40,6 @@ const headerNames = ['訂單狀態', '訂單編號', 'Email', '訂單金額', 'E
 export default function AdminOrders() {
   const [orders, setOrders] = useState([])
   const [filter, setFilter] = useState('所有訂單')
-
   const handleFilter = (name) => {
     setFilter(name)
   }

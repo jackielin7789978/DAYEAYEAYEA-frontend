@@ -11,9 +11,6 @@ import {
   Home,
   Login,
   Me,
-  ModifyInfo,
-  OrderDetail,
-  Orders,
   Products,
   NotFound
 } from './pages/index'
@@ -23,13 +20,15 @@ import {
   AdminProductDetail,
   AdminProducts
 } from './pages/AdminPages/AdminProducts'
+import AdminMembers from './pages/AdminPages/AdminMembers'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
-import { PageHeight, AdminPageWidth } from './components/general'
+import { PageHeight } from './components/general'
 import {
   HashRouter as Router,
   Route,
   Switch,
-  useRouteMatch
+  useRouteMatch,
+  Redirect
 } from 'react-router-dom'
 import {
   ScrollToTop,
@@ -43,8 +42,8 @@ import {
   LocalStorageContext,
   UserContext
 } from './context'
-import { getMe } from './webAPI/loginAPI'
 import GlobalStyle from './constants/globalStyle'
+import jwt_decode from 'jwt-decode'
 
 export default function App() {
   return (
@@ -60,27 +59,44 @@ export default function App() {
 }
 
 function AdminRoutes() {
-  const { path } = useRouteMatch()
+  const [user, setUser] = useState(() => {
+    if (!getTokenFromLocalStorage()) return false
+    // 尚未加上時效驗證
+    try {
+      const _info = jwt_decode(getTokenFromLocalStorage())
+      if (_info.hasOwnProperty('role')) {
+        return true
+      } else {
+        return false
+      }
+    } catch (error) {
+      return false
+    }
+  })
 
   return (
-    <Switch>
-      <AdminPageWidth>
-        <Route exact path={`${path}/login`} component={AdminLogin} />
-        <Route path={`${path}/orders/:id`} component={AdminOrderDetail} />
-        <Route exact path={`${path}/orders`} component={AdminOrders} />
-        <Route
-          path={`${path}/products/detail/:id`}
-          component={AdminProductDetail}
-        />
-        <Route
-          exact
-          path={`${path}/products/:page`}
-          component={AdminProducts}
-        />
-        {/* 以下尚未 import */}
-        {/* <Route path={`${path}/members`} component={AdminMembers} /> */}
-      </AdminPageWidth>
-    </Switch>
+    <UserContext.Provider value={{ user, setUser }}>
+      <Switch>
+        <Route path={'/admin/login'}>
+          {user ? <Redirect to='/admin/orders' /> : <AdminLogin />}
+        </Route>
+        <Route path={'/admin/orders/:slug'}>
+          {user ? <AdminOrderDetail /> : <Redirect to='/admin/login' />}
+        </Route>
+        <Route path={'/admin/orders'}>
+          {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
+        </Route>
+        <Route path={'/admin/products/:page'}>
+          {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
+        </Route>
+        <Route path={'/admin/products/products/detail/:id'}>
+          {user ? <AdminProductDetail /> : <Redirect to='/admin/login' />}
+        </Route>
+        <Route path={'/admin/members'}>
+          {user ? <AdminMembers /> : <Redirect to='/admin/login' />}
+        </Route>
+      </Switch>
+    </UserContext.Provider>
   )
 }
 function Shop() {
@@ -90,21 +106,28 @@ function Shop() {
     JSON.parse(getItemsFromLocalStorage())
   )
 
-  const [user, setUser] = useState(() => {
-    const localToken = getTokenFromLocalStorage()
-    return localToken
-      ? getMe().then((res) => {
-          if (res.ok) {
-            setUser(res.data)
-          }
-        })
-      : null
-  })
+  const isTokenExpired = (token) => {
+    try {
+      return jwt_decode(token)
+      // const _info = jwt_decode(token)
+      // if (_info.exp < Date.now() / 1000) {
+      //   return true
+      // } else return false
+    } catch (error) {
+      return false
+    }
+  }
 
+  const [user, setUser] = useState()
+  useEffect(() => {
+    let localToken = getTokenFromLocalStorage()
+    if (!localToken) return false
+    let decoded = isTokenExpired(localToken)
+    return decoded.id ? setUser(decoded) : setUser(null)
+  }, [])
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
   }, [setIsModalOpen])
-
   const totalPrice = useMemo(() => {
     if (!cartItems) return
     let sum = 0
@@ -207,7 +230,7 @@ function CheckoutRoutes() {
     <Switch>
       <Route path={`${path}/step1`} component={Step1} />
       <Route path={`${path}/step2`} component={Step2} />
-      <Route path={`${path}/step3`} component={Step3} />
+      <Route path={`${path}/step3/:ticket`} component={Step3} />
     </Switch>
   )
 }
@@ -216,9 +239,9 @@ function MemberRoutes() {
   return (
     <Switch>
       <Route path={`${path}/me`} component={Me} />
-      <Route path={`${path}/modify-info`} component={ModifyInfo} />
-      <Route path={`${path}/orders/order-detail`} component={OrderDetail} />
-      <Route path={`${path}/orders`} component={Orders} />
+      <Route path={`${path}/modify-info`} component={Me} />
+      <Route path={`${path}/orders/order-detail`} component={Me} />
+      <Route path={`${path}/orders`} component={Me} />
     </Switch>
   )
 }

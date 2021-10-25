@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import RemoveIcon from '@mui/icons-material/Remove'
-import AddIcon from '@mui/icons-material/Add'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 
 const Counter = styled.div`
   display: flex;
@@ -33,7 +33,10 @@ export const ItemCounter = ({
 }) => {
   return (
     <Counter style={marginStyle}>
-      <RemoveIcon onClick={() => handleCount('decrement', targetId)} />
+      <FontAwesomeIcon
+        icon={faMinus}
+        onClick={() => handleCount('decrement', targetId)}
+      />
       <Number
         id={targetId}
         type='number'
@@ -41,7 +44,10 @@ export const ItemCounter = ({
         onChange={handleChange}
         onBlur={handleOnBlur}
       />
-      <AddIcon onClick={() => handleCount('increment', targetId)} />
+      <FontAwesomeIcon
+        icon={faPlus}
+        onClick={() => handleCount('increment', targetId)}
+      />
     </Counter>
   )
 }

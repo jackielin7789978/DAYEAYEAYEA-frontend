@@ -11,9 +11,14 @@ export const signIn = async (username, password) => {
       })
     }).then((res) => res.json())
   } catch (e) {
-    console.log(e)
+    console.log(e.toString())
   }
 }
+
+// const XX= await fetch(XXX)
+
+// return XX
+
 export const signUp = async (username, email, password) => {
   try {
     return await fetch(`${BASE_URL}/members`, {
@@ -26,7 +31,7 @@ export const signUp = async (username, email, password) => {
       })
     }).then((res) => res.json())
   } catch (e) {
-    console.log(e.message)
+    console.log(e.toString())
   }
 }
 export const getMe = async () => {
@@ -34,10 +39,11 @@ export const getMe = async () => {
   try {
     return await fetch(`${BASE_URL}/members/me`, {
       headers: {
+        'Content-Type': 'application/json',
         authorization: `Bearer ${token}`
       }
     }).then((res) => res.json())
   } catch (e) {
-    console.log(e.message)
+    console.log(e.toString())
   }
 }

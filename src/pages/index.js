@@ -8,9 +8,6 @@ import Search from './Search'
 import Home from './Home'
 import Login from './Login'
 import Me from './MemberPages/Me'
-import ModifyInfo from './MemberPages/ModifyInfo'
-import OrderDetail from './MemberPages/OrderDetail'
-import Orders from './MemberPages/Orders'
 import Products from './Products'
 import NotFound from './404/404'
 
@@ -24,9 +21,6 @@ export {
   Home,
   Login,
   Me,
-  ModifyInfo,
-  OrderDetail,
-  Orders,
   Products,
   NotFound
 }
