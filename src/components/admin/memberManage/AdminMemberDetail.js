@@ -71,8 +71,9 @@ export default function AdminMemberDetail({ member, $setMember }) {
       return false
     }
     $setMember({ ...member, level: submitData.level })
+    alert('已編輯完成!')
   }
-  console.log(member)
+  console.log(member.Orders)
   return (
     <PageWrapper>
       <Wrapper>
@@ -119,7 +120,7 @@ export default function AdminMemberDetail({ member, $setMember }) {
             />
           </EditButton>
         </MemberWrapper>
-        {/* <ColumnHeader>
+        <ColumnHeader>
           {headerNames.map((name) => (
             <RestyleHeader key={name} $name={name}>
               {name}
@@ -127,11 +128,10 @@ export default function AdminMemberDetail({ member, $setMember }) {
           ))}
         </ColumnHeader>
         <TableItemContainer>
-          {members &&
-            members.map((member) => (
-              <TableItem key={member.id} member={member} />
-            ))}
-        </TableItemContainer> */}
+          {member.Orders.map((order) => (
+            <TableItem key={order.id} order={order} />
+          ))}
+        </TableItemContainer>
       </Wrapper>
     </PageWrapper>
   )
