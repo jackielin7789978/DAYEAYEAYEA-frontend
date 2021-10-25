@@ -1,4 +1,5 @@
-import { addTokenToLocalStorage, getTokenFromLocalStorage } from '../utils'
+import { getTokenFromLocalStorage } from '../utils'
+
 const BASE_URL = 'https://api.coolizz.tw/admin'
 
 export const adminLogin = async (username, password) => {
@@ -15,9 +16,7 @@ export const adminLogin = async (username, password) => {
       })
     })
 
-    const data = await res.json()
-    addTokenToLocalStorage(data.token)
-    return data
+    return await res.json()
   } catch (e) {
     console.log(e)
   }

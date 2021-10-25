@@ -156,7 +156,7 @@ export default function AdminOrderDetail() {
   const [order] = useState({})
   const [isOpen, setIsOpen] = useState(false)
 
-  // 資料等 API 修改完成再補上
+  // 待補：用前一頁抓下的全部訂單來抓單筆
   return (
     <PageWrapper $isOpen={isOpen}>
       <Container>

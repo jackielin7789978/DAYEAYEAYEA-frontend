@@ -14,8 +14,8 @@ export const PageHeight = styled.div`
 `
 export const AdminPageWidth = styled.div`
   position: relative;
-  height: calc(100vh);
   width: 90%;
+  min-height: 100vh;
   margin: 0 auto;
 `
 

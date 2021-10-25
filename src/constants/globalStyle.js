@@ -9,7 +9,6 @@ const GlobalStyle = createGlobalStyle`
     list-style: none;
     line-height: 1.5em;
     text-decoration: none;
-    color: ${COLOR.text_dark};
   }
   #root {
     min-height: 100vh;
@@ -27,6 +26,9 @@ const GlobalStyle = createGlobalStyle`
     -webkit-border-radius: 4px;
     border-radius: 4px;
     background: rgb(204,204,204);
+  }
+  div, p, span {
+    color: ${COLOR.text_dark};
   }
   h1, h2, h3, h4, h5, h6 {
     margin: 0;

@@ -11,6 +11,7 @@ import {
   CSSTriangle,
   Title
 } from '../navbar/MenuStyles'
+import { formatPrice } from '../../utils'
 
 const RestyledHoverArea = styled(HoverArea)`
   ${MEDIA_QUERY.desktop} {
@@ -46,6 +47,7 @@ const CartInfo = styled.div`
   justify-content: space-between;
   font-size: ${FONT_SIZE.sm};
   font-weight: bold;
+  letter-spacing: 1px;
 `
 const BtnWrapper = styled(Link)`
   ${MEDIA_QUERY.tablet} {
@@ -103,7 +105,7 @@ export default function CartMenu({ handleHover, $isOpen }) {
             </ItemsContainer>
             <CartInfo>
               <div>共有 {totalItems} 件商品</div>
-              <div>總金額 NT$ {totalPrice}</div>
+              <div>總金額 {formatPrice(totalPrice)}</div>
             </CartInfo>
 
             <BtnWrapper to='/checkout/step1'>
