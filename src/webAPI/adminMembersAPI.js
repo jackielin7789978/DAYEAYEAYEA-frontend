@@ -30,3 +30,22 @@ export const getMember = async (id) => {
     console.log(e.toString())
   }
 }
+
+export const updateMemberLevel = async (id, level) => {
+  try {
+    const token = getTokenFromLocalStorage()
+    const result = await fetch(`${BASE_URL}/members/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        level
+      })
+    })
+    return result.json()
+  } catch (e) {
+    console.log(e.toString())
+  }
+}

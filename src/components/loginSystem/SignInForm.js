@@ -1,12 +1,6 @@
 import { useContext } from 'react'
-import {
-  Form,
-  Input,
-  ErrorMsg,
-  SendPassword,
-  PasswordInput
-} from '../../components/loginSystem/loginCard'
-import { ArrowBtn } from '../../components/Button'
+import { Form, Input, ErrorMsg, SendPassword, PasswordInput } from './loginCard'
+import { ArrowBtn } from '../Button'
 import { useForm } from 'react-hook-form'
 import { signIn } from '../../webAPI/loginAPI'
 import { LoadingContext } from '../../context'
