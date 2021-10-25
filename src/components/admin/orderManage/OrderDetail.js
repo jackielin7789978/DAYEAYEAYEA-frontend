@@ -2,22 +2,23 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { ADMIN_COLOR, COLOR, FONT_SIZE } from '../../../constants/style'
-import { Wrapper } from '../../../components/admin/TableStyle'
+import { Wrapper } from '../TableStyle'
 // import { ImgAnchor } from '../../../components/general'
-import { GeneralBtn } from '../../../components/Button'
+import { GeneralBtn, LogoutBtn } from '../../Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import {
-  addOrderDetailToLocalSotrage,
-  getOrderDetailFromLocalStorage,
-  multiplyPrice
-} from '../../../utils'
+import { multiplyPrice } from '../../../utils'
 import { updateOrderStatus } from '../../../webAPI/adminAPIs'
+import { GeneralModal } from '../../Modal'
 
 const PageWrapper = styled.div`
-  margin-right: ${({ $isOpen }) => ($isOpen ? '-10px' : '0px')};
+  width: 100%;
+  position: relative;
+  right: ${({ $isOpen }) => ($isOpen ? '-5px' : '0px')};
+  margin: 40px auto;
 `
 const Container = styled(Wrapper)`
+  width: 100%;
   background: ${ADMIN_COLOR.light_grey};
   border-radius: 20px;
   position: relative;
@@ -151,14 +152,12 @@ function Item({ item }) {
     </ItemContainer>
   )
 }
-export default function AdminOrderDetail() {
+export default function OrderDetail({ orderDetail, setOrderDetail }) {
   const [isOpen, setIsOpen] = useState(false)
-  const [order, setOrder] = useState(() => {
-    return JSON.parse(getOrderDetailFromLocalStorage())
-  })
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleOrderStatus = (status) => {
-    updateOrderStatus(order.ticketNo, status).then((res) => {
+    updateOrderStatus(orderDetail.ticketNo, status).then((res) => {
       if (!res.ok) alert('發生錯誤：' + res.message)
       let newStatus = ''
       switch (status) {
@@ -177,24 +176,33 @@ export default function AdminOrderDetail() {
         default:
           newStatus = '處理中'
       }
-      const newOrder = { ...order }
-      newOrder.status = newStatus
-      setOrder(newOrder)
-      alert('變更成功！')
-      addOrderDetailToLocalSotrage(newOrder)
+      const newOrder = { ...orderDetail }
+      if (status === 'cancel') {
+        setIsModalOpen(true)
+      } else {
+        newOrder.status = newStatus
+        setOrderDetail(newOrder)
+        alert('變更成功！')
+      }
     })
   }
 
   return (
     <PageWrapper $isOpen={isOpen}>
+      <LogoutBtn
+        onClick={() => setOrderDetail(null)}
+        color={'admin_blue'}
+        children={'回訂單列表'}
+        buttonStyle={{ width: '120px' }}
+      />
       <Container>
         <Title>訂購明細</Title>
         <Subtotal>
           <span>
-            共 <b>{order.Order_items.length}</b> 件商品
+            共 <b>{orderDetail.Order_items.length}</b> 件商品
           </span>
           <span>
-            合計：<b>{order.subTotal}</b>
+            合計：<b>{orderDetail.subTotal}</b>
           </span>
           <Collapser
             onClick={() => {
@@ -211,7 +219,7 @@ export default function AdminOrderDetail() {
             <Header>數量</Header>
             <Header>小計</Header>
           </TableHeaders>
-          {order.Order_items.map((item) => (
+          {orderDetail.Order_items.map((item) => (
             <Item key={item.productId} item={item} />
           ))}
           <PriceDetail>
@@ -221,7 +229,7 @@ export default function AdminOrderDetail() {
             </div>
             <div>
               <span>合計：</span>
-              <span>{order.subTotal}</span>
+              <span>{orderDetail.subTotal}</span>
             </div>
           </PriceDetail>
         </Menu>
@@ -229,17 +237,24 @@ export default function AdminOrderDetail() {
       <Container>
         <Title>訂單資料</Title>
         <OrderInfo>
-          <div>訂單狀態：{order.status}</div>
-          <div>訂單編號：{order.ticketNo}</div>
-          <div>訂購人姓名：{order.orderName}</div>
-          <div>寄送地址：{order.orderAddress}</div>
-          <div>聯絡信箱：{order.orderEmail}</div>
-          <div>聯絡電話：{order.orderPhone}</div>
-          <div>付款方式：{order.payment}</div>
-          <div>運送方式：{order.shipping}</div>
+          <div>訂單狀態：{orderDetail.status}</div>
+          <div>訂單編號：{orderDetail.ticketNo}</div>
+          <div>訂購人姓名：{orderDetail.orderName}</div>
+          <div>寄送地址：{orderDetail.orderAddress}</div>
+          <div>聯絡信箱：{orderDetail.orderEmail}</div>
+          <div>聯絡電話：{orderDetail.orderPhone}</div>
+          <div>付款方式：{orderDetail.payment}</div>
+          <div>運送方式：{orderDetail.shipping}</div>
         </OrderInfo>
         <Buttons>
-          {order.status === '處理中' && (
+          <GeneralModal
+            open={isModalOpen}
+            content='確定要取消這筆訂單嗎？'
+            buttonOne='確定'
+            buttonTwo='返回'
+            onClose={() => setIsModalOpen(false)}
+          />
+          {orderDetail.status === '處理中' && (
             <>
               <GeneralBtn
                 onClick={() => handleOrderStatus('ship')}
@@ -253,12 +268,15 @@ export default function AdminOrderDetail() {
               />
             </>
           )}
-          {order.status === '已出貨' && (
+          {orderDetail.status === '已出貨' && (
             <GeneralBtn
               onClick={() => handleOrderStatus('complete')}
               color={'admin_grey'}
               children={'完成訂單'}
             />
+          )}
+          {orderDetail.status === '已完成' && (
+            <GeneralBtn color={'admin_grey'} children={'封存訂單'} />
           )}
         </Buttons>
       </Container>

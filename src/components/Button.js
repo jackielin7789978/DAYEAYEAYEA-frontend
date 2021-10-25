@@ -129,15 +129,16 @@ function EditBtn({ color, children, buttonStyle }) {
   )
 }
 
-function LogoutBtn({ color, children, buttonStyle }) {
+function LogoutBtn({ color, children, buttonStyle, onClick }) {
   return (
-    <ButtonStyle color={color} style={buttonStyle}>
+    <ButtonStyle color={color} style={buttonStyle} onClick={onClick}>
       {children}
       <LogoutColorIcon />
     </ButtonStyle>
   )
 }
 
+// 加了 onClick 綁定點擊事件
 function GeneralBtn({ color, children, buttonStyle, id, onClick }) {
   return (
     <ButtonStyle color={color} style={buttonStyle} id={id} onClick={onClick}>

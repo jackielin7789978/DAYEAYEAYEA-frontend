@@ -26,7 +26,7 @@ export const getAllOrders = async () => {
   const token = getTokenFromLocalStorage()
   let res
   try {
-    res = await fetch(`${BASE_URL}/orders`, {
+    res = await fetch(`${BASE_URL}/orders/active`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

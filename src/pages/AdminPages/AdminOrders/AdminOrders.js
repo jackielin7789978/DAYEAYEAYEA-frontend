@@ -10,14 +10,15 @@ import {
   TableItemContainer
 } from '../../../components/admin/TableStyle'
 import TableItem from '../../../components/admin/orderManage/TableItem'
-import { addOrderDetailToLocalSotrage } from '../../../utils'
+import OrderDetail from '../../../components/admin/orderManage/OrderDetail'
 
 const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   border: 1px solid transparent;
-  padding: 40px 0px;
+  margin: 40px auto;
+  width: 60vw;
 `
 const SearchContainer = styled.div`
   margin: 20px auto;
@@ -40,6 +41,7 @@ const headerNames = ['訂單狀態', '訂單編號', 'Email', '訂單金額', 'E
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState([])
+  const [orderDetail, setOrderDetail] = useState(null)
   const [filter, setFilter] = useState('所有訂單')
   const [isLoading, setIsLoading] = useState(true)
 
@@ -49,7 +51,7 @@ export default function AdminOrders() {
 
   const handleOrderDetail = (ticketNo) => {
     const order = orders.filter((order) => order.ticketNo === ticketNo)
-    addOrderDetailToLocalSotrage(order[0])
+    setOrderDetail(() => order[0])
   }
 
   useEffect(() => {
@@ -73,33 +75,43 @@ export default function AdminOrders() {
     </div>
   ) : (
     <PageWrapper>
-      <SearchContainer>
-        <Search />
-        <Filter handleFilter={handleFilter} />
-      </SearchContainer>
-      <Wrapper>
-        <ColumnHeader>
-          {headerNames.map((name) => (
-            <RestyleHeader key={name} $name={name}>
-              {name}
-            </RestyleHeader>
-          ))}
-        </ColumnHeader>
-        <TableItemContainer>
-          {orders
-            .filter((order) =>
-              filter === '所有訂單' ? order : order.status === filter
-            )
-            .sort((a, b) => b.id - a.id)
-            .map((order) => (
-              <TableItem
-                key={order.id}
-                order={order}
-                handleOrderDetail={handleOrderDetail}
-              />
-            ))}
-        </TableItemContainer>
-      </Wrapper>
+      {!orderDetail && (
+        <>
+          <SearchContainer>
+            <Search />
+            <Filter handleFilter={handleFilter} />
+          </SearchContainer>
+          <Wrapper>
+            <ColumnHeader>
+              {headerNames.map((name) => (
+                <RestyleHeader key={name} $name={name}>
+                  {name}
+                </RestyleHeader>
+              ))}
+            </ColumnHeader>
+            <TableItemContainer>
+              {orders
+                .filter((order) =>
+                  filter === '所有訂單' ? order : order.status === filter
+                )
+                .sort((a, b) => b.id - a.id)
+                .map((order) => (
+                  <TableItem
+                    key={order.id}
+                    order={order}
+                    handleOrderDetail={handleOrderDetail}
+                  />
+                ))}
+            </TableItemContainer>
+          </Wrapper>
+        </>
+      )}
+      {orderDetail && (
+        <OrderDetail
+          orderDetail={orderDetail}
+          setOrderDetail={setOrderDetail}
+        />
+      )}
     </PageWrapper>
   )
 }

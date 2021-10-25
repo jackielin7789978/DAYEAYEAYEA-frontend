@@ -1,22 +1,9 @@
 import { Container, Cell } from '../TableStyle'
 import { GeneralBtn } from '../../Button'
-import { ADMIN_COLOR } from '../../../constants/style'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
 
-const Btn = styled(Link)`
-  button {
-    min-width: 80px;
-    width: 50%;
-    background: ${ADMIN_COLOR.Btn_grey};
-    &:hover {
-      background: ${ADMIN_COLOR.Btn_grey_hover};
-    }
-  }
-`
 const RestyledCell = styled(Cell)`
   width: 12%;
-  word-wrap: break-word;
   padding: 0 4px;
 `
 
@@ -36,14 +23,14 @@ export default function TableItem({ order, handleOrderDetail }) {
       <RestyledCell style={{ width: '36%' }}>{order.orderEmail}</RestyledCell>
       <RestyledCell>{calTotalPrice(order)}</RestyledCell>
       <RestyledCell>
-        <Btn
+        <GeneralBtn
           onClick={() => {
             handleOrderDetail(order.ticketNo)
           }}
-          to={`/admin/orders/${order.ticketNo}`}
-        >
-          <GeneralBtn children={'訂單詳情'} />
-        </Btn>
+          color='admin_grey'
+          children={'訂單詳情'}
+          buttonStyle={{ minWidth: '80px', width: '50%' }}
+        />
       </RestyledCell>
     </Container>
   )

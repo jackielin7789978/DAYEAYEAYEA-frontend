@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom'
 
 const CARTTITLE_NAME = 'cartItemsList'
 const TOKEN = 'token'
-const ORDER_DETAIL = 'orderDetail'
 
 export function ScrollToTop() {
   const { pathname } = useLocation()
@@ -29,13 +28,6 @@ export const getTokenFromLocalStorage = () => {
 
 export const addTokenToLocalStorage = (token) => {
   localStorage.setItem(TOKEN, token)
-}
-
-export const addOrderDetailToLocalSotrage = (order) => {
-  localStorage.setItem(ORDER_DETAIL, JSON.stringify(order))
-}
-export const getOrderDetailFromLocalStorage = () => {
-  return localStorage.getItem(ORDER_DETAIL)
 }
 
 export const countWhiteCardAmount = (length, page, isDesktop) => {
