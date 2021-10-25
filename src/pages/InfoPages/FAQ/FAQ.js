@@ -2,9 +2,10 @@ import styled from 'styled-components'
 import { useState, useEffect } from 'react'
 import { PageWidth } from '../../../components/general'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../../constants/style'
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded'
 import getFAQs from '../../../webAPI/faq'
 import { IsLoadingComponent } from '../../../components/IsLoading'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
 
 const Title = styled.div`
   margin-top: 40px;
@@ -39,6 +40,7 @@ const Q = styled.div`
   padding: 22px 18px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border-bottom: ${({ $isOpen }) =>
     $isOpen ? 'none' : `2px solid ${COLOR.border_super_light}`};
   div {
@@ -72,7 +74,7 @@ const A = styled.div`
     font-size: ${FONT_SIZE.md};
   }
 `
-const Toggle = styled(KeyboardArrowDownRoundedIcon)`
+const Toggle = styled(FontAwesomeIcon)`
   cursor: pointer;
   transition: all 0.2s;
   transform: ${({ $isOpen }) => ($isOpen ? 'rotate(180deg)' : 'none')};
@@ -88,7 +90,7 @@ function Item({ faq }) {
     <>
       <Q $isOpen={isOpen}>
         <div>{faq.question}</div>
-        <Toggle onClick={toggleOpen} $isOpen={isOpen} />
+        <Toggle icon={faChevronUp} onClick={toggleOpen} $isOpen={isOpen} />
       </Q>
       <A $isOpen={isOpen}>
         <div>{faq.answer}</div>
