@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
+const MEMBER = 'memberData'
 const CARTTITLE_NAME = 'cartItemsList'
 const TOKEN = 'token'
 
@@ -28,6 +29,14 @@ export const getTokenFromLocalStorage = () => {
 
 export const addTokenToLocalStorage = (token) => {
   localStorage.setItem(TOKEN, token)
+}
+
+export const addMemberToLocalStorage = (memberData) => {
+  localStorage.setItem(MEMBER, JSON.stringify(memberData))
+}
+
+export const getMemberToLocalStorage = () => {
+  return localStorage.getItem(MEMBER)
 }
 
 export const countWhiteCardAmount = (length, page, isDesktop) => {
