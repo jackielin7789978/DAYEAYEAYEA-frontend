@@ -68,59 +68,38 @@ const ButtonStyle = styled.button`
 const ShoppingCardIcon = styled(FontAwesomeIcon)`
   margin-right: 6px;
   margin-top: 2px;
-
-  & path {
-    color: ${COLOR.light};
-  }
+  color: ${COLOR.light};
 `
 const ColorShoppingCardIcon = styled(FontAwesomeIcon)`
   margin-right: 6px;
   margin-bottom: 2px;
-
-  & path {
-    color: ${COLOR.primary_light};
-  }
+  color: ${COLOR.primary_light};
 `
 const LoginIcon = styled(FontAwesomeIcon)`
   margin-left: 6px;
   margin-top: 1px;
-
-  & path {
-    color: ${COLOR.light};
-  }
+  color: ${COLOR.light};
 `
 const SaveIcon = styled(FontAwesomeIcon)`
   margin-left: 6px;
   margin-top: 1px;
-
-  & path {
-    color: ${COLOR.light};
-  }
+  color: ${COLOR.light};
 `
 
 const ArrowIcon = styled(FontAwesomeIcon)`
   margin-left: 6px;
   margin-top: 1px;
-
-  & path {
-    color: ${COLOR.light};
-  }
+  color: ${COLOR.light};
 `
 const EditIcon = styled(FontAwesomeIcon)`
   margin-left: 6px;
   margin-top: 1px;
-
-  & path {
-    color: ${COLOR.light};
-  }
+  color: ${COLOR.light};
 `
 const LogoutIcon = styled(FontAwesomeIcon)`
   margin-left: 6px;
   margin-top: 1px;
-
-  & path {
-    color: ${COLOR.light};
-  }
+  color: ${COLOR.light};
 `
 function ShoppingCarBtn({ id, color, children, buttonStyle, onClick }) {
   return (

@@ -44,10 +44,7 @@ const SearchButton = styled(FontAwesomeIcon)`
   display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
   margin-left: 8px;
   cursor: pointer;
-
-  & path {
-    color: ${COLOR.grey};
-  }
+  color: ${COLOR.grey};
 `
 const SearchDiv = styled.div`
   display: ${({ $isOpen }) => ($isOpen ? 'inline-block' : 'none')};
