@@ -54,6 +54,7 @@ const ModalBtnDiv = styled.div`
 
 const ModalContentDiv = styled.div`
   word-wrap: break-word;
+  text-align: center;
 `
 
 const CancelRoundedColorIcon = styled(CancelRoundedIcon)`
