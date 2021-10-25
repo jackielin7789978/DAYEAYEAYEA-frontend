@@ -12,14 +12,9 @@ export const PageHeight = styled.div`
     margin-top: 121px;
   }
 `
-export const AdminPageWidth = styled.div`
-  position: relative;
-  width: 90%;
-  min-height: 100vh;
-  margin: 0 auto;
-`
+export const AdminPageHeight = styled.div``
 
-// 非滿版用 PageWidth 包
+// 非滿版用 PageWidth, AdminPageWidth 包
 export const PageWidth = styled.div`
   width: 90%;
   margin: 0 auto;
@@ -28,6 +23,7 @@ export const PageWidth = styled.div`
     max-width: 1200px;
   }
 `
+export const AdminPageWidth = styled.div``
 
 // 滿版用 FullWidth 包
 export const FullWidth = styled.div`

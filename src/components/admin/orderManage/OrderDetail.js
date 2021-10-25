@@ -12,7 +12,7 @@ import { updateOrderStatus } from '../../../webAPI/adminAPIs'
 import { GeneralModal } from '../../Modal'
 
 const PageWrapper = styled.div`
-  width: 100%;
+  width: 90%;
   position: relative;
   right: ${({ $isOpen }) => ($isOpen ? '-5px' : '0px')};
   margin: 40px auto;

@@ -18,7 +18,10 @@ const PageWrapper = styled.div`
   justify-content: flex-start;
   border: 1px solid transparent;
   margin: 40px auto;
-  width: 60vw;
+  width: 76%;
+  ${ADMIN_MEDIA_QUERY.md} {
+    width: 60%;
+  }
 `
 const SearchContainer = styled.div`
   margin: 20px auto;
