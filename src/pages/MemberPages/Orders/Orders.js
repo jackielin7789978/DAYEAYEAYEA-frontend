@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import styled from 'styled-components'
 import { COLOR } from '../../../constants/style'
 // import OrderDetail from './OrderDetail';
@@ -40,8 +41,6 @@ const PageLi = styled(Li)`
   }
 `
 
-const testArray = [1, 2, 3, 4, 5, 6]
-
 const renderPageBar = (array) => {
   if (array.length <= 5) {
     return array.map(i => <PageLi>{i}</PageLi>)
@@ -58,13 +57,17 @@ const renderPageBar = (array) => {
 }
 
 
-const Orders = () => {
+const Orders = ({ orders }) => {
+  useEffect(() => {
+    console.log(orders)
+  }, [orders])
+  
   return (
     <Container>
       {/* <OrderDetail></OrderDetail> */}
-      <OrderTable orders={testArray} />
+      <OrderTable orders={orders} />
       <PageList>
-        { renderPageBar(testArray) }
+        { renderPageBar([1,2,3]) }
       </PageList>
     </Container>
   )

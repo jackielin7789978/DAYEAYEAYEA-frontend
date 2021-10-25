@@ -4,7 +4,7 @@ import { Table, Button } from '../Table'
 
 const OrderTable = ({ orders }) => {
   const handleClick = useCallback((id) => {
-    // Todo
+    console.log('test')
   }, [])
 
   return (
@@ -18,11 +18,11 @@ const OrderTable = ({ orders }) => {
         </tr>
       </thead>
       <tbody>
-        { orders.map((order, index) => (
-            <tr key={index+10}>
+        { orders.map((order) => (
+            <tr key={order.ticketNo + new Date().getMilliseconds}>
               <td>{ order.status }</td>
               <td>{ order.ticketNo }</td>
-              <td>$1380</td>
+              <td>{ order.subTotal }</td>
               <td><Button onClick={handleClick}>查找</Button></td>
             </tr>
           ))

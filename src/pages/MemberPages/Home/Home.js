@@ -1,7 +1,9 @@
+import { useContext, useMemo } from 'react'
 import styled from 'styled-components'
 import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import OrderTable from '../../../components/memberSystem/OrderTable'
 import { LogoutBtn } from '../../../components/Button'
+
 
 const Container = styled.div`
   width: 90%;
@@ -41,21 +43,29 @@ const Button = ({ children }) => {
   return <LogoutBtn color={'primary'} buttonStyle={style} children={children}/>
 }
 
-const Home = ({ user }) => {
+const Home = ({ profile, logout }) => {
+  const newOrder = useMemo(() => {
+    if (!profile || profile.Orders.length === 0) return []
+    return [profile.Orders[profile.Orders.length-1]]
+  }, [profile])
+
+  
   return (
     <Container>
       <Header>
-        <h3>Hi! {user.fullname}</h3>
-        <Button>登出</Button>
+        <h3>Hi! { profile?.fullname }</h3>
+        <div onClick={logout}>
+          <Button>登出</Button>
+        </div>
       </Header>
       <SubTitle>基本資料</SubTitle>
       <MemberInfo>
-        <p>會員帳號: {user.username}</p>
+        <p>會員帳號: { profile?.username }</p>
         <p>會員等級: 一般會員</p>
-        <p>電郵: {user.email}</p>
+        <p>電郵: { profile?.email }</p>
       </MemberInfo>
       <SubTitle>最新訂單</SubTitle>
-      <OrderTable orders={[user.Orders[0]]} />
+      <OrderTable orders={newOrder} />
     </Container>
   )
 }

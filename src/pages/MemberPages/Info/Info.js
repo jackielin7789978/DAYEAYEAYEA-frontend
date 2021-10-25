@@ -38,30 +38,30 @@ const Button = ({ children }) => {
 }
 
 
-const ModifyInfo = () => {
+const ModifyInfo = ({ profile  }) => {
   return (
     <Container>
       <InfoWrapper>
         <Button>編輯</Button>
         <Field>
           <h5>帳號:</h5>
-          <p>username</p>
+          <p>{ profile.username }</p>
         </Field>
         <Field>
           <h5>電郵:</h5>
-          <p>1234@gmail.com</p>
+          <p>{ profile.email }</p>
         </Field>
         <Field>
           <h5>姓名:</h5>
-          <p>fullname</p>
+          <p>{ profile.fullname }</p>
         </Field>
         <Field>
           <h5>地址:</h5>
-          <p>台北市信義區吳興街111巷32號</p>
+          <p>{ profile.address }</p>
         </Field>
         <Field>
           <h5>電話:</h5>
-          <p>0912345678</p>
+          <p>{ profile.phone }</p>
         </Field>
       </InfoWrapper>
     </Container>

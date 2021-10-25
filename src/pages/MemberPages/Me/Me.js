@@ -1,12 +1,15 @@
-import { useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useCallback } from 'react'
+import { useHistory } from 'react-router'
 import styled from 'styled-components'
 import { UserContext } from '../../../context'
 import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import { Tabs } from '../../../components/Tab'
 import { PageWidth } from '../../../components/general'
+import { IsLoadingComponent as Loading } from '../../../components/IsLoading'
 import Home from '../Home'
 import Orders from '../Orders'
 import Info from '../Info'
+import { getMe } from '../../../webAPI/loginAPI'
 
 
 
@@ -34,17 +37,50 @@ const TabWrapper = styled.div`
 
 
 export default function Me() {
-  const aa = useContext(UserContext)
-  useEffect(() => console.log(aa), [])
+  const [isLoading, setIsLoading] = useState(false)
+  const [profile, setProfile] = useState(null)
+  const [editing, setEditing] = useState(null)
+  const { user, setUser } = useContext(UserContext)
+  const history = useHistory()
+  useEffect(() => {
+    setIsLoading(() => true)
+    getMe()
+      .then(res => {
+        setIsLoading(() => false)
+        setProfile(res.data)
+      })
+      .catch(err => {
+        // TODO
+        console.log(err)
+        setUser(null)
+        history.push('/')
+      })
+  }, [history])
+
+
+  const logout = useCallback(() => {
+    localStorage.removeItem('token')
+    setUser(null)
+    history.push('/')
+  }, [history])
+
+  const selectOrder = useCallback((ticket) => {
+    setEditing(ticket)
+  })
 
   return (
     <PageWidthHeight>
+      { isLoading && <Loading/> }
       <Container>
         <Title>會員專區</Title>
         <TabWrapper>
           <Tabs
             tabs={['會員首頁', '訂單紀錄', '會員資料']}
-            tabsPanel={[<Home user={aa.user} />, <Orders />, <Info />]}
+            tabsPanel={[
+              <Home profile={profile} logout={logout} />, 
+              <Orders orders={profile?.Orders} />, 
+              <Info profile={profile} />
+            ]}
             presetTab={0}
           />
         </TabWrapper>
