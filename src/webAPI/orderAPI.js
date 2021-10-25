@@ -14,7 +14,7 @@ export const createOrder = async (
 ) => {
   try {
     const token = getTokenFromLocalStorage()
-    return await fetch(`${BASE_URL}/orders`, {
+    const result = await fetch(`${BASE_URL}/orders`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31,7 +31,8 @@ export const createOrder = async (
         subTotal,
         isDeleted
       })
-    }).then((res) => res.json())
+    })
+    return result.json()
   } catch (e) {
     console.log(e.toString())
   }
@@ -39,10 +40,11 @@ export const createOrder = async (
 export const getOrderOne = async (ticket) => {
   try {
     const token = getTokenFromLocalStorage()
-    return await fetch(`${BASE_URL}/orders/me/${ticket}`, {
+    const result = await fetch(`${BASE_URL}/orders/me/${ticket}`, {
       method: 'GET',
       headers: { authorization: `Bearer ${token}` }
-    }).then((res) => res.json())
+    })
+    return result.json()
   } catch (e) {
     console.log(e.toString())
   }
@@ -50,10 +52,11 @@ export const getOrderOne = async (ticket) => {
 export const getOrderAll = async () => {
   try {
     const token = getTokenFromLocalStorage()
-    return await fetch(`${BASE_URL}/orders/me`, {
+    const result = await fetch(`${BASE_URL}/orders/me`, {
       method: 'GET',
       headers: { authorization: `Bearer ${token}` }
-    }).then((res) => res.json())
+    })
+    return result.json()
   } catch (e) {
     console.log(e.toString())
   }

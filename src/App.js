@@ -17,7 +17,10 @@ import {
 import AdminLogin from './pages/AdminPages/AdminLogin'
 import { AdminOrders, AdminOrderDetail } from './pages/AdminPages/AdminOrders'
 import AdminProducts from './pages/AdminPages/AdminProducts'
-import AdminMembers from './pages/AdminPages/AdminMembers'
+import {
+  AdminMembers,
+  AdminMemberDetail
+} from './pages/AdminPages/AdminMembers'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
 import { PageHeight, AdminPageWidth } from './components/general'
 import {
