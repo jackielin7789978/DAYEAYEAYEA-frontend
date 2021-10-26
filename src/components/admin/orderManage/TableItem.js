@@ -2,6 +2,7 @@ import { Container, Cell } from '../TableStyle'
 import { GeneralBtn } from '../../Button'
 import styled from 'styled-components'
 import { formatPrice } from '../../../utils'
+import { Link } from 'react-router-dom'
 
 const RestyledCell = styled(Cell)`
   width: 12%;
@@ -19,14 +20,16 @@ export default function TableItem({ order, handleOrderDetail }) {
         {order.subTotal && formatPrice(order.subTotal)}
       </RestyledCell>
       <RestyledCell>
-        <GeneralBtn
-          onClick={() => {
-            handleOrderDetail(order.ticketNo)
-          }}
-          color='admin_grey'
-          children={'訂單詳情'}
-          buttonStyle={{ minWidth: '80px', width: '50%' }}
-        />
+        <Link to={`/admin/orders/${order.ticketNo}`}>
+          <GeneralBtn
+            onClick={() => {
+              handleOrderDetail(order.ticketNo)
+            }}
+            color='admin_grey'
+            children={'訂單詳情'}
+            buttonStyle={{ minWidth: '80px', width: '50%' }}
+          />
+        </Link>
       </RestyledCell>
     </Container>
   )

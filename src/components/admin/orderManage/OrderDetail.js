@@ -174,12 +174,14 @@ export default function OrderDetail({ orderDetail, setOrderDetail }) {
 
   return (
     <PageWrapper $isOpen={isOpen}>
-      <LogoutBtn
-        onClick={() => setOrderDetail(null)}
-        color='admin_blue'
-        children='回訂單列表'
-        buttonStyle={{ width: '120px' }}
-      />
+      <Link to='/admin/orders'>
+        <LogoutBtn
+          onClick={() => setOrderDetail(null)}
+          color='admin_blue'
+          children='回訂單列表'
+          buttonStyle={{ width: '120px' }}
+        />
+      </Link>
       <Container>
         <Title>訂購明細</Title>
         <Subtotal>
