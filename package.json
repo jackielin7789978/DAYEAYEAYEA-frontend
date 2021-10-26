@@ -28,9 +28,6 @@
     "styled-components": "^5.3.3",
     "web-vitals": "^1.0.1"
   },
-  "resolutions": {
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@5.0.0"
-  },
   "homepage": "https://jackielin7789978.github.io/DAYEAYEAYEA-frontend",
   "husky": {
     "hooks": {

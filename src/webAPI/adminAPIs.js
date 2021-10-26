@@ -39,7 +39,7 @@ export const getAllOrders = async () => {
   }
 }
 
-export const getOrder = async (ticketNo) => {
+export const getSingleOrder = async (ticketNo) => {
   const token = getTokenFromLocalStorage()
   let res
   try {

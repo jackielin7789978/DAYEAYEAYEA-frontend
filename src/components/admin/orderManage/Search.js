@@ -40,7 +40,7 @@ export function Search() {
   )
 }
 
-export function Filter({ handleFilter }) {
+export function Filter({ filter, handleFilter }) {
   return (
     <Dropdown
       name='filter'
@@ -48,12 +48,13 @@ export function Filter({ handleFilter }) {
       onChange={(e) => {
         handleFilter(e.target.value)
       }}
+      value={filter}
     >
       <option value='所有訂單'>所有訂單</option>
       <option value='處理中'>處理中</option>
       <option value='已出貨'>已出貨</option>
       <option value='已取消'>已取消</option>
-      <option>已完成</option>
+      <option value='已完成'>已完成</option>
     </Dropdown>
   )
 }

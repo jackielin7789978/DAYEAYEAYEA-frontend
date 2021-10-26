@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { ADMIN_COLOR, COLOR, FONT_SIZE } from '../../../constants/style'
 import { Wrapper } from '../TableStyle'
-// import { ImgAnchor } from '../../../components/general'
+import { ImgAnchor } from '../../../components/general'
 import { GeneralBtn, LogoutBtn } from '../../Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
-import { multiplyPrice } from '../../../utils'
-import { updateOrderStatus } from '../../../webAPI/adminAPIs'
-import { GeneralModal } from '../../Modal'
+import { multiplyPrice, formatPrice } from '../../../utils'
+import { getSingleOrder, updateOrderStatus } from '../../../webAPI/adminAPIs'
+import { FullModal } from '../../Modal'
 
 const PageWrapper = styled.div`
   width: 90%;
@@ -93,8 +93,7 @@ const ItemContainer = styled(TableHeaders)`
 const Pic = styled.div`
   max-width: 70px;
   height: 70px;
-  ${'' /* background: url(${({ $img }) => ($img ? $img : $img)}); */}
-  background: ${COLOR.accent};
+  background: ${({ $img }) => `url(${$img})`};
 `
 const Name = styled(Link)`
   margin: 2px 10px;
@@ -141,14 +140,18 @@ function Item({ item }) {
   return (
     <ItemContainer>
       <div>
-        <Pic />
+        <Pic $img={JSON.stringify(item.Product.Product_imgs[0].imgUrlSm)}>
+          <ImgAnchor to={`/admin/products/${item.productId}`} />
+        </Pic>
         <Name to={`/admin/products/${item.productId}`}>
           {item.Product.name}
         </Name>
       </div>
-      <div>{item.Product.discountPrice}</div>
+      <div>{formatPrice(item.Product.discountPrice)}</div>
       <div>{item.quantity}</div>
-      <div>{multiplyPrice(item.Product.discountPrice, item.quantity)}</div>
+      <div>
+        {formatPrice(multiplyPrice(item.Product.discountPrice, item.quantity))}
+      </div>
     </ItemContainer>
   )
 }
@@ -159,31 +162,13 @@ export default function OrderDetail({ orderDetail, setOrderDetail }) {
   const handleOrderStatus = (status) => {
     updateOrderStatus(orderDetail.ticketNo, status).then((res) => {
       if (!res.ok) alert('發生錯誤：' + res.message)
-      let newStatus = ''
-      switch (status) {
-        case 'normal':
-          newStatus = '處理中'
-          break
-        case 'ship':
-          newStatus = '已出貨'
-          break
-        case 'cancel':
-          newStatus = '已取消'
-          break
-        case 'complete':
-          newStatus = '已完成'
-          break
-        default:
-          newStatus = '處理中'
-      }
-      const newOrder = { ...orderDetail }
-      if (status === 'cancel') {
-        setIsModalOpen(true)
-      } else {
-        newOrder.status = newStatus
-        setOrderDetail(newOrder)
-        alert('變更成功！')
-      }
+      if (status === 'cancel' && !isModalOpen) return setIsModalOpen(true)
+      getSingleOrder(orderDetail.ticketNo).then((res) => {
+        if (res.ok) setOrderDetail(res.data)
+        if (!res.ok) alert('發生錯誤：' + res.message)
+      })
+      setIsModalOpen(false)
+      alert('變更成功！')
     })
   }
 
@@ -191,8 +176,8 @@ export default function OrderDetail({ orderDetail, setOrderDetail }) {
     <PageWrapper $isOpen={isOpen}>
       <LogoutBtn
         onClick={() => setOrderDetail(null)}
-        color={'admin_blue'}
-        children={'回訂單列表'}
+        color='admin_blue'
+        children='回訂單列表'
         buttonStyle={{ width: '120px' }}
       />
       <Container>
@@ -202,7 +187,9 @@ export default function OrderDetail({ orderDetail, setOrderDetail }) {
             共 <b>{orderDetail.Order_items.length}</b> 件商品
           </span>
           <span>
-            合計：<b>{orderDetail.subTotal}</b>
+            合計：
+            {/* 暫時擋掉 subTotal 的舊訂單 */}
+            <b>{orderDetail.subTotal && formatPrice(orderDetail.subTotal)}</b>
           </span>
           <Collapser
             onClick={() => {
@@ -225,11 +212,14 @@ export default function OrderDetail({ orderDetail, setOrderDetail }) {
           <PriceDetail>
             <div>
               <span>運費：</span>
-              <span>NT$80</span>
+              <span>{formatPrice(80)}</span>
             </div>
             <div>
               <span>合計：</span>
-              <span>{orderDetail.subTotal}</span>
+              <span>
+                {/* 暫時擋掉 subTotal 的舊訂單 */}
+                {orderDetail.subTotal && formatPrice(orderDetail.subTotal)}
+              </span>
             </div>
           </PriceDetail>
         </Menu>
@@ -247,36 +237,48 @@ export default function OrderDetail({ orderDetail, setOrderDetail }) {
           <div>運送方式：{orderDetail.shipping}</div>
         </OrderInfo>
         <Buttons>
-          <GeneralModal
+          <FullModal
             open={isModalOpen}
             content='確定要取消這筆訂單嗎？'
-            buttonOne='確定'
-            buttonTwo='返回'
+            buttonOne={
+              <GeneralBtn
+                onClick={() => handleOrderStatus('cancel')}
+                color='admin_blue'
+                children='確定'
+              />
+            }
+            buttonTwo={
+              <GeneralBtn
+                onClick={() => setIsModalOpen(false)}
+                color='admin_grey'
+                children='返回'
+              />
+            }
             onClose={() => setIsModalOpen(false)}
           />
           {orderDetail.status === '處理中' && (
             <>
               <GeneralBtn
                 onClick={() => handleOrderStatus('ship')}
-                color={'admin_blue'}
-                children={'出貨'}
+                color='admin_blue'
+                children='出貨'
               />
               <GeneralBtn
                 onClick={() => handleOrderStatus('cancel')}
-                color={'admin_grey'}
-                children={'取消訂單'}
+                color='admin_grey'
+                children='取消訂單'
               />
             </>
           )}
           {orderDetail.status === '已出貨' && (
             <GeneralBtn
               onClick={() => handleOrderStatus('complete')}
-              color={'admin_grey'}
-              children={'完成訂單'}
+              color='admin_grey'
+              children='完成訂單'
             />
           )}
           {orderDetail.status === '已完成' && (
-            <GeneralBtn color={'admin_grey'} children={'封存訂單'} />
+            <GeneralBtn color='admin_grey' children='封存訂單' />
           )}
         </Buttons>
       </Container>

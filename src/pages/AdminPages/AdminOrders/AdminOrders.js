@@ -57,6 +57,14 @@ export default function AdminOrders() {
     setOrderDetail(() => order[0])
   }
 
+  useEffect(
+    (ticketNo) => {
+      const order = orders.filter((order) => order.ticketNo === ticketNo)
+      setOrderDetail(() => order[0])
+    },
+    [orders]
+  )
+
   useEffect(() => {
     getAllOrders().then((res) => {
       setIsLoading(false)
@@ -82,7 +90,7 @@ export default function AdminOrders() {
         <>
           <SearchContainer>
             <Search />
-            <Filter handleFilter={handleFilter} />
+            <Filter filter={filter} handleFilter={handleFilter} />
           </SearchContainer>
           <Wrapper>
             <ColumnHeader>

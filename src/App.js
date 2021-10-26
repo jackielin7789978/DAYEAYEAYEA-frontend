@@ -89,7 +89,7 @@ function AdminRoutes() {
         <Route path={'/admin/products/:page'}>
           {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
         </Route>
-        <Route path={'/admin/orders'}>
+        <Route path={['admin/orders/:ticketNo', '/admin/orders']}>
           {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
         </Route>
         <Route path={'/admin/members'}>
@@ -119,23 +119,28 @@ function Shop() {
   }
 
   const [user, setUser] = useState()
+
   useEffect(() => {
     let localToken = getTokenFromLocalStorage()
     if (!localToken) return false
     let decoded = isTokenExpired(localToken)
     return decoded.id ? setUser(decoded) : setUser(null)
   }, [])
+
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
   }, [setIsModalOpen])
+
   const totalPrice = useMemo(() => {
     if (!cartItems) return
-    let sum = 0
+    // 預先加上 80 元運費
+    let sum = 80
     for (const cartItem of cartItems) {
-      sum += cartItem.price
+      sum += cartItem.price * cartItem.quantity
     }
     return sum
   }, [cartItems])
+
   const totalItems = useMemo(() => {
     if (!cartItems) return
     return cartItems.length
@@ -177,6 +182,7 @@ function Shop() {
     addItemsToLocalStorage(productList)
     setCartItems(productList)
   }
+
   const handleRemoveCartItem = (id) => {
     addItemsToLocalStorage(cartItems.filter((item) => item.id !== id))
     setCartItems(cartItems.filter((item) => item.id !== id))

@@ -1,6 +1,7 @@
 import { Container, Cell } from '../TableStyle'
 import { GeneralBtn } from '../../Button'
 import styled from 'styled-components'
+import { formatPrice } from '../../../utils'
 
 const RestyledCell = styled(Cell)`
   width: 12%;
@@ -8,20 +9,15 @@ const RestyledCell = styled(Cell)`
 `
 
 export default function TableItem({ order, handleOrderDetail }) {
-  const calTotalPrice = (order) => {
-    let format = 'NT$ X'
-    let total = 80
-    order.Order_items.forEach((item) => {
-      total += item.Product.price
-    })
-    return format.replace('X', total)
-  }
   return (
     <Container>
       <RestyledCell>{order.status}</RestyledCell>
       <RestyledCell style={{ width: '28%' }}>{order.ticketNo}</RestyledCell>
       <RestyledCell style={{ width: '36%' }}>{order.orderEmail}</RestyledCell>
-      <RestyledCell>{calTotalPrice(order)}</RestyledCell>
+      <RestyledCell>
+        {/* 暫時擋掉沒有 subTotal 的舊訂單 */}
+        {order.subTotal && formatPrice(order.subTotal)}
+      </RestyledCell>
       <RestyledCell>
         <GeneralBtn
           onClick={() => {
