@@ -136,7 +136,7 @@ function Shop() {
     // 預先加上 80 元運費
     let sum = 80
     for (const cartItem of cartItems) {
-      sum += cartItem.price * cartItem.quantity
+      sum += cartItem.discountPrice * cartItem.quantity
     }
     return sum
   }, [cartItems])

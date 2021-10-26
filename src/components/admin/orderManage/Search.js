@@ -1,15 +1,17 @@
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
-import { COLOR, ADMIN_COLOR } from '../../../constants/style'
+import { ADMIN_COLOR } from '../../../constants/style'
 
 const Wrapper = styled.div`
   position: relative;
+  display: inline-block;
 `
 const Input = styled.input`
   width: 200px;
   padding: 10px 10px 10px 40px;
   border: 1px solid ${ADMIN_COLOR.border_grey};
+  border-radius: 3px;
   &:focus {
     border: 1px solid ${ADMIN_COLOR.border_dark_grey};
   }
@@ -22,9 +24,11 @@ const StyledSearchIcon = styled(FontAwesomeIcon)`
   transform: translate(0, -50%);
 `
 const Dropdown = styled.select`
+  display: inline-block;
   width: 200px;
-  padding: 10px;
+  padding: 11px;
   border: 1px solid ${ADMIN_COLOR.border_grey};
+  border-radius: 3px;
   margin-left: 12px;
   &:focus {
     border: 1px solid ${ADMIN_COLOR.border_dark_grey};
@@ -34,7 +38,10 @@ const Dropdown = styled.select`
 export function Search() {
   return (
     <Wrapper>
-      <StyledSearchIcon icon={faSearch} style={{ color: COLOR.text_dark }} />
+      <StyledSearchIcon
+        icon={faSearch}
+        style={{ color: ADMIN_COLOR.border_dark_grey }}
+      />
       <Input placeholder={'搜尋訂單'}></Input>
     </Wrapper>
   )

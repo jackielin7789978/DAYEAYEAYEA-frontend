@@ -8,7 +8,11 @@ import { GeneralBtn, LogoutBtn } from '../../Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { multiplyPrice, formatPrice } from '../../../utils'
-import { getSingleOrder, updateOrderStatus } from '../../../webAPI/adminAPIs'
+import {
+  getSingleOrder,
+  updateOrderStatus,
+  archiveOrder
+} from '../../../webAPI/adminAPIs'
 import { FullModal } from '../../Modal'
 
 const PageWrapper = styled.div`
@@ -155,6 +159,7 @@ function Item({ item }) {
     </ItemContainer>
   )
 }
+
 export default function OrderDetail({ orderDetail, setOrderDetail }) {
   const [isOpen, setIsOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -170,6 +175,14 @@ export default function OrderDetail({ orderDetail, setOrderDetail }) {
       setIsModalOpen(false)
       alert('變更成功！')
     })
+  }
+
+  const handleArchive = (ticketNo) => {
+    ;(async () => {
+      const res = await archiveOrder(ticketNo)
+      if (res.ok) alert(res.message)
+      if (!res.ok) alert('發生錯誤：' + res.message)
+    })()
   }
 
   return (
@@ -280,7 +293,11 @@ export default function OrderDetail({ orderDetail, setOrderDetail }) {
             />
           )}
           {orderDetail.status === '已完成' && (
-            <GeneralBtn color='admin_grey' children='封存訂單' />
+            <GeneralBtn
+              onClick={() => handleArchive(orderDetail.ticketNo)}
+              color='admin_grey'
+              children='封存訂單'
+            />
           )}
         </Buttons>
       </Container>
