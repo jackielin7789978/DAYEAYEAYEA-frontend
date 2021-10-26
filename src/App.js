@@ -19,7 +19,8 @@ import {
   AdminOrders,
   AdminProducts,
   AdminMembers,
-  AdminProductDetail
+  AdminProductDetail,
+  Layout as AdminLayout
 } from './pages/AdminPages'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
 import { PageHeight } from './components/general'
@@ -80,21 +81,23 @@ function AdminRoutes() {
         <Route path={'/admin/login'}>
           {user ? <Redirect to='/admin/orders' /> : <AdminLogin />}
         </Route>
-        <Route path={'/admin/orders'}>
-          {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
-        </Route>
-        <Route path={'/admin/products/detail/:id'}>
-          {user ? <AdminProductDetail /> : <Redirect to='/admin/login' />}
-        </Route>
-        <Route path={'/admin/products/:page'}>
-          {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
-        </Route>
-        <Route path={'/admin/orders'}>
-          {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
-        </Route>
-        <Route path={'/admin/members'}>
-          {user ? <AdminMembers /> : <Redirect to='/admin/login' />}
-        </Route>
+        <AdminLayout>
+          <Route path={'/admin/orders'}>
+            {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
+          </Route>
+          <Route path={'/admin/products/detail/:id'}>
+            {user ? <AdminProductDetail /> : <Redirect to='/admin/login' />}
+          </Route>
+          <Route path={'/admin/products/:page'}>
+            {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
+          </Route>
+          <Route path={'/admin/orders'}>
+            {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
+          </Route>
+          <Route path={'/admin/members'}>
+            {user ? <AdminMembers /> : <Redirect to='/admin/login' />}
+          </Route>
+        </AdminLayout>
       </Switch>
     </UserContext.Provider>
   )
