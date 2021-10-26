@@ -9,13 +9,11 @@ import {
 import Table from '../../../components/admin/productManage/Table'
 import { PaginatorButton } from '../../../components/admin/PaginatorStyle'
 import { GeneralBtn } from '../../../components/Button'
-import { adminLogin } from '../../../webAPI/adminAPIs'
 import {
   getAllProducts,
   searchProductsFromAdmin
 } from '../../../webAPI/adminProductsAPI'
 import { setAdminProductsPageInArray } from '../../../utils'
-import { AdminPageWidth } from '../../../components/general'
 
 const PageWrapper = styled.div`
   height: 100vh;
@@ -67,7 +65,6 @@ export default function AdminProducts() {
   )
 
   useEffect(() => {
-    adminLogin('admin01', 'Admin1357')
     if (keywords) {
       searchProductsFromAdmin(keywords).then((result) => {
         if (result.ok === 0) {
