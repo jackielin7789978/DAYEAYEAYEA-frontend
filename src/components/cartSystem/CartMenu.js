@@ -104,7 +104,7 @@ export default function CartMenu({ handleHover, $isOpen }) {
                     id={item.id}
                     name={item.name}
                     img={item.img}
-                    price={item.price}
+                    price={item.discountPrice}
                     quantity={item.quantity}
                   />
                 )
