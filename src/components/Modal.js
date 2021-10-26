@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../constants/style'
-import CancelRoundedIcon from '@mui/icons-material/CancelRounded'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
 const FixedBackground = styled.div`
   position: fixed;
@@ -58,17 +59,17 @@ const ModalContentDiv = styled.div`
   text-align: center;
 `
 
-const CancelRoundedColorIcon = styled(CancelRoundedIcon)`
+const CancelRoundedColorIcon = styled(FontAwesomeIcon)`
   position: absolute;
   top: 12px;
   left: 15px;
-  fill: ${COLOR.grey};
-  font-size: 32px;
+  color: ${COLOR.grey};
+  font-size: 26px;
   cursor: pointer;
 `
 
 function CloseButton({ onClick }) {
-  return <CancelRoundedColorIcon onClick={onClick} />
+  return <CancelRoundedColorIcon icon={faTimesCircle} onClick={onClick} />
 }
 
 function ModalIcon({ icon }) {
