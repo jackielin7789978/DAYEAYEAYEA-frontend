@@ -1,22 +1,19 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router'
-import jwt_decode from 'jwt-decode'
-import { getMember } from '../../../webAPI/adminMembersAPI'
 import {
   Wrapper,
   ColumnHeader,
   Header,
   TableItemContainer
 } from '../TableStyle'
-import TableItem from './TableItem'
-import { getTokenFromLocalStorage } from '../../../utils'
-import { GeneralBtn } from '../../Button'
-import { COLOR, ADMIN_COLOR, ADMIN_MEDIA_QUERY } from '../../../constants/style'
+import OrderItem from './OrderItem'
+import { GeneralBtn, LogoutBtn } from '../../Button'
+import { ADMIN_COLOR } from '../../../constants/style'
 import { useForm } from 'react-hook-form'
 import { updateMemberLevel } from '../../../webAPI/adminMembersAPI'
 const PageWrapper = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -27,6 +24,7 @@ const MemberWrapper = styled.div`
   background: ${ADMIN_COLOR.light_grey};
   position: relative;
   padding: 20px 30px;
+  margin: 40px 0px;
 `
 
 const List = styled.div`
@@ -44,14 +42,17 @@ const EditButton = styled.div`
   top: 20px;
   right: 30px;
 `
-
+const Msg = styled.div`
+  text-align: center;
+  padding: 30px;
+`
 const RestyleHeader = styled(Header)`
   width: 12%;
   width: ${({ $name }) => $name === 'Email' && '38%'};
   width: ${({ $name }) => $name === '訂單編號' && '26%'};
 `
-const headerNames = ['帳號名稱', 'Email', '訂單數', '消費總金額', 'Edit']
-export default function AdminMemberDetail({ member, $setMember }) {
+const headerNames = ['訂單狀態', '訂單編號', 'Email', '訂單金額', 'Edit']
+export default function AdminMemberDetail({ member, setMember }) {
   const location = useHistory()
   const [isEdit, setIsEdit] = useState(false)
   const handleEdit = () => {
@@ -64,18 +65,27 @@ export default function AdminMemberDetail({ member, $setMember }) {
     }
   })
   const onSubmit = async (submitData) => {
-    handleEdit()
     const result = await updateMemberLevel(member.id, submitData.level)
     if (result.ok === 0) {
       console.log(result.message)
       return false
     }
-    $setMember({ ...member, level: submitData.level })
+    setMember({ ...member, level: submitData.level })
     alert('已編輯完成!')
+    handleEdit()
   }
-  console.log(member.Orders)
+
   return (
     <PageWrapper>
+      <LogoutBtn
+        onClick={() => {
+          setMember(null)
+          location.push('/admin/members')
+        }}
+        color={'admin_blue'}
+        children={'回訂單列表'}
+        buttonStyle={{ width: '120px' }}
+      />
       <Wrapper>
         <MemberWrapper>
           <List>
@@ -109,7 +119,7 @@ export default function AdminMemberDetail({ member, $setMember }) {
             {isEdit && (
               <select {...register('level')}>
                 <option value='normal'>normal</option>
-                <option value='VIP'>VIP</option>
+                <option value='vip'>vip</option>
               </select>
             )}
           </List>
@@ -127,10 +137,12 @@ export default function AdminMemberDetail({ member, $setMember }) {
             </RestyleHeader>
           ))}
         </ColumnHeader>
+
         <TableItemContainer>
-          {/* {member.Orders.map((order) => (
-            <TableItem key={order.id} order={order} />
-          ))} */}
+          {!member.Orders.length && <Msg>客人還沒有訂單喔!</Msg>}
+          {member.Orders.map((order) => (
+            <OrderItem key={order.id} order={order} />
+          ))}
         </TableItemContainer>
       </Wrapper>
     </PageWrapper>

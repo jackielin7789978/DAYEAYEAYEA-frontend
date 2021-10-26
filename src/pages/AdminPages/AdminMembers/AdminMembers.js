@@ -63,7 +63,7 @@ export default function AdminMembers() {
         </SearchContainer>
       )}
       <Wrapper>
-        {member && <AdminMemberDetail member={member} $setMember={setMember} />}
+        {member && <AdminMemberDetail member={member} setMember={setMember} />}
         {!member && (
           <>
             <ColumnHeader>
@@ -79,7 +79,7 @@ export default function AdminMembers() {
                   <TableItem
                     key={member.id}
                     member={member}
-                    $setMember={setMember}
+                    setMember={setMember}
                   />
                 ))}
             </TableItemContainer>

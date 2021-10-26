@@ -2,8 +2,6 @@ import styled from 'styled-components'
 import { COLOR, MEDIA_QUERY } from '../../constants/style'
 import { Link } from 'react-router-dom'
 import { PageWidth } from '../general'
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined'
-import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined'
 
 const PageWidthHeight = styled(PageWidth)`
   min-height: 550px;
@@ -70,25 +68,6 @@ const SendPassword = styled(Link)`
 const PasswordInput = styled.div`
   position: relative;
 `
-const EyeIcon = styled.div``
-const VisibilityIcon = styled(VisibilityOutlinedIcon)`
-  position: absolute;
-  top: 25%;
-  right: 5%;
-  fill: ${COLOR.text_primary_dark};
-  &:hover {
-    cursor: pointer;
-  }
-`
-const VisibilityOffIcon = styled(VisibilityOffOutlinedIcon)`
-  position: absolute;
-  top: 25%;
-  right: 5%;
-  fill: ${COLOR.text_primary_light};
-  &:hover {
-    cursor: pointer;
-  }
-`
 
 export {
   PageWidthHeight,
@@ -98,8 +77,5 @@ export {
   ErrorMsg,
   SendPassword,
   AbsoluteCenter,
-  PasswordInput,
-  EyeIcon,
-  VisibilityIcon,
-  VisibilityOffIcon
+  PasswordInput
 }
