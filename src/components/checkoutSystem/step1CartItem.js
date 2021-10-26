@@ -45,9 +45,11 @@ export const Cart = ({
       setWarningMessage('已達商品數量上限')
       return setQuantity(totalQuantity)
     }
-    if (e.target.value === '') {
+    if (e.target.value === '' || e.target.value === '0') {
       setWarningMessage('請填寫數量')
-      return setQuantity('')
+      return e.target.value === ''
+        ? setQuantity('')
+        : setQuantity(parseInt(e.target.value))
     }
     setQuantity(parseInt(e.target.value))
   }
@@ -69,7 +71,7 @@ export const Cart = ({
       <ItemInfo>
         <ItemName children={item.name} to={`/products/${item.id}`} />
         <ItemContent>
-          <ItemPrice children={`NT$ ${item.price}`} />
+          <ItemPrice children={`NT$ ${item.discountPrice}`} />
           <ItemCounter
             marginStyle={{ marginRight: '25px' }}
             handleCount={handleCount}

@@ -19,7 +19,7 @@ const RestyledCell = styled(Cell)`
   padding: 0 4px;
 `
 
-export default function TableItem({ member, $setMember }) {
+export default function TableItem({ member, setMember }) {
   const calTotalPrice =
     member.Orders.length > 0
       ? member?.Orders.map((order) => order.subTotal).reduce(
@@ -27,7 +27,7 @@ export default function TableItem({ member, $setMember }) {
         )
       : 0
   // const handleStore = () => {
-  //   $setMember(member)
+  //   setMember(member)
   // }
   return (
     <Container>

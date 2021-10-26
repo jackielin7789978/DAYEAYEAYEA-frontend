@@ -25,7 +25,7 @@ export default function Step1() {
   const totalPrice = useMemo(() => {
     if (!cartItems.length) return
     return cartItems
-      .map((item) => item.price * item.quantity)
+      .map((item) => item.discountPrice * item.quantity)
       .reduce((total, num) => total + num)
   }, [cartItems])
 
