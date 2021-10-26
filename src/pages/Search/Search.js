@@ -80,6 +80,7 @@ export default function Search() {
       return setIsLoading((isLoading) => false)
     }
     getProductByKeywords(keywords).then((result) => {
+      if (!result) return
       if (result.ok === 0) {
         history.push('/404')
         return setIsLoading((isLoading) => false)

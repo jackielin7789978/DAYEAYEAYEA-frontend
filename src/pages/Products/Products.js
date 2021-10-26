@@ -52,6 +52,7 @@ export default function Products() {
   useEffect(() => {
     setIsLoading((isLoading) => true)
     getProductById(id).then((result) => {
+      if (!result) return
       if (result.ok === 0) {
         history.push('/404')
         return setIsLoading(false)

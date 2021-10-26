@@ -110,6 +110,7 @@ export default function Articles() {
   useEffect(() => {
     setIsLoading(true)
     getArticlesById(parseInt(id)).then((result) => {
+      if (!result) return
       const isResultOk = PageIsFound(result.ok)
       if (isResultOk) {
         getProductByArticle(articleSort, parseInt(page)).then((result) => {

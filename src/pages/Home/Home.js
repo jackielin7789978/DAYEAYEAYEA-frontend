@@ -41,6 +41,7 @@ const CardContainer = styled.div`
 const getProductsByCategory = (category, setProducts, setIsLoading) => {
   setIsLoading(true)
   getCategoryProducts(category).then((products) => {
+    if (!products) return
     if (products.ok === 0) return
     setProducts(products.data.slice(0, 4))
     setIsLoading(false)
@@ -53,8 +54,8 @@ const showProductsInComponent = (data, MediaQuery, setIsModalOpen) => {
     ({ id, name, price, Product_imgs, discountPrice, status }) => {
       const length = Product_imgs.length
       const imgUrl = isMobile
-        ? Product_imgs[length - 1].imgUrlSm
-        : Product_imgs[length - 1].imgUrlMd
+        ? Product_imgs[length - 1].imgUrlMd
+        : Product_imgs[length - 1].imgUrlLg
       return (
         <ProductCard
           id={id}

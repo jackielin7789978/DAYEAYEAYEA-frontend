@@ -41,6 +41,7 @@ export default function Categories() {
 
   const setAPIResult = useCallback(
     (result) => {
+      if (!result) return
       if (result.ok === 0) {
         history.push('/404')
         return setIsLoading(false)
@@ -56,10 +57,12 @@ export default function Categories() {
     setIsLoading((isLoading) => true)
     if (slug === 'all') {
       getAllProductsByPage(page).then((result) => {
+        if (!result) return
         setAPIResult(result)
       })
     } else {
       getCategoryProductsByPage(slug, page).then((result) => {
+        if (!result) return
         setAPIResult(result)
       })
     }
@@ -83,8 +86,8 @@ export default function Categories() {
           ({ id, name, price, Product_imgs, discountPrice, status }) => {
             const length = Product_imgs.length
             const imgUrl = isMobile
-              ? Product_imgs[length - 1].imgUrlSm
-              : Product_imgs[length - 1].imgUrlMd
+              ? Product_imgs[length - 1].imgUrlMd
+              : Product_imgs[length - 1].imgUrlLg
             return (
               <ProductCard
                 id={id}
