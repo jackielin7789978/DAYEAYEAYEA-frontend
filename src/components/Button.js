@@ -75,32 +75,12 @@ const ColorShoppingCardIcon = styled(FontAwesomeIcon)`
   margin-bottom: 2px;
   color: ${COLOR.primary_light};
 `
-const LoginIcon = styled(FontAwesomeIcon)`
-  margin-left: 6px;
-  margin-top: 1px;
-  color: ${COLOR.light};
-`
-const SaveIcon = styled(FontAwesomeIcon)`
+const GeneralIcon = styled(FontAwesomeIcon)`
   margin-left: 6px;
   margin-top: 1px;
   color: ${COLOR.light};
 `
 
-const ArrowIcon = styled(FontAwesomeIcon)`
-  margin-left: 6px;
-  margin-top: 1px;
-  color: ${COLOR.light};
-`
-const EditIcon = styled(FontAwesomeIcon)`
-  margin-left: 6px;
-  margin-top: 1px;
-  color: ${COLOR.light};
-`
-const LogoutIcon = styled(FontAwesomeIcon)`
-  margin-left: 6px;
-  margin-top: 1px;
-  color: ${COLOR.light};
-`
 function ShoppingCarBtn({ id, color, children, buttonStyle, onClick }) {
   return (
     <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
@@ -123,7 +103,7 @@ function ArrowBtn({ id, color, children, buttonStyle, onClick }) {
   return (
     <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       {children}
-      <ArrowIcon icon={faArrowRight} />
+      <GeneralIcon icon={faArrowRight} />
     </ButtonStyle>
   )
 }
@@ -132,7 +112,7 @@ function LoginBtn({ id, color, children, buttonStyle, onClick }) {
   return (
     <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       {children}
-      <LoginIcon icon={faSignInAlt} />
+      <GeneralIcon icon={faSignInAlt} />
     </ButtonStyle>
   )
 }
@@ -141,7 +121,7 @@ function LogoutBtn({ id, color, children, buttonStyle, onClick }) {
   return (
     <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       {children}
-      <LogoutIcon icon={faSignOutAlt} />
+      <GeneralIcon icon={faSignOutAlt} />
     </ButtonStyle>
   )
 }
@@ -150,7 +130,7 @@ function EditBtn({ id, color, children, buttonStyle, onClick }) {
   return (
     <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       {children}
-      <EditIcon icon={faEdit} />
+      <GeneralIcon icon={faEdit} />
     </ButtonStyle>
   )
 }
@@ -159,7 +139,7 @@ function SaveBtn({ id, color, children, buttonStyle, onClick }) {
   return (
     <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
       {children}
-      <SaveIcon icon={faSave} />
+      <GeneralIcon icon={faSave} />
     </ButtonStyle>
   )
 }
