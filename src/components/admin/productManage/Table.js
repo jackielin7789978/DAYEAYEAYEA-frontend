@@ -70,9 +70,10 @@ function TableItem({ product }) {
   } = product
   const [productQuantity, setProductQuantity] = useState(quantity)
   const [productStatus, setProductStatus] = useState(status)
+  const length = Product_imgs.length
   // eslint-disable-next-line no-unused-vars
   const [productImg, setProductImg] = useState(
-    Product_imgs && Product_imgs[0].imgUrlSm
+    Product_imgs && Product_imgs[length - 1].imgUrlSm
   )
   const handleCount = useCallback(
     (type, id) => {

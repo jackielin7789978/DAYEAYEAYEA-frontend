@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import SearchIcon from '@mui/icons-material/Search'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { useState, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { ADMIN_COLOR } from '../../../constants/style'
@@ -15,7 +16,7 @@ const Input = styled.input`
     border: 1px solid ${ADMIN_COLOR.border_dark_grey};
   }
 `
-const StyledSearchIcon = styled(SearchIcon)`
+const StyledSearchIcon = styled(FontAwesomeIcon)`
   position: absolute;
   top: 50%;
   left: 10px;
@@ -82,7 +83,7 @@ function Search() {
 
   return (
     <Wrapper>
-      <StyledSearchIcon onClick={handleOnClick} />
+      <StyledSearchIcon icon={faSearch} onClick={handleOnClick} />
       <Input
         placeholder='搜尋商品'
         type='text'

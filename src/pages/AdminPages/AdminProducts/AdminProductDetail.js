@@ -6,7 +6,6 @@ import ImgForm from '../../../components/admin/productManage/AdminDetailForms/Im
 import DescForm from '../../../components/admin/productManage/AdminDetailForms/DescForm'
 import InfoForm from '../../../components/admin/productManage/AdminDetailForms/InfoForm'
 import { getProductById } from '../../../webAPI/adminProductsAPI'
-import { AdminPageWidth } from '../../../components/general'
 
 export default function AdminProductDetail() {
   const [productDetail, setProductDetail] = useState([])
