@@ -59,17 +59,23 @@ export default function AdminOrders() {
 
   useEffect(
     (ticketNo) => {
+      let isMounted = true
       const order = orders.filter((order) => order.ticketNo === ticketNo)
-      setOrderDetail(() => order[0])
+      if (isMounted) setOrderDetail(() => order[0])
+      return () => (isMounted = false)
     },
     [orders]
   )
 
   useEffect(() => {
+    let isMounted = true
     getAllOrders().then((res) => {
-      setIsLoading(false)
-      setOrders(res.data)
+      if (isMounted) {
+        setIsLoading(false)
+        setOrders(res.data)
+      }
     })
+    return () => (isMounted = false)
   }, [])
 
   return isLoading ? (

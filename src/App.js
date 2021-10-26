@@ -78,7 +78,7 @@ function AdminRoutes() {
     <UserContext.Provider value={{ user, setUser }}>
       <Switch>
         <Route path={'/admin/login'}>
-          {user ? <Redirect to='/admin/orders' /> : <AdminLogin />}
+          {user ? <Redirect to='/admin/members' /> : <AdminLogin />}
         </Route>
         <Route path={'/admin/orders'}>
           {user ? <AdminOrders /> : <Redirect to='/admin/login' />}

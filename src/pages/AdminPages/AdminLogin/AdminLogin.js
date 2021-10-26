@@ -1,6 +1,5 @@
 import { useState, useContext } from 'react'
 import { UserContext } from '../../../context'
-import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import { LoginBtn } from '../../../components/Button'
 import { COLOR, ADMIN_COLOR, FONT_SIZE } from '../../../constants/style'
@@ -67,7 +66,6 @@ export default function AdminLogin() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [errMsg, setErrMsg] = useState('')
-  let history = useHistory()
   const { setUser } = useContext(UserContext)
 
   const handleLogin = (e) => {
@@ -79,7 +77,6 @@ export default function AdminLogin() {
       alert('登入成功')
       addTokenToLocalStorage(res.token)
       setUser(true)
-      history.push('/admin/orders')
     })()
   }
 
