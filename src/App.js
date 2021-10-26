@@ -19,7 +19,8 @@ import {
   AdminOrders,
   AdminProducts,
   AdminMembers,
-  AdminProductDetail
+  AdminProductDetail,
+  AdminProductAdd
 } from './pages/AdminPages'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
 import { PageHeight } from './components/general'
@@ -59,6 +60,7 @@ export default function App() {
 }
 
 function AdminRoutes() {
+  const [isLoading, setIsLoading] = useState(false)
   const [user, setUser] = useState(() => {
     if (!getTokenFromLocalStorage()) return false
     // 尚未加上時效驗證
@@ -76,26 +78,31 @@ function AdminRoutes() {
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <Switch>
-        <Route path={'/admin/login'}>
-          {user ? <Redirect to='/admin/orders' /> : <AdminLogin />}
-        </Route>
-        <Route path={'/admin/orders'}>
-          {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
-        </Route>
-        <Route path={'/admin/products/detail/:id'}>
-          {user ? <AdminProductDetail /> : <Redirect to='/admin/login' />}
-        </Route>
-        <Route path={'/admin/products/:page'}>
-          {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
-        </Route>
-        <Route path={'/admin/orders'}>
-          {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
-        </Route>
-        <Route path={'/admin/members'}>
-          {user ? <AdminMembers /> : <Redirect to='/admin/login' />}
-        </Route>
-      </Switch>
+      <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
+        <Switch>
+          <Route path={'/admin/login'}>
+            {user ? <Redirect to='/admin/orders' /> : <AdminLogin />}
+          </Route>
+          <Route path={'/admin/orders'}>
+            {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
+          </Route>
+          <Route path={'/admin/products/detail/:id'}>
+            {user ? <AdminProductDetail /> : <Redirect to='/admin/login' />}
+          </Route>
+          <Route path={'/admin/products/add'}>
+            {user ? <AdminProductAdd /> : <Redirect to='/admin/login' />}
+          </Route>
+          <Route path={'/admin/products/:page'}>
+            {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
+          </Route>
+          <Route path={'/admin/orders'}>
+            {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
+          </Route>
+          <Route path={'/admin/members'}>
+            {user ? <AdminMembers /> : <Redirect to='/admin/login' />}
+          </Route>
+        </Switch>
+      </LoadingContext.Provider>
     </UserContext.Provider>
   )
 }
