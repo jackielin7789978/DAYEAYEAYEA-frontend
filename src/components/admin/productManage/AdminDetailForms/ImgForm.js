@@ -5,7 +5,11 @@ import styled from 'styled-components'
 import { FONT_SIZE, ADMIN_COLOR } from '../../../../constants/style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
-// import { changeProductImgById } from '../../../../webAPI/adminProductsAPI'
+// import {
+//   changeProductImgById,
+//   createProductImg,
+//   deleteProductImgById
+// } from '../../../../webAPI/adminProductsAPI'
 import {
   Form,
   Input,
@@ -123,7 +127,7 @@ function ImgPreviewSet({ title, imgUrl }) {
 function ImgUrlWithTitle({
   title,
   name,
-  imgUrl,
+  value,
   placeholder,
   disabled,
   formData,
@@ -131,8 +135,8 @@ function ImgUrlWithTitle({
 }) {
   const [inputValue, setInputValue] = useState('')
   useEffect(() => {
-    if (imgUrl) setInputValue((inputValue) => imgUrl)
-  }, [imgUrl])
+    if (value) setInputValue((inputValue) => value)
+  }, [value])
 
   const handleOnChange = (e) => {
     const targetValue = e.target.value.trim(' ')
@@ -140,13 +144,13 @@ function ImgUrlWithTitle({
     setInputValue((inputValue) => targetValue)
     if (!targetValue) {
       delete formData[targetName]
-      return setFormData(formData)
+      return setFormData((formData) => formData)
     }
     const newFormData = {
       ...formData,
       [targetName]: targetValue
     }
-    setFormData(newFormData)
+    setFormData((formData) => newFormData)
   }
 
   return (
@@ -166,7 +170,8 @@ function ImgUrlWithTitle({
   )
 }
 
-function ImgInputSet({ productImgUrl, span, formData, id, require }) {
+function ImgInputSet({ span, formData, imgId, require, isNew, setFormData }) {
+  // const { id } = useParams()
   const [isDisabled, setIsDisabled] = useState(true)
   const [buttonStatus, setButtonStatus] = useState('edit')
   const [errorMsg, setErrorMsg] = useState('')
@@ -186,34 +191,42 @@ function ImgInputSet({ productImgUrl, span, formData, id, require }) {
     setButtonStatus((buttonStatus) => 'save')
   }, [])
 
-  // fix
-  const handleCheckClick = useCallback(() => {
-    const length = Object.keys(imgData).length
-    if (length === 1) {
-      if (require) {
-        return setErrorMsg((errorMsg) => '此欄位為必填欄位')
+  const handleCheckClick = useCallback(
+    (e) => {
+      const length = Object.keys(imgData).length
+      console.log(length)
+      console.log(isNew)
+      console.log(imgId)
+      if (!isNew) {
+        if (length === 1) {
+          if (require) {
+            return setErrorMsg((errorMsg) => '此欄位為必填欄位')
+          }
+          //刪除圖片API
+        }
+        if (length !== 1 && length !== 4) {
+          return setErrorMsg((errorMsg) => '請完整填入三張圖片')
+        }
+        // changeProductImgById(id, imgData)
+      } else {
+        if (length !== 0 && length !== 3) {
+          return setErrorMsg((errorMsg) => '請完整填入三張圖片')
+        }
+        if (length === 3) {
+          // createProductImg({ productId: parseInt(id), ...imgData })
+          // setFormData({ productId: parseInt(id), ...imgData })
+        }
       }
-      //刪除圖片API
-    }
-    if (length !== 1 && length !== 4) {
-      return setErrorMsg((errorMsg) => '請完整填入三張圖片')
-    }
-    if (Object.keys(productImgUrl).length === 0) {
-      //新增圖片 API
-    } else {
-      // changeProductImgById(id, imgData)
-    }
-    setErrorMsg((errorMsg) => '')
-    setIsDisabled((isDisabled) => !isDisabled)
-    setButtonStatus((buttonStatus) => 'edit')
-  }, [imgData, productImgUrl, require])
+      setErrorMsg((errorMsg) => '')
+      setIsDisabled((isDisabled) => !isDisabled)
+      setButtonStatus((buttonStatus) => 'edit')
+    },
+    [imgData, isNew, require, imgId]
+  )
 
   return (
     <ImgInputOutContainer>
-      <ImgPreviewSet
-        title='圖片預覽'
-        imgUrl={productImgUrl.imgUrlMd}
-      ></ImgPreviewSet>
+      <ImgPreviewSet title='圖片預覽' imgUrl={imgData.imgUrlMd}></ImgPreviewSet>
       <ImgUrlSetContainer>
         <InputTitle>
           圖片 URL<span>{span}</span>
@@ -222,7 +235,7 @@ function ImgInputSet({ productImgUrl, span, formData, id, require }) {
           <ImgUrlWithTitle
             title='Small Size'
             name='imgUrlSm'
-            imgUrl={productImgUrl.imgUrlSm}
+            value={imgData.imgUrlSm}
             placeholder='small-size ImgURL'
             formData={imgData}
             setFormData={setImgData}
@@ -231,7 +244,7 @@ function ImgInputSet({ productImgUrl, span, formData, id, require }) {
           <ImgUrlWithTitle
             title='Medium Size'
             name='imgUrlMd'
-            imgUrl={productImgUrl.imgUrlMd}
+            value={imgData.imgUrlMd}
             placeholder='medium-size ImgURL'
             formData={imgData}
             setFormData={setImgData}
@@ -240,7 +253,7 @@ function ImgInputSet({ productImgUrl, span, formData, id, require }) {
           <ImgUrlWithTitle
             title='Large Size'
             name='imgUrlLg'
-            imgUrl={productImgUrl.imgUrlLg}
+            value={imgData.imgUrlLg}
             placeholder='large-size ImgURL'
             formData={imgData}
             setFormData={setImgData}
@@ -259,10 +272,15 @@ function ImgInputSet({ productImgUrl, span, formData, id, require }) {
 }
 
 export default function DetailImgForm({ product }) {
+  // const productData = JSON.parse(JSON.stringify(product))
+  // const imgData = productData.Product_imgs
   const { Product_imgs } = product
   const [productImgUrlOne, setProductImgUrlOne] = useState({})
   const [productImgUrlTwo, setProductImgUrlTwo] = useState({})
   const [productImgUrlThree, setProductImgUrlThree] = useState({})
+  // const [idOne, setIdOne] = useState()
+  // const [idTwo, setIdTwo] = useState()
+  // const [idThree, setIdThree] = useState()
   const history = useHistory()
 
   useEffect(() => {
@@ -271,7 +289,15 @@ export default function DetailImgForm({ product }) {
       setProductImgUrlTwo(Product_imgs[1] || {})
       setProductImgUrlThree(Product_imgs[2] || {})
     }
-  }, [product, Product_imgs])
+  }, [Product_imgs])
+
+  // useLayoutEffect(() => {
+  //   if (imgData) {
+  //     setIdOne(imgData[0].id)
+  //     setIdTwo(imgData[1].id || null)
+  //     setIdThree(imgData[2].id || null)
+  //   }
+  // }, [imgData])
 
   const handleLeaveClick = useCallback(
     (e) => {
@@ -287,20 +313,23 @@ export default function DetailImgForm({ product }) {
       <FormContentContainer>
         <ImgInputSet
           span='* 必填欄位'
-          id={productImgUrlOne.id}
+          // imgId={idOne}
+          isNew={Object.keys(productImgUrlOne).length === 0 ? true : false}
           require='true'
-          productImgUrl={productImgUrlOne}
           formData={productImgUrlOne}
+          setFormData={setProductImgUrlOne}
         />
         <ImgInputSet
-          id={productImgUrlTwo.id}
-          productImgUrl={productImgUrlTwo}
+          // imgId={idTwo}
+          isNew={Object.keys(productImgUrlTwo).length === 0 ? true : false}
           formData={productImgUrlTwo}
+          setFormData={setProductImgUrlTwo}
         />
         <ImgInputSet
-          id={productImgUrlThree.id}
-          productImgUrl={productImgUrlThree}
+          // imgId={idThree}
+          isNew={Object.keys(productImgUrlThree).length === 0 ? true : false}
           formData={productImgUrlThree}
+          setFormData={setProductImgUrlThree}
         />
       </FormContentContainer>
       <ButtonForImgForm onLeaveClick={handleLeaveClick} />

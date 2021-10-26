@@ -80,8 +80,8 @@ const ThumbnailImgDiv = styled.div`
 
   ${MEDIA_QUERY.desktop} {
     width: 100%;
-    height: 26% !important;
-    margin: 0px 0px 8px 0px;
+    height: 25% !important;
+    margin: 0px 0px 10px 0px;
   }
 `
 
