@@ -8,8 +8,8 @@ import { PageWidth } from '../../components/general'
 import { COLOR, MEDIA_QUERY } from '../../constants/style'
 import { ProductCard } from '../../components/productSystem/ProductCard'
 import { getCategoryProducts } from '../../webAPI/productsAPI'
-import { HomeCategoriesImg } from './HomeCategoriesImg'
-import { HomeArticlesImg } from './HomeArticlesImg'
+import { HomeCategoriesImg } from '../../components/homeSystem/HomeCategoriesImg'
+import { HomeArticlesImg } from '../../components/homeSystem/HomeArticlesImg'
 import { FullModal } from '../../components/Modal'
 
 const ProductContainer = styled.div`

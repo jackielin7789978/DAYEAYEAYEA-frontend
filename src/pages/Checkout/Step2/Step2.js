@@ -1,4 +1,5 @@
-import { useContext } from 'react'
+import { useContext, useState, useEffect, useMemo } from 'react'
+import { useHistory } from 'react-router'
 import { PageWidth } from '../../../components/general'
 import { ErrorMsg } from '../../../components/loginSystem/loginCard'
 import {
@@ -19,15 +20,66 @@ import { GeneralBtn } from '../../../components/Button'
 import { UserContext } from '../../../context'
 import Login from '../../Login/Login'
 import { COLOR } from '../../../constants/style'
+import { LocalStorageContext } from '../../../context'
+import { createOrder } from '../../../webAPI/orderAPI'
 export default function Step2() {
-  const { user } = useContext(UserContext) // memberId
+  const { cartItems, setCartItems } = useContext(LocalStorageContext)
+  const { user } = useContext(UserContext)
+  const { errMsg } = useState()
+  const location = useHistory()
+  useEffect(() => {
+    if (!cartItems.length) location.push('/')
+  }, [cartItems, location])
   const {
     register,
     formState: { errors },
-    handleSubmit
+    handleSubmit,
+    setValue
   } = useForm()
-  const onSubmit = (submitData) => {
-    console.log(submitData)
+  const handleChecked = (e) => {
+    if (e.target.checked) {
+      setValue('orderEmail', user.email)
+      setValue('orderAddress', user.address)
+      setValue('orderName', user.fullname)
+      setValue('orderPhone', user.phone)
+    } else {
+      setValue('orderEmail', '')
+      setValue('orderAddress', '')
+      setValue('orderName', '')
+      setValue('orderPhone', '')
+    }
+  }
+  const subTotal = useMemo(() => {
+    if (!cartItems.length) return
+    return (
+      cartItems
+        .map((item) => item.price * item.quantity)
+        .reduce((total, num) => total + num) + 80
+    )
+  }, [cartItems])
+  console.log(subTotal)
+  const onSubmit = async (submitData) => {
+    const orderItem = cartItems.map((item) => ({
+      productId: item.id,
+      quantity: item.quantity
+    }))
+    const result = await createOrder(
+      submitData.orderAddress,
+      submitData.orderEmail,
+      submitData.orderName,
+      submitData.orderPhone,
+      submitData.payment,
+      submitData.shipping,
+      orderItem,
+      subTotal,
+      0 //isDelete
+    )
+    if (result.ok === 0) {
+      console.log(result.message)
+    }
+    localStorage.removeItem('cartItemsList')
+    location.push(`/checkout/step3/${result.ticketNo}`)
+    setCartItems([])
   }
   return (
     <PageWidth>
@@ -40,12 +92,16 @@ export default function Step2() {
               <InputWrapper>
                 <InputTitle children='電郵:' />
                 <Input
-                  type='email'
-                  {...register('orderEmail', { required: true })}
+                  type='text'
+                  {...register('orderEmail', {
+                    required: true,
+                    pattern: /\S+@\S+\.\S+/
+                  })}
                 />
               </InputWrapper>
               <ErrorMsg>
                 {errors.orderEmail?.type === 'required' && '請填寫電郵'}
+                {errors.orderEmail?.type === 'pattern' && '電郵請填寫完整'}
               </ErrorMsg>
               <InputWrapper>
                 <InputTitle children='姓名:' />
@@ -73,14 +129,19 @@ export default function Step2() {
                   type='tel'
                   {...register('orderPhone', {
                     required: true,
-                    pattern: /^[0-9]{10}$/
+                    pattern:
+                      /(\d{2,3}-?|\(\d{2,3}\))\d{3,4}-?\d{4}|09\d{2}(\d{6}|-\d{3}-\d{3})/
                   })}
                 />
               </InputWrapper>
               <ErrorMsg>
                 {errors.orderPhone?.type === 'required' && '請填寫電話'}
-                {errors.password?.type === 'pattern' && '請符合電話號碼規格'}
+                {errors.orderPhone?.type === 'pattern' && '請符合電話號碼規格'}
               </ErrorMsg>
+              <Label>
+                <input type='checkbox' id='userData' onChange={handleChecked} />
+                <label htmlFor='userData'>寄件資訊與顧客資訊相同</label>
+              </Label>
             </FormWrapper>
             <FormWrapper>
               <FormTitle>付款方式</FormTitle>
@@ -120,17 +181,17 @@ export default function Step2() {
                 />
                 <RadionLabel children='宅配' />
               </Label>
-
               {/* <Label>
-            <Input type='radio' id='store' name='delivery' value='store' />
-            <RadionLabel children='超商' />
-          </Label> */}
+                <Input type='radio' id='store' name='delivery' value='store' />
+                <RadionLabel children='超商' />
+              </Label> */}
             </FormWrapper>
           </div>
+          {errMsg && <ErrorMsg>{errMsg}</ErrorMsg>}
           <BtnFlexCenter>
             <GeneralBtn
               color='primary'
-              marginStyle={{ marginTop: '20px' }}
+              buttonStyle={{ marginTop: '20px' }}
               children='送出訂單'
             />
           </BtnFlexCenter>
@@ -141,11 +202,11 @@ export default function Step2() {
             請先<span style={{ color: COLOR.text_warning }}>登入</span>
             再繼續購買
           </MsgTitle>
-          <Login $location={'/checkout/step2'} />
+          <Login />
           <BtnFlexCenter>
             <GeneralBtn
               color='light_grey'
-              marginStyle={{ cursor: 'not-allowed' }}
+              buttonStyle={{ cursor: 'not-allowed' }}
               children='送出訂單'
             />
           </BtnFlexCenter>

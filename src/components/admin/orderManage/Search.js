@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
-import { ADMIN_COLOR } from '../../../constants/style'
+import { COLOR, ADMIN_COLOR } from '../../../constants/style'
 
 const Wrapper = styled.div`
   position: relative;
@@ -34,7 +34,7 @@ const Dropdown = styled.select`
 export function Search() {
   return (
     <Wrapper>
-      <StyledSearchIcon icon={faSearch} />
+      <StyledSearchIcon icon={faSearch} style={{ color: COLOR.text_dark }} />
       <Input placeholder={'搜尋訂單'}></Input>
     </Wrapper>
   )

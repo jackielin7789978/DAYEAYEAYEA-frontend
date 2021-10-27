@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { useHistory } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
 import {
   PageWidthHeight,
   FormWrapper,
@@ -12,11 +12,12 @@ import { addTokenToLocalStorage } from '../../utils'
 import { getMe } from '../../webAPI/loginAPI'
 import { LoadingContext, UserContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
-export default function Login({ $location = '/' }) {
+export default function Login() {
   const { isLoading } = useContext(LoadingContext)
-  const location = useHistory()
   const [errMessage, setErrMessage] = useState()
   const { setUser } = useContext(UserContext)
+  const redirect = useHistory()
+  const location = useLocation()
   const tokenCheck = (token) => {
     addTokenToLocalStorage(token)
     getMe().then((res) => {
@@ -24,7 +25,10 @@ export default function Login({ $location = '/' }) {
         setErrMessage(res.message)
       }
       setUser(res.data)
-      location.push($location)
+      if (location.pathname === '/checkout/step2') {
+        return window.location.reload()
+      }
+      redirect.push('/')
     })
   }
   return (

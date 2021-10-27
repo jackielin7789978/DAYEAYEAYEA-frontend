@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import { ShoppingCarBtn, ShoppingCarWhiteBtn, GeneralBtn } from '../Button'
 import { ModalContext, LocalStorageContext } from '../../context'
+import { formatPrice } from '../../utils'
 
 const CardContainerDiv = styled.div`
   margin: 8px 4px;
@@ -210,9 +211,11 @@ export function ProductCard({
         <ProductInfoContainer>
           <TitleContainer>{name}</TitleContainer>
           <PriceContainer>
-            <PriceStyle discount={hasDiscount}>NT. {price}</PriceStyle>
+            <PriceStyle discount={hasDiscount}>{formatPrice(price)}</PriceStyle>
             {hasDiscount && (
-              <DiscountPriceStyle>NT. {discountPrice}</DiscountPriceStyle>
+              <DiscountPriceStyle>
+                {formatPrice(discountPrice)}
+              </DiscountPriceStyle>
             )}
           </PriceContainer>
         </ProductInfoContainer>

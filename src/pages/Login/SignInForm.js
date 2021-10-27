@@ -6,7 +6,7 @@ import {
   SendPassword,
   PasswordInput
 } from '../../components/loginSystem/loginCard'
-import { ArrowBtn } from '../../components/Button'
+import { LoginBtn } from '../../components/Button'
 import { useForm } from 'react-hook-form'
 import { signIn } from '../../webAPI/loginAPI'
 import { LoadingContext } from '../../context'
@@ -21,17 +21,16 @@ export default function SignInForm({
     formState: { errors },
     handleSubmit
   } = useForm()
-  const onSubmit = (submitData) => {
+  const onSubmit = async (submitData) => {
     setIsLoading(true)
     const { username, password } = submitData
-    signIn(username, password).then((data) => {
-      if (data.ok === 0) {
-        setIsLoading(false)
-        return $setErrMessage('帳號或密碼不正確')
-      }
-      $setErrMessage(null)
-      tokenCheck(data.token)
-    })
+    const result = await signIn(username, password)
+    if (result.ok === 0) {
+      setIsLoading(false)
+      return $setErrMessage('帳號或密碼不正確')
+    }
+    $setErrMessage(null)
+    tokenCheck(result.token)
   }
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -55,10 +54,10 @@ export default function SignInForm({
       </ErrorMsg>
 
       <SendPassword to='/'>忘記密碼?</SendPassword>
-      <ArrowBtn
+      <LoginBtn
         color='accent'
         children='登入'
-        marginStyle={{ marginTop: '20px' }}
+        buttonStyle={{ marginTop: '20px' }}
       />
       {$errMessage && (
         <ErrorMsg style={{ textAlign: 'center' }}>{$errMessage}</ErrorMsg>
