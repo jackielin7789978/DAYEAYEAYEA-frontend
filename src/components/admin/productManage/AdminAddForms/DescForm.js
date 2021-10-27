@@ -1,14 +1,11 @@
 import { useState, useCallback } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { ADMIN_COLOR, COLOR } from '../../../../constants/style'
-import { changeProductInfoById } from '../../../../webAPI/adminProductsAPI'
 import {
   Form,
   Input,
   InputTitle,
   FormTitleComponent,
-  ButtonGroup,
   ErrorMsg
 } from '../FormStyle'
 
@@ -16,7 +13,7 @@ const DescInput = styled(Input)`
   margin-top: 8px;
   width: 89%;
 `
-const DescForm = styled(Form)`
+const DescForm = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -25,7 +22,7 @@ const DescForm = styled(Form)`
   height: 100%;
 `
 const ComponentDiv = styled.div`
-  margin-top: 20px;
+  margin-bottom: 20px;
 `
 const DescTextArea = styled.textarea`
   margin-top: 8px;
@@ -41,17 +38,21 @@ const DescTextArea = styled.textarea`
   }
 `
 
-export default function DetailDescForm({ product }) {
-  const history = useHistory()
-  const { id } = useParams()
-  const { name, shortDesc, longDesc } = product
-  const [descData, setDescData] = useState({ name, shortDesc, longDesc })
+export default function DetailDescForm({
+  isChecked,
+  setIsChecked,
+  productDetail,
+  setProductDetail
+}) {
+  const [descData, setDescData] = useState({})
   const [errorMsgForName, setErrorMsgForName] = useState('')
   const [errorMsgForShort, setErrorMsgForShort] = useState('')
   const [errorMsgForLong, setErrorMsgForLong] = useState('')
-  const [isDisabled, setIsDisabled] = useState(true)
-  const [isValid, setIsValid] = useState(true)
-  const [buttonStatus, setButtonStatus] = useState('edit')
+  const [isValid, setIsValid] = useState({
+    name: true,
+    shortDesc: true,
+    longDesc: true
+  })
 
   const handleOnChange = useCallback(
     (e) => {
@@ -62,50 +63,51 @@ export default function DetailDescForm({ product }) {
         [targetName]: targetValue
       }
       setDescData(newDescData)
+      setProductDetail((productDetail) => ({
+        ...productDetail,
+        [targetName]: targetValue
+      }))
     },
-    [descData]
+    [setProductDetail, descData]
   )
 
-  const handleOnBlur = useCallback((e) => {
-    const targetName = e.target.name
-    const targetValue = e.target.value.trim(' ')
-    const errMsg = '此欄位不得為空'
-    targetValue ? setIsValid(true) : setIsValid(false)
-    if (targetName === 'name') {
-      targetValue ? setErrorMsgForName('') : setErrorMsgForName(errMsg)
-    }
-    if (targetName === 'shortDesc') {
-      targetValue ? setErrorMsgForShort('') : setErrorMsgForShort(errMsg)
-    }
-    if (targetName === 'longDesc') {
-      targetValue ? setErrorMsgForLong('') : setErrorMsgForLong(errMsg)
-    }
-  }, [])
-
-  const handleLeaveClick = useCallback(
+  const handleOnBlur = useCallback(
     (e) => {
-      e.preventDefault()
-      history.push('/admin/products/1')
+      const targetName = e.target.name
+      const targetValue = e.target.value.trim(' ')
+      const errMsg = '此欄位不得為空'
+      targetValue ? setIsValid(true) : setIsValid(false)
+      const falseValid = {
+        ...isValid,
+        [targetName]: false
+      }
+      const trueValid = {
+        ...isValid,
+        [targetName]: true
+      }
+
+      const checkValid = (targetValue, setErrorMsg) => {
+        targetValue
+          ? setErrorMsg('') && setIsValid((isValid) => trueValid)
+          : setErrorMsg(errMsg) && setIsValid((isValid) => falseValid)
+
+        targetValue
+          ? setIsChecked((isChecked) => ({ ...isChecked, [targetName]: true }))
+          : setIsChecked((isChecked) => ({ ...isChecked, [targetName]: false }))
+      }
+      if (targetName === 'name') {
+        return checkValid(targetValue, setErrorMsgForName)
+      }
+      if (targetName === 'shortDesc') {
+        return checkValid(targetValue, setErrorMsgForShort)
+      }
+      if (targetName === 'longDesc') {
+        return checkValid(targetValue, setErrorMsgForLong)
+      }
     },
-    [history]
+    [setIsChecked, isValid]
   )
 
-  const handleEditClick = useCallback((e) => {
-    e.preventDefault()
-    setIsDisabled((isDisabled) => !isDisabled)
-    setButtonStatus((buttonStatus) => 'save')
-  }, [])
-
-  const handleSaveClick = useCallback(
-    (e) => {
-      e.preventDefault()
-      if (!isValid) return
-      if (isValid) changeProductInfoById(id, descData)
-      setIsDisabled((isDisabled) => !isDisabled)
-      setButtonStatus((buttonStatus) => 'edit')
-    },
-    [isValid, id, descData]
-  )
   return (
     <DescForm>
       <FormTitleComponent title={'商品名稱敘述'} />
@@ -114,7 +116,6 @@ export default function DetailDescForm({ product }) {
         <DescInput
           name='name'
           value={descData.name}
-          disabled={isDisabled}
           onChange={handleOnChange}
           onBlur={handleOnBlur}
         />
@@ -127,7 +128,6 @@ export default function DetailDescForm({ product }) {
           cols='116'
           name='shortDesc'
           value={descData.shortDesc}
-          disabled={isDisabled}
           onChange={handleOnChange}
           onBlur={handleOnBlur}
         />
@@ -140,19 +140,11 @@ export default function DetailDescForm({ product }) {
           cols='116'
           name='longDesc'
           value={descData.longDesc}
-          disabled={isDisabled}
           onChange={handleOnChange}
           onBlur={handleOnBlur}
         />
         {errorMsgForLong && <ErrorMsg>{errorMsgForLong}</ErrorMsg>}
       </ComponentDiv>
-      <ButtonGroup
-        status={buttonStatus}
-        isValid={isValid}
-        onLeaveClick={handleLeaveClick}
-        onEditClick={handleEditClick}
-        onSaveClick={handleSaveClick}
-      />
     </DescForm>
   )
 }

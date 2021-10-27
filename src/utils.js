@@ -83,3 +83,9 @@ export const formatPrice = (cents) => {
 }
 
 export const multiplyPrice = (quantity, price) => quantity * price
+
+export const imgVerify = (imgUrl) => {
+  const rule = /\.(jpeg|jpg|gif|png)$/
+  const isChecked = !rule.test(imgUrl) ? false : true
+  return isChecked
+}

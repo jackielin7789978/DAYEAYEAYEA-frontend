@@ -69,9 +69,14 @@ const ButtonDiv = styled.div`
   width: 15%;
   margin: 0px 8px;
 `
-function ButtonForImgForm({ onLeaveClick }) {
+function ButtonForImgForm({ onLeaveClick, onSaveClick, isChecked }) {
   return (
     <ButtonContainer>
+      <ButtonDiv onClick={onSaveClick}>
+        <SaveBtn color={isChecked ? 'admin_blue' : ''} typeof='submit'>
+          儲存
+        </SaveBtn>
+      </ButtonDiv>
       <ButtonDiv onClick={onLeaveClick}>
         <LogoutBtn color='admin_blue'>離開</LogoutBtn>
       </ButtonDiv>
@@ -97,6 +102,24 @@ function ButtonGroup({
           <SaveBtn color={isValid ? 'admin_blue' : ''}>儲存</SaveBtn>
         </ButtonDiv>
       )}
+      <ButtonDiv onClick={onLeaveClick}>
+        <LogoutBtn color='admin_blue'>離開</LogoutBtn>
+      </ButtonDiv>
+    </ButtonContainer>
+  )
+}
+
+function ButtonGroupForAdd({
+  onEditClick,
+  onSaveClick,
+  onLeaveClick,
+  isValid
+}) {
+  return (
+    <ButtonContainer>
+      <ButtonDiv onClick={onSaveClick}>
+        <SaveBtn color={isValid ? 'admin_blue' : ''}>儲存</SaveBtn>
+      </ButtonDiv>
       <ButtonDiv onClick={onLeaveClick}>
         <LogoutBtn color='admin_blue'>離開</LogoutBtn>
       </ButtonDiv>
@@ -136,17 +159,11 @@ function Dropdown({ onChange, valueArray, productValue, disabled, name }) {
       name={name}
       id='filter'
       onChange={onChange}
-      value={productValue}
+      defaultValue={productValue}
     >
       {valueArray.map((value) => {
-        let isSelected = productValue === value ? true : false
         return (
-          <option
-            key={value}
-            value={value}
-            selected={isSelected}
-            disabled={disabled}
-          >
+          <option key={value} value={value} disabled={disabled}>
             {value}
           </option>
         )
@@ -155,17 +172,14 @@ function Dropdown({ onChange, valueArray, productValue, disabled, name }) {
   )
 }
 
-function ForNewDropdown({ onChange, dropdownTitle, valueArray, productValue }) {
+function ForNewDropdown({ onChange, valueArray, name }) {
   return (
     <DropdownStyle
-      name='filter'
+      name={name}
       id='filter'
-      defaultValue={'DEFAULT'}
       onChange={onChange}
+      defaultValue={valueArray[0]}
     >
-      <option value='DEFAULT' disabled>
-        {dropdownTitle}
-      </option>
       {valueArray.map((value) => {
         return (
           <option key={value} value={value}>
@@ -249,6 +263,7 @@ export {
   Dropdown,
   ForNewDropdown,
   ButtonGroup,
+  ButtonGroupForAdd,
   ButtonForImgForm,
   PriceInput,
   SelectedComponent,

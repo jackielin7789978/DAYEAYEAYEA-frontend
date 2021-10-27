@@ -115,7 +115,7 @@ export function ProductImgsComponent({ imgs }) {
 
   useEffect(() => {
     setShowLargeImg(imgs[0])
-    setShowThumbnailImage(imgs)
+    setShowThumbnailImage(imgs.filter((img) => img.imgUrlSm))
   }, [imgs])
 
   const handleThumbnailClick = useCallback(
@@ -154,7 +154,7 @@ export function ProductImgsComponent({ imgs }) {
       )}
       {!isMobile && (
         <LargeImgDiv
-          style={{ backgroundImage: `url(${showLargeImg?.imgUrlMd})` }}
+          style={{ backgroundImage: `url(${showLargeImg?.imgUrlLg})` }}
         />
       )}
     </ProductImgContainer>

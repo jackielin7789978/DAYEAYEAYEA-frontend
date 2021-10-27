@@ -110,47 +110,11 @@ export const changeProductInfoById = async (id, newInfo) => {
   }
 }
 
-export const changeProductImgById = async (imgId, newImgs) => {
+export const deleteProductById = async (id) => {
   const token = getTokenFromLocalStorage()
   let res
   try {
-    res = await fetch(`${BASE_URL}/products/imgs/${imgId}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify(newImgs)
-    })
-    return await res.json().then((result) => alert(result.message))
-  } catch (e) {
-    console.log(e)
-  }
-}
-
-export const createProductImg = async (newImgs) => {
-  const token = getTokenFromLocalStorage()
-  let res
-  try {
-    res = await fetch(`${BASE_URL}/products/imgs`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify(newImgs)
-    })
-    return await res.json()
-  } catch (e) {
-    console.log(e)
-  }
-}
-
-export const deleteProductImgById = async (imgId) => {
-  const token = getTokenFromLocalStorage()
-  let res
-  try {
-    res = await fetch(`${BASE_URL}/products/imgs/${imgId}`, {
+    res = await fetch(`${BASE_URL}/products/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
