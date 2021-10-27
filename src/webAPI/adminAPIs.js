@@ -22,6 +22,23 @@ export const adminLogin = async (username, password) => {
   }
 }
 
+export const adminCheck = async () => {
+  const token = getTokenFromLocalStorage()
+  try {
+    const res = await fetch(`${BASE_URL}/me`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    const result = await res.json()
+    return result.ok
+  } catch (e) {
+    console.log(e)
+    return false
+  }
+}
+
 export const getAllOrders = async () => {
   const token = getTokenFromLocalStorage()
   let res
