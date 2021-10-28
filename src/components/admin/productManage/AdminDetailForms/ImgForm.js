@@ -6,13 +6,13 @@ import { FONT_SIZE, ADMIN_COLOR } from '../../../../constants/style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { changeProductInfoById } from '../../../../webAPI/adminProductsAPI'
-import { LogoutBtn, SaveBtn } from '../../../Button'
 import {
   Form,
   Input,
   InputTitle,
   ErrorMsg,
-  FormTitleComponent
+  FormTitleComponent,
+  ButtonForImgForm
 } from '../FormStyle'
 
 const CheckIcon = styled(FontAwesomeIcon)`
@@ -96,17 +96,6 @@ const ImgContainer = styled.div`
   align-items: center;
 `
 
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin: 10px 0px 50px 0px;
-`
-
-const ButtonDiv = styled.div`
-  width: 15%;
-  margin: 0px 8px;
-`
-
 function ImgPreviewSet({ title, imgUrl }) {
   let isBlank = imgUrl ? false : true
   return (
@@ -188,7 +177,7 @@ function ImgInputSet({
   const [buttonStatus, setButtonStatus] = useState('edit')
   const inputId = parseInt(id)
 
-  const newInputValid = useCallback(
+  const setInputValid = useCallback(
     (valid) => {
       return {
         ...isValid,
@@ -220,7 +209,7 @@ function ImgInputSet({
 
   const handleCheckClick = useCallback(() => {
     const length = Object.keys(imgData).length
-    const isNotValid = newInputValid(false)
+    const isNotValid = setInputValid(false)
     const isImgCheck = checkIsImg(imgData)
     if (imgData.id !== undefined) {
       if (length === 1 && require) {
@@ -231,7 +220,7 @@ function ImgInputSet({
         setErrorMsg('請完整填入或刪除此三個欄位')
         return setIsValid((isValid) => isNotValid)
       }
-      if (!isImgCheck) {
+      if (length !== 1 && !isImgCheck) {
         setErrorMsg('請輸入結尾為 .jpg/.png/.jpeg 的網址')
         return setIsValid((isValid) => isNotValid)
       }
@@ -253,9 +242,9 @@ function ImgInputSet({
     setErrorMsg((errorMsg) => '')
     setIsDisabled((isDisabled) => !isDisabled)
     setButtonStatus((buttonStatus) => 'edit')
-    const newValid = newInputValid(true)
+    const newValid = setInputValid(true)
     setIsValid((isValid) => newValid)
-  }, [imgData, require, setIsValid, setFormData, newInputValid, checkIsImg])
+  }, [imgData, require, setIsValid, setFormData, setInputValid, checkIsImg])
 
   return (
     <ImgInputOutContainer>
@@ -392,16 +381,11 @@ export default function DetailImgForm({ product }) {
           setIsValid={setIsValid}
         />
       </FormContentContainer>
-      <ButtonContainer>
-        <ButtonDiv onClick={handleSaveClick}>
-          <SaveBtn color={isChecked ? 'admin_blue' : ''} typeof='submit'>
-            儲存
-          </SaveBtn>
-        </ButtonDiv>
-        <ButtonDiv onClick={handleLeaveClick}>
-          <LogoutBtn color='admin_blue'>離開</LogoutBtn>
-        </ButtonDiv>
-      </ButtonContainer>
+      <ButtonForImgForm
+        onSaveClick={handleSaveClick}
+        onLeaveClick={handleLeaveClick}
+        isChecked={isChecked}
+      />
     </ImgForm>
   )
 }

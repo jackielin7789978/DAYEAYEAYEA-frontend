@@ -167,10 +167,9 @@ function PriceComponent({
   })
   const handleOnChange = useCallback(
     (e) => {
-      const targetValue = parseInt(e.target.value.trim(' '))
-      const newValue = targetValue ? targetValue : ''
-      setInputPriceValue({ ...inputPriceValue, [e.target.name]: newValue })
-      setFormData({ ...formData, [e.target.name]: newValue })
+      const targetValue = e.target.value.trim(' ')
+      setInputPriceValue({ ...inputPriceValue, [e.target.name]: targetValue })
+      setFormData({ ...formData, [e.target.name]: targetValue })
     },
     [setFormData, formData, inputPriceValue]
   )
@@ -179,6 +178,10 @@ function PriceComponent({
       const { price, discountPrice } = inputPriceValue
       const targetValue = parseInt(e.target.value)
       handleBlur(e, setIsValid, setErrorMsg, errorMessage)
+      if (isNaN(targetValue)) {
+        setErrorMsg('此欄位僅限輸入數字')
+        return setIsValid(false)
+      }
       if (e.target.name === 'price') {
         if (discountPrice && targetValue < discountPrice) {
           setErrorMsg('原價價格不得低於特價')
@@ -250,7 +253,12 @@ function QuantityComponent({
 
   const handleOnBlur = useCallback(
     (e) => {
+      const targetValue = parseInt(e.target.value)
       handleBlur(e, setIsValid, setErrorMsg, errorMessage)
+      if (isNaN(targetValue)) {
+        setErrorMsg('此欄位僅限輸入數字')
+        return setIsValid(false)
+      }
     },
     [setIsValid]
   )

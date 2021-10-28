@@ -121,7 +121,25 @@ export const deleteProductById = async (id) => {
         Authorization: `Bearer ${token}`
       }
     })
-    return await res.json().then((result) => alert(result.message))
+    return await res.json()
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const createNewProduct = async (newProduct) => {
+  const token = getTokenFromLocalStorage()
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/products/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(newProduct)
+    })
+    return await res.json()
   } catch (e) {
     console.log(e)
   }

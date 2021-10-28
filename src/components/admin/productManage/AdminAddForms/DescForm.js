@@ -32,12 +32,13 @@ const DescTextArea = styled.textarea`
   }
 `
 
-export default function DetailDescForm({ setIsChecked, setProductDetail }) {
-  const [descData, setDescData] = useState({
-    name: '',
-    longDesc: '',
-    shortDesc: ''
-  })
+export default function DetailDescForm({
+  productDetail,
+  setProductDetail,
+  isChecked,
+  setIsChecked
+}) {
+  const { name, longDesc, shortDesc } = productDetail
   const [errorMsgForName, setErrorMsgForName] = useState('')
   const [errorMsgForShort, setErrorMsgForShort] = useState('')
   const [errorMsgForLong, setErrorMsgForLong] = useState('')
@@ -46,17 +47,12 @@ export default function DetailDescForm({ setIsChecked, setProductDetail }) {
     (e) => {
       const targetValue = e.target.value.trim(' ')
       const targetName = e.target.name
-      const newDescData = {
-        ...descData,
-        [targetName]: targetValue
-      }
-      setDescData(newDescData)
       setProductDetail((productDetail) => ({
         ...productDetail,
         [targetName]: targetValue
       }))
     },
-    [setProductDetail, descData]
+    [setProductDetail]
   )
 
   const handleOnBlur = useCallback(
@@ -95,7 +91,7 @@ export default function DetailDescForm({ setIsChecked, setProductDetail }) {
         <InputTitle>商品名稱:</InputTitle>
         <DescInput
           name='name'
-          value={descData.name}
+          value={name}
           onChange={handleOnChange}
           onBlur={handleOnBlur}
         />
@@ -107,7 +103,7 @@ export default function DetailDescForm({ setIsChecked, setProductDetail }) {
           rows='3'
           cols='116'
           name='shortDesc'
-          value={descData.shortDesc}
+          value={shortDesc}
           onChange={handleOnChange}
           onBlur={handleOnBlur}
         />
@@ -119,7 +115,7 @@ export default function DetailDescForm({ setIsChecked, setProductDetail }) {
           rows='10'
           cols='116'
           name='longDesc'
-          value={descData.longDesc}
+          value={longDesc}
           onChange={handleOnChange}
           onBlur={handleOnBlur}
         />

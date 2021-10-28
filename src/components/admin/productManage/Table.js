@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useState, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import {
   changeProductStatus,
   changeProductQuantity,
@@ -77,6 +77,7 @@ function TableItem({ product }) {
   const [productImg, setProductImg] = useState(
     Product_imgs && Product_imgs[length - 1].imgUrlSm
   )
+  let history = useHistory()
   const handleCount = useCallback(
     (type, id) => {
       let changeQuantity
@@ -118,11 +119,18 @@ function TableItem({ product }) {
     [productStatus, product]
   )
 
-  const handleOnDeleteClick = useCallback((e) => {
-    const targetId = Number(e.target.id)
-    alert(targetId)
-    // deleteProductById
-  }, [])
+  const handleOnDeleteClick = useCallback(
+    (e) => {
+      const targetId = Number(e.target.id)
+      deleteProductById(targetId).then((result) => {
+        if (!result) return
+        if (result.ok === 0) return alert(result.message)
+        alert('成功刪除商品')
+        history.go(0)
+      })
+    },
+    [history]
+  )
 
   return (
     <Container>

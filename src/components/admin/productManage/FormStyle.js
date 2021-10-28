@@ -73,9 +73,7 @@ function ButtonForImgForm({ onLeaveClick, onSaveClick, isChecked }) {
   return (
     <ButtonContainer>
       <ButtonDiv onClick={onSaveClick}>
-        <SaveBtn color={isChecked ? 'admin_blue' : ''} typeof='submit'>
-          儲存
-        </SaveBtn>
+        <SaveBtn color={isChecked ? 'admin_blue' : ''}>儲存</SaveBtn>
       </ButtonDiv>
       <ButtonDiv onClick={onLeaveClick}>
         <LogoutBtn color='admin_blue'>離開</LogoutBtn>
@@ -109,16 +107,11 @@ function ButtonGroup({
   )
 }
 
-function ButtonGroupForAdd({
-  onEditClick,
-  onSaveClick,
-  onLeaveClick,
-  isValid
-}) {
+function ButtonGroupForAdd({ onSaveClick, onLeaveClick }) {
   return (
     <ButtonContainer>
       <ButtonDiv onClick={onSaveClick}>
-        <SaveBtn color={isValid ? 'admin_blue' : ''}>儲存</SaveBtn>
+        <SaveBtn color='admin_blue'>儲存</SaveBtn>
       </ButtonDiv>
       <ButtonDiv onClick={onLeaveClick}>
         <LogoutBtn color='admin_blue'>離開</LogoutBtn>

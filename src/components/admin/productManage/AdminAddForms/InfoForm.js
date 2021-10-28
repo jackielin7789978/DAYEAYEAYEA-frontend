@@ -90,33 +90,42 @@ function ArticlesDropdown({ value, onChange, name }) {
 }
 
 // styledComponent End
+const setImgDataIsValid = (name, imgDataIsValid) => {
+  return (isChecked) => ({
+    ...isChecked,
+    [name]: imgDataIsValid
+  })
+}
+
+const handleChange = (e, setProductDetail) => {
+  const targetValue = e.target.value.trim(' ')
+  setProductDetail((productDetail) => ({
+    ...productDetail,
+    [e.target.name]: targetValue
+  }))
+}
 
 const handleBlur = (e, setIsChecked, setErrorMsg, errorMsg) => {
   const targetName = e.target.name
   const targetValue = e.target.value.trim(' ')
   if (!targetValue) {
     setErrorMsg(errorMsg)
-    return setIsChecked((isChecked) => ({ ...isChecked, [targetName]: false }))
+    return setIsChecked(setImgDataIsValid(targetName, false))
   }
   setErrorMsg('')
-  setIsChecked((isChecked) => ({ ...isChecked, [targetName]: true }))
+  setIsChecked(setImgDataIsValid(targetName, true))
 }
 
-function StatusComponent({ setProductDetail }) {
-  const [productStatus, setProductStatus] = useState({
-    status: 'on',
-    category: 'home',
-    article: 'fragrance'
-  })
+function StatusComponent({ productDetail, setProductDetail }) {
+  const { status, category, article } = productDetail
   const handleOnChange = useCallback(
     (e) => {
-      setProductStatus({ ...productStatus, [e.target.name]: e.target.value })
       setProductDetail((productDetail) => ({
         ...productDetail,
         [e.target.name]: e.target.value
       }))
     },
-    [productStatus, setProductDetail]
+    [setProductDetail]
   )
   return (
     <InfoFormSetContainer>
@@ -124,17 +133,17 @@ function StatusComponent({ setProductDetail }) {
       <OptionsContainer>
         <StatusDropdown
           name='status'
-          productValue={productStatus.status}
+          productValue={status}
           onChange={handleOnChange}
         />
         <CategoriesDropdown
           name='category'
-          productValue={productStatus.category}
+          productValue={category}
           onChange={handleOnChange}
         />
         <ArticlesDropdown
           name='article'
-          productValue={productStatus.article}
+          productValue={article}
           onChange={handleOnChange}
         />
       </OptionsContainer>
@@ -142,53 +151,41 @@ function StatusComponent({ setProductDetail }) {
   )
 }
 
-function PriceComponent({ setProductDetail, setIsChecked }) {
+function PriceComponent({ productDetail, setProductDetail, setIsChecked }) {
   const errorMessage = '此兩欄位不得為空'
   const [errorMsg, setErrorMsg] = useState('')
-  const [inputPriceValue, setInputPriceValue] = useState({
-    price: '',
-    discountPrice: ''
-  })
+  const { price, discountPrice } = productDetail
   const handleOnChange = useCallback(
     (e) => {
-      const targetValue = parseInt(e.target.value.trim(' '))
-      const newValue = targetValue ? targetValue : ''
-      setInputPriceValue({ ...inputPriceValue, [e.target.name]: newValue })
-      setProductDetail((productDetail) => ({
-        ...productDetail,
-        [e.target.name]: newValue
-      }))
+      handleChange(e, setProductDetail)
     },
-    [setProductDetail, inputPriceValue]
+    [setProductDetail]
   )
 
   const handleOnBlur = useCallback(
     (e) => {
-      const { price, discountPrice } = inputPriceValue
+      const targetName = e.target.name
       const targetValue = parseInt(e.target.value)
       handleBlur(e, setIsChecked, setErrorMsg, errorMessage)
+      if (isNaN(targetValue)) {
+        setErrorMsg('此欄位僅限輸入數字')
+        return setIsChecked(setImgDataIsValid(targetName, false))
+      }
       if (e.target.name === 'price') {
         if (discountPrice && targetValue < discountPrice) {
           setErrorMsg('原價價格不得低於特價')
-          setIsChecked((isChecked) => ({
-            ...isChecked,
-            [e.target.name]: false
-          }))
+          return setIsChecked(setImgDataIsValid(targetName, false))
         }
       }
       if (e.target.name === 'discountPrice') {
         if (price && targetValue > price) {
           setErrorMsg('特價價格不可高於原價')
-          setIsChecked((isChecked) => ({
-            ...isChecked,
-            [e.target.name]: false
-          }))
+          return setIsChecked(setImgDataIsValid(targetName, false))
         }
       }
     },
-    [setIsChecked, inputPriceValue]
+    [setIsChecked, price, discountPrice]
   )
-
   return (
     <InfoFormSetContainer>
       <FormTitleComponent title='商品價格' />
@@ -197,7 +194,7 @@ function PriceComponent({ setProductDetail, setIsChecked }) {
           <InputTitle>商品原價</InputTitle>
           <PriceInput
             name='price'
-            value={inputPriceValue.price}
+            value={price}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
           ></PriceInput>
@@ -209,7 +206,7 @@ function PriceComponent({ setProductDetail, setIsChecked }) {
           </InputTitle>
           <PriceInput
             name='discountPrice'
-            value={inputPriceValue.discountPrice}
+            value={discountPrice}
             onChange={handleOnChange}
             onBlur={handleOnBlur}
           ></PriceInput>
@@ -220,25 +217,26 @@ function PriceComponent({ setProductDetail, setIsChecked }) {
   )
 }
 
-function QuantityComponent({ setProductDetail, setIsChecked }) {
-  const [inputQuantityValue, setInputQuantityValue] = useState('')
+function QuantityComponent({ productDetail, setProductDetail, setIsChecked }) {
+  const { quantity } = productDetail
   const [errorMsg, setErrorMsg] = useState('')
   const errorMessage = '此欄位不得為空'
   const handleOnChange = useCallback(
     (e) => {
-      const targetValue = parseInt(e.target.value.trim(' '))
-      const newValue = targetValue ? targetValue : ''
-      setInputQuantityValue(newValue)
-      setProductDetail((productDetail) => ({
-        ...productDetail,
-        [e.target.name]: newValue
-      }))
+      handleChange(e, setProductDetail)
     },
-    [setProductDetail, setInputQuantityValue]
+    [setProductDetail]
   )
+
   const handleOnBlur = useCallback(
     (e) => {
+      const targetName = e.target.name
+      const targetValue = parseInt(e.target.value)
       handleBlur(e, setIsChecked, setErrorMsg, errorMessage)
+      if (isNaN(targetValue)) {
+        setErrorMsg('此欄位僅限輸入數字')
+        return setIsChecked(setImgDataIsValid(targetName, false))
+      }
     },
     [setIsChecked]
   )
@@ -249,7 +247,7 @@ function QuantityComponent({ setProductDetail, setIsChecked }) {
       <OptionsContainer>
         <QuantityInputStyle
           name='quantity'
-          value={inputQuantityValue}
+          value={quantity}
           onChange={handleOnChange}
           onBlur={handleOnBlur}
         ></QuantityInputStyle>
@@ -259,18 +257,26 @@ function QuantityComponent({ setProductDetail, setIsChecked }) {
   )
 }
 
-export default function DetailInfoForm({ setIsChecked, setProductDetail }) {
+export default function DetailInfoForm({
+  productDetail,
+  setProductDetail,
+  isChecked,
+  setIsChecked
+}) {
   return (
     <InfoForm>
       <StatusComponent
+        productDetail={productDetail}
         setProductDetail={setProductDetail}
         setIsChecked={setIsChecked}
       ></StatusComponent>
       <PriceComponent
+        productDetail={productDetail}
         setProductDetail={setProductDetail}
         setIsChecked={setIsChecked}
       ></PriceComponent>
       <QuantityComponent
+        productDetail={productDetail}
         setProductDetail={setProductDetail}
         setIsChecked={setIsChecked}
       ></QuantityComponent>
