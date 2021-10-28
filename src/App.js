@@ -19,7 +19,8 @@ import {
   AdminOrders,
   AdminProducts,
   AdminMembers,
-  AdminProductDetail
+  AdminProductDetail,
+  Layout as AdminLayout
 } from './pages/AdminPages'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
 import { PageHeight } from './components/general'
@@ -27,8 +28,7 @@ import {
   HashRouter as Router,
   Route,
   Switch,
-  useRouteMatch,
-  Redirect
+  useRouteMatch
 } from 'react-router-dom'
 import {
   ScrollToTop,
@@ -59,44 +59,16 @@ export default function App() {
 }
 
 function AdminRoutes() {
-  const [user, setUser] = useState(() => {
-    if (!getTokenFromLocalStorage()) return false
-    // 尚未加上時效驗證
-    try {
-      const _info = jwt_decode(getTokenFromLocalStorage())
-      if (_info.hasOwnProperty('role')) {
-        return true
-      } else {
-        return false
-      }
-    } catch (error) {
-      return false
-    }
-  })
-
   return (
-    <UserContext.Provider value={{ user, setUser }}>
-      <Switch>
-        <Route path={'/admin/login'}>
-          {user ? <Redirect to='/admin/orders' /> : <AdminLogin />}
-        </Route>
-        <Route path={'/admin/orders'}>
-          {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
-        </Route>
-        <Route path={'/admin/products/detail/:id'}>
-          {user ? <AdminProductDetail /> : <Redirect to='/admin/login' />}
-        </Route>
-        <Route path={'/admin/products/:page'}>
-          {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
-        </Route>
-        <Route path={'/admin/orders'}>
-          {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
-        </Route>
-        <Route path={'/admin/members'}>
-          {user ? <AdminMembers /> : <Redirect to='/admin/login' />}
-        </Route>
-      </Switch>
-    </UserContext.Provider>
+    <Switch>
+      <Route path={'/admin/login'} component={AdminLogin}/>
+      <AdminLayout>
+        <Route path={'/admin/members'} component={AdminMembers}/>
+        <Route path={'/admin/orders'} component={AdminOrders}/>
+        <Route path={'/admin/products/detail/:id'} component={AdminProductDetail}/>
+        <Route path={'/admin/products/:page'} component={AdminProducts}/>
+      </AdminLayout>
+    </Switch>
   )
 }
 function Shop() {
