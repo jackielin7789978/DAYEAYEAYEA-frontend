@@ -73,13 +73,13 @@ const showProductsInComponent = (data, MediaQuery, setIsModalOpen) => {
 }
 
 export default function Home() {
+  const { isLoading, setIsLoading } = useContext(LoadingContext)
   const [homeProducts, setHomeProducts] = useState([])
   const [apparelProducts, setApparelProducts] = useState([])
   const [kitchenwareProducts, setKitchenProducts] = useState([])
   const [foodProducts, setFoodProducts] = useState([])
   const [stationeryProducts, setStationeryProducts] = useState([])
   const [outdoorProducts, setOutdoorProducts] = useState([])
-  const { isLoading, setIsLoading } = useContext(LoadingContext)
   const { isModalOpen, handleModalClose } = useContext(ModalContext)
 
   useEffect(() => {

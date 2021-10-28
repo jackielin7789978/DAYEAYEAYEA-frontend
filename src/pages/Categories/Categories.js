@@ -43,8 +43,7 @@ export default function Categories() {
     (result) => {
       if (!result) return
       if (result.ok === 0) {
-        history.push('/404')
-        return setIsLoading(false)
+        return history.push('/404')
       }
       setTotalPage((totalPage) => setNumInArray(result.totalPage))
       setProducts(result.data)
@@ -73,9 +72,10 @@ export default function Categories() {
     parseInt(page),
     isDesktop
   )
-  return (
+  return isLoading ? (
+    <IsLoadingComponent />
+  ) : (
     <PageWidth>
-      {isLoading && <IsLoadingComponent />}
       <FullModal
         open={isModalOpen}
         content='已成功加入購物車 ! '

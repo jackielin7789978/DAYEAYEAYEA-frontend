@@ -57,9 +57,9 @@ export default function Products() {
         history.push('/404')
         return setIsLoading(false)
       }
+      setIsLoading((isLoading) => false)
       setProduct(result.data)
       setProductImgs(result.data.Product_imgs)
-      setIsLoading((isLoading) => false)
     })
   }, [setIsLoading, id, history])
 
@@ -67,9 +67,10 @@ export default function Products() {
     product
   let hasDiscount = price !== discountPrice ? true : false
 
-  return (
+  return isLoading ? (
+    <IsLoadingComponent />
+  ) : (
     <PageWidth>
-      {isLoading && <IsLoadingComponent />}
       <FullModal
         open={isModalOpen}
         content='已成功加入購物車 ! '

@@ -83,10 +83,9 @@ export default function Search() {
       if (!result) return
       if (result.ok === 0) {
         history.push('/404')
-        return setIsLoading((isLoading) => false)
       }
-      setSearchResult(result.data)
       setIsLoading((isLoading) => false)
+      setSearchResult(result.data)
     })
   }, [setIsLoading, history, keywords, keywordString])
   const SearchProductsAmount = searchResult.length
@@ -98,9 +97,10 @@ export default function Search() {
     isDesktop
   )
 
-  return (
+  return isLoading ? (
+    <IsLoadingComponent />
+  ) : (
     <PageWidth>
-      {isLoading && <IsLoadingComponent />}
       <FullModal
         open={isModalOpen}
         content='已成功加入購物車 ! '
