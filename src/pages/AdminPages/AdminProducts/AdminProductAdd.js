@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Tabs } from '../../../components/admin/productManage/Tab'
 import {
@@ -10,11 +10,23 @@ import DescForm from '../../../components/admin/productManage/AdminAddForms/Desc
 import InfoForm from '../../../components/admin/productManage/AdminAddForms/InfoForm'
 
 export default function AdminProductAdd() {
-  const [productDetail, setProductDetail] = useState({})
-  useEffect(() => {
-    setProductDetail({})
-  }, [])
-  const [isChecked, setIsChecked] = useState({})
+  const [productDetail, setProductDetail] = useState({
+    status: 'on',
+    category: 'home',
+    article: 'fragrance'
+  })
+  const [isChecked, setIsChecked] = useState({
+    name: false,
+    price: false,
+    discountPrice: false,
+    category: true,
+    quantity: false,
+    status: true,
+    shortDesc: false,
+    longDesc: false,
+    article: true,
+    imgsData: false
+  })
   let history = useHistory()
   const handleLeaveClick = useCallback(
     (e) => {

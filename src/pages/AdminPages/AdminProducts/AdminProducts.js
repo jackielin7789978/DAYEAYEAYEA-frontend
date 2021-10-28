@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useState, useEffect, useCallback, useContext } from 'react'
+import { useState, useLayoutEffect, useCallback, useContext } from 'react'
 import { useParams, useLocation, useHistory, Link } from 'react-router-dom'
 import { LoadingContext } from '../../../context'
 import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
@@ -61,27 +61,27 @@ export default function AdminProducts() {
   let showProductsList
   let pagesArray
   let showProductsByPage
-  useEffect(() => {
+
+  useLayoutEffect(() => {
+    setIsLoading(true)
     if (keywords) {
-      setIsLoading(true)
       searchProductsFromAdmin(keywords).then((result) => {
         if (!result) return setIsLoading((isLoading) => true)
         if (result.ok === 0) {
           return history.push('/404')
         }
-        setProducts(result.data)
         setIsLoading(false)
+        setProducts(result.data)
       })
     }
     if (!keywords) {
-      setIsLoading(true)
       getAllProducts().then((result) => {
         if (!result) return setIsLoading((isLoading) => true)
         if (result.ok === 0) {
           return history.push('/404')
         }
-        setProducts(result.data)
         setIsLoading(false)
+        setProducts(result.data)
       })
     }
   }, [keywords, history, setIsLoading])
@@ -109,9 +109,10 @@ export default function AdminProducts() {
     [history, location, keywords]
   )
 
-  return (
+  return isLoading ? (
+    <AdminIsLoadingComponent />
+  ) : (
     <PageWrapper>
-      {isLoading && <AdminIsLoadingComponent />}
       <SearchContainer>
         <SearchSideContainer>
           <Search />

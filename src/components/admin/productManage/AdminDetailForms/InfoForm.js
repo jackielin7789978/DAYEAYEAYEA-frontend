@@ -176,9 +176,23 @@ function PriceComponent({
   )
   const handleOnBlur = useCallback(
     (e) => {
+      const { price, discountPrice } = inputPriceValue
+      const targetValue = parseInt(e.target.value)
       handleBlur(e, setIsValid, setErrorMsg, errorMessage)
+      if (e.target.name === 'price') {
+        if (discountPrice && targetValue < discountPrice) {
+          setErrorMsg('原價價格不得低於特價')
+          setIsValid(false)
+        }
+      }
+      if (e.target.name === 'discountPrice') {
+        if (price && targetValue > price) {
+          setErrorMsg('特價價格不可高於原價')
+          setIsValid(false)
+        }
+      }
     },
-    [setIsValid]
+    [setIsValid, inputPriceValue]
   )
 
   return (

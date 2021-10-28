@@ -1,13 +1,7 @@
 import { useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { ADMIN_COLOR, COLOR } from '../../../../constants/style'
-import {
-  Form,
-  Input,
-  InputTitle,
-  FormTitleComponent,
-  ErrorMsg
-} from '../FormStyle'
+import { Input, InputTitle, FormTitleComponent, ErrorMsg } from '../FormStyle'
 
 const DescInput = styled(Input)`
   margin-top: 8px;
@@ -38,21 +32,15 @@ const DescTextArea = styled.textarea`
   }
 `
 
-export default function DetailDescForm({
-  isChecked,
-  setIsChecked,
-  productDetail,
-  setProductDetail
-}) {
-  const [descData, setDescData] = useState({})
+export default function DetailDescForm({ setIsChecked, setProductDetail }) {
+  const [descData, setDescData] = useState({
+    name: '',
+    longDesc: '',
+    shortDesc: ''
+  })
   const [errorMsgForName, setErrorMsgForName] = useState('')
   const [errorMsgForShort, setErrorMsgForShort] = useState('')
   const [errorMsgForLong, setErrorMsgForLong] = useState('')
-  const [isValid, setIsValid] = useState({
-    name: true,
-    shortDesc: true,
-    longDesc: true
-  })
 
   const handleOnChange = useCallback(
     (e) => {
@@ -76,36 +64,28 @@ export default function DetailDescForm({
       const targetName = e.target.name
       const targetValue = e.target.value.trim(' ')
       const errMsg = '此欄位不得為空'
-      targetValue ? setIsValid(true) : setIsValid(false)
-      const falseValid = {
-        ...isValid,
-        [targetName]: false
-      }
-      const trueValid = {
-        ...isValid,
-        [targetName]: true
-      }
-
-      const checkValid = (targetValue, setErrorMsg) => {
-        targetValue
-          ? setErrorMsg('') && setIsValid((isValid) => trueValid)
-          : setErrorMsg(errMsg) && setIsValid((isValid) => falseValid)
-
-        targetValue
-          ? setIsChecked((isChecked) => ({ ...isChecked, [targetName]: true }))
-          : setIsChecked((isChecked) => ({ ...isChecked, [targetName]: false }))
+      const checkValid = (targetValue, setErrorMsg, errMsg, targetName) => {
+        if (!targetValue) {
+          setErrorMsg(errMsg)
+          return setIsChecked((isChecked) => ({
+            ...isChecked,
+            [targetName]: false
+          }))
+        }
+        setErrorMsg('')
+        setIsChecked((isChecked) => ({ ...isChecked, [targetName]: true }))
       }
       if (targetName === 'name') {
-        return checkValid(targetValue, setErrorMsgForName)
+        return checkValid(targetValue, setErrorMsgForName, errMsg, targetName)
       }
       if (targetName === 'shortDesc') {
-        return checkValid(targetValue, setErrorMsgForShort)
+        return checkValid(targetValue, setErrorMsgForShort, errMsg, targetName)
       }
       if (targetName === 'longDesc') {
-        return checkValid(targetValue, setErrorMsgForLong)
+        return checkValid(targetValue, setErrorMsgForLong, errMsg, targetName)
       }
     },
-    [setIsChecked, isValid]
+    [setIsChecked]
   )
 
   return (

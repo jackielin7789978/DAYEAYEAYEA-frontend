@@ -222,7 +222,6 @@ function ImgInputSet({
     const length = Object.keys(imgData).length
     const isNotValid = newInputValid(false)
     const isImgCheck = checkIsImg(imgData)
-    console.log(imgData)
     if (imgData.id !== undefined) {
       if (length === 1 && require) {
         setErrorMsg('請完整填入此必填欄位')
