@@ -17,6 +17,7 @@ import {
 import {
   AdminLogin,
   AdminOrders,
+  AdminOrderDetail,
   AdminProducts,
   AdminMembers,
   AdminProductDetail,
@@ -61,12 +62,16 @@ export default function App() {
 function AdminRoutes() {
   return (
     <Switch>
-      <Route path={'/admin/login'} component={AdminLogin}/>
+      <Route path={'/admin/login'} component={AdminLogin} />
       <AdminLayout>
-        <Route path={'/admin/members'} component={AdminMembers}/>
-        <Route path={'/admin/orders'} component={AdminOrders}/>
-        <Route path={'/admin/products/detail/:id'} component={AdminProductDetail}/>
-        <Route path={'/admin/products/:page'} component={AdminProducts}/>
+        <Route path={'/admin/members'} component={AdminMembers} />
+        <Route path={'/admin/orders/:id'} component={AdminOrderDetail} />
+        <Route path={'/admin/orders'} component={AdminOrders} />
+        <Route
+          path={'/admin/products/detail/:id'}
+          component={AdminProductDetail}
+        />
+        <Route path={'/admin/products/:page'} component={AdminProducts} />
       </AdminLayout>
     </Switch>
   )
@@ -91,23 +96,28 @@ function Shop() {
   }
 
   const [user, setUser] = useState()
+
   useEffect(() => {
     let localToken = getTokenFromLocalStorage()
     if (!localToken) return false
     let decoded = isTokenExpired(localToken)
     return decoded.id ? setUser(decoded) : setUser(null)
   }, [])
+
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
   }, [setIsModalOpen])
+
   const totalPrice = useMemo(() => {
     if (!cartItems) return
-    let sum = 0
+    // 預先加上 80 元運費
+    let sum = 80
     for (const cartItem of cartItems) {
-      sum += cartItem.price
+      sum += cartItem.discountPrice * cartItem.quantity
     }
     return sum
   }, [cartItems])
+
   const totalItems = useMemo(() => {
     if (!cartItems) return
     return cartItems.length
@@ -149,6 +159,7 @@ function Shop() {
     addItemsToLocalStorage(productList)
     setCartItems(productList)
   }
+
   const handleRemoveCartItem = (id) => {
     addItemsToLocalStorage(cartItems.filter((item) => item.id !== id))
     setCartItems(cartItems.filter((item) => item.id !== id))
