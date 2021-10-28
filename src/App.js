@@ -17,6 +17,7 @@ import {
 import {
   AdminLogin,
   AdminOrders,
+  AdminOrderDetail,
   AdminProducts,
   AdminMembers,
   AdminProductDetail
@@ -80,16 +81,16 @@ function AdminRoutes() {
         <Route path={'/admin/login'}>
           {user ? <Redirect to='/admin/members' /> : <AdminLogin />}
         </Route>
-        <Route path={'/admin/orders'}>
-          {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
-        </Route>
         <Route path={'/admin/products/detail/:id'}>
           {user ? <AdminProductDetail /> : <Redirect to='/admin/login' />}
         </Route>
         <Route path={'/admin/products/:page'}>
           {user ? <AdminProducts /> : <Redirect to='/admin/login' />}
         </Route>
-        <Route path={['admin/orders/:ticketNo', '/admin/orders']}>
+        <Route path={'/admin/orders/:ticket'}>
+          {user ? <AdminOrderDetail /> : <Redirect to='/admin/login' />}
+        </Route>
+        <Route path={'/admin/orders'}>
           {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
         </Route>
         <Route path={'/admin/members'}>

@@ -9,7 +9,7 @@ const RestyledCell = styled(Cell)`
   padding: 0 4px;
 `
 
-export default function TableItem({ order, handleOrderDetail }) {
+export default function TableItem({ order }) {
   return (
     <Container>
       <RestyledCell>{order.status}</RestyledCell>
@@ -22,9 +22,6 @@ export default function TableItem({ order, handleOrderDetail }) {
       <RestyledCell>
         <Link to={`/admin/orders/${order.ticketNo}`}>
           <GeneralBtn
-            onClick={() => {
-              handleOrderDetail(order.ticketNo)
-            }}
             color='admin_grey'
             children={'訂單詳情'}
             buttonStyle={{ minWidth: '80px', width: '50%' }}
