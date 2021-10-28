@@ -21,7 +21,10 @@ const Layout = ({ children }) => {
   const history = useHistory();
   useEffect(() => {
     ;(async () => {
-      if(!await adminCheck()) history.push('/admin/login')
+      if(await adminCheck()) return
+      
+      alert('請先登入!!!')
+      history.push('/admin/login')
     })()
   }, [history, children])
 
