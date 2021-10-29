@@ -1,13 +1,17 @@
+import { useState } from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { ADMIN_COLOR } from '../../../constants/style'
-
+import { useEffect } from 'react'
+import { GeneralBtn } from '../../Button'
 const Wrapper = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
 `
 const Input = styled.input`
-  width: 200px;
+  width: 400px;
   padding: 10px 10px 10px 40px;
   border: 1px solid ${ADMIN_COLOR.border_grey};
   &:focus {
@@ -21,39 +25,33 @@ const StyledSearchIcon = styled(FontAwesomeIcon)`
   left: 12px;
   transform: translate(0, -50%);
 `
-const Dropdown = styled.select`
-  width: 200px;
-  padding: 10px;
-  border: 1px solid ${ADMIN_COLOR.border_grey};
-  margin-left: 12px;
-  &:focus {
-    border: 1px solid ${ADMIN_COLOR.border_dark_grey};
-  }
-`
 
-export function Search() {
+export function Search({ value, setValue }) {
+  const [isSearching, setIsSearching] = useState(false)
+  useEffect(() => {
+    value ? setIsSearching(true) : setIsSearching(false)
+  }, [value])
+  const handleChange = (e) => {
+    setValue(e.target.value)
+  }
   return (
     <Wrapper>
       <StyledSearchIcon icon={faSearch} />
-      <Input placeholder={'搜尋使用者'}></Input>
+      <Input
+        placeholder={'輸入帳號、信箱、名稱或是電話來搜尋使用者'}
+        value={value}
+        onChange={handleChange}
+      ></Input>
+      {isSearching && (
+        <GeneralBtn
+          onClick={() => {
+            setValue('')
+          }}
+          color={'admin_blue'}
+          children={'清除搜尋'}
+          buttonStyle={{ width: '100px', marginLeft: '20px' }}
+        />
+      )}
     </Wrapper>
-  )
-}
-
-export function Filter({ handleFilter }) {
-  return (
-    <Dropdown
-      name='filter'
-      id='filter'
-      onChange={(e) => {
-        handleFilter(e.target.value)
-      }}
-    >
-      <option value='所有訂單'>所有訂單</option>
-      <option value='處理中'>處理中</option>
-      <option value='已出貨'>已出貨</option>
-      <option value='已取消'>已取消</option>
-      <option>已完成</option>
-    </Dropdown>
   )
 }

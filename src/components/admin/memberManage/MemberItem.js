@@ -19,16 +19,13 @@ const RestyledCell = styled(Cell)`
   padding: 0 4px;
 `
 
-export default function TableItem({ member, setMember }) {
+export default function TableItem({ member }) {
   const calTotalPrice =
     member.Orders.length > 0
       ? member?.Orders.map((order) => order.subTotal).reduce(
           (total, num) => total + num
         )
       : 0
-  // const handleStore = () => {
-  //   setMember(member)
-  // }
   return (
     <Container>
       <RestyledCell style={{ width: '19%' }}>{member.username}</RestyledCell>
