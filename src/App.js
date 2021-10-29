@@ -64,14 +64,16 @@ function AdminRoutes() {
     <Switch>
       <Route path={'/admin/login'} component={AdminLogin} />
       <AdminLayout>
-        <Route path={'/admin/members/:id'} component={AdminMemberDetail} />
-        <Route path={'/admin/members'} component={AdminMembers} />
-        <Route path={'/admin/orders'} component={AdminOrders} />
-        <Route
-          path={'/admin/products/detail/:id'}
-          component={AdminProductDetail}
-        />
-        <Route path={'/admin/products/:page'} component={AdminProducts} />
+        <Switch>
+          <Route path={'/admin/members/:id'} component={AdminMemberDetail} />
+          <Route path={'/admin/members'} component={AdminMembers} />
+          <Route path={'/admin/orders'} component={AdminOrders} />
+          <Route
+            path={'/admin/products/detail/:id'}
+            component={AdminProductDetail}
+          />
+          <Route path={'/admin/products/:page'} component={AdminProducts} />
+        </Switch>
       </AdminLayout>
     </Switch>
   )
