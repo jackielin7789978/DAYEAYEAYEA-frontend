@@ -109,6 +109,7 @@ function AdminRoutes() {
 function Shop() {
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isProductSoldOut, setIsProductSoldOut] = useState(false)
   const [cartItems, setCartItems] = useState(
     JSON.parse(getItemsFromLocalStorage())
   )
@@ -134,6 +135,7 @@ function Shop() {
   }, [])
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
+    setIsProductSoldOut((isProductSoldOut) => false)
   }, [setIsModalOpen])
   const totalPrice = useMemo(() => {
     if (!cartItems) return
@@ -197,7 +199,13 @@ function Shop() {
     <UserContext.Provider value={{ user, setUser }}>
       <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
         <ModalContext.Provider
-          value={{ isModalOpen, setIsModalOpen, handleModalClose }}
+          value={{
+            isModalOpen,
+            setIsModalOpen,
+            handleModalClose,
+            isProductSoldOut,
+            setIsProductSoldOut
+          }}
         >
           <LocalStorageContext.Provider
             value={{

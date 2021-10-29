@@ -13,7 +13,10 @@ import {
   WhiteCard
 } from '../../components/productSystem/ProductCard'
 import { countWhiteCardAmount, setSearchPageInArray } from '../../utils'
-import { FullModal } from '../../components/Modal'
+import {
+  AddCartModal,
+  SoldOutCartModal
+} from '../../components/productSystem/ProductModal'
 import { PaginatorButton } from '../../components/Paginator'
 
 const PageContainer = styled.div`
@@ -62,7 +65,8 @@ function SearchFoundResult({ keyword, searchAmount }) {
 
 export default function Search() {
   const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, handleModalClose } = useContext(ModalContext)
+  const { isModalOpen, handleModalClose, isProductSoldOut } =
+    useContext(ModalContext)
   const [searchResult, setSearchResult] = useState([])
   const history = useHistory()
   const isMobile = useMediaQuery('(max-width: 767px)')
@@ -100,11 +104,18 @@ export default function Search() {
   return (
     <PageWidth>
       {isLoading && <IsLoadingComponent />}
-      <FullModal
-        open={isModalOpen}
-        content='已成功加入購物車 ! '
-        onClose={handleModalClose}
-      />
+      {isProductSoldOut && (
+        <AddCartModal
+          isModalOpen={isModalOpen}
+          handleModalClose={handleModalClose}
+        />
+      )}
+      {!isProductSoldOut && (
+        <SoldOutCartModal
+          isModalOpen={isModalOpen}
+          handleModalClose={handleModalClose}
+        />
+      )}
       {SearchProductsAmount === 0 && (
         <PageContainer>
           <SearchNotFoundContainer>沒有符合搜尋的商品</SearchNotFoundContainer>
@@ -120,7 +131,15 @@ export default function Search() {
             {searchResult
               .slice(perPageSliceStart, perPageSliceEnd)
               .map(
-                ({ id, name, price, Product_imgs, discountPrice, status }) => {
+                ({
+                  id,
+                  name,
+                  price,
+                  Product_imgs,
+                  discountPrice,
+                  status,
+                  quantity
+                }) => {
                   const length = Product_imgs.length
                   const imgUrl = isMobile
                     ? Product_imgs[length - 1].imgUrlSm
@@ -135,6 +154,7 @@ export default function Search() {
                       price={price}
                       discountPrice={discountPrice}
                       status={status}
+                      stockQuantity={quantity}
                     />
                   )
                 }

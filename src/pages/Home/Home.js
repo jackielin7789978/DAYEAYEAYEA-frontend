@@ -10,7 +10,10 @@ import { ProductCard } from '../../components/productSystem/ProductCard'
 import { getCategoryProducts } from '../../webAPI/productsAPI'
 import { HomeCategoriesImg } from '../../components/homeSystem/HomeCategoriesImg'
 import { HomeArticlesImg } from '../../components/homeSystem/HomeArticlesImg'
-import { FullModal } from '../../components/Modal'
+import {
+  AddCartModal,
+  SoldOutCartModal
+} from '../../components/productSystem/ProductModal'
 
 const ProductContainer = styled.div`
   display: flex;
@@ -51,7 +54,7 @@ const getProductsByCategory = (category, setProducts, setIsLoading) => {
 const showProductsInComponent = (data, MediaQuery, setIsModalOpen) => {
   const isMobile = MediaQuery('(max-width: 767px)')
   return data.map(
-    ({ id, name, price, Product_imgs, discountPrice, status }) => {
+    ({ id, name, price, Product_imgs, discountPrice, status, quantity }) => {
       const length = Product_imgs.length
       const imgUrl = isMobile
         ? Product_imgs[length - 1].imgUrlMd
@@ -66,6 +69,7 @@ const showProductsInComponent = (data, MediaQuery, setIsModalOpen) => {
           price={price}
           discountPrice={discountPrice}
           status={status}
+          stockQuantity={quantity}
         />
       )
     }
@@ -80,7 +84,8 @@ export default function Home() {
   const [foodProducts, setFoodProducts] = useState([])
   const [stationeryProducts, setStationeryProducts] = useState([])
   const [outdoorProducts, setOutdoorProducts] = useState([])
-  const { isModalOpen, handleModalClose } = useContext(ModalContext)
+  const { isModalOpen, handleModalClose, isProductSoldOut } =
+    useContext(ModalContext)
 
   useEffect(() => {
     getProductsByCategory('home', setHomeProducts, setIsLoading)
@@ -96,11 +101,18 @@ export default function Home() {
       <HomeArticlesImg />
       <PageWidth>
         {isLoading && <IsLoadingComponent />}
-        <FullModal
-          open={isModalOpen}
-          content='已成功加入購物車 ! '
-          onClose={handleModalClose}
-        />
+        {isProductSoldOut && (
+          <AddCartModal
+            isModalOpen={isModalOpen}
+            handleModalClose={handleModalClose}
+          />
+        )}
+        {!isProductSoldOut && (
+          <SoldOutCartModal
+            isModalOpen={isModalOpen}
+            handleModalClose={handleModalClose}
+          />
+        )}
         <ProductContainer>
           <HomeCategoriesImg
             imgUrl='https://i.imgur.com/WjvyBCB.jpg'

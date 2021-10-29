@@ -15,7 +15,10 @@ import {
 } from '../../components/productSystem/ProductCard'
 import { countWhiteCardAmount, setNumInArray } from '../../utils'
 import { PaginatorButton } from '../../components/Paginator'
-import { FullModal } from '../../components/Modal'
+import {
+  AddCartModal,
+  SoldOutCartModal
+} from '../../components/productSystem/ProductModal'
 
 const CardContainer = styled.div`
   display: flex;
@@ -32,7 +35,8 @@ export default function Categories() {
   const [products, setProducts] = useState([])
   const [totalPage, setTotalPage] = useState([])
   const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, handleModalClose } = useContext(ModalContext)
+  const { isModalOpen, handleModalClose, isProductSoldOut } =
+    useContext(ModalContext)
   const isMobile = useMediaQuery('(max-width: 767px)')
   const isDesktop = useMediaQuery('(min-width: 1200px)')
   const pathname = useLocation().pathname
@@ -75,14 +79,29 @@ export default function Categories() {
   return (
     <PageWidth>
       {isLoading && <IsLoadingComponent />}
-      <FullModal
-        open={isModalOpen}
-        content='已成功加入購物車 ! '
-        onClose={handleModalClose}
-      />
+      {isProductSoldOut && (
+        <AddCartModal
+          isModalOpen={isModalOpen}
+          handleModalClose={handleModalClose}
+        />
+      )}
+      {!isProductSoldOut && (
+        <SoldOutCartModal
+          isModalOpen={isModalOpen}
+          handleModalClose={handleModalClose}
+        />
+      )}
       <CardContainer>
         {products.map(
-          ({ id, name, price, Product_imgs, discountPrice, status }) => {
+          ({
+            id,
+            name,
+            price,
+            Product_imgs,
+            discountPrice,
+            status,
+            quantity
+          }) => {
             const length = Product_imgs.length
             const imgUrl = isMobile
               ? Product_imgs[length - 1].imgUrlMd
@@ -97,6 +116,7 @@ export default function Categories() {
                 price={price}
                 discountPrice={discountPrice}
                 status={status}
+                stockQuantity={quantity}
               />
             )
           }
