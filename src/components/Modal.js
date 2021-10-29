@@ -97,12 +97,20 @@ function GeneralModal({ icon, content, buttonOne, buttonTwo, open, onClose }) {
   )
 }
 
-function FullModal({ icon, content, buttonOne, buttonTwo, open, onClose }) {
+function FullModal({
+  icon,
+  content,
+  buttonOne,
+  buttonTwo,
+  open,
+  onClose,
+  position
+}) {
   if (!open) return null
   return (
     <div>
       <FixedBackground onClick={onClose} />
-      <ModalContent>
+      <ModalContent style={position}>
         <CloseButton onClick={onClose} />
         <ModalIcon icon={icon} />
         <ModalContentDiv>{content}</ModalContentDiv>
