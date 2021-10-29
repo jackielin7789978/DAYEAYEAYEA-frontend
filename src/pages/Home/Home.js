@@ -9,7 +9,7 @@ import { COLOR, MEDIA_QUERY } from '../../constants/style'
 import { ProductCard } from '../../components/productSystem/ProductCard'
 import { getCategoryProducts } from '../../webAPI/productsAPI'
 import { HomeCategoriesImg } from '../../components/homeSystem/HomeCategoriesImg'
-import { HomeArticlesImg } from '../../components/homeSystem/HomeArticlesImg'
+import Carousel from '../../components/Carousel'
 import {
   AddCartModal,
   SoldOutCartModal
@@ -98,7 +98,7 @@ export default function Home() {
 
   return (
     <>
-      <HomeArticlesImg />
+      <Carousel />
       <PageWidth>
         {isLoading && <IsLoadingComponent />}
         {isProductSoldOut && (
