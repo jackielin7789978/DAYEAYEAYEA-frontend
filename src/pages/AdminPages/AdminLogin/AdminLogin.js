@@ -1,6 +1,5 @@
-import { useState, useContext } from 'react'
-import { UserContext } from '../../../context'
-import { useHistory } from 'react-router-dom'
+import { useState } from 'react'
+import { useHistory } from 'react-router'
 import styled from 'styled-components'
 import { LoginBtn } from '../../../components/Button'
 import { COLOR, ADMIN_COLOR, FONT_SIZE } from '../../../constants/style'

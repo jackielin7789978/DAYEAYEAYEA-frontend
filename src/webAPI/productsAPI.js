@@ -64,8 +64,8 @@ export const getProductByKeywords = async (keywords) => {
   let res
   try {
     res = await fetch(`${BASE_URL}/products/${keywords}`)
+    return await res.json()
   } catch (e) {
     console.log(e)
   }
-  return await res.json()
 }

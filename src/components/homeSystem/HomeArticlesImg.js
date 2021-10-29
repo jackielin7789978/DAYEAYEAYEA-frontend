@@ -57,6 +57,7 @@ export function HomeArticlesImg() {
   const [articles, setArticles] = useState([])
   useEffect(() => {
     getAllArticles().then((result) => {
+      if (!result || result.ok === 0) return
       if (result.ok === 1) setArticles(result.data)
     })
   }, [])

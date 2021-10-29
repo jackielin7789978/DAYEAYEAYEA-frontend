@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 
 const CARTTITLE_NAME = 'cartItemsList'
 const TOKEN = 'token'
+const NEWPRODUCTINFO = 'newProductInfo'
 
 export function ScrollToTop() {
   const { pathname } = useLocation()
@@ -28,6 +29,18 @@ export const getTokenFromLocalStorage = () => {
 
 export const addTokenToLocalStorage = (token) => {
   localStorage.setItem(TOKEN, token)
+}
+
+export const addNewProductToLocalStorage = (newProductInfo) => {
+  localStorage.setItem(NEWPRODUCTINFO, JSON.stringify(newProductInfo))
+}
+
+export const getNewProductFromLocalStorage = () => {
+  return localStorage.getItem(NEWPRODUCTINFO)
+}
+
+export const removeNewProductFromLocalStorage = () => {
+  return localStorage.removeItem(NEWPRODUCTINFO)
 }
 
 export const countWhiteCardAmount = (length, page, isDesktop) => {
@@ -83,3 +96,20 @@ export const formatPrice = (cents) => {
 }
 
 export const multiplyPrice = (quantity, price) => quantity * price
+
+export const imgVerify = (imgUrl) => {
+  const rule = /\.(jpeg|jpg|gif|png)$/
+  const isChecked = !rule.test(imgUrl) ? false : true
+  return isChecked
+}
+
+export const checkIsImg = (imgData) => {
+  const imgDataForCheck = Object.values(imgData)
+  const result = imgDataForCheck.every((imgUrl) => imgVerify(imgUrl))
+  return result
+}
+
+export const calTotalPages = (totalItems) => {
+  if (totalItems % 10) return Math.floor(totalItems / 10) + 1
+  return totalItems / 10
+}

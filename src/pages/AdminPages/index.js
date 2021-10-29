@@ -1,7 +1,12 @@
 import AdminLogin from './AdminLogin'
 import { AdminMembers, AdminMemberDetail } from './AdminMembers'
-import AdminOrders from './AdminOrders'
-import { AdminProducts, AdminProductDetail } from './AdminProducts'
+import {
+  AdminProducts,
+  AdminProductDetail,
+  AdminProductAdd
+} from './AdminProducts'
+import AdminOrders from './AdminOrders/AdminOrders'
+import AdminOrderDetail from './AdminOrders/AdminOrderDetail'
 import Layout from './Layout'
 
 export {
@@ -9,7 +14,9 @@ export {
   AdminMembers,
   AdminMemberDetail,
   AdminOrders,
+  AdminOrderDetail,
   AdminProducts,
   AdminProductDetail,
+  AdminProductAdd,
   Layout
 }
