@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router'
 import {
@@ -6,12 +6,14 @@ import {
   ColumnHeader,
   Header,
   TableItemContainer
-} from '../TableStyle'
-import OrderItem from './OrderItem'
-import { GeneralBtn, LogoutBtn } from '../../Button'
+} from '../../../components/admin/TableStyle'
+import OrderItem from '../../../components/admin/memberManage/OrderItem'
+import { GeneralBtn, LogoutBtn } from '../../../components/Button'
 import { ADMIN_COLOR } from '../../../constants/style'
 import { useForm } from 'react-hook-form'
 import { updateMemberLevel } from '../../../webAPI/adminMembersAPI'
+import { useParams } from 'react-router-dom'
+import { getMember } from '../../../webAPI/adminMembersAPI'
 const PageWrapper = styled.div`
   min-height: 100vh;
   display: flex;
@@ -24,7 +26,7 @@ const MemberWrapper = styled.div`
   background: ${ADMIN_COLOR.light_grey};
   position: relative;
   padding: 20px 30px;
-  margin: 40px 0px;
+  margin: 25px 0px;
 `
 
 const List = styled.div`
@@ -52,70 +54,76 @@ const RestyleHeader = styled(Header)`
   width: ${({ $name }) => $name === '訂單編號' && '26%'};
 `
 const headerNames = ['訂單狀態', '訂單編號', 'Email', '訂單金額', 'Edit']
-export default function AdminMemberDetail({ member, setMember }) {
+export default function AdminMemberDetail() {
+  let { id } = useParams()
   const location = useHistory()
   const [isEdit, setIsEdit] = useState(false)
+  const [memberDetail, setMemberDetail] = useState(() => {
+    ;(async () => {
+      const result = await getMember(id)
+      setMemberDetail(result.data)
+    })()
+  })
   const handleEdit = () => {
     isEdit ? setIsEdit(false) : setIsEdit(true)
   }
+  const { register, handleSubmit, setValue } = useForm()
 
-  const { register, handleSubmit } = useForm({
-    defaultValues: {
-      level: member.level
-    }
-  })
+  useEffect(() => {
+    setValue('level', memberDetail?.level)
+  }, [memberDetail?.level, setValue])
+
   const onSubmit = async (submitData) => {
-    const result = await updateMemberLevel(member.id, submitData.level)
+    const result = await updateMemberLevel(memberDetail.id, submitData.level)
     if (result.ok === 0) {
       console.log(result.message)
       return false
     }
-    setMember({ ...member, level: submitData.level })
+    setMemberDetail({ ...memberDetail, level: submitData.level })
     alert('已編輯完成!')
     handleEdit()
   }
-
   return (
     <PageWrapper>
-      <LogoutBtn
-        onClick={() => {
-          setMember(null)
-          location.push('/admin/members')
-        }}
-        color={'admin_blue'}
-        children={'回訂單列表'}
-        buttonStyle={{ width: '120px' }}
-      />
       <Wrapper>
+        <LogoutBtn
+          onClick={() => {
+            setMemberDetail(null)
+            location.push('/admin/members')
+          }}
+          color={'admin_blue'}
+          children={'回會員列表'}
+          buttonStyle={{ width: '120px' }}
+        />
         <MemberWrapper>
           <List>
             <ListTitle>帳號:</ListTitle>
 
-            <ListData children={member.username} />
+            <ListData children={memberDetail?.username} />
           </List>
           <List>
             <ListTitle>信箱:</ListTitle>
 
-            <ListData children={member.email} />
+            <ListData children={memberDetail?.email} />
           </List>
           <List>
             <ListTitle>名稱:</ListTitle>
 
-            <ListData children={member.fullname} />
+            <ListData children={memberDetail?.fullname} />
           </List>
           <List>
             <ListTitle>電話:</ListTitle>
 
-            <ListData children={member.phone} />
+            <ListData children={memberDetail?.phone} />
           </List>
           <List>
             <ListTitle>地址:</ListTitle>
 
-            <ListData children={member.address} />
+            <ListData children={memberDetail?.address} />
           </List>
           <List>
             <ListTitle>會員等級:</ListTitle>
-            {!isEdit && <ListData children={member.level} />}
+            {!isEdit && <ListData children={memberDetail?.level} />}
             {isEdit && (
               <select {...register('level')}>
                 <option value='normal'>normal</option>
@@ -139,8 +147,8 @@ export default function AdminMemberDetail({ member, setMember }) {
         </ColumnHeader>
 
         <TableItemContainer>
-          {!member.Orders.length && <Msg>客人還沒有訂單喔!</Msg>}
-          {member.Orders.map((order) => (
+          {!memberDetail?.Orders.length && <Msg>客人還沒有訂單喔!</Msg>}
+          {memberDetail?.Orders.sort((a, b) => b.id - a.id).map((order) => (
             <OrderItem key={order.id} order={order} />
           ))}
         </TableItemContainer>

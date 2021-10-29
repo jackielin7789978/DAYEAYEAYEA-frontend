@@ -12,7 +12,7 @@ export const signIn = async (username, password) => {
     })
     return result.json()
   } catch (e) {
-    console.log(e.toString())
+    console.log(e)
   }
 }
 
@@ -32,7 +32,7 @@ export const signUp = async (username, email, password) => {
     })
     return result.json()
   } catch (e) {
-    console.log(e.toString())
+    console.log(e)
   }
 }
 export const getMe = async () => {
@@ -46,6 +46,6 @@ export const getMe = async () => {
     })
     return result.json()
   } catch (e) {
-    console.log(e.toString())
+    console.log(e)
   }
 }

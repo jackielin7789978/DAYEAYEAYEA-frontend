@@ -33,12 +33,7 @@ export const Cart = ({
       setQuantity(quantity - 1)
     }
   }
-  useEffect(() => {
-    if (item.quantity === '') {
-      $setNotAllowed(true)
-      setWarningMessage('請填寫數量')
-    }
-  }, [$setNotAllowed, item.quantity])
+
   function handleChange(e) {
     setWarningMessage('')
     if (e.target.value > totalQuantity) {
@@ -49,22 +44,35 @@ export const Cart = ({
       setWarningMessage('請填寫數量')
       return e.target.value === ''
         ? setQuantity('')
-        : setQuantity(parseInt(e.target.value))
+        : setQuantity(Number(e.target.value))
     }
-    setQuantity(parseInt(e.target.value))
+    setQuantity(Number(e.target.value))
   }
+
+  useEffect(() => {
+    if (item.quantity === '') {
+      $setNotAllowed(true)
+      setWarningMessage('請填寫數量')
+    }
+  }, [$setNotAllowed, item.quantity])
+
   useEffect(() => {
     warningMessage === '請填寫數量'
       ? $setNotAllowed(true)
       : $setNotAllowed(false)
   }, [$setNotAllowed, quantity, warningMessage])
+
   useEffect(() => {
     ;(async () => {
+      console.log(item.id)
       const result = await getProductById(item.id)
+      console.log(result)
+      if (!result) return
       return setTotalQuantity(result.data.quantity)
     })()
     handleUpdateCount(quantity, item.id)
   }, [quantity, handleUpdateCount, item.id, totalQuantity])
+
   return (
     <Item key={item.id}>
       <ItemImg img={item.img} to={`/products/${item.id}`} />

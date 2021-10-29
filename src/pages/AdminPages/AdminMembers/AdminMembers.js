@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+
 import styled from 'styled-components'
 import { getAllMembers } from '../../../webAPI/adminMembersAPI'
 import {
@@ -9,16 +9,18 @@ import {
   TableItemContainer
 } from '../../../components/admin/TableStyle'
 import { ADMIN_MEDIA_QUERY } from '../../../constants/style'
-import TableItem from '../../../components/admin/memberManage/TableItem'
+import TableItem from '../../../components/admin/memberManage/MemberItem'
 import { Search } from '../../../components/admin/memberManage/Search'
-import AdminMemberDetail from '../../../components/admin/memberManage/AdminMemberDetail'
 const PageWrapper = styled.div`
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   border: 1px solid transparent;
-  padding: 40px 0px;
+  margin: 40px auto;
+  width: 76%;
+  ${ADMIN_MEDIA_QUERY.md} {
+    width: 60%;
+  }
 `
 const SearchContainer = styled.div`
   margin: 20px auto;
@@ -38,6 +40,10 @@ const RestyleHeader = styled(Header)`
   width: ${({ $name }) => $name === '訂單編號' && '26%'};
 `
 const headerNames = ['帳號名稱', 'Email', '訂單數', '消費總金額', 'Edit']
+const Msg = styled.div`
+  text-align: center;
+  padding: 30px;
+`
 export default function AdminMembers() {
   const [members, setMembers] = useState(() => {
     ;(async () => {
@@ -45,46 +51,43 @@ export default function AdminMembers() {
       setMembers(result.data)
     })()
   })
-  let { id } = useParams()
-  const [member, setMember] = useState()
+  const [value, setValue] = useState('')
+  const [membersFilter, setMembersFilter] = useState()
   useEffect(() => {
-    id
-      ? setMember(
-          () =>
-            members && members.filter((member) => member.id === Number(id))[0]
+    let reg = new RegExp(value, 'i')
+    value
+      ? setMembersFilter(
+          members.filter(
+            (member) =>
+              reg.test(member.username) ||
+              reg.test(member.email) ||
+              reg.test(member.fullname) ||
+              reg.test(member.phone)
+          )
         )
-      : setMember(null)
-  }, [id, members])
+      : setMembersFilter(members)
+  }, [members, value])
+
   return (
     <PageWrapper>
-      {!member && (
-        <SearchContainer>
-          <Search />
-        </SearchContainer>
-      )}
+      <SearchContainer>
+        <Search value={value} setValue={setValue} />
+      </SearchContainer>
       <Wrapper>
-        {member && <AdminMemberDetail member={member} setMember={setMember} />}
-        {!member && (
-          <>
-            <ColumnHeader>
-              {headerNames.map((name) => (
-                <RestyleHeader key={name} $name={name}>
-                  {name}
-                </RestyleHeader>
-              ))}
-            </ColumnHeader>
-            <TableItemContainer>
-              {members &&
-                members.map((member) => (
-                  <TableItem
-                    key={member.id}
-                    member={member}
-                    setMember={setMember}
-                  />
-                ))}
-            </TableItemContainer>
-          </>
-        )}
+        <ColumnHeader>
+          {headerNames.map((name) => (
+            <RestyleHeader key={name} $name={name}>
+              {name}
+            </RestyleHeader>
+          ))}
+        </ColumnHeader>
+        <TableItemContainer>
+          {membersFilter &&
+            membersFilter
+              .sort((a, b) => b.id - a.id)
+              .map((member) => <TableItem key={member.id} member={member} />)}
+          {!membersFilter?.length && <Msg>沒有符合條件的客人</Msg>}
+        </TableItemContainer>
       </Wrapper>
     </PageWrapper>
   )

@@ -34,7 +34,7 @@ export const createOrder = async (
     })
     return result.json()
   } catch (e) {
-    console.log(e.toString())
+    console.log(e)
   }
 }
 export const getOrderOne = async (ticket) => {
@@ -46,7 +46,7 @@ export const getOrderOne = async (ticket) => {
     })
     return result.json()
   } catch (e) {
-    console.log(e.toString())
+    console.log(e)
   }
 }
 export const getOrderAll = async () => {
@@ -58,6 +58,6 @@ export const getOrderAll = async () => {
     })
     return result.json()
   } catch (e) {
-    console.log(e.toString())
+    console.log(e)
   }
 }

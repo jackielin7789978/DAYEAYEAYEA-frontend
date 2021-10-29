@@ -19,6 +19,7 @@ import {
   AdminOrders,
   AdminProducts,
   AdminMembers,
+  AdminMemberDetail,
   AdminProductDetail
 } from './pages/AdminPages'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
@@ -92,7 +93,10 @@ function AdminRoutes() {
         <Route path={'/admin/orders'}>
           {user ? <AdminOrders /> : <Redirect to='/admin/login' />}
         </Route>
-        <Route path={['/admin/members/:id', '/admin/members']}>
+        <Route path={'/admin/members/:id'}>
+          {user ? <AdminMemberDetail /> : <Redirect to='/admin/login' />}
+        </Route>
+        <Route path={'/admin/members'}>
           {user ? <AdminMembers /> : <Redirect to='/admin/login' />}
         </Route>
       </Switch>
