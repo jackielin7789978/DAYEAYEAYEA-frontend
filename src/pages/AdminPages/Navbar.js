@@ -12,7 +12,6 @@ import {
   faAngleLeft
 } from '@fortawesome/free-solid-svg-icons'
 
-
 const NavWrapper = styled.nav`
   width: 230px;
   position: relative;
@@ -21,9 +20,11 @@ const NavWrapper = styled.nav`
   align-items: center;
   padding: 8px 0 48px;
   background: #333;
-  transition: all linear .3s;
+  transition: all linear 0.3s;
 
-  ${({$active}) => $active && `
+  ${({ $active }) =>
+    $active &&
+    `
     margin-left: -230px;
   `}
 `
@@ -48,11 +49,10 @@ const NavbarList = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  
 `
 
 const Nav = styled(NavLink, {
-  activeClass: 'active',
+  activeClass: 'active'
 })`
   text-align: center;
   padding: 16px 0;
@@ -64,7 +64,7 @@ const Nav = styled(NavLink, {
 
   span {
     margin-left: 16px;
-    color: #fff
+    color: #fff;
   }
 
   &.active {
@@ -84,7 +84,7 @@ const LogoutButton = styled.button`
   color: #003169;
   background: #cecece;
   padding: 10px 4px;
-  transition: all .3s;
+  transition: all 0.3s;
 
   svg {
     margin-right: 6px;
@@ -110,14 +110,14 @@ const SwitchButton = styled.button`
   border-radius: 0 10px 10px 0;
   transform: translateY(-50%);
 
-  ${({$active}) => $active && `
+  ${({ $active }) =>
+    $active &&
+    `
     svg {
       transform: scale(-1);
     }
   `}
 `
-
-
 
 const Navbar = ({ handleLogout }) => {
   const [active, setActive] = useState(false)
@@ -125,36 +125,36 @@ const Navbar = ({ handleLogout }) => {
   return (
     <NavWrapper $active={active}>
       <NavbarList>
-        <Avatar to="/">
-          <img src="https://i.imgur.com/jPZXt9T.png" alt="" />
+        <Avatar to='/'>
+          <img src='https://i.imgur.com/jPZXt9T.png' alt='' />
         </Avatar>
-        <Nav exact to="/admin/members">
-          <FontAwesomeIcon icon={faUserFriends}/>
+        <Nav exact to='/admin/members'>
+          <FontAwesomeIcon icon={faUserFriends} />
           <span>會員管理</span>
         </Nav>
-        <Nav to="/admin/orders">
-          <FontAwesomeIcon icon={faShoppingCart}/>
+        <Nav to='/admin/orders'>
+          <FontAwesomeIcon icon={faShoppingCart} />
           <span>訂單管理</span>
         </Nav>
-        <Nav to="/admin/3">
-          <FontAwesomeIcon icon={faEye}/>
+        <Nav to='/admin/products/1'>
+          <FontAwesomeIcon icon={faEye} />
           <span>商品管理</span>
         </Nav>
-        <Nav to="/admin/4">
-          <FontAwesomeIcon icon={faImages}/>
+        <Nav to='/admin/4'>
+          <FontAwesomeIcon icon={faImages} />
           <span>活動管理</span>
         </Nav>
-        <Nav to="/admin/5">
-          <FontAwesomeIcon icon={faThLarge}/>
+        <Nav to='/admin/5'>
+          <FontAwesomeIcon icon={faThLarge} />
           <span>分類頁面</span>
         </Nav>
       </NavbarList>
       <LogoutButton onClick={handleLogout}>
-        <FontAwesomeIcon icon={faSignOutAlt}/>
+        <FontAwesomeIcon icon={faSignOutAlt} />
         Logout
       </LogoutButton>
-      <SwitchButton $active={active} onClick={() => setActive(pre => !pre)}>
-        <FontAwesomeIcon icon={faAngleLeft}/>
+      <SwitchButton $active={active} onClick={() => setActive((pre) => !pre)}>
+        <FontAwesomeIcon icon={faAngleLeft} />
       </SwitchButton>
     </NavWrapper>
   )
