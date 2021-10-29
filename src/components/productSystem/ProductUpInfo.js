@@ -8,22 +8,26 @@ import { formatPrice } from '../../utils'
 
 const ProductInfoContainer = styled.div`
   width: 100%;
+  min-height: 40%;
   height: 40%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding: 0px 30px;
   margin: 10px 0px;
+
   ${MEDIA_QUERY.tablet} {
     width: 45%;
     margin: 0px;
-    height: 100%;
+    height: 90%;
+    min-height: 90%;
   }
 
   ${MEDIA_QUERY.desktop} {
     width: 50%;
     margin: 0px;
-    height: 100%;
+    height: 90%;
+    min-height: 90%;
   }
 `
 

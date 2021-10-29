@@ -1,0 +1,57 @@
+import { useState } from 'react'
+import styled from 'styled-components'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { ADMIN_COLOR } from '../../../constants/style'
+import { useEffect } from 'react'
+import { GeneralBtn } from '../../Button'
+const Wrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`
+const Input = styled.input`
+  width: 400px;
+  padding: 10px 10px 10px 40px;
+  border: 1px solid ${ADMIN_COLOR.border_grey};
+  &:focus {
+    border: 1px solid ${ADMIN_COLOR.border_dark_grey};
+  }
+`
+const StyledSearchIcon = styled(FontAwesomeIcon)`
+  font-size: 14px;
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translate(0, -50%);
+`
+
+export function Search({ value, setValue }) {
+  const [isSearching, setIsSearching] = useState(false)
+  useEffect(() => {
+    value ? setIsSearching(true) : setIsSearching(false)
+  }, [value])
+  const handleChange = (e) => {
+    setValue(e.target.value)
+  }
+  return (
+    <Wrapper>
+      <StyledSearchIcon icon={faSearch} />
+      <Input
+        placeholder={'輸入帳號、信箱、名稱或是電話來搜尋使用者'}
+        value={value}
+        onChange={handleChange}
+      ></Input>
+      {isSearching && (
+        <GeneralBtn
+          onClick={() => {
+            setValue('')
+          }}
+          color={'admin_blue'}
+          children={'清除搜尋'}
+          buttonStyle={{ width: '100px', marginLeft: '20px' }}
+        />
+      )}
+    </Wrapper>
+  )
+}

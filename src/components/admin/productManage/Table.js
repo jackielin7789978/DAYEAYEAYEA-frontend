@@ -1,9 +1,10 @@
 import styled from 'styled-components'
 import { useState, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import {
   changeProductStatus,
-  changeProductQuantity
+  changeProductQuantity,
+  deleteProductById
 } from '../../../webAPI/adminProductsAPI'
 import { GeneralBtn } from '../../../components/Button'
 import { ItemCounter } from '../../../components/Counter'
@@ -16,24 +17,29 @@ import {
   Cell
 } from '../TableStyle'
 
+const TableWrapper = styled(Wrapper)`
+  width: 95%;
+`
+
 const NameHeader = styled(Header)`
   text-align: center;
-  width: 12%;
-  width: ${({ $name }) => $name === '商品名稱' && '22%'};
-  margin: 0px 3px;
+  width: 13%;
+  width: ${({ $name }) => $name === '商品名稱' && '20%'};
+  width: ${({ $name }) => $name === '商品預覽' && '15%'};
+  margin: 0px 5px;
 `
-const NameCell = styled(Cell)`
+const GeneralCell = styled(Cell)`
   text-align: center;
-  width: 22%;
-  margin: 0px 3px;
+  margin: 0px 6px;
 `
-const ProductCell = styled(Cell)`
-  text-align: center;
-  width: 12%;
-  margin: 0px 3px;
+const NameCell = styled(GeneralCell)`
+  width: 20%;
 `
-const ImgCell = styled(Cell)`
-  width: 12%;
+const ProductCell = styled(GeneralCell)`
+  width: 13%;
+`
+const ImgCell = styled(GeneralCell)`
+  width: 15%;
   height: 80px;
   background-size: cover;
   background-repeat: no-repeat;
@@ -75,6 +81,7 @@ function TableItem({ product }) {
   const [productImg, setProductImg] = useState(
     Product_imgs && Product_imgs[length - 1].imgUrlSm
   )
+  let history = useHistory()
   const handleCount = useCallback(
     (type, id) => {
       let changeQuantity
@@ -106,7 +113,7 @@ function TableItem({ product }) {
     [product]
   )
 
-  const handleStatusOnClick = useCallback(
+  const handleOnStatusClick = useCallback(
     (e) => {
       const targetId = Number(e.target.id)
       let newStatus = productStatus === 'on' ? 'off' : 'on'
@@ -114,6 +121,19 @@ function TableItem({ product }) {
       changeProductStatus(targetId, newStatus, product)
     },
     [productStatus, product]
+  )
+
+  const handleOnDeleteClick = useCallback(
+    (e) => {
+      const targetId = Number(e.target.id)
+      deleteProductById(targetId).then((result) => {
+        if (!result) return
+        if (result.ok === 0) return alert(result.message)
+        alert('成功刪除商品')
+        history.go(0)
+      })
+    },
+    [history]
   )
 
   return (
@@ -134,15 +154,22 @@ function TableItem({ product }) {
       </ProductCell>
       <ProductCell>{article}</ProductCell>
       <ProductCell>
-        <ButtonContainer onClick={handleStatusOnClick} id={id}>
+        <ButtonContainer onClick={handleOnStatusClick} id={id}>
           <StatusButton status={productStatus} id={id} />
         </ButtonContainer>
       </ProductCell>
       <ProductCell>
         <ButtonContainer>
           <Link to={`/admin/products/detail/${id}`}>
-            <GeneralBtn color='admin_grey'>商品詳情</GeneralBtn>
+            <GeneralBtn color='admin_blue'>進入</GeneralBtn>
           </Link>
+        </ButtonContainer>
+      </ProductCell>
+      <ProductCell>
+        <ButtonContainer onClick={handleOnDeleteClick} id={id}>
+          <GeneralBtn color='admin_grey' id={id}>
+            刪除
+          </GeneralBtn>
         </ButtonContainer>
       </ProductCell>
     </Container>
@@ -158,11 +185,12 @@ export default function Table({ products }) {
     '庫存數量',
     '活動文章',
     '上下架',
-    '詳情'
+    '詳情',
+    '刪除'
   ]
 
   return (
-    <Wrapper>
+    <TableWrapper>
       <ColumnHeader>
         {headerNames.map((name) => (
           <NameHeader key={name} $name={name}>
@@ -171,10 +199,11 @@ export default function Table({ products }) {
         ))}
       </ColumnHeader>
       <TableItemContainer>
-        {products.map((product) => (
-          <TableItem key={product.id} product={product} />
-        ))}
+        {products &&
+          products.map((product) => (
+            <TableItem key={product.id} product={product} />
+          ))}
       </TableItemContainer>
-    </Wrapper>
+    </TableWrapper>
   )
 }

@@ -6,8 +6,8 @@ import {
   AbsoluteCenter
 } from '../../components/loginSystem/loginCard'
 import { Tabs } from '../../components/Tab'
-import SignInForm from './SignInForm'
-import SignUpForm from './SignUpForm'
+import SignInForm from '../../components/loginSystem/SignInForm'
+import SignUpForm from '../../components/loginSystem/SignUpForm'
 import { addTokenToLocalStorage } from '../../utils'
 import { getMe } from '../../webAPI/loginAPI'
 import { LoadingContext, UserContext } from '../../context'

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-brands-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.16",
     "@testing-library/jest-dom": "^5.11.4",
@@ -27,9 +28,6 @@
     "react-spinners": "^0.11.0",
     "styled-components": "^5.3.3",
     "web-vitals": "^1.0.1"
-  },
-  "resolutions": {
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@5.0.0"
   },
   "homepage": "https://jackielin7789978.github.io/DAYEAYEAYEA-frontend",
   "husky": {
@@ -67,5 +65,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "package": "^1.0.1"
   }
 }

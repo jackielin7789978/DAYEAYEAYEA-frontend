@@ -1,7 +1,8 @@
 import styled from 'styled-components'
-import { useState, useEffect, useCallback } from 'react'
-import { useParams, useLocation, useHistory } from 'react-router'
-import { ADMIN_MEDIA_QUERY } from '../../../constants/style'
+import { useState, useLayoutEffect, useCallback, useContext } from 'react'
+import { useParams, useLocation, useHistory, Link } from 'react-router-dom'
+import { LoadingContext } from '../../../context'
+import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
 import {
   CategoryDropdown,
   Search
@@ -16,26 +17,18 @@ import {
 import { setAdminProductsPageInArray } from '../../../utils'
 
 const PageWrapper = styled.div`
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: center;
   border: 1px solid transparent;
-  padding: 40px 0px;
-  margin-bottom: 60px;
+  padding: 40px 20px;
 `
 const SearchContainer = styled.div`
   margin: 20px auto;
   display: flex;
   justify-content: space-between;
-  width: 78vw;
-  ${ADMIN_MEDIA_QUERY.md} {
-    width: 68vw;
-    max-width: 1180px;
-  }
-  ${ADMIN_MEDIA_QUERY.lg} {
-    max-width: 1180px;
-  }
+  width: 95%;
 `
 
 const SearchSideContainer = styled.div`
@@ -48,6 +41,7 @@ const PaginatorDiv = styled.div`
 export default function AdminProducts() {
   const [products, setProducts] = useState([])
   const [categoryFilter, setCategoryFilter] = useState('all')
+  const { isLoading, setIsLoading } = useContext(LoadingContext)
   const { page } = useParams()
   const keywords = useLocation().search
   const history = useHistory()
@@ -55,66 +49,84 @@ export default function AdminProducts() {
   const productsPerPage = 10
   const perPageSliceStart = (Number(page) - 1) * productsPerPage
   const perPageSliceEnd = Number(page) * productsPerPage
-  let showProductsList = products.filter((product) =>
-    categoryFilter === 'all' ? product : product.category === categoryFilter
-  )
-  const { pagesArray } = setAdminProductsPageInArray(showProductsList.length)
-  const showProductsByPage = showProductsList.slice(
-    perPageSliceStart,
-    perPageSliceEnd
-  )
+  let showProductsList
+  let pagesArray
+  let showProductsByPage
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    setIsLoading(true)
     if (keywords) {
       searchProductsFromAdmin(keywords).then((result) => {
+        if (!result) return setIsLoading((isLoading) => true)
         if (result.ok === 0) {
-          history.push('/404')
+          return history.push('/404')
         }
+        setIsLoading(false)
         setProducts(result.data)
       })
     }
     if (!keywords) {
       getAllProducts().then((result) => {
+        if (!result) return setIsLoading((isLoading) => true)
+        if (result.ok === 0) {
+          return history.push('/404')
+        }
+        setIsLoading(false)
         setProducts(result.data)
       })
     }
-  }, [keywords, history])
+  }, [keywords, history, setIsLoading])
 
-  // fix here
+  if (products) {
+    showProductsList = products.filter((product) =>
+      categoryFilter === 'all' ? product : product.category === categoryFilter
+    )
+    pagesArray = setAdminProductsPageInArray(showProductsList.length).pagesArray
+    showProductsByPage = showProductsList.slice(
+      perPageSliceStart,
+      perPageSliceEnd
+    )
+  }
+
   const handleDropDownChange = useCallback(
     (e) => {
       setCategoryFilter((categoryFilter) => e.target.value)
+      if (keywords) {
+        history.push('/admin/products/1')
+      }
       if (location.pathname !== '/admin/products/1')
         history.push('/admin/products/1')
     },
-    [history, location]
+    [history, location, keywords]
   )
 
   return (
     <PageWrapper>
+      {isLoading && <AdminIsLoadingComponent />}
       <SearchContainer>
         <SearchSideContainer>
           <Search />
           <CategoryDropdown onChange={handleDropDownChange} />
         </SearchSideContainer>
         <SearchSideContainer>
-          <div style={{ width: '100px' }}>
+          <Link style={{ width: '100px' }} to={'/admin/products/add'}>
             <GeneralBtn color='admin_blue'>新增商品</GeneralBtn>
-          </div>
+          </Link>
         </SearchSideContainer>
       </SearchContainer>
       <Table products={showProductsByPage} />
       <PaginatorDiv>
-        {pagesArray.map((pageValue) => {
-          return (
-            <PaginatorButton
-              key={pageValue}
-              page={pageValue}
-              to={`/admin/products/${pageValue}`}
-              active={pageValue === page}
-            ></PaginatorButton>
-          )
-        })}
+        {pagesArray &&
+          pagesArray.map((pageValue) => {
+            return (
+              <PaginatorButton
+                key={pageValue}
+                page={pageValue}
+                to={`/admin/products/${pageValue}`}
+                active={pageValue === parseInt(page)}
+              ></PaginatorButton>
+            )
+          })}
       </PaginatorDiv>
     </PageWrapper>
   )

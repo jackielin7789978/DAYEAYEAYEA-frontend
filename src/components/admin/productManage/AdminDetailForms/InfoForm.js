@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
+import { changeProductInfoById } from '../../../../webAPI/adminProductsAPI'
 import {
   Form,
   FormTitleComponent,
@@ -45,7 +46,6 @@ function StatusDropdown({ productValue, disabled, onChange, name }) {
     <SelectedComponent>
       <InputTitle>上架狀態</InputTitle>
       <Dropdown
-        dropdownTitle='status'
         valueArray={['on', 'off']}
         productValue={productValue}
         disabled={disabled}
@@ -61,7 +61,6 @@ function CategoriesDropdown({ productValue, disabled, onChange, name }) {
     <SelectedComponent>
       <InputTitle>商品分類</InputTitle>
       <Dropdown
-        dropdownTitle='Category'
         valueArray={[
           'home',
           'apparel',
@@ -84,7 +83,6 @@ function ArticlesDropdown({ productValue, disabled, onChange, name }) {
     <SelectedComponent>
       <InputTitle>活動文章</InputTitle>
       <Dropdown
-        dropdownTitle='article'
         valueArray={['fragrance', 'dining', 'camping', 'null']}
         productValue={productValue}
         disabled={disabled}
@@ -106,7 +104,14 @@ const handleBlur = (e, setValid, setErrMsg, errorMessage) => {
   setErrMsg('')
 }
 
-function StatusComponent({ status, category, article, disabled }) {
+function StatusComponent({
+  status,
+  category,
+  article,
+  disabled,
+  setFormData,
+  formData
+}) {
   const [productStatus, setProductStatus] = useState({
     status,
     category,
@@ -115,8 +120,9 @@ function StatusComponent({ status, category, article, disabled }) {
   const handleOnChange = useCallback(
     (e) => {
       setProductStatus({ ...productStatus, [e.target.name]: e.target.value })
+      setFormData({ ...formData, [e.target.name]: e.target.value })
     },
-    [productStatus]
+    [productStatus, formData, setFormData]
   )
   return (
     <InfoFormSetContainer>
@@ -155,24 +161,41 @@ function PriceComponent({
 }) {
   const errorMessage = '此兩欄位不得為空'
   const [errorMsg, setErrorMsg] = useState('')
-  const [inputPriceValue, setInputQuantityValue] = useState({
+  const [inputPriceValue, setInputPriceValue] = useState({
     price,
     discountPrice
   })
   const handleOnChange = useCallback(
     (e) => {
-      const targetValue = parseInt(e.target.value.trim(' '))
-      const newValue = targetValue ? targetValue : ''
-      setInputQuantityValue({ ...inputPriceValue, [e.target.name]: newValue })
-      setFormData({ ...formData, [e.target.name]: newValue })
+      const targetValue = e.target.value.trim(' ')
+      setInputPriceValue({ ...inputPriceValue, [e.target.name]: targetValue })
+      setFormData({ ...formData, [e.target.name]: targetValue })
     },
     [setFormData, formData, inputPriceValue]
   )
   const handleOnBlur = useCallback(
     (e) => {
+      const { price, discountPrice } = inputPriceValue
+      const targetValue = parseInt(e.target.value)
       handleBlur(e, setIsValid, setErrorMsg, errorMessage)
+      if (isNaN(targetValue)) {
+        setErrorMsg('此欄位僅限輸入數字')
+        return setIsValid(false)
+      }
+      if (e.target.name === 'price') {
+        if (discountPrice && targetValue < discountPrice) {
+          setErrorMsg('原價價格不得低於特價')
+          setIsValid(false)
+        }
+      }
+      if (e.target.name === 'discountPrice') {
+        if (price && targetValue > price) {
+          setErrorMsg('特價價格不可高於原價')
+          setIsValid(false)
+        }
+      }
     },
-    [setIsValid]
+    [setIsValid, inputPriceValue]
   )
 
   return (
@@ -230,7 +253,12 @@ function QuantityComponent({
 
   const handleOnBlur = useCallback(
     (e) => {
+      const targetValue = parseInt(e.target.value)
       handleBlur(e, setIsValid, setErrorMsg, errorMessage)
+      if (isNaN(targetValue)) {
+        setErrorMsg('此欄位僅限輸入數字')
+        return setIsValid(false)
+      }
     },
     [setIsValid]
   )
@@ -253,6 +281,7 @@ function QuantityComponent({
 
 export default function DetailInfoForm({ product }) {
   const history = useHistory()
+  const { id } = useParams()
   const { status, category, article, price, discountPrice, quantity } = product
   const [isValid, setIsValid] = useState(true)
   const [buttonStatus, setButtonStatus] = useState('edit')
@@ -283,8 +312,11 @@ export default function DetailInfoForm({ product }) {
     (e) => {
       e.preventDefault()
       if (!isValid) return
+      changeProductInfoById(parseInt(id), InfoData)
+      setIsDisabled((isDisabled) => !isDisabled)
+      setButtonStatus((buttonStatus) => 'edit')
     },
-    [isValid]
+    [isValid, id, InfoData]
   )
   return (
     <InfoForm>

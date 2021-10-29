@@ -52,13 +52,14 @@ export default function Products() {
   useEffect(() => {
     setIsLoading((isLoading) => true)
     getProductById(id).then((result) => {
+      if (!result) return
       if (result.ok === 0) {
         history.push('/404')
         return setIsLoading(false)
       }
+      setIsLoading((isLoading) => false)
       setProduct(result.data)
       setProductImgs(result.data.Product_imgs)
-      setIsLoading((isLoading) => false)
     })
   }, [setIsLoading, id, history])
 

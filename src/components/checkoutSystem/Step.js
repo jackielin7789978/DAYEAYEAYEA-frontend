@@ -152,7 +152,8 @@ export const ItemInfo = styled.div`
 export const ItemImg = styled(Link)`
   min-width: 100px;
   height: 100px;
-  background: url(${(props) => props.img}) center;
+  background: url(${(props) => props.img}) no-repeat center;
+  background-size: cover;
 `
 
 export const ItemName = styled(Link)`
