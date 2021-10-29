@@ -20,6 +20,7 @@ import {
   AdminOrderDetail,
   AdminProducts,
   AdminMembers,
+  AdminMemberDetail,
   AdminProductDetail,
   AdminProductAdd,
   Layout as AdminLayout
@@ -68,6 +69,7 @@ function AdminRoutes() {
         <Route path={'/admin/login'} component={AdminLogin} />
         <AdminLayout>
           <Switch>
+            <Route path={'/admin/members/:id'} component={AdminMemberDetail} />
             <Route path={'/admin/members'} component={AdminMembers} />
             <Route
               path={'/admin/orders/:ticket'}
@@ -94,25 +96,16 @@ function Shop() {
     JSON.parse(getItemsFromLocalStorage())
   )
 
-  const isTokenExpired = (token) => {
-    try {
-      return jwt_decode(token)
-      // const _info = jwt_decode(token)
-      // if (_info.exp < Date.now() / 1000) {
-      //   return true
-      // } else return false
-    } catch (error) {
-      return false
-    }
-  }
-
   const [user, setUser] = useState()
-
   useEffect(() => {
-    let localToken = getTokenFromLocalStorage()
-    if (!localToken) return false
-    let decoded = isTokenExpired(localToken)
-    return decoded.id ? setUser(decoded) : setUser(null)
+    if (!getTokenFromLocalStorage()) return false
+    try {
+      const _info = jwt_decode(getTokenFromLocalStorage())
+      if (_info.hasOwnProperty('id')) return setUser(_info)
+      return setUser(null)
+    } catch (error) {
+      return setUser(null)
+    }
   }, [])
 
   const handleModalClose = useCallback(() => {

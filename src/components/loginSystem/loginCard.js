@@ -68,7 +68,6 @@ const SendPassword = styled(Link)`
 const PasswordInput = styled.div`
   position: relative;
 `
-const EyeIcon = styled.div``
 
 export {
   PageWidthHeight,
@@ -78,6 +77,5 @@ export {
   ErrorMsg,
   SendPassword,
   AbsoluteCenter,
-  PasswordInput,
-  EyeIcon
+  PasswordInput
 }
