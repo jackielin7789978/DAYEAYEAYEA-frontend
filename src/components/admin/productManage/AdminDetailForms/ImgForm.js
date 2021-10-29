@@ -212,7 +212,7 @@ function ImgInputSet({
     const isNotValid = setInputValid(false)
     const isImgCheck = checkIsImg(imgData)
     if (imgData.id !== undefined) {
-      if (length === 1 && require) {
+      if (length !== 4 && require) {
         setErrorMsg('請完整填入此必填欄位')
         return setIsValid((isValid) => isNotValid)
       }

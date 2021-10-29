@@ -104,11 +104,7 @@ export const imgVerify = (imgUrl) => {
 }
 
 export const checkIsImg = (imgData) => {
-  let isImg
-  // eslint-disable-next-line array-callback-return
-  Object.values(imgData).map((imgUrl) => {
-    isImg = imgVerify(imgUrl)
-    if (!isImg) return isImg
-  })
-  return isImg
+  const imgDataForCheck = Object.values(imgData)
+  const result = imgDataForCheck.every((imgUrl) => imgVerify(imgUrl))
+  return result
 }
