@@ -10,7 +10,10 @@ import { ProductCard } from '../../components/productSystem/ProductCard'
 import { getCategoryProducts } from '../../webAPI/productsAPI'
 import { HomeCategoriesImg } from '../../components/homeSystem/HomeCategoriesImg'
 import { HomeArticlesImg } from '../../components/homeSystem/HomeArticlesImg'
-import { FullModal } from '../../components/Modal'
+import {
+  AddCartModal,
+  SoldOutCartModal
+} from '../../components/productSystem/ProductModal'
 
 const ProductContainer = styled.div`
   display: flex;
@@ -43,7 +46,7 @@ const getProductsByCategory = (category, setProducts, setIsLoading) => {
   getCategoryProducts(category).then((products) => {
     if (!products) return
     if (products.ok === 0) return
-    setProducts(products.data.slice(0, 4))
+    setProducts(products.data.slice(-4))
     setIsLoading(false)
   })
 }
@@ -51,11 +54,11 @@ const getProductsByCategory = (category, setProducts, setIsLoading) => {
 const showProductsInComponent = (data, MediaQuery, setIsModalOpen) => {
   const isMobile = MediaQuery('(max-width: 767px)')
   return data.map(
-    ({ id, name, price, Product_imgs, discountPrice, status }) => {
+    ({ id, name, price, Product_imgs, discountPrice, status, quantity }) => {
       const length = Product_imgs.length
       const imgUrl = isMobile
-        ? Product_imgs[length - 1].imgUrlSm
-        : Product_imgs[length - 1].imgUrlMd
+        ? Product_imgs[length - 1].imgUrlMd
+        : Product_imgs[length - 1].imgUrlLg
       return (
         <ProductCard
           id={id}
@@ -66,6 +69,7 @@ const showProductsInComponent = (data, MediaQuery, setIsModalOpen) => {
           price={price}
           discountPrice={discountPrice}
           status={status}
+          stockQuantity={quantity}
         />
       )
     }
@@ -73,14 +77,15 @@ const showProductsInComponent = (data, MediaQuery, setIsModalOpen) => {
 }
 
 export default function Home() {
+  const { isLoading, setIsLoading } = useContext(LoadingContext)
   const [homeProducts, setHomeProducts] = useState([])
   const [apparelProducts, setApparelProducts] = useState([])
   const [kitchenwareProducts, setKitchenProducts] = useState([])
   const [foodProducts, setFoodProducts] = useState([])
   const [stationeryProducts, setStationeryProducts] = useState([])
   const [outdoorProducts, setOutdoorProducts] = useState([])
-  const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, handleModalClose } = useContext(ModalContext)
+  const { isModalOpen, handleModalClose, isProductSoldOut } =
+    useContext(ModalContext)
 
   useEffect(() => {
     getProductsByCategory('home', setHomeProducts, setIsLoading)
@@ -96,11 +101,18 @@ export default function Home() {
       <HomeArticlesImg />
       <PageWidth>
         {isLoading && <IsLoadingComponent />}
-        <FullModal
-          open={isModalOpen}
-          content='已成功加入購物車 ! '
-          onClose={handleModalClose}
-        />
+        {isProductSoldOut && (
+          <AddCartModal
+            isModalOpen={isModalOpen}
+            handleModalClose={handleModalClose}
+          />
+        )}
+        {!isProductSoldOut && (
+          <SoldOutCartModal
+            isModalOpen={isModalOpen}
+            handleModalClose={handleModalClose}
+          />
+        )}
         <ProductContainer>
           <HomeCategoriesImg
             imgUrl='https://i.imgur.com/WjvyBCB.jpg'
