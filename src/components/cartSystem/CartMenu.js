@@ -42,12 +42,19 @@ const ItemsContainer = styled.div`
   }
 `
 const CartInfo = styled.div`
-  margin: 20px 10px;
+  margin: 0px 10px 10px 10px;
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
   font-size: ${FONT_SIZE.sm};
   font-weight: bold;
   letter-spacing: 1px;
+  p {
+    margin: 0;
+    margin-top: 4px;
+    padding: 0;
+    text-align: right;
+  }
 `
 const BtnWrapper = styled(Link)`
   ${MEDIA_QUERY.tablet} {
@@ -97,7 +104,7 @@ export default function CartMenu({ handleHover, $isOpen }) {
                     id={item.id}
                     name={item.name}
                     img={item.img}
-                    price={item.price}
+                    price={item.discountPrice}
                     quantity={item.quantity}
                   />
                 )
@@ -105,7 +112,10 @@ export default function CartMenu({ handleHover, $isOpen }) {
             </ItemsContainer>
             <CartInfo>
               <div>共有 {totalItems} 件商品</div>
-              <div>總金額 {formatPrice(totalPrice)}</div>
+              <div>
+                <p>運費 {formatPrice(80)}</p>
+                <p>總金額 {formatPrice(totalPrice)}</p>
+              </div>
             </CartInfo>
 
             <BtnWrapper to='/checkout/step1'>
