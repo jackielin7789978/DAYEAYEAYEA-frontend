@@ -39,11 +39,11 @@ export const adminCheck = async () => {
   }
 }
 
-export const getAllOrders = async () => {
+export const getOrders = async (condition) => {
   const token = getTokenFromLocalStorage()
   let res
   try {
-    res = await fetch(`${BASE_URL}/orders/active`, {
+    res = await fetch(`${BASE_URL}/orders/${condition}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export const getAllOrders = async () => {
   }
 }
 
-export const getOrder = async (ticketNo) => {
+export const getSingleOrder = async (ticketNo) => {
   const token = getTokenFromLocalStorage()
   let res
   try {
@@ -69,7 +69,7 @@ export const getOrder = async (ticketNo) => {
     })
     return await res.json()
   } catch (e) {
-    console.log(res.message)
+    console.log(e)
   }
 }
 
@@ -86,6 +86,23 @@ export const updateOrderStatus = async (ticketNo, status) => {
     })
     return await res.json()
   } catch (e) {
-    console.log(res.message)
+    console.log(e)
+  }
+}
+
+export const archiveOrder = async (ticketNo) => {
+  const token = getTokenFromLocalStorage()
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/orders/${ticketNo}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return await res.json()
+  } catch (e) {
+    console.log(e)
   }
 }

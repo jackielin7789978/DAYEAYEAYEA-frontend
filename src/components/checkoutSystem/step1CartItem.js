@@ -56,6 +56,8 @@ export const Cart = ({
       ? $setNotAllowed(true)
       : $setNotAllowed(false)
   }, [$setNotAllowed, quantity, warningMessage])
+
+  // 這裡戳出過 bug，進入結帳頁面時會讀不到某個商品的 quantity
   useEffect(() => {
     ;(async () => {
       const result = await getProductById(item.id)

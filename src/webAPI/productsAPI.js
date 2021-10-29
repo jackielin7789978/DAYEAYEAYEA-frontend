@@ -4,20 +4,20 @@ export const getAllProducts = async () => {
   let res
   try {
     res = await fetch(`${BASE_URL}/products`)
+    return await res.json()
   } catch (e) {
     console.log(e)
   }
-  return await res.json()
 }
 
 export const getCategoryProducts = async (category) => {
   let res
   try {
     res = await fetch(`${BASE_URL}/products/category/${category}`)
+    return await res.json()
   } catch (e) {
     console.log(e)
   }
-  return await res.json()
 }
 
 export const getAllProductsByPage = async (page) => {

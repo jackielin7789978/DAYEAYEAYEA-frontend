@@ -41,6 +41,7 @@ const CardContainer = styled.div`
 const getProductsByCategory = (category, setProducts, setIsLoading) => {
   setIsLoading(true)
   getCategoryProducts(category).then((products) => {
+    if (!products) return
     if (products.ok === 0) return
     setProducts(products.data.slice(0, 4))
     setIsLoading(false)
