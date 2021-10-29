@@ -109,10 +109,9 @@ export default function AdminProducts() {
     [history, location, keywords]
   )
 
-  return isLoading ? (
-    <AdminIsLoadingComponent />
-  ) : (
+  return (
     <PageWrapper>
+      {isLoading && <AdminIsLoadingComponent />}
       <SearchContainer>
         <SearchSideContainer>
           <Search />

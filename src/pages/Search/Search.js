@@ -97,10 +97,9 @@ export default function Search() {
     isDesktop
   )
 
-  return isLoading ? (
-    <IsLoadingComponent />
-  ) : (
+  return (
     <PageWidth>
+      {isLoading && <IsLoadingComponent />}
       <FullModal
         open={isModalOpen}
         content='已成功加入購物車 ! '

@@ -67,10 +67,9 @@ export default function Products() {
     product
   let hasDiscount = price !== discountPrice ? true : false
 
-  return isLoading ? (
-    <IsLoadingComponent />
-  ) : (
+  return (
     <PageWidth>
+      {isLoading && <IsLoadingComponent />}
       <FullModal
         open={isModalOpen}
         content='已成功加入購物車 ! '

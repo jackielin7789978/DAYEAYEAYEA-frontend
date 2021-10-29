@@ -133,14 +133,13 @@ export default function Articles() {
     isDesktop
   )
 
-  return isLoading ? (
-    <IsLoadingComponent />
-  ) : (
+  return (
     <>
       <FullWidth>
         <ArticleImgContainer style={{ backgroundImage: `url(${imgUrl})` }} />
       </FullWidth>
       <PageWidth>
+        {isLoading && <IsLoadingComponent />}
         <FullModal
           open={isModalOpen}
           content='已成功加入購物車 ! '
