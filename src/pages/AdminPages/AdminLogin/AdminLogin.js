@@ -68,7 +68,6 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('')
   const [errMsg, setErrMsg] = useState('')
   let history = useHistory()
-  const { setUser } = useContext(UserContext)
 
   const handleLogin = (e) => {
     e.preventDefault()
@@ -78,8 +77,7 @@ export default function AdminLogin() {
       if (!res.ok) return setErrMsg('帳號或密碼錯誤')
       alert('登入成功')
       addTokenToLocalStorage(res.token)
-      setUser(true)
-      history.push('/admin/orders')
+      history.push('/admin/members')
     })()
   }
 

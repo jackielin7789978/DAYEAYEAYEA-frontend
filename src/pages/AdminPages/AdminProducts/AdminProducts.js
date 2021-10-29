@@ -3,7 +3,6 @@ import { useState, useLayoutEffect, useCallback, useContext } from 'react'
 import { useParams, useLocation, useHistory, Link } from 'react-router-dom'
 import { LoadingContext } from '../../../context'
 import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
-import { ADMIN_MEDIA_QUERY } from '../../../constants/style'
 import {
   CategoryDropdown,
   Search
@@ -18,26 +17,18 @@ import {
 import { setAdminProductsPageInArray } from '../../../utils'
 
 const PageWrapper = styled.div`
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: center;
   border: 1px solid transparent;
-  padding: 40px 0px;
-  margin-bottom: 60px;
+  padding: 40px 20px;
 `
 const SearchContainer = styled.div`
   margin: 20px auto;
   display: flex;
   justify-content: space-between;
-  width: 78vw;
-  ${ADMIN_MEDIA_QUERY.md} {
-    width: 68vw;
-    max-width: 1180px;
-  }
-  ${ADMIN_MEDIA_QUERY.lg} {
-    max-width: 1180px;
-  }
+  width: 95%;
 `
 
 const SearchSideContainer = styled.div`
@@ -132,7 +123,7 @@ export default function AdminProducts() {
                 key={pageValue}
                 page={pageValue}
                 to={`/admin/products/${pageValue}`}
-                active={pageValue === page}
+                active={pageValue === parseInt(page)}
               ></PaginatorButton>
             )
           })}

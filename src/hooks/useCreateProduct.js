@@ -71,11 +71,10 @@ export default function useCreateProduct() {
           if (result.ok === 0) return alert(result.message)
           removeNewProductFromLocalStorage()
           alert('成功新增商品')
-          history.push('/admin/products/1')
         })
       }
     },
-    [productDetail, isChecked, history]
+    [productDetail, isChecked]
   )
 
   return {

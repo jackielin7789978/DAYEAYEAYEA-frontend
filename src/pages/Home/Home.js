@@ -46,7 +46,7 @@ const getProductsByCategory = (category, setProducts, setIsLoading) => {
   getCategoryProducts(category).then((products) => {
     if (!products) return
     if (products.ok === 0) return
-    setProducts(products.data.slice(0, 4))
+    setProducts(products.data.slice(-4))
     setIsLoading(false)
   })
 }

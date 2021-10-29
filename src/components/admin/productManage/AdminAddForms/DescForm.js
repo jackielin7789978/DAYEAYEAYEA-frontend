@@ -5,7 +5,7 @@ import { Input, InputTitle, FormTitleComponent, ErrorMsg } from '../FormStyle'
 
 const DescInput = styled(Input)`
   margin-top: 8px;
-  width: 89%;
+  width: 90%;
 `
 const DescForm = styled.div`
   display: flex;
@@ -45,7 +45,7 @@ export default function DetailDescForm({
 
   const handleOnChange = useCallback(
     (e) => {
-      const targetValue = e.target.value.trim(' ')
+      const targetValue = e.target.value
       const targetName = e.target.name
       setProductDetail((productDetail) => ({
         ...productDetail,
@@ -100,8 +100,7 @@ export default function DetailDescForm({
       <ComponentDiv>
         <InputTitle>商品簡述:</InputTitle>
         <DescTextArea
-          rows='3'
-          cols='116'
+          style={{ width: '90%', height: '100px' }}
           name='shortDesc'
           value={shortDesc}
           onChange={handleOnChange}
@@ -112,8 +111,7 @@ export default function DetailDescForm({
       <ComponentDiv>
         <InputTitle>商品文案:</InputTitle>
         <DescTextArea
-          rows='10'
-          cols='116'
+          style={{ width: '90%', height: '250px' }}
           name='longDesc'
           value={longDesc}
           onChange={handleOnChange}

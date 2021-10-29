@@ -17,6 +17,10 @@ import {
   Cell
 } from '../TableStyle'
 
+const TableWrapper = styled(Wrapper)`
+  width: 95%;
+`
+
 const NameHeader = styled(Header)`
   text-align: center;
   width: 13%;
@@ -186,7 +190,7 @@ export default function Table({ products }) {
   ]
 
   return (
-    <Wrapper>
+    <TableWrapper>
       <ColumnHeader>
         {headerNames.map((name) => (
           <NameHeader key={name} $name={name}>
@@ -200,6 +204,6 @@ export default function Table({ products }) {
             <TableItem key={product.id} product={product} />
           ))}
       </TableItemContainer>
-    </Wrapper>
+    </TableWrapper>
   )
 }

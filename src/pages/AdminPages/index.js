@@ -6,6 +6,7 @@ import {
   AdminProductDetail,
   AdminProductAdd
 } from './AdminProducts'
+import Layout from './Layout'
 
 export {
   AdminLogin,
@@ -13,5 +14,6 @@ export {
   AdminOrders,
   AdminProducts,
   AdminProductDetail,
-  AdminProductAdd
+  AdminProductAdd,
+  Layout
 }

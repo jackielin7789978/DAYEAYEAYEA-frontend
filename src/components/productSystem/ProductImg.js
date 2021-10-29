@@ -13,18 +13,20 @@ const ProductImgContainer = styled.div`
 
   ${MEDIA_QUERY.tablet} {
     width: 55%;
-    height: 100%;
+    height: 90%;
     flex-direction: row;
     align-items: flex-start;
     margin: 0px;
+    margin-right: 10px;
   }
 
   ${MEDIA_QUERY.desktop} {
     width: 50%;
-    height: 100%;
+    height: 90%;
     flex-direction: row;
     align-items: flex-start;
     margin: 0px;
+    margin-right: 10px;
   }
 `
 const ThumbnailContainer = styled.div`
@@ -80,7 +82,7 @@ const ThumbnailImgDiv = styled.div`
 
   ${MEDIA_QUERY.desktop} {
     width: 100%;
-    height: 25% !important;
+    height: 40% !important;
     margin: 0px 0px 10px 0px;
   }
 `
@@ -94,14 +96,14 @@ const LargeImgDiv = styled.div`
   margin-bottom: 30px;
   ${MEDIA_QUERY.tablet} {
     width: 80%;
-    height: 80%;
+    height: 100%;
     margin: 0;
     margin-left: 10px;
   }
 
   ${MEDIA_QUERY.desktop} {
     width: 80%;
-    height: 80%;
+    height: 100%;
     margin: 0;
     margin-left: 10px;
   }
@@ -131,19 +133,19 @@ export function ProductImgsComponent({ imgs }) {
     <ProductImgContainer>
       {isMobile && (
         <LargeImgDiv
-          style={{ backgroundImage: `url(${showLargeImg?.imgUrlMd})` }}
+          style={{ backgroundImage: `url(${showLargeImg?.imgUrlLg})` }}
         />
       )}
       {imgs.length > 1 && (
         <ThumbnailContainer>
-          {showThumbnailImage?.map(({ id, imgUrlSm }) => {
+          {showThumbnailImage?.map(({ id, imgUrlMd }) => {
             let $isSelected = id === selectedId ? true : false
             return (
               <ThumbnailImgDiv
                 key={id}
                 id={id}
                 style={{
-                  backgroundImage: `url(${imgUrlSm}})`
+                  backgroundImage: `url(${imgUrlMd}})`
                 }}
                 onClick={handleThumbnailClick}
                 $isSelected={$isSelected}
