@@ -8,8 +8,6 @@ export default function useFetchData(ApiFunc, setterFunc, args) {
       if (!res.ok) return alert(res.message)
       if (setterFunc && isMounted) {
         setterFunc(res.data)
-      } else {
-        alert('ok')
       }
     })()
     return () => (isMounted = false)

@@ -65,8 +65,8 @@ function AdminRoutes() {
       <Route path={'/admin/login'} component={AdminLogin} />
       <AdminLayout>
         <Route path={'/admin/members'} component={AdminMembers} />
-        <Route path={'/admin/orders/:id'} component={AdminOrderDetail} />
-        <Route path={'/admin/orders'} component={AdminOrders} />
+        <Route path={'/admin/orders/:ticket'} component={AdminOrderDetail} />
+        <Route exact path={'/admin/orders'} component={AdminOrders} />
         <Route
           path={'/admin/products/detail/:id'}
           component={AdminProductDetail}

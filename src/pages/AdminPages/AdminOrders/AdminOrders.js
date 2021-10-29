@@ -2,7 +2,11 @@ import { useState } from 'react'
 import { getOrders } from '../../../webAPI/adminAPIs'
 import { Search, Filter } from '../../../components/admin/orderManage/Search'
 import styled from 'styled-components'
-import { ADMIN_MEDIA_QUERY } from '../../../constants/style'
+import {
+  FONT_SIZE,
+  ADMIN_COLOR,
+  ADMIN_MEDIA_QUERY
+} from '../../../constants/style'
 import {
   ColumnHeader,
   Header,
@@ -11,19 +15,22 @@ import {
 import TableItem from '../../../components/admin/orderManage/TableItem'
 import { GeneralBtn } from '../../../components/Button'
 import useFetchData from '../../../hooks/useFetchData'
+import { calTotalPages } from '../../../utils'
 
 const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   margin: 40px auto;
-  width: 76vw;
+  width: 75vw;
+  font-size: ${FONT_SIZE.sm};
   ${ADMIN_MEDIA_QUERY.md} {
-    width: 60vw;
-    max-width: 1180px;
+    max-width: 1280px;
+    font-size: ${FONT_SIZE.md};
   }
   ${ADMIN_MEDIA_QUERY.lg} {
-    max-width: 1180px;
+    max-width: 1280px;
+    font-size: ${FONT_SIZE.md};
   }
 `
 const SearchContainer = styled.div`
@@ -31,13 +38,12 @@ const SearchContainer = styled.div`
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  width: 75vw;
+  width: 74vw;
   ${ADMIN_MEDIA_QUERY.md} {
-    width: 59vw;
-    max-width: 1180px;
+    max-width: 1260px;
   }
   ${ADMIN_MEDIA_QUERY.lg} {
-    max-width: 1150px;
+    max-width: 1260px;
   }
 `
 const RestyleHeader = styled(Header)`
@@ -45,32 +51,53 @@ const RestyleHeader = styled(Header)`
   width: ${({ $name }) => $name === 'Email' && '36%'};
   width: ${({ $name }) => $name === '訂單編號' && '28%'};
 `
+const Paginator = styled.div`
+  text-align: center;
+  margin: 20px;
+`
+const PaginatorBtn = styled.button`
+  background: transport;
+  color: ${ADMIN_COLOR.Btn_grey};
+  margin: 0px 4px;
+  padding: 0px 4px;
+  font-size: ${FONT_SIZE.md};
+
+  ${(props) =>
+    props.$active &&
+    `
+    font-weight: bold;
+    border-bottom: 1px solid ${ADMIN_COLOR.border_grey};
+    `}
+`
 const headerNames = ['訂單狀態', '訂單編號', 'Email', '訂單金額', 'Edit']
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState([])
   const [filter, setFilter] = useState('所有訂單')
   const [isViewingArchive, setIsViewingArchive] = useState(false)
+  const [offset, setOffset] = useState(0)
+
+  const filteredOrders = orders.filter((orders) => orders.status === filter)
+  const ORDERS_PER_PAGE = 10
+  const TotalPages =
+    filter === '所有訂單'
+      ? [...Array(calTotalPages(orders.length)).keys()]
+      : [...Array(calTotalPages(filteredOrders.length)).keys()]
 
   const handleFilter = (name) => {
     setFilter(name)
+    setOffset(0)
   }
 
-  const handleGetArchiveOrders = () => {
+  const handleGetOrders = (condition) => {
     ;(async () => {
-      const res = await getOrders('archive')
-      if (res.ok) setOrders(res.data)
+      const res = await getOrders(condition)
       if (!res.ok) alert('發生錯誤：' + res.message)
+      setOrders(res.data)
+      setOffset(0)
     })()
   }
 
-  const handleGetActiveOrders = () => {
-    ;(async () => {
-      const res = await getOrders('active')
-      if (res.ok) setOrders(res.data)
-      if (!res.ok) alert('發生錯誤：' + res.message)
-    })()
-  }
   useFetchData(getOrders, setOrders, 'active')
 
   return (
@@ -79,17 +106,13 @@ export default function AdminOrders() {
         <div>
           <Search />
           {!isViewingArchive && (
-            <Filter
-              filter={filter}
-              handleFilter={handleFilter}
-              handleGetArchiveOrders={handleGetArchiveOrders}
-            />
+            <Filter filter={filter} handleFilter={handleFilter} />
           )}
         </div>
         {isViewingArchive ? (
           <GeneralBtn
             onClick={() => {
-              handleGetActiveOrders()
+              handleGetOrders('active')
               setIsViewingArchive(false)
               setFilter('所有訂單')
             }}
@@ -100,7 +123,7 @@ export default function AdminOrders() {
         ) : (
           <GeneralBtn
             onClick={() => {
-              handleGetArchiveOrders()
+              handleGetOrders('archive')
               setIsViewingArchive(true)
             }}
             color='admin_grey'
@@ -120,14 +143,27 @@ export default function AdminOrders() {
         {isViewingArchive
           ? orders
               .sort((a, b) => b.id - a.id)
+              .slice(offset, offset + ORDERS_PER_PAGE)
               .map((order) => <TableItem key={order.id} order={order} />)
           : orders
               .filter((order) =>
                 filter === '所有訂單' ? order : order.status === filter
               )
               .sort((a, b) => b.id - a.id)
+              .slice(offset, offset + ORDERS_PER_PAGE)
               .map((order) => <TableItem key={order.id} order={order} />)}
       </TableItemContainer>
+      <Paginator>
+        {TotalPages.map((page) => (
+          <PaginatorBtn
+            onClick={() => setOffset(page * ORDERS_PER_PAGE)}
+            key={page}
+            $active={offset / 10 === page}
+          >
+            {page + 1}
+          </PaginatorBtn>
+        ))}
+      </Paginator>
     </PageWrapper>
   )
 }

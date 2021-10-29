@@ -83,3 +83,8 @@ export const formatPrice = (cents) => {
 }
 
 export const multiplyPrice = (quantity, price) => quantity * price
+
+export const calTotalPages = (totalItems) => {
+  if (totalItems % 10) return Math.floor(totalItems / 10) + 1
+  return totalItems / 10
+}
