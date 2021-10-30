@@ -71,7 +71,9 @@ export default function Step1() {
               $setNotAllowed={setNotAllowed}
             />
           ))}
-          <TotalPrice>{`小計 ${formatPrice(totalPrice)}`}</TotalPrice>
+          <TotalPrice>{`小計 ${formatPrice(
+            totalPrice ? totalPrice : 0
+          )}`}</TotalPrice>
           <TotalPrice>運費 NT$80</TotalPrice>
           <TotalPrice>{`總金額 ${formatPrice(totalPrice + 80)}`}</TotalPrice>
           <BtnFlex>
