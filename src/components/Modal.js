@@ -4,12 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
 const FixedBackground = styled.div`
-  position: fixed;
+  position: ${(props) => (props.desk === 'back' ? 'absolute' : 'fixed')};
   z-index: 3;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -19,7 +19,7 @@ const ModalContent = styled.div`
   background: ${COLOR.light};
   font-size: ${FONT_SIZE.lg};
   color: ${COLOR.text_dark};
-  position: fixed;
+  position: ${(props) => (props.desk === 'back' ? 'absolute' : 'fixed')};
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -104,13 +104,13 @@ function FullModal({
   buttonTwo,
   open,
   onClose,
-  position
+  desk
 }) {
   if (!open) return null
   return (
     <div>
-      <FixedBackground onClick={onClose} />
-      <ModalContent style={position}>
+      <FixedBackground onClick={onClose} desk={desk} />
+      <ModalContent desk={desk}>
         <CloseButton onClick={onClose} />
         <ModalIcon icon={icon} />
         <ModalContentDiv>{content}</ModalContentDiv>

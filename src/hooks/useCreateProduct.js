@@ -56,7 +56,6 @@ export default function useCreateProduct() {
     (e) => {
       e.preventDefault()
       let isAllChecked
-      console.log(isChecked)
       for (const key in isChecked) {
         if (isChecked[key] === false) {
           isAllChecked = false

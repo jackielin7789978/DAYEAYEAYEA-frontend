@@ -1,10 +1,9 @@
 import { useRef, useEffect, useCallback } from 'react'
-import { useHistory } from "react-router-dom";
+import { useHistory } from 'react-router-dom'
 import { adminCheck } from '../../webAPI/adminAPIs'
 import styled from 'styled-components'
 import Navbar from './Navbar'
 import Footer from './Footer'
-
 
 const Wrapper = styled.div`
   display: flex;
@@ -15,6 +14,7 @@ const Container = styled.div`
   flex-grow: 1;
   overflow: auto;
   padding: 6px 0 12px;
+  position: relative;
 `
 
 const Layout = ({ children }) => {
@@ -22,11 +22,11 @@ const Layout = ({ children }) => {
   const history = useHistory()
   useEffect(() => {
     ;(async () => {
-      if(await adminCheck()) {
+      if (await adminCheck()) {
         isLogin.current = true
         return
       }
-      
+
       isLogin.current = false
       alert('請先登入!!!')
       history.push('/admin/login')
@@ -37,18 +37,16 @@ const Layout = ({ children }) => {
     localStorage.removeItem('token')
     history.go(0)
   }, [history])
-  
+
   return (
     <>
       <Wrapper>
-        <Navbar handleLogout={handleLogout}/>
-        <Container>
-          { isLogin && children }
-        </Container>
+        <Navbar handleLogout={handleLogout} />
+        <Container>{isLogin && children}</Container>
       </Wrapper>
-      <Footer/>
+      <Footer />
     </>
   )
-};
+}
 
 export default Layout

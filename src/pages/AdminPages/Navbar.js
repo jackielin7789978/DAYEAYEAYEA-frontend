@@ -104,6 +104,7 @@ const SwitchButton = styled.button`
   top: 50%;
   right: -30px;
   color: #fff;
+  z-index: 10;
 
   background: #333c;
   font-size: 24px;
