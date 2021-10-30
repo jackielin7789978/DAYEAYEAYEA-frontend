@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { getOrders } from '../../../webAPI/adminAPIs'
 import { Search, Filter } from '../../../components/admin/orderManage/Search'
 import styled from 'styled-components'
@@ -16,6 +16,7 @@ import TableItem from '../../../components/admin/orderManage/TableItem'
 import { GeneralBtn } from '../../../components/Button'
 import useFetchData from '../../../hooks/useFetchData'
 import { calTotalPages } from '../../../utils'
+import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -76,6 +77,24 @@ export default function AdminOrders() {
   const [filter, setFilter] = useState('所有訂單')
   const [isViewingArchive, setIsViewingArchive] = useState(false)
   const [offset, setOffset] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
+
+  // 搜尋功能
+  const [searchVal, setSearchVal] = useState('')
+  const [searchedOrders, setSearchedOrders] = useState()
+  useEffect(() => {
+    let reg = new RegExp(searchVal, 'i')
+    searchVal
+      ? setSearchedOrders(
+          orders.filter(
+            (order) =>
+              reg.test(order.status) ||
+              reg.test(order.ticketNo) ||
+              reg.test(order.orderEmail)
+          )
+        )
+      : setSearchedOrders('')
+  }, [orders, searchVal])
 
   const filteredOrders = orders.filter((orders) => orders.status === filter)
   const ORDERS_PER_PAGE = 10
@@ -90,21 +109,23 @@ export default function AdminOrders() {
   }
 
   const handleGetOrders = (condition) => {
+    setIsLoading(true)
     ;(async () => {
       const res = await getOrders(condition)
       if (!res.ok) alert('發生錯誤：' + res.message)
       setOrders(res.data)
       setOffset(0)
+      setIsLoading(false)
     })()
   }
 
-  useFetchData(getOrders, setOrders, 'active')
+  useFetchData(getOrders, setOrders, setIsLoading, 'active')
 
   return (
     <PageWrapper>
       <SearchContainer>
         <div>
-          <Search />
+          <Search searchVal={searchVal} setSearchVal={setSearchVal} />
           {!isViewingArchive && (
             <Filter filter={filter} handleFilter={handleFilter} />
           )}
@@ -139,31 +160,41 @@ export default function AdminOrders() {
           </RestyleHeader>
         ))}
       </ColumnHeader>
-      <TableItemContainer>
-        {isViewingArchive
-          ? orders
-              .sort((a, b) => b.id - a.id)
-              .slice(offset, offset + ORDERS_PER_PAGE)
-              .map((order) => <TableItem key={order.id} order={order} />)
-          : orders
-              .filter((order) =>
-                filter === '所有訂單' ? order : order.status === filter
-              )
-              .sort((a, b) => b.id - a.id)
-              .slice(offset, offset + ORDERS_PER_PAGE)
-              .map((order) => <TableItem key={order.id} order={order} />)}
-      </TableItemContainer>
-      <Paginator>
-        {TotalPages.map((page) => (
-          <PaginatorBtn
-            onClick={() => setOffset(page * ORDERS_PER_PAGE)}
-            key={page}
-            $active={offset / 10 === page}
-          >
-            {page + 1}
-          </PaginatorBtn>
-        ))}
-      </Paginator>
+      {isLoading ? (
+        <AdminIsLoadingComponent />
+      ) : (
+        <TableItemContainer>
+          {searchedOrders
+            ? searchedOrders
+                .sort((a, b) => b.id - a.id)
+                .map((order) => <TableItem key={order.id} order={order} />)
+            : isViewingArchive
+            ? orders
+                .sort((a, b) => b.id - a.id)
+                .slice(offset, offset + ORDERS_PER_PAGE)
+                .map((order) => <TableItem key={order.id} order={order} />)
+            : orders
+                .filter((order) =>
+                  filter === '所有訂單' ? order : order.status === filter
+                )
+                .sort((a, b) => b.id - a.id)
+                .slice(offset, offset + ORDERS_PER_PAGE)
+                .map((order) => <TableItem key={order.id} order={order} />)}
+        </TableItemContainer>
+      )}
+      {!searchVal && !isLoading && (
+        <Paginator>
+          {TotalPages.map((page) => (
+            <PaginatorBtn
+              onClick={() => setOffset(page * ORDERS_PER_PAGE)}
+              key={page}
+              $active={offset / 10 === page}
+            >
+              {page + 1}
+            </PaginatorBtn>
+          ))}
+        </Paginator>
+      )}
     </PageWrapper>
   )
 }

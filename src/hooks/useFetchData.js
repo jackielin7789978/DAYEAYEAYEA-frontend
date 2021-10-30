@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-export default function useFetchData(ApiFunc, setterFunc, args) {
+export default function useFetchData(ApiFunc, setterFunc, setIsLoading, args) {
   useEffect(() => {
     let isMounted = true
     ;(async () => {
@@ -8,8 +8,9 @@ export default function useFetchData(ApiFunc, setterFunc, args) {
       if (!res.ok) return alert(res.message)
       if (setterFunc && isMounted) {
         setterFunc(res.data)
+        setIsLoading(false)
       }
     })()
     return () => (isMounted = false)
-  }, [ApiFunc, args, setterFunc])
+  }, [ApiFunc, args, setterFunc, setIsLoading])
 }

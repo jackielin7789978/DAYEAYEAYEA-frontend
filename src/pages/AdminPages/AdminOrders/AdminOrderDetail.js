@@ -8,21 +8,20 @@ import {
   ADMIN_MEDIA_QUERY
 } from '../../../constants/style'
 import { Wrapper } from '../../../components/admin/TableStyle'
-import { ImgAnchor } from '../../../components/general'
-import { GeneralBtn, LogoutBtn } from '../../../components/Button'
+import { LogoutBtn } from '../../../components/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faChevronDown,
-  faQuestionCircle
-} from '@fortawesome/free-solid-svg-icons'
-import { multiplyPrice, formatPrice } from '../../../utils'
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { formatPrice } from '../../../utils'
 import {
   getSingleOrder,
   updateOrderStatus,
   archiveOrder
 } from '../../../webAPI/adminAPIs'
-import { FullModal } from '../../../components/Modal'
 import useFetchData from '../../../hooks/useFetchData'
+import Item from '../../../components/admin/orderManage/DetailItem'
+import OrderInfo from '../../../components/admin/orderManage/OrderInfo'
+import Buttons from '../../../components/admin/orderManage/Buttons'
+import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -40,6 +39,7 @@ const PageWrapper = styled.div`
 `
 const Container = styled(Wrapper)`
   width: 100%;
+  min-height: 40px;
   background: ${ADMIN_COLOR.light_grey};
   border-radius: 20px;
   position: relative;
@@ -95,35 +95,6 @@ const TableHeaders = styled.div`
 const Header = styled.span`
   width: 10%;
 `
-const ItemContainer = styled(TableHeaders)`
-  padding: 10px;
-  margin: 0 20px 10px 20px;
-  div {
-    text-align: center;
-    width: 10%;
-    margin: 2px 0px;
-  }
-  div:first-child {
-    width: 70%;
-    display: flex;
-  }
-  div:last-child {
-    text-align: right;
-  }
-`
-const Pic = styled.div`
-  max-width: 70px;
-  height: 70px;
-  background: ${({ $img }) => `url(${$img})`};
-`
-const Name = styled(Link)`
-  margin: 2px 10px;
-  font-weight: bold;
-  color: ${COLOR.text_dark};
-  &:hover {
-    color: ${COLOR.text_dark};
-  }
-`
 const PriceDetail = styled.div`
   width: 100%;
   padding: 4px 30px;
@@ -139,72 +110,16 @@ const PriceDetail = styled.div`
     font-weight: bold;
   }
 `
-const OrderInfo = styled.div`
-  padding: 10px 40px;
-  div {
-    margin: 8px 0px;
-  }
-`
-const Buttons = styled.div`
-  position: absolute;
-  top: 22%;
-  right: 40px;
-  display: flex;
-  button {
-    padding: 0 20px;
-    margin: 0 8px;
-    transition: 0.2s ease;
-  }
-`
-const Archived = styled.span`
-  margin-left: 4px;
-  color: ${ADMIN_COLOR.Btn_grey};
-  span {
-    opacity: 0;
-    transition: opacity 0.2s;
-    padding: 4px;
-    border-bottom: 1px dotted black;
-    font-size: ${FONT_SIZE.xs};
-    position: relative;
-    bottom: 8px;
-    left: 8px;
-  }
-  &:hover {
-    span {
-      opacity: 1;
-    }
-  }
-`
-
-function Item({ item }) {
-  return (
-    <ItemContainer>
-      <div>
-        <Pic $img={JSON.stringify(item.Product.Product_imgs[0].imgUrlSm)}>
-          <ImgAnchor to={`/admin/products/detail/${item.productId}`} />
-        </Pic>
-        <Name to={`/admin/products/detail/${item.productId}`}>
-          {item.Product.name}
-        </Name>
-      </div>
-      <div>{formatPrice(item.Product.discountPrice)}</div>
-      <div>{item.quantity}</div>
-      <div>
-        {formatPrice(multiplyPrice(item.Product.discountPrice, item.quantity))}
-      </div>
-    </ItemContainer>
-  )
-}
 
 export default function AdminOrderDetail() {
   const [isOpen, setIsOpen] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [orderDetail, setOrderDetail] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
   const { ticket } = useParams()
 
-  useFetchData(getSingleOrder, setOrderDetail, ticket)
+  useFetchData(getSingleOrder, setOrderDetail, setIsLoading, ticket)
 
-  // TODO: 變更後要抓新資料。沒變更的情況下回上一頁，可以不重打 API 嗎？
   const handleArchive = (ticketNo) => {
     ;(async () => {
       const res = await archiveOrder(ticketNo)
@@ -214,9 +129,10 @@ export default function AdminOrderDetail() {
     })()
   }
 
-  const handleOrderStatus = (status) => {
+  const handleOrderStatus = (action) => {
+    if (action === 'cancel' && !isModalOpen) return setIsModalOpen(true)
     ;(async () => {
-      const res = await updateOrderStatus(ticket, status)
+      const res = await updateOrderStatus(ticket, action)
       if (!res.ok) return alert('發生錯誤：' + res.message)
       alert('變更成功！')
       window.location.reload()
@@ -225,6 +141,7 @@ export default function AdminOrderDetail() {
 
   return (
     <PageWrapper $isOpen={isOpen}>
+      {isLoading && <AdminIsLoadingComponent />}
       <Link to='/admin/orders'>
         <LogoutBtn
           color='admin_blue'
@@ -284,82 +201,14 @@ export default function AdminOrderDetail() {
         {orderDetail && (
           <>
             <Title>訂單資料</Title>
-            <OrderInfo>
-              <div>
-                訂單狀態：{orderDetail.status}
-                {orderDetail.isDeleted ? (
-                  <Archived>
-                    <FontAwesomeIcon icon={faQuestionCircle} />
-                    <span>此筆訂單已封存</span>
-                  </Archived>
-                ) : (
-                  <></>
-                )}
-              </div>
-              <div>訂單編號：{orderDetail.ticketNo}</div>
-              <div>訂購人姓名：{orderDetail.orderName}</div>
-              <div>寄送地址：{orderDetail.orderAddress}</div>
-              <div>聯絡信箱：{orderDetail.orderEmail}</div>
-              <div>聯絡電話：{orderDetail.orderPhone}</div>
-              <div>付款方式：{orderDetail.payment}</div>
-              <div>運送方式：{orderDetail.shipping}</div>
-            </OrderInfo>
-            <Buttons>
-              <FullModal
-                open={isModalOpen}
-                content='確定要取消這筆訂單嗎？'
-                buttonOne={
-                  <GeneralBtn
-                    onClick={() => handleOrderStatus('cancel')}
-                    color='admin_blue'
-                    children='確定'
-                  />
-                }
-                buttonTwo={
-                  <GeneralBtn
-                    onClick={() => setIsModalOpen(false)}
-                    color='admin_grey'
-                    children='返回'
-                  />
-                }
-                onClose={() => setIsModalOpen(false)}
-              />
-              {orderDetail.status === '處理中' && (
-                <>
-                  <GeneralBtn
-                    onClick={() => handleOrderStatus('ship')}
-                    color='admin_blue'
-                    children='出貨'
-                  />
-                  <GeneralBtn
-                    onClick={() => handleOrderStatus('cancel')}
-                    color='admin_grey'
-                    children='取消訂單'
-                  />
-                </>
-              )}
-              {orderDetail.status === '已出貨' && (
-                <GeneralBtn
-                  onClick={() => handleOrderStatus('complete')}
-                  color='admin_grey'
-                  children='完成訂單'
-                />
-              )}
-              {orderDetail.status === '已完成' && !orderDetail.isDeleted && (
-                <GeneralBtn
-                  onClick={() => handleArchive(orderDetail.ticketNo)}
-                  color='admin_grey'
-                  children='封存訂單'
-                />
-              )}
-              {orderDetail.status === '已取消' && !orderDetail.isDeleted && (
-                <GeneralBtn
-                  onClick={() => handleArchive(orderDetail.ticketNo)}
-                  color='admin_grey'
-                  children='封存訂單'
-                />
-              )}
-            </Buttons>
+            <OrderInfo orderDetail={orderDetail} />
+            <Buttons
+              orderDetail={orderDetail}
+              handleOrderStatus={handleOrderStatus}
+              handleArchive={handleArchive}
+              isModalOpen={isModalOpen}
+              setIsModalOpen={setIsModalOpen}
+            />
           </>
         )}
       </Container>
