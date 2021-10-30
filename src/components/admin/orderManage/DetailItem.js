@@ -26,7 +26,8 @@ const ItemContainer = styled.div`
 const Pic = styled.div`
   max-width: 70px;
   height: 70px;
-  background: ${({ $img }) => `url(${$img})`};
+  background: url(${({ $img }) => $img}) no-repeat center;
+  background-size: cover;
 `
 const Name = styled(Link)`
   margin: 2px 10px;
