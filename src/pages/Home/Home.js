@@ -1,4 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
 import styled from 'styled-components'
 import { useState, useEffect, useContext } from 'react'
 import useMediaQuery from '../../hooks/useMediaQuery'
@@ -9,7 +8,7 @@ import { COLOR, MEDIA_QUERY } from '../../constants/style'
 import { ProductCard } from '../../components/productSystem/ProductCard'
 import { getCategoryProducts } from '../../webAPI/productsAPI'
 import { HomeCategoriesImg } from '../../components/homeSystem/HomeCategoriesImg'
-import { HomeArticlesImg } from '../../components/homeSystem/HomeArticlesImg'
+import Carousel from '../../components/Carousel'
 import {
   AddCartModal,
   SoldOutCartModal
@@ -98,7 +97,7 @@ export default function Home() {
 
   return (
     <>
-      <HomeArticlesImg />
+      <Carousel />
       <PageWidth>
         {isLoading && <IsLoadingComponent />}
         {isProductSoldOut && (

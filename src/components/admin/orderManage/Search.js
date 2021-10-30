@@ -35,14 +35,18 @@ const Dropdown = styled.select`
   }
 `
 
-export function Search() {
+export function Search({ searchVal, setSearchVal }) {
   return (
     <Wrapper>
       <StyledSearchIcon
         icon={faSearch}
         style={{ color: ADMIN_COLOR.border_dark_grey }}
       />
-      <Input placeholder={'搜尋訂單'}></Input>
+      <Input
+        placeholder={'搜尋訂單'}
+        value={searchVal}
+        onChange={(e) => setSearchVal(e.target.value)}
+      ></Input>
     </Wrapper>
   )
 }
