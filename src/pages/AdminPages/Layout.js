@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useRef, useEffect, useCallback } from 'react'
 import { useHistory } from "react-router-dom";
 import { adminCheck } from '../../webAPI/adminAPIs'
 import styled from 'styled-components'
@@ -18,11 +18,16 @@ const Container = styled.div`
 `
 
 const Layout = ({ children }) => {
-  const history = useHistory();
+  const isLogin = useRef(false)
+  const history = useHistory()
   useEffect(() => {
     ;(async () => {
-      if(await adminCheck()) return
+      if(await adminCheck()) {
+        isLogin.current = true
+        return
+      }
       
+      isLogin.current = false
       alert('請先登入!!!')
       history.push('/admin/login')
     })()
@@ -38,7 +43,7 @@ const Layout = ({ children }) => {
       <Wrapper>
         <Navbar handleLogout={handleLogout}/>
         <Container>
-          { children }
+          { isLogin && children }
         </Container>
       </Wrapper>
       <Footer/>
