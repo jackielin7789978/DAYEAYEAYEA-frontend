@@ -1,4 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
 import styled from 'styled-components'
 import { useState, useEffect, useContext } from 'react'
 import useMediaQuery from '../../hooks/useMediaQuery'
