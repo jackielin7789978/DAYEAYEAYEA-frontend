@@ -15,7 +15,7 @@ import {
 import { GeneralBtn } from '../../../components/Button'
 import { OrderItem } from '../../../components/checkoutSystem/step3OrderItem'
 import { getOrderOne } from '../../../webAPI/orderAPI'
-
+import { formatPrice } from '../../../utils'
 export default function Step3() {
   const location = useHistory()
   let { ticket } = useParams()
@@ -58,9 +58,11 @@ export default function Step3() {
           {orderData.Order_items.map((item) => (
             <OrderItem key={item.productId} item={item} />
           ))}
-          <TotalPrice>{`小計 NT$${orderData.subTotal - 80}`}</TotalPrice>
+          <TotalPrice>{`小計 ${formatPrice(
+            orderData.subTotal - 80
+          )}`}</TotalPrice>
           <TotalPrice>運費 NT$80</TotalPrice>
-          <TotalPrice>{`總金額 NT$ ${orderData.subTotal}`}</TotalPrice>
+          <TotalPrice>{`總金額 ${formatPrice(orderData.subTotal)}`}</TotalPrice>
         </>
       )}
       <Link to='/'>

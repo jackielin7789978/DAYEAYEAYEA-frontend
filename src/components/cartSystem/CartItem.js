@@ -20,7 +20,8 @@ const ItemContainer = styled.div`
 const Pic = styled.div`
   min-width: 70px;
   height: 70px;
-  background: url(${({ $img }) => ($img ? $img : $img)});
+  background: url(${({ $img }) => $img}) no-repeat center;
+  background-size: cover;
   &:hover {
     transition: all 0.3s;
     transform: scale(1.05);

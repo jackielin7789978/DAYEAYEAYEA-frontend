@@ -14,7 +14,7 @@ import {
 
 const DescInput = styled(Input)`
   margin-top: 8px;
-  width: 100%;
+  width: 90%;
 `
 const DescForm = styled(Form)`
   display: flex;
@@ -55,7 +55,7 @@ export default function DetailDescForm({ product }) {
 
   const handleOnChange = useCallback(
     (e) => {
-      const targetValue = e.target.value.trim(' ')
+      const targetValue = e.target.value
       const targetName = e.target.name
       const newDescData = {
         ...descData,
@@ -123,8 +123,7 @@ export default function DetailDescForm({ product }) {
       <ComponentDiv>
         <InputTitle>商品簡述:</InputTitle>
         <DescTextArea
-          rows='3'
-          cols='116'
+          style={{ width: '90%', height: '100px' }}
           name='shortDesc'
           value={descData.shortDesc}
           disabled={isDisabled}
@@ -136,8 +135,7 @@ export default function DetailDescForm({ product }) {
       <ComponentDiv>
         <InputTitle>商品文案:</InputTitle>
         <DescTextArea
-          rows='10'
-          cols='116'
+          style={{ width: '90%', height: '250px' }}
           name='longDesc'
           value={descData.longDesc}
           disabled={isDisabled}

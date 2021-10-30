@@ -1,11 +1,12 @@
 import styled from 'styled-components'
-import { useMemo, useContext } from 'react'
+import { useMemo, useContext, useState } from 'react'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { Link } from 'react-router-dom'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import { ShoppingCarBtn, ShoppingCarWhiteBtn, GeneralBtn } from '../Button'
 import { ModalContext, LocalStorageContext } from '../../context'
-import { formatPrice } from '../../utils'
+import { formatPrice, getItemsFromLocalStorage } from '../../utils'
+import { useEffect } from 'react'
 
 const CardContainerDiv = styled.div`
   margin: 8px 4px;
@@ -176,14 +177,17 @@ export function ProductCard({
   imgUrl,
   discountPrice,
   imgs,
-  status
+  status,
+  stockQuantity
 }) {
   let hasDiscount = price !== discountPrice ? true : false
   const isDesktop = useMediaQuery('(min-width: 1200px)')
   // eslint-disable-next-line no-unused-vars
-  const { isModalOpen, setIsModalOpen } = useContext(ModalContext)
+  const { setIsModalOpen, setIsProductSoldOut } = useContext(ModalContext)
   const { handleAddCartItem } = useContext(LocalStorageContext)
+  const [inStock, setInStock] = useState(0)
   const quantity = 1
+
   const productInfo = useMemo(
     () => ({
       name,
@@ -194,9 +198,31 @@ export function ProductCard({
     }),
     [name, price, discountPrice, imgs]
   )
+
+  useEffect(() => {
+    const cartInLocal = JSON.parse(getItemsFromLocalStorage())
+    const isProductInCart =
+      (cartInLocal && cartInLocal.filter((item) => item.id === id)) || []
+    if (isProductInCart.length === 0) {
+      setInStock(stockQuantity)
+    } else {
+      const surplus = stockQuantity - isProductInCart[0].quantity
+      surplus === 0 ? setInStock(0) : setInStock(surplus)
+    }
+  }, [id, stockQuantity])
+
   const handleAddProductInCart = () => {
-    handleAddCartItem(id, productInfo)
-    setIsModalOpen(true)
+    console.log(inStock)
+    if (inStock > 0) {
+      setInStock(inStock - 1)
+      handleAddCartItem(id, productInfo)
+      setIsProductSoldOut((isProductSoldOut) => true)
+      return setIsModalOpen(true)
+    }
+    if (inStock === 0) {
+      setIsProductSoldOut((isProductSoldOut) => false)
+      return setIsModalOpen(true)
+    }
   }
 
   return (

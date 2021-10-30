@@ -31,6 +31,8 @@ export const ItemCounter = ({
   count,
   targetId
 }) => {
+  const blockInvalidChar = (e) =>
+    ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault()
   return (
     <Counter style={marginStyle}>
       <FontAwesomeIcon
@@ -43,6 +45,7 @@ export const ItemCounter = ({
         value={count}
         onChange={handleChange}
         onBlur={handleOnBlur}
+        onKeyDown={blockInvalidChar}
       />
       <FontAwesomeIcon
         icon={faPlus}

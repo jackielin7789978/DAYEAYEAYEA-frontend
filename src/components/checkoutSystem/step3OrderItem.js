@@ -8,6 +8,7 @@ import {
   ItemCountMobile,
   ItemInfo
 } from './Step'
+import { formatPrice } from '../../utils'
 export const OrderItem = ({ item }) => {
   return (
     <Item key={item.productId}>
@@ -21,10 +22,10 @@ export const OrderItem = ({ item }) => {
           to={`/products/${item.productId}`}
         />
         <ItemContent>
-          <ItemPriceHidden children={`NT$ ${item.Product.price}`} />
+          <ItemPriceHidden children={`${formatPrice(item.Product.price)}`} />
           <ItemCountHidden children={item.quantity} />
           <ItemCountMobile
-            children={`${item.quantity} x NT$ ${item.Product.price}`}
+            children={`${item.quantity} x ${formatPrice(item.Product.price)}`}
           />
         </ItemContent>
       </ItemInfo>

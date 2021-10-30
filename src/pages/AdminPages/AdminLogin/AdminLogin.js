@@ -1,6 +1,5 @@
-import { useState, useContext } from 'react'
-import { UserContext } from '../../../context'
-import { useHistory } from 'react-router-dom'
+import { useState } from 'react'
+import { useHistory } from 'react-router'
 import styled from 'styled-components'
 import { LoginBtn } from '../../../components/Button'
 import { COLOR, ADMIN_COLOR, FONT_SIZE } from '../../../constants/style'
@@ -68,7 +67,6 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('')
   const [errMsg, setErrMsg] = useState('')
   let history = useHistory()
-  const { setUser } = useContext(UserContext)
 
   const handleLogin = (e) => {
     e.preventDefault()
@@ -78,8 +76,7 @@ export default function AdminLogin() {
       if (!res.ok) return setErrMsg('帳號或密碼錯誤')
       alert('登入成功')
       addTokenToLocalStorage(res.token)
-      setUser(true)
-      history.push('/admin/orders')
+      history.push('/admin/members')
     })()
   }
 
