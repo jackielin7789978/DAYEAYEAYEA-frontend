@@ -7,7 +7,6 @@ import {
   faUserFriends,
   faEye,
   faImages,
-  faThLarge,
   faSignOutAlt,
   faAngleLeft
 } from '@fortawesome/free-solid-svg-icons'
@@ -144,10 +143,6 @@ const Navbar = ({ handleLogout }) => {
         <Nav to='/admin/4'>
           <FontAwesomeIcon icon={faImages} />
           <span>活動管理</span>
-        </Nav>
-        <Nav to='/admin/5'>
-          <FontAwesomeIcon icon={faThLarge} />
-          <span>分類頁面</span>
         </Nav>
       </NavbarList>
       <LogoutButton onClick={handleLogout}>

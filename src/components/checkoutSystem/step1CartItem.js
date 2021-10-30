@@ -12,6 +12,7 @@ import {
 import { ItemCounter } from '../Counter'
 import { getProductById } from '../../webAPI/productsAPI'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { formatPrice } from '../../utils'
 export const Cart = ({
   item,
   handleRemoveCartItem,
@@ -79,7 +80,7 @@ export const Cart = ({
       <ItemInfo>
         <ItemName children={item.name} to={`/products/${item.id}`} />
         <ItemContent>
-          <ItemPrice children={`NT$ ${item.discountPrice}`} />
+          <ItemPrice children={formatPrice(item.discountPrice)} />
           <ItemCounter
             marginStyle={{ marginRight: '25px' }}
             handleCount={handleCount}
