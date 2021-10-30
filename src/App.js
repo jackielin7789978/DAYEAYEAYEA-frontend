@@ -13,12 +13,20 @@ import {
   Me,
   Products,
   NotFound
-} from './pages/index'
-import AdminLogin from './pages/AdminPages/AdminLogin'
-import { AdminOrders, AdminOrderDetail } from './pages/AdminPages/AdminOrders'
-import AdminProducts from './pages/AdminPages/AdminProducts'
+} from './pages'
+import {
+  AdminLogin,
+  AdminOrders,
+  AdminOrderDetail,
+  AdminProducts,
+  AdminMembers,
+  AdminMemberDetail,
+  AdminProductDetail,
+  AdminProductAdd,
+  Layout as AdminLayout
+} from './pages/AdminPages'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
-import { PageHeight, AdminPageWidth } from './components/general'
+import { PageHeight } from './components/general'
 import {
   HashRouter as Router,
   Route,
@@ -37,8 +45,8 @@ import {
   LocalStorageContext,
   UserContext
 } from './context'
-import { getMe } from './webAPI/loginAPI'
 import GlobalStyle from './constants/globalStyle'
+import jwt_decode from 'jwt-decode'
 
 export default function App() {
   return (
@@ -54,55 +62,67 @@ export default function App() {
 }
 
 function AdminRoutes() {
-  const { path } = useRouteMatch()
-
+  const [isLoading, setIsLoading] = useState(false)
   return (
-    <Switch>
-      <AdminPageWidth>
-        <Route exact path={`${path}/login`} component={AdminLogin} />
-        <Route path={`${path}/orders/:id`} component={AdminOrderDetail} />
-        <Route exact path={`${path}/orders`} component={AdminOrders} />
-        <Route
-          path={`${path}/products/:slug/:page`}
-          component={AdminProducts}
-        />
-        <Route exact path={`${path}/products`} component={AdminOrders} />
-        {/* 以下尚未 import */}
-        {/* <Route path={`${path}/members`} component={AdminMembers} /> */}
-      </AdminPageWidth>
-    </Switch>
+    <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
+      <Switch>
+        <Route path={'/admin/login'} component={AdminLogin} />
+        <AdminLayout>
+          <Switch>
+            <Route path={'/admin/members/:id'} component={AdminMemberDetail} />
+            <Route path={'/admin/members'} component={AdminMembers} />
+            <Route
+              path={'/admin/orders/:ticket'}
+              component={AdminOrderDetail}
+            />
+            <Route path={'/admin/orders'} component={AdminOrders} />
+            <Route
+              path={'/admin/products/detail/:id'}
+              component={AdminProductDetail}
+            />
+            <Route path={'/admin/products/add'} component={AdminProductAdd} />
+            <Route path={'/admin/products/:page'} component={AdminProducts} />
+          </Switch>
+        </AdminLayout>
+      </Switch>
+    </LoadingContext.Provider>
   )
 }
 function Shop() {
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isProductSoldOut, setIsProductSoldOut] = useState(false)
   const [cartItems, setCartItems] = useState(
     JSON.parse(getItemsFromLocalStorage())
   )
 
-  const [user, setUser] = useState(() => {
-    const localToken = getTokenFromLocalStorage()
-    return localToken
-      ? getMe().then((res) => {
-          if (res.ok) {
-            setUser(res.data)
-          }
-        })
-      : null
-  })
+  const [user, setUser] = useState()
+  useEffect(() => {
+    if (!getTokenFromLocalStorage()) return false
+    try {
+      const _info = jwt_decode(getTokenFromLocalStorage())
+      if (_info.hasOwnProperty('id')) return setUser(_info)
+      return setUser(null)
+    } catch (error) {
+      return setUser(null)
+    }
+  }, [])
 
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
+    setIsProductSoldOut((isProductSoldOut) => false)
   }, [setIsModalOpen])
 
   const totalPrice = useMemo(() => {
     if (!cartItems) return
-    let sum = 0
+    // 預先加上 80 元運費
+    let sum = 80
     for (const cartItem of cartItems) {
-      sum += cartItem.price
+      sum += cartItem.discountPrice * cartItem.quantity
     }
     return sum
   }, [cartItems])
+
   const totalItems = useMemo(() => {
     if (!cartItems) return
     return cartItems.length
@@ -144,6 +164,7 @@ function Shop() {
     addItemsToLocalStorage(productList)
     setCartItems(productList)
   }
+
   const handleRemoveCartItem = (id) => {
     addItemsToLocalStorage(cartItems.filter((item) => item.id !== id))
     setCartItems(cartItems.filter((item) => item.id !== id))
@@ -157,7 +178,13 @@ function Shop() {
     <UserContext.Provider value={{ user, setUser }}>
       <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
         <ModalContext.Provider
-          value={{ isModalOpen, setIsModalOpen, handleModalClose }}
+          value={{
+            isModalOpen,
+            setIsModalOpen,
+            handleModalClose,
+            isProductSoldOut,
+            setIsProductSoldOut
+          }}
         >
           <LocalStorageContext.Provider
             value={{
@@ -197,7 +224,7 @@ function CheckoutRoutes() {
     <Switch>
       <Route path={`${path}/step1`} component={Step1} />
       <Route path={`${path}/step2`} component={Step2} />
-      <Route path={`${path}/step3`} component={Step3} />
+      <Route path={`${path}/step3/:ticket`} component={Step3} />
     </Switch>
   )
 }
@@ -206,7 +233,9 @@ function MemberRoutes() {
   return (
     <Switch>
       <Route path={`${path}/me`} component={Me} />
-      <Route path={`${path}/order/:ticket`} component={Me} />
+      <Route path={`${path}/modify-info`} component={Me} />
+      <Route path={`${path}/orders/order-detail`} component={Me} />
+      <Route path={`${path}/orders`} component={Me} />
     </Switch>
   )
 }

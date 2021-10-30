@@ -1,11 +1,12 @@
 import { useEffect, useState, useContext } from 'react'
 import { LocalStorageContext } from '../../context'
 import { useLocation } from 'react-router-dom'
-import SearchIcon from '@mui/icons-material/Search'
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined'
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined'
-import MenuIcon from '@mui/icons-material/Menu'
-import CloseIcon from '@mui/icons-material/Close'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import CategoryMenu from './CategoryMenu'
 import CartMenu from '../cartSystem/CartMenu'
 import AccountMenu from './AccountMenu'
@@ -54,7 +55,7 @@ export default function Navbar() {
               }}
               $shouldHide={menu ? true : false}
             >
-              <MenuIcon />
+              <FontAwesomeIcon icon={faBars} />
             </BurgerBTN>
             <CloseBTN
               onClick={() => {
@@ -62,7 +63,7 @@ export default function Navbar() {
               }}
               $isClicked={menu !== '' ? true : false}
             >
-              <CloseIcon />
+              <FontAwesomeIcon icon={faTimes} />
             </CloseBTN>
             <SearchBTN
               onClick={() => {
@@ -76,7 +77,7 @@ export default function Navbar() {
               }}
               $shouldHide={menu ? true : false}
             >
-              <SearchIcon />
+              <FontAwesomeIcon icon={faSearch} />
             </SearchBTN>
           </LeftIcons>
           <LOGO to='/'>DAYEAYEAYEA</LOGO>
@@ -93,7 +94,7 @@ export default function Navbar() {
               }}
               $shouldHide={menu ? true : false}
             >
-              <AccountCircleOutlinedIcon />
+              <FontAwesomeIcon icon={faUserCircle} />
             </AccountBTN>
             <CartBTN
               onClick={() => {
@@ -107,7 +108,7 @@ export default function Navbar() {
               }}
               $shouldHide={menu ? true : false}
             >
-              <ShoppingCartOutlinedIcon />
+              <FontAwesomeIcon icon={faShoppingCart} />
               {totalItems ? <span>{totalItems}</span> : null}
             </CartBTN>
           </RightIcons>

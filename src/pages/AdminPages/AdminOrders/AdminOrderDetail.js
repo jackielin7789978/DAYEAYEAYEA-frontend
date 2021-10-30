@@ -1,16 +1,45 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import { ADMIN_COLOR, COLOR, FONT_SIZE } from '../../../constants/style'
+import {
+  ADMIN_COLOR,
+  COLOR,
+  FONT_SIZE,
+  ADMIN_MEDIA_QUERY
+} from '../../../constants/style'
 import { Wrapper } from '../../../components/admin/TableStyle'
-// import { ImgAnchor } from '../../../components/general'
-import { GeneralBtn } from '../../../components/Button'
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded'
+import { LogoutBtn } from '../../../components/Button'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { formatPrice } from '../../../utils'
+import {
+  getSingleOrder,
+  updateOrderStatus,
+  archiveOrder
+} from '../../../webAPI/adminAPIs'
+import useFetchData from '../../../hooks/useFetchData'
+import Item from '../../../components/admin/orderManage/DetailItem'
+import OrderInfo from '../../../components/admin/orderManage/OrderInfo'
+import Buttons from '../../../components/admin/orderManage/Buttons'
+import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
 
 const PageWrapper = styled.div`
-  margin-right: ${({ $isOpen }) => ($isOpen ? '-10px' : '0px')};
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 60px auto;
+  width: 76vw;
+  ${ADMIN_MEDIA_QUERY.md} {
+    width: 60vw;
+    max-width: 1180px;
+  }
+  ${ADMIN_MEDIA_QUERY.lg} {
+    max-width: 1180px;
+  }
 `
 const Container = styled(Wrapper)`
+  width: 100%;
+  min-height: 40px;
   background: ${ADMIN_COLOR.light_grey};
   border-radius: 20px;
   position: relative;
@@ -33,10 +62,11 @@ const Subtotal = styled.div`
 `
 const Collapser = styled.div`
   margin-top: 10px;
-  ${({ $isOpen }) => $isOpen && 'transform: rotate(180deg)'};
 `
-const Icon = styled(KeyboardArrowDownRoundedIcon)`
+const Icon = styled(FontAwesomeIcon)`
   cursor: pointer;
+  transition: all 0.2s;
+  ${({ $isOpen }) => $isOpen && 'transform: rotate(180deg)'};
 `
 const Menu = styled.div`
   height: ${({ $isOpen }) => ($isOpen ? 'unset' : 0)};
@@ -65,36 +95,6 @@ const TableHeaders = styled.div`
 const Header = styled.span`
   width: 10%;
 `
-const ItemContainer = styled(TableHeaders)`
-  padding: 10px;
-  margin: 0 20px 10px 20px;
-  div {
-    text-align: center;
-    width: 10%;
-    margin: 2px 0px;
-  }
-  div:first-child {
-    width: 70%;
-    display: flex;
-  }
-  div:last-child {
-    text-align: right;
-  }
-`
-const Pic = styled.div`
-  max-width: 70px;
-  height: 70px;
-  ${'' /* background: url(${({ $img }) => ($img ? $img : $img)}); */}
-  background: ${COLOR.accent};
-`
-const Name = styled(Link)`
-  margin: 2px 10px;
-  font-weight: bold;
-  color: ${COLOR.text_dark};
-  &:hover {
-    color: ${COLOR.text_dark};
-  }
-`
 const PriceDetail = styled.div`
   width: 100%;
   padding: 4px 30px;
@@ -110,116 +110,107 @@ const PriceDetail = styled.div`
     font-weight: bold;
   }
 `
-const OrderInfo = styled.div`
-  padding: 10px 40px;
-  div {
-    margin: 8px 0px;
-  }
-`
-const Buttons = styled.div`
-  position: absolute;
-  top: 22%;
-  right: 40px;
-  display: flex;
-  button {
-    padding: 0 20px;
-    margin: 0 8px;
-    transition: 0.2s ease;
-  }
-  button:last-child {
-    &:hover {
-      background: ${COLOR.grey};
-    }
-  }
-  button:first-child {
-    background: ${ADMIN_COLOR.Btn_blue};
-    &:hover {
-      background: ${ADMIN_COLOR.Btn_blue_hover};
-    }
-  }
-`
 
-function Item() {
-  return (
-    <ItemContainer>
-      <div>
-        <Pic />
-        <Name to={`/products/1`}>商品名稱 商品名稱商品名稱</Name>
-      </div>
-      <div>NT$1800</div>
-      <div>1</div>
-      <div>NT$1800</div>
-    </ItemContainer>
-  )
-}
 export default function AdminOrderDetail() {
-  const [order] = useState({})
   const [isOpen, setIsOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [orderDetail, setOrderDetail] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const { ticket } = useParams()
 
-  // 資料等 API 修改完成再補上
+  useFetchData(getSingleOrder, setOrderDetail, setIsLoading, ticket)
+
+  const handleArchive = (ticketNo) => {
+    ;(async () => {
+      const res = await archiveOrder(ticketNo)
+      if (!res.ok) return alert('發生錯誤：' + res.message)
+      alert('已封存訂單！')
+      window.location.reload()
+    })()
+  }
+
+  const handleOrderStatus = (action) => {
+    if (action === 'cancel' && !isModalOpen) return setIsModalOpen(true)
+    ;(async () => {
+      const res = await updateOrderStatus(ticket, action)
+      if (!res.ok) return alert('發生錯誤：' + res.message)
+      alert('變更成功！')
+      window.location.reload()
+    })()
+  }
+
   return (
     <PageWrapper $isOpen={isOpen}>
+      {isLoading && <AdminIsLoadingComponent />}
+      <Link to='/admin/orders'>
+        <LogoutBtn
+          color='admin_blue'
+          children='回訂單列表'
+          buttonStyle={{ width: '120px' }}
+        />
+      </Link>
       <Container>
-        <Title>訂購明細</Title>
-        <Subtotal>
-          <span>
-            共 <b>3</b> 件商品
-          </span>
-          <span>
-            合計：<b>NT$5480</b>
-          </span>
-          <Collapser
-            onClick={() => {
-              setIsOpen(!isOpen)
-            }}
-            $isOpen={isOpen}
-          >
-            <Icon />
-          </Collapser>
-        </Subtotal>
-        <Menu $isOpen={isOpen}>
-          <TableHeaders>
-            <Header>商品名稱</Header>
-            <Header>單件價格</Header>
-            <Header>數量</Header>
-            <Header>小計</Header>
-          </TableHeaders>
-          <Item />
-          <Item />
-          <Item />
-          <PriceDetail>
-            <div>
-              <span>運費：</span>
-              <span>NT$80</span>
-            </div>
-            <div>
-              <span>合計：</span>
-              <span>NT$5480</span>
-            </div>
-          </PriceDetail>
-        </Menu>
+        {orderDetail && (
+          <>
+            <Title>訂購明細</Title>
+            <Subtotal>
+              <span>
+                共 <b>{orderDetail.Order_items.length}</b> 件商品
+              </span>
+              <span>
+                合計：
+                <b>
+                  {orderDetail.subTotal && formatPrice(orderDetail.subTotal)}
+                </b>
+              </span>
+              <Collapser
+                onClick={() => {
+                  setIsOpen(!isOpen)
+                }}
+              >
+                <Icon icon={faChevronDown} $isOpen={isOpen} />
+              </Collapser>
+            </Subtotal>
+            <Menu $isOpen={isOpen}>
+              <TableHeaders>
+                <Header>商品名稱</Header>
+                <Header>單件價格</Header>
+                <Header>數量</Header>
+                <Header>小計</Header>
+              </TableHeaders>
+              {orderDetail.Order_items.map((item) => (
+                <Item key={item.productId} item={item} />
+              ))}
+              <PriceDetail>
+                <div>
+                  <span>運費：</span>
+                  <span>{formatPrice(80)}</span>
+                </div>
+                <div>
+                  <span>合計：</span>
+                  <span>
+                    {orderDetail.subTotal && formatPrice(orderDetail.subTotal)}
+                  </span>
+                </div>
+              </PriceDetail>
+            </Menu>
+          </>
+        )}
       </Container>
       <Container>
-        <Title>訂單資料</Title>
-        <OrderInfo>
-          <div>訂單狀態：{order.status}</div>
-          <div>訂單編號：{order.id}</div>
-          <div>訂購人姓名：神恩佐</div>
-          <div>寄送地址：台北市士林區中山北路六段178號2樓</div>
-          <div>聯絡信箱：enzo721986091734@gmail.com</div>
-          <div>聯絡電話：0912345678</div>
-          <div>付款方式：信用卡</div>
-          <div>運送方式：宅配</div>
-        </OrderInfo>
-        <Buttons>
-          {order.status === '處理中' && (
-            <>
-              <GeneralBtn children={'出貨'} />
-              <GeneralBtn children={'取消訂單'} />
-            </>
-          )}
-          {order.status === '已出貨' && <GeneralBtn children={'完成訂單'} />}
-        </Buttons>
+        {orderDetail && (
+          <>
+            <Title>訂單資料</Title>
+            <OrderInfo orderDetail={orderDetail} />
+            <Buttons
+              orderDetail={orderDetail}
+              handleOrderStatus={handleOrderStatus}
+              handleArchive={handleArchive}
+              isModalOpen={isModalOpen}
+              setIsModalOpen={setIsModalOpen}
+            />
+          </>
+        )}
       </Container>
     </PageWrapper>
   )

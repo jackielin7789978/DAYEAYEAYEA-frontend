@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router'
 import styled from 'styled-components'
-import { ArrowBtn } from '../../../components/Button'
+import { LoginBtn } from '../../../components/Button'
 import { COLOR, ADMIN_COLOR, FONT_SIZE } from '../../../constants/style'
 import { adminLogin } from '../../../webAPI/adminAPIs'
+import { addTokenToLocalStorage } from '../../../utils'
 
 const Wrapper = styled.div`
   position: absolute;
@@ -72,11 +73,10 @@ export default function AdminLogin() {
     if (!username || !password) return setErrMsg('缺少帳號或密碼')
     ;(async () => {
       const res = await adminLogin(username, password)
-      res.message === 'Login Fail' && setErrMsg('帳號或密碼錯誤')
-      if (res.ok) {
-        alert('登入成功')
-        history.push('/admin/orders')
-      }
+      if (!res.ok) return setErrMsg('帳號或密碼錯誤')
+      alert('登入成功')
+      addTokenToLocalStorage(res.token)
+      history.push('/admin/members')
     })()
   }
 
@@ -101,7 +101,7 @@ export default function AdminLogin() {
           }}
         ></Input>
         <Err>{errMsg}</Err>
-        <ArrowBtn
+        <LoginBtn
           buttonStyle={{
             background: ADMIN_COLOR.Btn_darkgrey,
             width: '80%',
@@ -109,7 +109,7 @@ export default function AdminLogin() {
           }}
         >
           登入
-        </ArrowBtn>
+        </LoginBtn>
       </FormContainer>
     </Wrapper>
   )

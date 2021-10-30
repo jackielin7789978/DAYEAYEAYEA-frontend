@@ -13,9 +13,12 @@ import {
   ProductCard,
   WhiteCard
 } from '../../components/productSystem/ProductCard'
-import { countWhiteCardAmount, setPageInArray } from '../../utils'
+import { countWhiteCardAmount, setNumInArray } from '../../utils'
 import { PaginatorButton } from '../../components/Paginator'
-import { FullModal } from '../../components/Modal'
+import {
+  AddCartModal,
+  SoldOutCartModal
+} from '../../components/productSystem/ProductModal'
 
 const CardContainer = styled.div`
   display: flex;
@@ -32,7 +35,8 @@ export default function Categories() {
   const [products, setProducts] = useState([])
   const [totalPage, setTotalPage] = useState([])
   const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, handleModalClose } = useContext(ModalContext)
+  const { isModalOpen, handleModalClose, isProductSoldOut } =
+    useContext(ModalContext)
   const isMobile = useMediaQuery('(max-width: 767px)')
   const isDesktop = useMediaQuery('(min-width: 1200px)')
   const pathname = useLocation().pathname
@@ -41,11 +45,11 @@ export default function Categories() {
 
   const setAPIResult = useCallback(
     (result) => {
+      if (!result) return
       if (result.ok === 0) {
-        history.push('/404')
-        return setIsLoading(false)
+        return history.push('/404')
       }
-      setTotalPage((totalPage) => setPageInArray(result.totalPage))
+      setTotalPage((totalPage) => setNumInArray(result.totalPage))
       setProducts(result.data)
       setIsLoading((isLoading) => false)
     },
@@ -56,10 +60,12 @@ export default function Categories() {
     setIsLoading((isLoading) => true)
     if (slug === 'all') {
       getAllProductsByPage(page).then((result) => {
+        if (!result) return
         setAPIResult(result)
       })
     } else {
       getCategoryProductsByPage(slug, page).then((result) => {
+        if (!result) return
         setAPIResult(result)
       })
     }
@@ -73,18 +79,33 @@ export default function Categories() {
   return (
     <PageWidth>
       {isLoading && <IsLoadingComponent />}
-      <FullModal
-        open={isModalOpen}
-        content='已成功加入購物車 ! '
-        onClose={handleModalClose}
-      />
+      {isProductSoldOut && (
+        <AddCartModal
+          isModalOpen={isModalOpen}
+          handleModalClose={handleModalClose}
+        />
+      )}
+      {!isProductSoldOut && (
+        <SoldOutCartModal
+          isModalOpen={isModalOpen}
+          handleModalClose={handleModalClose}
+        />
+      )}
       <CardContainer>
         {products.map(
-          ({ id, name, price, Product_imgs, discountPrice, status }) => {
+          ({
+            id,
+            name,
+            price,
+            Product_imgs,
+            discountPrice,
+            status,
+            quantity
+          }) => {
             const length = Product_imgs.length
             const imgUrl = isMobile
-              ? Product_imgs[length - 1].imgUrlSm
-              : Product_imgs[length - 1].imgUrlMd
+              ? Product_imgs[length - 1].imgUrlMd
+              : Product_imgs[length - 1].imgUrlLg
             return (
               <ProductCard
                 id={id}
@@ -95,6 +116,7 @@ export default function Categories() {
                 price={price}
                 discountPrice={discountPrice}
                 status={status}
+                stockQuantity={quantity}
               />
             )
           }

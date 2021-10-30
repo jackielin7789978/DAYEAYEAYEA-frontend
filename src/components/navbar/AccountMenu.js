@@ -52,7 +52,7 @@ export default function AccountMenu({ handleHover, $isOpen, $setMenu }) {
             </AccountTitle>
           </>
         ) : (
-          <AccountTitle to='/login'>登入</AccountTitle>
+          <AccountTitle to='/login'>登入/註冊</AccountTitle>
         )}
       </RestyledMenuContainer>
     </RestyledHoverArea>

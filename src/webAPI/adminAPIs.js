@@ -1,4 +1,5 @@
-import { addTokenToLocalStorage, getTokenFromLocalStorage } from '../utils'
+import { getTokenFromLocalStorage } from '../utils'
+
 const BASE_URL = 'https://api.coolizz.tw/admin'
 
 export const adminLogin = async (username, password) => {
@@ -15,36 +16,34 @@ export const adminLogin = async (username, password) => {
       })
     })
 
-    const data = await res.json()
-    addTokenToLocalStorage(data.token)
-    return data
+    return await res.json()
   } catch (e) {
     console.log(e)
   }
 }
 
-export const getAllOrders = async () => {
+export const adminCheck = async () => {
   const token = getTokenFromLocalStorage()
-  let res
   try {
-    res = await fetch(`${BASE_URL}/orders`, {
+    const res = await fetch(`${BASE_URL}/me`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       }
     })
-    return await res.json()
+    const result = await res.json()
+    return result.ok
   } catch (e) {
-    return console.log(e)
+    console.log(e)
+    return false
   }
 }
 
-export const getOrder = async (id) => {
+export const getOrders = async (condition) => {
   const token = getTokenFromLocalStorage()
   let res
   try {
-    res = await fetch(`${BASE_URL}/orders/${id}`, {
+    res = await fetch(`${BASE_URL}/orders/${condition}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -53,6 +52,57 @@ export const getOrder = async (id) => {
     })
     return await res.json()
   } catch (e) {
-    return console.log(res.message)
+    console.log(e)
+  }
+}
+
+export const getSingleOrder = async (ticketNo) => {
+  const token = getTokenFromLocalStorage()
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/orders/${ticketNo}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return await res.json()
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const updateOrderStatus = async (ticketNo, status) => {
+  const token = getTokenFromLocalStorage()
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/orders/${ticketNo}/${status}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return await res.json()
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const archiveOrder = async (ticketNo) => {
+  const token = getTokenFromLocalStorage()
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/orders/${ticketNo}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return await res.json()
+  } catch (e) {
+    console.log(e)
   }
 }

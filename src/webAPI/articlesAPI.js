@@ -1,17 +1,21 @@
 const BASE_URL = 'https://api.coolizz.tw'
 
 export const getAllArticles = async () => {
-  return await fetch(`${BASE_URL}/articles`)
-    .then((res) => res.json())
-    .catch((err) => {
-      console.log(err.toString())
-    })
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/articles`)
+    return await res.json()
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 export const getArticlesById = async (id) => {
-  return await fetch(`${BASE_URL}/articles/${id}`)
-    .then((res) => res.json())
-    .catch((err) => {
-      console.log(err.toString())
-    })
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/articles/${id}`)
+    return await res.json()
+  } catch (e) {
+    console.log(e)
+  }
 }

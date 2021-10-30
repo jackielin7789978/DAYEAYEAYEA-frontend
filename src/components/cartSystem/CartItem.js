@@ -3,8 +3,10 @@ import { LocalStorageContext } from '../../context'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { ImgAnchor } from '../general'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { formatPrice } from '../../utils'
 
 const ItemContainer = styled.div`
   border-bottom: 2px solid ${COLOR.border_grey};
@@ -18,7 +20,12 @@ const ItemContainer = styled.div`
 const Pic = styled.div`
   min-width: 70px;
   height: 70px;
-  background: url(${({ $img }) => ($img ? $img : $img)});
+  background: url(${({ $img }) => $img}) no-repeat center;
+  background-size: cover;
+  &:hover {
+    transition: all 0.3s;
+    transform: scale(1.05);
+  }
 `
 const Info = styled.div`
   padding-left: 14px;
@@ -31,7 +38,8 @@ const Name = styled(Link)`
   font-weight: bold;
   color: ${COLOR.text_dark};
   &:hover {
-    color: ${COLOR.text_dark};
+    transition: all 0.2s;
+    color: ${COLOR.text_black};
   }
   ${MEDIA_QUERY.desktop} {
     font-size: ${FONT_SIZE.xs};
@@ -45,15 +53,16 @@ const NumPrice = styled.div`
     font-size: ${FONT_SIZE.xs};
   }
 `
-const RemoveBtn = styled(DeleteOutlinedIcon)`
+const RemoveBtn = styled(FontAwesomeIcon)`
   cursor: pointer;
   position: absolute;
   right: 2px;
   bottom: 16px;
   ${MEDIA_QUERY.desktop} {
     bottom: 8px;
+    transition: all 0.1s;
     &:hover {
-      fill: ${COLOR.primary_dark};
+      color: ${COLOR.primary_dark} !important;
     }
   }
 `
@@ -68,9 +77,10 @@ export default function CartItem({ id, name, img, price, quantity }) {
       <Info>
         <Name to={`/products/${id}`}>{name}</Name>
         <NumPrice>
-          {quantity} x NT${price}
+          {quantity} x {formatPrice(price)}
         </NumPrice>
         <RemoveBtn
+          icon={faTrashAlt}
           onClick={() => {
             handleRemoveCartItem(id)
           }}

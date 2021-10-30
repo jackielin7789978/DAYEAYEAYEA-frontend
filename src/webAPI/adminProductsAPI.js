@@ -12,17 +12,14 @@ export const getAllProducts = async () => {
         Authorization: `Bearer ${token}`
       }
     })
+    return await res.json()
   } catch (e) {
-    return console.log(e)
+    console.log(e)
   }
-  return await res.json()
 }
 
-export const changeProductStatus = async (id, newStatus, product) => {
+export const changeProductStatus = async (id, newStatus) => {
   const token = getTokenFromLocalStorage()
-  delete product.Product_imgs
-  delete product.createdAt
-  delete product.updatedAt
   let res
   try {
     res = await fetch(`${BASE_URL}/products/${id}`, {
@@ -32,21 +29,17 @@ export const changeProductStatus = async (id, newStatus, product) => {
         Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
-        ...product,
         status: newStatus
       })
     })
     return await res.json().then((result) => alert(result.message))
   } catch (e) {
-    return console.log(e)
+    console.log(e)
   }
 }
 
-export const changeProductQuantity = async (id, newQuantity, product) => {
+export const changeProductQuantity = async (id, newQuantity) => {
   const token = getTokenFromLocalStorage()
-  delete product.Product_imgs
-  delete product.createdAt
-  delete product.updatedAt
   let res
   try {
     res = await fetch(`${BASE_URL}/products/${id}`, {
@@ -56,13 +49,12 @@ export const changeProductQuantity = async (id, newQuantity, product) => {
         Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
-        ...product,
         quantity: newQuantity
       })
     })
     return await res.json().then((result) => alert(result.message))
   } catch (e) {
-    return console.log(e)
+    console.log(e)
   }
 }
 
@@ -79,6 +71,76 @@ export const searchProductsFromAdmin = async (keywords) => {
     })
     return await res.json()
   } catch (e) {
-    return console.log(e)
+    console.log(e)
+  }
+}
+
+export const getProductById = async (id) => {
+  const token = getTokenFromLocalStorage()
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/products/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return await res.json()
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const changeProductInfoById = async (id, newInfo) => {
+  const token = getTokenFromLocalStorage()
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/products/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(newInfo)
+    })
+    return await res.json().then((result) => alert(result.message))
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const deleteProductById = async (id) => {
+  const token = getTokenFromLocalStorage()
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/products/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return await res.json()
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+export const createNewProduct = async (newProduct) => {
+  const token = getTokenFromLocalStorage()
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/products/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(newProduct)
+    })
+    return await res.json()
+  } catch (e) {
+    console.log(e)
   }
 }

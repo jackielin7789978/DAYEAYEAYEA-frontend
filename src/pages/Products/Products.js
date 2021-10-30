@@ -4,12 +4,12 @@ import { useParams, useHistory } from 'react-router-dom'
 import { MEDIA_QUERY } from '../../constants/style'
 import { LoadingContext, ModalContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
-import { ProductImgsComponent } from './ProductImg'
-import { ProductUpInfoComponent } from './ProductUpInfo'
-import { ProductBottomInfoComponent } from './ProductBottomInfo'
 import { PageWidth } from '../../components/general'
 import { getProductById } from '../../webAPI/productsAPI'
 import { FullModal } from '../../components/Modal'
+import { ProductImgsComponent } from '../../components/productSystem/ProductImg'
+import { ProductUpInfoComponent } from '../../components/productSystem/ProductUpInfo'
+import { ProductBottomInfoComponent } from '../../components/productSystem/ProductBottomInfo'
 
 const ProductPageDiv = styled.div`
   width: 100%;
@@ -52,13 +52,14 @@ export default function Products() {
   useEffect(() => {
     setIsLoading((isLoading) => true)
     getProductById(id).then((result) => {
+      if (!result) return
       if (result.ok === 0) {
         history.push('/404')
         return setIsLoading(false)
       }
+      setIsLoading((isLoading) => false)
       setProduct(result.data)
       setProductImgs(result.data.Product_imgs)
-      setIsLoading((isLoading) => false)
     })
   }, [setIsLoading, id, history])
 

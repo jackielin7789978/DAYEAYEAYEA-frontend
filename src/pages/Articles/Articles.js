@@ -12,9 +12,12 @@ import {
 } from '../../components/productSystem/ProductCard'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { PageWidth, FullWidth } from '../../components/general'
-import { FullModal } from '../../components/Modal'
+import {
+  AddCartModal,
+  SoldOutCartModal
+} from '../../components/productSystem/ProductModal'
 import { PaginatorButton } from '../../components/Paginator'
-import { setPageInArray, countWhiteCardAmount } from '../../utils'
+import { setNumInArray, countWhiteCardAmount } from '../../utils'
 
 const ArticleImgContainer = styled.div`
   background-repeat: no-repeat;
@@ -81,7 +84,8 @@ export default function Articles() {
   const [articleProducts, setArticleProducts] = useState([])
   const [totalPage, setTotalPage] = useState([])
   const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, handleModalClose } = useContext(ModalContext)
+  const { isModalOpen, handleModalClose, isProductSoldOut } =
+    useContext(ModalContext)
   const isMobile = useMediaQuery('(max-width: 767px)')
   const isDesktop = useMediaQuery('(min-width: 1200px)')
   let history = useHistory()
@@ -110,13 +114,14 @@ export default function Articles() {
   useEffect(() => {
     setIsLoading(true)
     getArticlesById(parseInt(id)).then((result) => {
+      if (!result) return
       const isResultOk = PageIsFound(result.ok)
       if (isResultOk) {
         getProductByArticle(articleSort, parseInt(page)).then((result) => {
           const isResultOk = PageIsFound(result.ok)
           if (isResultOk) {
             setArticleProducts(result.data)
-            setTotalPage((totalPage) => setPageInArray(result.totalPage))
+            setTotalPage((totalPage) => setNumInArray(result.totalPage))
           }
         })
         setArticleData((articleData) => result.data)
@@ -139,11 +144,18 @@ export default function Articles() {
       </FullWidth>
       <PageWidth>
         {isLoading && <IsLoadingComponent />}
-        <FullModal
-          open={isModalOpen}
-          content='已成功加入購物車 ! '
-          onClose={handleModalClose}
-        />
+        {isProductSoldOut && (
+          <AddCartModal
+            isModalOpen={isModalOpen}
+            handleModalClose={handleModalClose}
+          />
+        )}
+        {!isProductSoldOut && (
+          <SoldOutCartModal
+            isModalOpen={isModalOpen}
+            handleModalClose={handleModalClose}
+          />
+        )}
         <Title>
           {title}
           <TitleBorder />
@@ -151,7 +163,15 @@ export default function Articles() {
         <ContentDiv>{content}</ContentDiv>
         <ProductCardsContainer>
           {articleProducts.map(
-            ({ id, name, price, Product_imgs, discountPrice, status }) => {
+            ({
+              id,
+              name,
+              price,
+              Product_imgs,
+              discountPrice,
+              status,
+              quantity
+            }) => {
               const length = Product_imgs.length
               const imgUrl = isMobile
                 ? Product_imgs[length - 1].imgUrlSm
@@ -166,6 +186,7 @@ export default function Articles() {
                   price={price}
                   discountPrice={discountPrice}
                   status={status}
+                  stockQuantity={quantity}
                 />
               )
             }

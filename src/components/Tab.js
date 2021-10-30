@@ -3,9 +3,11 @@ import { COLOR } from '../constants/style'
 import styled from 'styled-components'
 const TabWrapper = styled.div`
   display: flex;
+  height: 100%;
 `
 const Tab = styled.div`
   transition: 0.2s ease-out;
+  height: 100%;
   width: 100%;
   padding: 10px;
   font-weight: bold;

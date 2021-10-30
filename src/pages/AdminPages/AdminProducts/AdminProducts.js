@@ -1,116 +1,132 @@
 import styled from 'styled-components'
-import { useState, useEffect, useCallback } from 'react'
-import { useParams, useLocation, useHistory } from 'react-router'
-import { ADMIN_MEDIA_QUERY } from '../../../constants/style'
+import { useState, useLayoutEffect, useCallback, useContext } from 'react'
+import { useParams, useLocation, useHistory, Link } from 'react-router-dom'
+import { LoadingContext } from '../../../context'
+import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
 import {
-  Search,
-  Dropdown
-} from '../../../components/admin/productManage/SearchStyle'
-import Table from './AdminProductsTable'
+  CategoryDropdown,
+  Search
+} from '../../../components/admin/productManage/Search'
+import Table from '../../../components/admin/productManage/Table'
 import { PaginatorButton } from '../../../components/admin/PaginatorStyle'
 import { GeneralBtn } from '../../../components/Button'
-import { adminLogin } from '../../../webAPI/adminAPIs'
 import {
-  getAllProducts
-  // adminProductsSearch
+  getAllProducts,
+  searchProductsFromAdmin
 } from '../../../webAPI/adminProductsAPI'
 import { setAdminProductsPageInArray } from '../../../utils'
 
 const PageWrapper = styled.div`
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: center;
   border: 1px solid transparent;
-  padding: 40px 0px;
-  margin-bottom: 60px;
+  padding: 40px 20px;
 `
 const SearchContainer = styled.div`
   margin: 20px auto;
   display: flex;
-  width: 78vw;
-  ${ADMIN_MEDIA_QUERY.md} {
-    width: 68vw;
-    max-width: 1180px;
-  }
-  ${ADMIN_MEDIA_QUERY.lg} {
-    max-width: 1180px;
-  }
+  justify-content: space-between;
+  width: 95%;
+`
+
+const SearchSideContainer = styled.div`
+  display: flex;
 `
 const PaginatorDiv = styled.div`
   margin: 10px auto;
 `
-function CategoryDropdown() {
-  return (
-    <Dropdown name='filter' id='filter'>
-      <option value='home'>居家生活</option>
-      <option value='apparel'>服飾配件</option>
-      <option value='kitchenware'>廚房餐具</option>
-      <option value='food'>食材雜貨</option>
-      <option value='stationery'>設計文具</option>
-      <option value='outdoor'>休閒戶外</option>
-    </Dropdown>
-  )
-}
 
 export default function AdminProducts() {
-  const productsPerPage = 10
-  const { slug, page } = useParams()
+  const [products, setProducts] = useState([])
+  const [categoryFilter, setCategoryFilter] = useState('all')
+  const { isLoading, setIsLoading } = useContext(LoadingContext)
+  const { page } = useParams()
   const keywords = useLocation().search
   const history = useHistory()
-  const [products, setProducts] = useState([])
+  const location = useLocation()
+  const productsPerPage = 10
   const perPageSliceStart = (Number(page) - 1) * productsPerPage
   const perPageSliceEnd = Number(page) * productsPerPage
-  const { pagesArray } = setAdminProductsPageInArray(products.length)
-  const productsByPage = products.slice(perPageSliceStart, perPageSliceEnd)
-  useEffect(() => {
-    adminLogin('admin01', 'Admin1357')
-    if (slug === 'all') {
-      getAllProducts().then((result) => {
+  let showProductsList
+  let pagesArray
+  let showProductsByPage
+
+  useLayoutEffect(() => {
+    setIsLoading(true)
+    if (keywords) {
+      searchProductsFromAdmin(keywords).then((result) => {
+        if (!result) return setIsLoading((isLoading) => true)
+        if (result.ok === 0) {
+          return history.push('/404')
+        }
+        setIsLoading(false)
         setProducts(result.data)
       })
     }
-    // if (slug === 'search' && keywords) {
-    //   adminProductsSearch(keywords).then((result) => {
-    //     if (result.ok === 0) {
-    //       history.push('/404')
-    //       // return setIsLoading((isLoading) => false)
-    //     }
-    //     setProducts(result.data)
-    //     // setIsLoading((isLoading) => false)
-    //   })
-    // }
-  }, [slug, keywords, history])
+    if (!keywords) {
+      getAllProducts().then((result) => {
+        if (!result) return setIsLoading((isLoading) => true)
+        if (result.ok === 0) {
+          return history.push('/404')
+        }
+        setIsLoading(false)
+        setProducts(result.data)
+      })
+    }
+  }, [keywords, history, setIsLoading])
 
-  const handleShowAllClick = useCallback(() => {
-    getAllProducts().then((result) => {
-      setProducts(result.data)
-    })
-  }, [])
+  if (products) {
+    showProductsList = products.filter((product) =>
+      categoryFilter === 'all' ? product : product.category === categoryFilter
+    )
+    pagesArray = setAdminProductsPageInArray(showProductsList.length).pagesArray
+    showProductsByPage = showProductsList.slice(
+      perPageSliceStart,
+      perPageSliceEnd
+    )
+  }
+
+  const handleDropDownChange = useCallback(
+    (e) => {
+      setCategoryFilter((categoryFilter) => e.target.value)
+      if (keywords) {
+        history.push('/admin/products/1')
+      }
+      if (location.pathname !== '/admin/products/1')
+        history.push('/admin/products/1')
+    },
+    [history, location, keywords]
+  )
 
   return (
     <PageWrapper>
+      {isLoading && <AdminIsLoadingComponent />}
       <SearchContainer>
-        <Search content='搜尋商品' />
-        <CategoryDropdown />
-        <div style={{ width: '120px', margin: '6px 0px 0px 10px' }}>
-          <GeneralBtn color='admin_blue' onClick={handleShowAllClick}>
-            顯示所有商品
-          </GeneralBtn>
-        </div>
+        <SearchSideContainer>
+          <Search />
+          <CategoryDropdown onChange={handleDropDownChange} />
+        </SearchSideContainer>
+        <SearchSideContainer>
+          <Link style={{ width: '100px' }} to={'/admin/products/add'}>
+            <GeneralBtn color='admin_blue'>新增商品</GeneralBtn>
+          </Link>
+        </SearchSideContainer>
       </SearchContainer>
-      <Table products={productsByPage} />
+      <Table products={showProductsByPage} />
       <PaginatorDiv>
-        {pagesArray.map((pageValue) => {
-          return (
-            <PaginatorButton
-              key={pageValue}
-              page={pageValue}
-              to={`/admin/products/${slug}/${pageValue}`}
-              active={pageValue === page}
-            ></PaginatorButton>
-          )
-        })}
+        {pagesArray &&
+          pagesArray.map((pageValue) => {
+            return (
+              <PaginatorButton
+                key={pageValue}
+                page={pageValue}
+                to={`/admin/products/${pageValue}`}
+                active={pageValue === parseInt(page)}
+              ></PaginatorButton>
+            )
+          })}
       </PaginatorDiv>
     </PageWrapper>
   )

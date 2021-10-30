@@ -4,25 +4,30 @@ import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import { ShoppingCarBtn, GeneralBtn } from '../../components/Button'
 import { ItemCounter } from '../../components/Counter'
 import { ModalContext, LocalStorageContext } from '../../context'
+import { formatPrice } from '../../utils'
 
 const ProductInfoContainer = styled.div`
   width: 100%;
+  min-height: 40%;
   height: 40%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding: 0px 30px;
   margin: 10px 0px;
+
   ${MEDIA_QUERY.tablet} {
     width: 45%;
     margin: 0px;
-    height: 100%;
+    height: 90%;
+    min-height: 90%;
   }
 
   ${MEDIA_QUERY.desktop} {
     width: 50%;
     margin: 0px;
-    height: 100%;
+    height: 90%;
+    min-height: 90%;
   }
 `
 
@@ -156,7 +161,6 @@ export function ProductUpInfoComponent({
     }),
     [name, price, discountPrice, imgs, quantity]
   )
-
   const handleAddProductInCart = (e) => {
     const targetId = Number(e.target.id)
     handleAddCartItem(targetId, productInfo)
@@ -180,7 +184,8 @@ export function ProductUpInfoComponent({
 
   const handleChange = useCallback(
     (e) => {
-      const changeQuantity = e.target.value ? parseInt(e.target.value) : ''
+      const targetValue = parseInt(e.target.value.trim(' '))
+      const changeQuantity = targetValue ? targetValue : ''
       if (changeQuantity >= totalQuantity) {
         setQuantity((quantity) => totalQuantity)
         return setWarningMessage((warningMessage) => '已達商品數量上限')
@@ -222,9 +227,13 @@ export function ProductUpInfoComponent({
       <ProductName>{name}</ProductName>
       <Shortdesc>{shortDesc}</Shortdesc>
       <PriceContainer>
-        <PriceStyle discount={hasDiscount}>售價: NT. {price}</PriceStyle>
+        <PriceStyle discount={hasDiscount}>
+          售價: {formatPrice(parseInt(price))}
+        </PriceStyle>
         {hasDiscount && (
-          <DiscountPriceStyle>售價: NT. {discountPrice}</DiscountPriceStyle>
+          <DiscountPriceStyle>
+            售價: {formatPrice(parseInt(discountPrice))}
+          </DiscountPriceStyle>
         )}
       </PriceContainer>
       {status === 'on' && (

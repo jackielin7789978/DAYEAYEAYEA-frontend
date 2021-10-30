@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../constants/style'
-import CancelRoundedIcon from '@mui/icons-material/CancelRounded'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
 const FixedBackground = styled.div`
   position: fixed;
@@ -31,6 +32,7 @@ const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
 
   ${MEDIA_QUERY.tablet} {
     height: 260px;
@@ -54,19 +56,20 @@ const ModalBtnDiv = styled.div`
 
 const ModalContentDiv = styled.div`
   word-wrap: break-word;
+  text-align: center;
 `
 
-const CancelRoundedColorIcon = styled(CancelRoundedIcon)`
+const CancelRoundedColorIcon = styled(FontAwesomeIcon)`
   position: absolute;
   top: 12px;
   left: 15px;
-  fill: ${COLOR.grey};
-  font-size: 32px;
+  color: ${COLOR.grey};
+  font-size: 26px;
   cursor: pointer;
 `
 
 function CloseButton({ onClick }) {
-  return <CancelRoundedColorIcon onClick={onClick} />
+  return <CancelRoundedColorIcon icon={faTimesCircle} onClick={onClick} />
 }
 
 function ModalIcon({ icon }) {
@@ -94,12 +97,20 @@ function GeneralModal({ icon, content, buttonOne, buttonTwo, open, onClose }) {
   )
 }
 
-function FullModal({ icon, content, buttonOne, buttonTwo, open, onClose }) {
+function FullModal({
+  icon,
+  content,
+  buttonOne,
+  buttonTwo,
+  open,
+  onClose,
+  position
+}) {
   if (!open) return null
   return (
     <div>
       <FixedBackground onClick={onClose} />
-      <ModalContent>
+      <ModalContent style={position}>
         <CloseButton onClick={onClose} />
         <ModalIcon icon={icon} />
         <ModalContentDiv>{content}</ModalContentDiv>
