@@ -1,4 +1,5 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
+import { Link } from 'react-router-dom'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../../constants/style'
 import { PageWidth } from '../../../components/general'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -12,6 +13,38 @@ const Card = styled.div`
   flex-wrap: wrap;
   justify-content: center;
 `
+const Avatar = styled.div`
+  border: 5px solid ${COLOR.border_light_grey};
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  position: absolute;
+  top: -110px;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow: hidden;
+  background: url(${(props) => props.$bg}) no-repeat center;
+  background-size: cover;
+`
+const DanceAvator = styled.div`
+  background: url(${(props) => props.$img}) no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`
+const dance = (x) => keyframes`
+  from {
+    background-position:  0px;
+  }
+
+  to {
+    background-position: ${x}px;
+  }
+`
 const CardMember = styled.div`
   position: relative;
   margin: 50px;
@@ -23,7 +56,21 @@ const CardMember = styled.div`
   ${MEDIA_QUERY.tablet} {
     width: 315px;
   }
-  & hover {
+  &:hover {
+    ${DanceAvator} {
+      background: url(${(props) => props.$danceImg}) no-repeat;
+      background-size: cover;
+      width: ${(props) => (props.$width ? props.$width : 77)}px;
+      height: ${(props) => (props.$height ? props.$height : 90)}px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(
+        -50%,
+        ${(props) => (props.$translateY ? props.$translateY : -50)}%
+      );
+      animation: ${(props) => dance(props.$x)} 0.4s steps(4) infinite alternate;
+    }
   }
 `
 const CardTop = styled.div`
@@ -31,24 +78,7 @@ const CardTop = styled.div`
   border: 1px solid ${COLOR.border_primary};
   border-radius: 20% 20% 0% 0%;
 `
-const Avatar = styled.div`
-  border: 5px solid ${COLOR.border_light_grey};
-  border-radius: 50%;
-  width: 150px;
-  height: 150px;
-  position: absolute;
-  top: -110px;
-  left: 50%;
-  transform: translateX(-50%);
-  overflow: hidden;
-  background: url(${(props) => props.$img}) no-repeat center,
-    radial-gradient(
-      circle at center,
-      ${COLOR.primary_light},
-      ${COLOR.primary_light_hover}
-    );
-  background-size: cover;
-`
+
 const Name = styled.div`
   font-size: ${FONT_SIZE.xl};
   padding-bottom: 5px;
@@ -86,9 +116,15 @@ export default function Join() {
     <PageWidth>
       <Title>DAYEAYEAYEA 團隊</Title>
       <Card>
-        <CardMember>
+        <CardMember
+          $danceImg={'https://i.imgur.com/lMsSbeA.png'}
+          $x={-340}
+          $width={80}
+        >
           <CardTop>
-            <Avatar $img={'https://i.imgur.com/UkSjhZT.png'}></Avatar>
+            <Avatar $bg={'https://i.imgur.com/G2acwhV.png'}>
+              <DanceAvator $img={'https://i.imgur.com/2LlrzGf.png'} />
+            </Avatar>
             <Name>叮叮</Name>
             <SubTitle>負責項目</SubTitle>
             <Work>
@@ -99,27 +135,33 @@ export default function Join() {
             </Work>
           </CardTop>
           <CardFooter>
-            <div>
+            <Link to='/'>
               <FontAwesomeIcon
                 icon={['fab', 'github']}
                 size='lg'
                 color={`${COLOR.light}`}
               />
               <IconTitle children={'GitHub'} />
-            </div>
-            <div>
+            </Link>
+            <Link to='/'>
               <FontAwesomeIcon
                 icon={faPortrait}
                 size='lg'
                 color={`${COLOR.light}`}
               />
               <IconTitle children={'履歷'} />
-            </div>
+            </Link>
           </CardFooter>
         </CardMember>
-        <CardMember>
+        <CardMember
+          $danceImg={'https://i.imgur.com/jJaOC2h.png'}
+          $x={-222}
+          $width={55}
+        >
           <CardTop>
-            <Avatar $img={'https://i.imgur.com/7KaTasx.png'}></Avatar>
+            <Avatar $bg={'https://i.imgur.com/fgmDbdG.png'}>
+              <DanceAvator $img={'https://i.imgur.com/UjZSIrO.png'} />
+            </Avatar>
             <Name>Jackie</Name>
             <SubTitle>負責項目</SubTitle>
             <Work>
@@ -130,27 +172,29 @@ export default function Join() {
             </Work>
           </CardTop>
           <CardFooter>
-            <div>
+            <Link to='/'>
               <FontAwesomeIcon
                 icon={['fab', 'github']}
                 size='lg'
                 color={`${COLOR.light}`}
               />
               <IconTitle children={'GitHub'} />
-            </div>
-            <div>
+            </Link>
+            <Link to='/'>
               <FontAwesomeIcon
                 icon={faPortrait}
                 size='lg'
                 color={`${COLOR.light}`}
               />
               <IconTitle children={'履歷'} />
-            </div>
+            </Link>
           </CardFooter>
         </CardMember>
-        <CardMember>
+        <CardMember $danceImg={'https://i.imgur.com/ijpQPkc.png'} $x={-306}>
           <CardTop>
-            <Avatar $img={'https://i.imgur.com/KKUyQO6.png'}></Avatar>
+            <Avatar $bg={'https://i.imgur.com/7W6f0bL.png'}>
+              <DanceAvator $img={'https://i.imgur.com/NGk6d8r.png'} />
+            </Avatar>
             <Name>Enzo</Name>
             <SubTitle>負責項目</SubTitle>
             <Work>
@@ -161,27 +205,34 @@ export default function Join() {
             </Work>
           </CardTop>
           <CardFooter>
-            <div>
+            <Link to='/'>
               <FontAwesomeIcon
                 icon={['fab', 'github']}
                 size='lg'
                 color={`${COLOR.light}`}
               />
               <IconTitle children={'GitHub'} />
-            </div>
-            <div>
+            </Link>
+            <Link to='/'>
               <FontAwesomeIcon
                 icon={faPortrait}
                 size='lg'
                 color={`${COLOR.light}`}
               />
               <IconTitle children={'履歷'} />
-            </div>
+            </Link>
           </CardFooter>
         </CardMember>
-        <CardMember>
+        <CardMember
+          $danceImg={'https://i.imgur.com/aBRIgF0.png'}
+          $x={-306}
+          $height={110}
+          $translateY={-60}
+        >
           <CardTop>
-            <Avatar $img={'https://i.imgur.com/NIlmi5Z.png'}></Avatar>
+            <Avatar $bg={'https://i.imgur.com/PfbWpth.png'}>
+              <DanceAvator $img={'https://i.imgur.com/Wp6fW8X.png'} />
+            </Avatar>
             <Name>Janet</Name>
             <SubTitle>負責項目</SubTitle>
             <Work>
@@ -192,22 +243,22 @@ export default function Join() {
             </Work>
           </CardTop>
           <CardFooter>
-            <div>
+            <Link to='/'>
               <FontAwesomeIcon
                 icon={['fab', 'github']}
                 size='lg'
                 color={`${COLOR.light}`}
               />
               <IconTitle children={'GitHub'} />
-            </div>
-            <div>
+            </Link>
+            <Link to='/'>
               <FontAwesomeIcon
                 icon={faPortrait}
                 size='lg'
                 color={`${COLOR.light}`}
               />
               <IconTitle children={'履歷'} />
-            </div>
+            </Link>
           </CardFooter>
         </CardMember>
       </Card>
