@@ -1,26 +1,41 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext, useLayoutEffect } from 'react'
 import styled from 'styled-components'
-import { useHistory } from 'react-router'
+import { useHistory, useLocation } from 'react-router-dom'
 import {
-  Wrapper,
   ColumnHeader,
   Header,
   TableItemContainer
 } from '../../../components/admin/TableStyle'
 import OrderItem from '../../../components/admin/memberManage/OrderItem'
 import { GeneralBtn, LogoutBtn } from '../../../components/Button'
-import { ADMIN_COLOR } from '../../../constants/style'
+import {
+  ADMIN_COLOR,
+  FONT_SIZE,
+  ADMIN_MEDIA_QUERY
+} from '../../../constants/style'
 import { useForm } from 'react-hook-form'
 import { updateMemberLevel } from '../../../webAPI/adminMembersAPI'
 import { useParams } from 'react-router-dom'
 import { getMember } from '../../../webAPI/adminMembersAPI'
+import { LoadingContext } from '../../../context'
+import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
+import { calTotalPages } from '../../../utils'
+import { PaginatorButton } from '../../../components/admin/PaginatorStyle'
 const PageWrapper = styled.div`
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  border: 1px solid transparent;
-  padding: 40px 0px;
+  margin: 40px auto;
+  width: 75vw;
+  font-size: ${FONT_SIZE.sm};
+  ${ADMIN_MEDIA_QUERY.md} {
+    max-width: 1280px;
+    font-size: ${FONT_SIZE.md};
+  }
+  ${ADMIN_MEDIA_QUERY.lg} {
+    max-width: 1280px;
+    font-size: ${FONT_SIZE.md};
+  }
 `
 const MemberWrapper = styled.div`
   background: ${ADMIN_COLOR.light_grey};
@@ -53,22 +68,47 @@ const RestyleHeader = styled(Header)`
   width: ${({ $name }) => $name === 'Email' && '38%'};
   width: ${({ $name }) => $name === '訂單編號' && '26%'};
 `
+const Paginator = styled.div`
+  text-align: center;
+  margin: 20px;
+`
 const headerNames = ['訂單狀態', '訂單編號', 'Email', '訂單金額', 'Edit']
 export default function AdminMemberDetail() {
+  const { isLoading, setIsLoading } = useContext(LoadingContext)
   let { id } = useParams()
   const location = useHistory()
   const [isEdit, setIsEdit] = useState(false)
   const [memberDetail, setMemberDetail] = useState(() => {
     ;(async () => {
       const result = await getMember(id)
+      if (result.ok === 0) {
+        return location.push('/404')
+      }
       setMemberDetail(result.data)
+      setIsLoading(false)
     })()
   })
+
+  const [offset, setOffset] = useState(0)
+  const query = useLocation().search
+  const [page, setPage] = useState()
+  useEffect(() => {
+    const param = new URLSearchParams(query)
+    param.get('page') ? setPage(param.get('page')) : setPage('1')
+    setOffset((page - 1) * 10)
+  }, [page, query])
+  const ORDERS_PER_PAGE = 10
+  const TotalPages = memberDetail && [
+    ...Array(calTotalPages(memberDetail?.Orders.length)).keys()
+  ]
+
   const handleEdit = () => {
     isEdit ? setIsEdit(false) : setIsEdit(true)
   }
   const { register, handleSubmit, setValue } = useForm()
-
+  useLayoutEffect(() => {
+    setIsLoading(true)
+  }, [setIsLoading])
   useEffect(() => {
     setValue('level', memberDetail?.level)
   }, [memberDetail?.level, setValue])
@@ -85,74 +125,86 @@ export default function AdminMemberDetail() {
   }
   return (
     <PageWrapper>
-      <Wrapper>
-        <LogoutBtn
-          onClick={() => {
-            setMemberDetail(null)
-            location.push('/admin/members')
-          }}
-          color={'admin_blue'}
-          children={'回會員列表'}
-          buttonStyle={{ width: '120px' }}
-        />
-        <MemberWrapper>
-          <List>
-            <ListTitle>帳號:</ListTitle>
+      {isLoading && <AdminIsLoadingComponent />}
+      <LogoutBtn
+        onClick={() => {
+          setMemberDetail(null)
+          location.push('/admin/members')
+        }}
+        color={'admin_blue'}
+        children={'回會員列表'}
+        buttonStyle={{ width: '120px' }}
+      />
+      <MemberWrapper>
+        <List>
+          <ListTitle>帳號:</ListTitle>
 
-            <ListData children={memberDetail?.username} />
-          </List>
-          <List>
-            <ListTitle>信箱:</ListTitle>
+          <ListData children={memberDetail?.username} />
+        </List>
+        <List>
+          <ListTitle>信箱:</ListTitle>
 
-            <ListData children={memberDetail?.email} />
-          </List>
-          <List>
-            <ListTitle>名稱:</ListTitle>
+          <ListData children={memberDetail?.email} />
+        </List>
+        <List>
+          <ListTitle>名稱:</ListTitle>
 
-            <ListData children={memberDetail?.fullname} />
-          </List>
-          <List>
-            <ListTitle>電話:</ListTitle>
+          <ListData children={memberDetail?.fullname} />
+        </List>
+        <List>
+          <ListTitle>電話:</ListTitle>
 
-            <ListData children={memberDetail?.phone} />
-          </List>
-          <List>
-            <ListTitle>地址:</ListTitle>
+          <ListData children={memberDetail?.phone} />
+        </List>
+        <List>
+          <ListTitle>地址:</ListTitle>
 
-            <ListData children={memberDetail?.address} />
-          </List>
-          <List>
-            <ListTitle>會員等級:</ListTitle>
-            {!isEdit && <ListData children={memberDetail?.level} />}
-            {isEdit && (
-              <select {...register('level')}>
-                <option value='normal'>normal</option>
-                <option value='vip'>vip</option>
-              </select>
-            )}
-          </List>
-          <EditButton onClick={isEdit ? handleSubmit(onSubmit) : handleEdit}>
-            <GeneralBtn
-              children={isEdit ? '儲存' : '編輯'}
-              color={isEdit ? 'admin_blue' : 'admin_grey'}
-            />
-          </EditButton>
-        </MemberWrapper>
-        <ColumnHeader>
-          {headerNames.map((name) => (
-            <RestyleHeader key={name} $name={name}>
-              {name}
-            </RestyleHeader>
-          ))}
-        </ColumnHeader>
+          <ListData children={memberDetail?.address} />
+        </List>
+        <List>
+          <ListTitle>會員等級:</ListTitle>
+          {!isEdit && <ListData children={memberDetail?.level} />}
+          {isEdit && (
+            <select {...register('level')}>
+              <option value='normal'>normal</option>
+              <option value='vip'>vip</option>
+            </select>
+          )}
+        </List>
+        <EditButton onClick={isEdit ? handleSubmit(onSubmit) : handleEdit}>
+          <GeneralBtn
+            children={isEdit ? '儲存' : '編輯'}
+            color={isEdit ? 'admin_blue' : 'admin_grey'}
+          />
+        </EditButton>
+      </MemberWrapper>
+      <ColumnHeader>
+        {headerNames.map((name) => (
+          <RestyleHeader key={name} $name={name}>
+            {name}
+          </RestyleHeader>
+        ))}
+      </ColumnHeader>
 
-        <TableItemContainer>
-          {!memberDetail?.Orders.length && <Msg>客人還沒有訂單喔!</Msg>}
-          {memberDetail?.Orders.sort((a, b) => b.id - a.id).map((order) => (
+      <TableItemContainer>
+        {!memberDetail?.Orders.length && <Msg>客人還沒有訂單喔!</Msg>}
+        {memberDetail?.Orders.sort((a, b) => b.id - a.id)
+          .slice(offset, offset + ORDERS_PER_PAGE)
+          .map((order) => (
             <OrderItem key={order.id} order={order} />
           ))}
-        </TableItemContainer>
-      </Wrapper>
+      </TableItemContainer>
+      <Paginator>
+        {TotalPages &&
+          TotalPages.map((pageValue) => (
+            <PaginatorButton
+              key={pageValue}
+              page={pageValue + 1}
+              to={`/admin/members/${id}?page=${pageValue + 1}`}
+              active={pageValue + 1 === parseInt(page)}
+            ></PaginatorButton>
+          ))}
+      </Paginator>
     </PageWrapper>
   )
 }

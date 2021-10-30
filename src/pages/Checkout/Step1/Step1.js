@@ -15,7 +15,7 @@ import {
 import { LocalStorageContext } from '../../../context'
 import { GeneralBtn } from '../../../components/Button'
 import { Cart } from '../../../components/checkoutSystem/step1CartItem'
-import { addItemsToLocalStorage } from '../../../utils'
+import { addItemsToLocalStorage, formatPrice } from '../../../utils'
 export default function Step1() {
   const [notAllowed, setNotAllowed] = useState('')
   const location = useHistory()
@@ -71,9 +71,9 @@ export default function Step1() {
               $setNotAllowed={setNotAllowed}
             />
           ))}
-          <TotalPrice>{`小計 NT$${totalPrice}`}</TotalPrice>
+          <TotalPrice>{`小計 ${formatPrice(totalPrice)}`}</TotalPrice>
           <TotalPrice>運費 NT$80</TotalPrice>
-          <TotalPrice>{`總金額 NT$ ${totalPrice + 80}`}</TotalPrice>
+          <TotalPrice>{`總金額 ${formatPrice(totalPrice + 80)}`}</TotalPrice>
           <BtnFlex>
             <Link style={LinkStyle} to='/'>
               <GeneralBtn color='accent' children='繼續購物' />
