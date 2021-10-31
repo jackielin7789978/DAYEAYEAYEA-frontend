@@ -105,11 +105,19 @@ const handleChange = (e, setProductDetail) => {
   }))
 }
 
-const handleBlur = (e, setIsChecked, setErrorMsg, errorMsg) => {
+const handleBlur = (e, setIsChecked, setErrorMsg) => {
   const targetName = e.target.name
   const targetValue = e.target.value.trim(' ')
   if (!targetValue) {
-    setErrorMsg(errorMsg)
+    setErrorMsg('此欄位不得為空')
+    return setIsChecked(setImgDataIsValid(targetName, false))
+  }
+  if (isNaN(targetValue)) {
+    setErrorMsg('此欄位僅限輸入數字')
+    return setIsChecked(setImgDataIsValid(targetName, false))
+  }
+  if (targetValue >= 100000) {
+    setErrorMsg('此欄位數字超過上限五位數')
     return setIsChecked(setImgDataIsValid(targetName, false))
   }
   setErrorMsg('')
@@ -152,7 +160,6 @@ function StatusComponent({ productDetail, setProductDetail }) {
 }
 
 function PriceComponent({ productDetail, setProductDetail, setIsChecked }) {
-  const errorMessage = '此兩欄位不得為空'
   const [errorMsg, setErrorMsg] = useState('')
   const { price, discountPrice } = productDetail
   const handleOnChange = useCallback(
@@ -166,11 +173,7 @@ function PriceComponent({ productDetail, setProductDetail, setIsChecked }) {
     (e) => {
       const targetName = e.target.name
       const targetValue = parseInt(e.target.value)
-      handleBlur(e, setIsChecked, setErrorMsg, errorMessage)
-      if (isNaN(targetValue)) {
-        setErrorMsg('此欄位僅限輸入數字')
-        return setIsChecked(setImgDataIsValid(targetName, false))
-      }
+      handleBlur(e, setIsChecked, setErrorMsg)
       if (e.target.name === 'price') {
         if (discountPrice && targetValue < discountPrice) {
           setErrorMsg('原價價格不得低於特價')
@@ -220,7 +223,6 @@ function PriceComponent({ productDetail, setProductDetail, setIsChecked }) {
 function QuantityComponent({ productDetail, setProductDetail, setIsChecked }) {
   const { quantity } = productDetail
   const [errorMsg, setErrorMsg] = useState('')
-  const errorMessage = '此欄位不得為空'
   const handleOnChange = useCallback(
     (e) => {
       handleChange(e, setProductDetail)
@@ -230,13 +232,7 @@ function QuantityComponent({ productDetail, setProductDetail, setIsChecked }) {
 
   const handleOnBlur = useCallback(
     (e) => {
-      const targetName = e.target.name
-      const targetValue = parseInt(e.target.value)
-      handleBlur(e, setIsChecked, setErrorMsg, errorMessage)
-      if (isNaN(targetValue)) {
-        setErrorMsg('此欄位僅限輸入數字')
-        return setIsChecked(setImgDataIsValid(targetName, false))
-      }
+      handleBlur(e, setIsChecked, setErrorMsg)
     },
     [setIsChecked]
   )

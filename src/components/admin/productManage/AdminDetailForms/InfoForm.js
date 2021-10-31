@@ -94,11 +94,19 @@ function ArticlesDropdown({ productValue, disabled, onChange, name }) {
 }
 
 // styledComponent End
-const handleBlur = (e, setValid, setErrMsg, errorMessage) => {
-  const targetValue = parseInt(e.target.value.trim(' '))
+const handleBlur = (e, setValid, setErrMsg) => {
+  const targetValue = e.target.value.trim(' ')
   if (!targetValue) {
+    setErrMsg('此欄位不得為空')
+    return setValid(false)
+  }
+  if (isNaN(targetValue)) {
+    setErrMsg('此欄位僅限輸入數字')
+    return setValid(false)
+  }
+  if (targetValue >= 100000) {
     setValid(false)
-    return setErrMsg(errorMessage)
+    return setErrMsg('此欄位數字超過上限五位數')
   }
   setValid(true)
   setErrMsg('')
@@ -159,7 +167,6 @@ function PriceComponent({
   setIsValid,
   disabled
 }) {
-  const errorMessage = '此兩欄位不得為空'
   const [errorMsg, setErrorMsg] = useState('')
   const [inputPriceValue, setInputPriceValue] = useState({
     price,
@@ -177,11 +184,7 @@ function PriceComponent({
     (e) => {
       const { price, discountPrice } = inputPriceValue
       const targetValue = parseInt(e.target.value)
-      handleBlur(e, setIsValid, setErrorMsg, errorMessage)
-      if (isNaN(targetValue)) {
-        setErrorMsg('此欄位僅限輸入數字')
-        return setIsValid(false)
-      }
+      handleBlur(e, setIsValid, setErrorMsg)
       if (e.target.name === 'price') {
         if (discountPrice && targetValue < discountPrice) {
           setErrorMsg('原價價格不得低於特價')
@@ -240,10 +243,10 @@ function QuantityComponent({
 }) {
   const [inputQuantityValue, setInputQuantityValue] = useState(quantity)
   const [errorMsg, setErrorMsg] = useState('')
-  const errorMessage = '此欄位不得為空'
+
   const handleOnChange = useCallback(
     (e) => {
-      const targetValue = parseInt(e.target.value.trim(' '))
+      const targetValue = e.target.value.trim(' ')
       const newValue = targetValue ? targetValue : ''
       setInputQuantityValue(newValue)
       setFormData({ ...formData, [e.target.name]: newValue })
@@ -253,12 +256,7 @@ function QuantityComponent({
 
   const handleOnBlur = useCallback(
     (e) => {
-      const targetValue = parseInt(e.target.value)
-      handleBlur(e, setIsValid, setErrorMsg, errorMessage)
-      if (isNaN(targetValue)) {
-        setErrorMsg('此欄位僅限輸入數字')
-        return setIsValid(false)
-      }
+      handleBlur(e, setIsValid, setErrorMsg)
     },
     [setIsValid]
   )

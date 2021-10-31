@@ -43,6 +43,13 @@ export default function DetailDescForm({
   const [errorMsgForShort, setErrorMsgForShort] = useState('')
   const [errorMsgForLong, setErrorMsgForLong] = useState('')
 
+  const setDescDataIsValid = useCallback((targetName, imgDataIsValid) => {
+    return (isChecked) => ({
+      ...isChecked,
+      [targetName]: imgDataIsValid
+    })
+  }, [])
+
   const handleOnChange = useCallback(
     (e) => {
       const targetValue = e.target.value
@@ -63,32 +70,45 @@ export default function DetailDescForm({
       const checkValid = (targetValue, setErrorMsg, errMsg, targetName) => {
         if (!targetValue) {
           setErrorMsg(errMsg)
-          return setIsChecked((isChecked) => ({
-            ...isChecked,
-            [targetName]: false
-          }))
+          return setIsChecked(setDescDataIsValid(targetName, false))
         }
         setErrorMsg('')
-        setIsChecked((isChecked) => ({ ...isChecked, [targetName]: true }))
+        setIsChecked(setDescDataIsValid(targetName, true))
       }
       if (targetName === 'name') {
-        return checkValid(targetValue, setErrorMsgForName, errMsg, targetName)
+        checkValid(targetValue, setErrorMsgForName, errMsg, targetName)
+        if (targetValue.length > 40) {
+          setErrorMsgForName('此欄位不得超過中英文 40 個字')
+          setIsChecked(setDescDataIsValid(targetName, false))
+        } else {
+          setErrorMsgForName('')
+          setIsChecked(setDescDataIsValid(targetName, true))
+        }
       }
       if (targetName === 'shortDesc') {
-        return checkValid(targetValue, setErrorMsgForShort, errMsg, targetName)
+        checkValid(targetValue, setErrorMsgForShort, errMsg, targetName)
+        if (targetValue.length > 200) {
+          setErrorMsgForShort('此欄位不得超過中英文 200 個字')
+          setIsChecked(setDescDataIsValid(targetName, false))
+        } else {
+          setErrorMsgForShort('')
+          setIsChecked(setDescDataIsValid(targetName, true))
+        }
       }
       if (targetName === 'longDesc') {
         return checkValid(targetValue, setErrorMsgForLong, errMsg, targetName)
       }
     },
-    [setIsChecked]
+    [setIsChecked, setDescDataIsValid]
   )
 
   return (
     <DescForm>
       <FormTitleComponent title={'商品名稱敘述'} />
       <ComponentDiv>
-        <InputTitle>商品名稱:</InputTitle>
+        <InputTitle>
+          商品名稱:<span>請輸入中英文 40 個字以內之商品名稱</span>
+        </InputTitle>
         <DescInput
           name='name'
           value={name}
@@ -98,7 +118,9 @@ export default function DetailDescForm({
         {errorMsgForName && <ErrorMsg>{errorMsgForName}</ErrorMsg>}
       </ComponentDiv>
       <ComponentDiv>
-        <InputTitle>商品簡述:</InputTitle>
+        <InputTitle>
+          商品簡述:<span>請輸入中英文 200 個字以內之商品短述</span>
+        </InputTitle>
         <DescTextArea
           style={{ width: '90%', height: '100px' }}
           name='shortDesc'
