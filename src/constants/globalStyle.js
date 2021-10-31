@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
-import { COLOR } from './style'
+import { COLOR, FONT } from './style'
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -9,6 +9,7 @@ const GlobalStyle = createGlobalStyle`
     list-style: none;
     line-height: 1.5em;
     text-decoration: none;
+    font-family: ${FONT.logo};
   }
   #root {
     min-height: 100vh;
