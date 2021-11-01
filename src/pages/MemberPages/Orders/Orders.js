@@ -57,7 +57,7 @@ const renderPageBar = (array) => {
 }
 
 
-const Orders = ({ orders }) => {
+const Orders = ({ orders, handleClick }) => {
   useEffect(() => {
     console.log(orders)
   }, [orders])
@@ -65,7 +65,7 @@ const Orders = ({ orders }) => {
   return (
     <Container>
       {/* <OrderDetail></OrderDetail> */}
-      <OrderTable orders={orders} />
+      <OrderTable orders={orders} handleClick={handleClick} />
       <PageList>
         { renderPageBar([1,2,3]) }
       </PageList>

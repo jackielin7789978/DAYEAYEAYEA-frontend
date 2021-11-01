@@ -11,6 +11,7 @@ import {
   Home,
   Login,
   Me,
+  OrderDetail,
   Products,
   NotFound
 } from './pages'
@@ -237,7 +238,7 @@ function MemberRoutes() {
       <Route path={`${path}/me`} component={Me} />
       <Route path={`${path}/modify-info`} component={Me} />
       <Route path={`${path}/orders/order-detail`} component={Me} />
-      <Route path={`${path}/orders`} component={Me} />
+      <Route path={`${path}/orders/:ticket`} component={OrderDetail} />
     </Switch>
   )
 }

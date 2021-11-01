@@ -1,12 +1,9 @@
-import { useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Table, Button } from '../Table'
 
 
 const OrderTable = ({ orders }) => {
-  const handleClick = useCallback((id) => {
-    console.log('test')
-  }, [])
-
+  const history = useHistory()
   return (
     <Table col={4}>
       <thead>
@@ -23,7 +20,7 @@ const OrderTable = ({ orders }) => {
               <td>{ order.status }</td>
               <td>{ order.ticketNo }</td>
               <td>{ order.subTotal }</td>
-              <td><Button onClick={handleClick}>查找</Button></td>
+              <td><Button onClick={() => history.push('/member/orders/' + order.ticketNo)}>查找</Button></td>
             </tr>
           ))
         }

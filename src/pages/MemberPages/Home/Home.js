@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import OrderTable from '../../../components/memberSystem/OrderTable'
@@ -17,13 +17,13 @@ const Header = styled.div`
   align-items: center;
   margin: 12px 0 24px;
 
-  h3 {
+  h2 {
     font-size: ${FONT_SIZE.lg};
     font-weight: 700;
   }
 `
 
-const SubTitle = styled.h5`
+const SubTitle = styled.h4`
   margin: 16px 0;
   font-weight: 700;
 `
@@ -33,6 +33,9 @@ const MemberInfo = styled.div`
   border: 1px solid ${COLOR.border_light_grey};
   ${MEDIA_QUERY.tablet} {
     transform: translateY(5%);
+  }
+  p + p {
+    margin: 8px 0;
   }
 `
 
@@ -65,7 +68,7 @@ const Home = ({ profile, logout }) => {
         <p>電郵: { profile?.email }</p>
       </MemberInfo>
       <SubTitle>最新訂單</SubTitle>
-      <OrderTable orders={newOrder} />
+      <OrderTable orders={newOrder}/>
     </Container>
   )
 }
