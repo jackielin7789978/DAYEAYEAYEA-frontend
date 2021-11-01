@@ -31,7 +31,7 @@ const PageWrapper = styled.div`
   }
 `
 const SearchContainer = styled.div`
-  margin: 20px auto;
+  margin: 20px 0px;
   display: flex;
   width: 78vw;
   ${ADMIN_MEDIA_QUERY.md} {
