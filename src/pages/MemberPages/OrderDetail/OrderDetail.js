@@ -5,8 +5,9 @@ import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import { GeneralBtn } from '../../../components/Button'
 import { PageWidth } from '../../../components/general'
 import { IsLoadingComponent as Loading } from '../../../components/IsLoading'
-import ItemTable from '../../../components/memberSystem/ItemTable'
 import { getOrderOne, cancelOrder } from '../../../webAPI/orderAPI'
+import ItemTable from './ItemTable'
+import { formatPrice } from '../../../utils'
 
 
 const PageWidthHeight = styled(PageWidth)`
@@ -60,12 +61,12 @@ const ButtonGroup = styled.div`
   }
 `
 
-const Button = ({ children, onClick }) => {
+const Button = ({ children, color, onClick }) => {
   const style = {
     fontSize: '14px',
     width: '70px'
   }
-  return <GeneralBtn color={'accent'} buttonStyle={style} children={children} onClick={onClick}/>
+  return <GeneralBtn color={color} buttonStyle={style} children={children} onClick={onClick}/>
 }
 
 const OrderDetail = () => {
@@ -93,37 +94,46 @@ const OrderDetail = () => {
 
   return (
     <PageWidthHeight>
-      { isLoading && <Loading/> }
       <Container>
         <Title>訂單詳情</Title>
         <Wrapper>
-          <Info>
-            <ButtonGroup>
-              <Button onClick={() => history.goBack(-1)} >返回</Button>
-              <Button onClick={handleCancel} >取消訂單</Button>
-            </ButtonGroup>
-            <Field>
-              <h5>訂單狀態:</h5>
-              <p>{ data?.status }</p>
-            </Field>
-            <Field>
-              <h5>收件人電郵:</h5>
-              <p>{ data?.orderEmail || '尚未輸入' }</p>
-            </Field>
-            <Field>
-              <h5>收件人姓名:</h5>
-              <p>{ data?.orderName || '尚未輸入' }</p>
-            </Field>
-            <Field>
-              <h5>收件人地址:</h5>
-              <p>{ data?.orderAddress || '尚未輸入' }</p>
-            </Field>
-            <Field>
-              <h5>收件人電話:</h5>
-              <p>{ data?.orderPhone || '尚未輸入' }</p>
-            </Field>
-          </Info>
-          <ItemTable order={ data?.Order_items || [] } />
+        { isLoading ? <Loading/> : (
+          <>
+            <Info>
+              <ButtonGroup>
+                <Button color={'accent'} onClick={() => history.goBack(-1)} >返回</Button>
+                {
+                  (data?.status === '處理中') && <Button color={'warning'} onClick={handleCancel} >取消訂單</Button>
+                }
+              </ButtonGroup>
+              <Field>
+                <h5>訂單狀態:　</h5>
+                <p>{ data?.status }</p>
+              </Field>
+              <Field>
+                <h5>訂單金額:　</h5>
+                <p>{ data?.subTotal && formatPrice(data.subTotal) }</p>
+              </Field>
+              <Field>
+                <h5>收件人電郵:</h5>
+                <p>{ data?.orderEmail || '尚未輸入' }</p>
+              </Field>
+              <Field>
+                <h5>收件人姓名:</h5>
+                <p>{ data?.orderName || '尚未輸入' }</p>
+              </Field>
+              <Field>
+                <h5>收件人地址:</h5>
+                <p>{ data?.orderAddress || '尚未輸入' }</p>
+              </Field>
+              <Field>
+                <h5>收件人電話:</h5>
+                <p>{ data?.orderPhone || '尚未輸入' }</p>
+              </Field>
+            </Info>
+            <ItemTable order={ data?.Order_items || [] } />
+          </>
+          ) }
         </Wrapper>
       </Container>
     </PageWidthHeight>
