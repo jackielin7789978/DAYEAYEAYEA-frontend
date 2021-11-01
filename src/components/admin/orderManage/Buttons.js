@@ -76,7 +76,7 @@ export default function Buttons({
           />
         }
         onClose={() => setIsModalOpen(false)}
-        position={{ left: '56%' }}
+        desk='back'
       />
     </Wrapper>
   )

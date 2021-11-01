@@ -66,21 +66,32 @@ export default function DetailDescForm({ product }) {
     [descData]
   )
 
-  const handleOnBlur = useCallback((e) => {
-    const targetName = e.target.name
-    const targetValue = e.target.value.trim(' ')
-    const errMsg = '此欄位不得為空'
-    targetValue ? setIsValid(true) : setIsValid(false)
-    if (targetName === 'name') {
-      targetValue ? setErrorMsgForName('') : setErrorMsgForName(errMsg)
-    }
-    if (targetName === 'shortDesc') {
-      targetValue ? setErrorMsgForShort('') : setErrorMsgForShort(errMsg)
-    }
-    if (targetName === 'longDesc') {
-      targetValue ? setErrorMsgForLong('') : setErrorMsgForLong(errMsg)
-    }
-  }, [])
+  const handleOnBlur = useCallback(
+    (e) => {
+      const targetName = e.target.name
+      const targetValue = e.target.value.trim(' ')
+      const errMsg = '此欄位不得為空'
+      if (targetName === 'name') {
+        targetValue ? setErrorMsgForName('') : setErrorMsgForName(errMsg)
+        targetValue.length > 40
+          ? setErrorMsgForName('此欄位不得超過中英文 40 個字')
+          : setErrorMsgForName('')
+        errorMsgForName ? setIsValid(true) : setIsValid(false)
+      }
+      if (targetName === 'shortDesc') {
+        targetValue ? setErrorMsgForShort('') : setErrorMsgForShort(errMsg)
+        targetValue.length > 200
+          ? setErrorMsgForName('此欄位不得超過中英文 200 個字')
+          : setErrorMsgForName('')
+        errorMsgForShort ? setIsValid(true) : setIsValid(false)
+      }
+      if (targetName === 'longDesc') {
+        targetValue ? setErrorMsgForLong('') : setErrorMsgForLong(errMsg)
+        errorMsgForLong ? setIsValid(true) : setIsValid(false)
+      }
+    },
+    [errorMsgForName, errorMsgForShort, errorMsgForLong]
+  )
 
   const handleLeaveClick = useCallback(
     (e) => {

@@ -4,12 +4,12 @@ import SyncLoader from 'react-spinners/SyncLoader'
 import { ADMIN_COLOR } from '../../constants/style'
 
 const FixedBackground = styled.div`
-  position: fixed;
+  position: absolute;
   z-index: 3;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   background: rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
@@ -17,7 +17,7 @@ const FixedBackground = styled.div`
 
 const IsLoadingStyle = styled.div`
   margin: 0 auto;
-  position: fixed;
+  position: absolute;
   z-index: 4;
   top: 50%;
   left: 50%;

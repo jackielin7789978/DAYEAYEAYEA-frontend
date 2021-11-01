@@ -82,7 +82,7 @@ const ThumbnailImgDiv = styled.div`
 
   ${MEDIA_QUERY.desktop} {
     width: 100%;
-    height: 40% !important;
+    height: 33% !important;
     margin: 0px 0px 10px 0px;
   }
 `
@@ -136,24 +136,24 @@ export function ProductImgsComponent({ imgs }) {
           style={{ backgroundImage: `url(${showLargeImg?.imgUrlLg})` }}
         />
       )}
-      {imgs.length > 1 && (
-        <ThumbnailContainer>
-          {showThumbnailImage?.map(({ id, imgUrlMd }) => {
-            let $isSelected = id === selectedId ? true : false
-            return (
-              <ThumbnailImgDiv
-                key={id}
-                id={id}
-                style={{
-                  backgroundImage: `url(${imgUrlMd}})`
-                }}
-                onClick={handleThumbnailClick}
-                $isSelected={$isSelected}
-              />
-            )
-          })}
-        </ThumbnailContainer>
-      )}
+
+      <ThumbnailContainer>
+        {showThumbnailImage?.map(({ id, imgUrlMd }) => {
+          let $isSelected = id === selectedId ? true : false
+          return (
+            <ThumbnailImgDiv
+              key={id}
+              id={id}
+              style={{
+                backgroundImage: `url(${imgUrlMd}})`
+              }}
+              onClick={handleThumbnailClick}
+              $isSelected={$isSelected}
+            />
+          )
+        })}
+      </ThumbnailContainer>
+
       {!isMobile && (
         <LargeImgDiv
           style={{ backgroundImage: `url(${showLargeImg?.imgUrlLg})` }}
