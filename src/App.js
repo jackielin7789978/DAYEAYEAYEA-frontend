@@ -11,6 +11,7 @@ import {
   Home,
   Login,
   Me,
+  OrderDetail,
   Products,
   NotFound
 } from './pages'
@@ -109,6 +110,7 @@ function Shop() {
   }, [])
 
   const handleModalClose = useCallback(() => {
+    document.body.style.overflow = 'auto'
     setIsModalOpen((isModalOpen) => false)
     setIsProductSoldOut((isProductSoldOut) => false)
   }, [setIsModalOpen])
@@ -130,10 +132,11 @@ function Shop() {
 
   const handleAddCartItem = (targetId, productInfo) => {
     const { imgs, name, price, discountPrice, quantity } = productInfo
+    const length = imgs.length
     let storageProductItems = JSON.parse(getItemsFromLocalStorage()) || []
     let imgUrlSm
     if (imgs) {
-      imgUrlSm = imgs.length > 0 ? imgs[0].imgUrlSm : ''
+      imgUrlSm = imgs[length - 1].imgUrlSm
     }
     const checkHasProducts =
       storageProductItems.length >= 1
@@ -235,7 +238,7 @@ function MemberRoutes() {
       <Route path={`${path}/me`} component={Me} />
       <Route path={`${path}/modify-info`} component={Me} />
       <Route path={`${path}/orders/order-detail`} component={Me} />
-      <Route path={`${path}/orders`} component={Me} />
+      <Route path={`${path}/orders/:ticket`} component={OrderDetail} />
     </Switch>
   )
 }

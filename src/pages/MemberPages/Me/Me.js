@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext, useCallback } from 'react'
 import { useHistory } from 'react-router'
 import styled from 'styled-components'
-import { UserContext } from '../../../context'
 import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import { Tabs } from '../../../components/Tab'
 import { PageWidth } from '../../../components/general'
@@ -10,7 +9,6 @@ import Home from '../Home'
 import Orders from '../Orders'
 import Info from '../Info'
 import { getMe } from '../../../webAPI/loginAPI'
-
 
 
 const PageWidthHeight = styled(PageWidth)`
@@ -27,8 +25,9 @@ const Title = styled.div`
   font-weight: bold;
 `
 
-const TabWrapper = styled.div`
+const Wrapper = styled.div`
   margin: 30px auto;
+  min-height: 400px;
   border: 1px solid ${COLOR.border_light_grey};
   ${MEDIA_QUERY.tablet} {
     transform: translateY(5%);
@@ -39,9 +38,12 @@ const TabWrapper = styled.div`
 export default function Me() {
   const [isLoading, setIsLoading] = useState(false)
   const [profile, setProfile] = useState(null)
-  const [editing, setEditing] = useState(null)
-  const { user, setUser } = useContext(UserContext)
   const history = useHistory()
+  const logout = useCallback(() => {
+    localStorage.removeItem('token')
+    history.push('/')
+  }, [history])
+
   useEffect(() => {
     setIsLoading(() => true)
     getMe()
@@ -49,31 +51,16 @@ export default function Me() {
         setIsLoading(() => false)
         setProfile(res.data)
       })
-      .catch(err => {
-        // TODO
-        console.log(err)
-        setUser(null)
-        history.push('/')
-      })
-  }, [history])
+  }, [])
 
 
-  const logout = useCallback(() => {
-    localStorage.removeItem('token')
-    setUser(null)
-    history.push('/')
-  }, [history])
-
-  const selectOrder = useCallback((ticket) => {
-    setEditing(ticket)
-  })
 
   return (
     <PageWidthHeight>
       { isLoading && <Loading/> }
       <Container>
         <Title>會員專區</Title>
-        <TabWrapper>
+        <Wrapper>
           <Tabs
             tabs={['會員首頁', '訂單紀錄', '會員資料']}
             tabsPanel={[
@@ -83,7 +70,7 @@ export default function Me() {
             ]}
             presetTab={0}
           />
-        </TabWrapper>
+        </Wrapper>
       </Container>
     </PageWidthHeight>
   )

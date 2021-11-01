@@ -74,7 +74,7 @@ const Shortdesc = styled(InfoStyle)`
   }
 `
 
-const PriceContainer = styled.div`
+const InfoSetContainer = styled.div`
   width: 100%;
   margin: 6px 0px;
   flex-wrap: wrap;
@@ -226,7 +226,7 @@ export function ProductUpInfoComponent({
     <ProductInfoContainer>
       <ProductName>{name}</ProductName>
       <Shortdesc>{shortDesc}</Shortdesc>
-      <PriceContainer>
+      <InfoSetContainer>
         <PriceStyle discount={hasDiscount}>
           售價: {formatPrice(parseInt(price))}
         </PriceStyle>
@@ -235,19 +235,21 @@ export function ProductUpInfoComponent({
             售價: {formatPrice(parseInt(discountPrice))}
           </DiscountPriceStyle>
         )}
-      </PriceContainer>
-      {status === 'on' && (
-        <ItemCounter
-          buttonStyle={{ marginTop: '20px' }}
-          handleCount={handleCount}
-          handleChange={handleChange}
-          handleOnBlur={handleOnBlur}
-          count={quantity}
-        />
-      )}
-      {warningMessage && <WarningMessage>{warningMessage}</WarningMessage>}
-      {status === 'off' && <SoldOutBtn />}
-      {status === 'on' && <AddProductToCart />}
+      </InfoSetContainer>
+      <InfoSetContainer>
+        {status === 'on' && (
+          <ItemCounter
+            buttonStyle={{ marginTop: '20px' }}
+            handleCount={handleCount}
+            handleChange={handleChange}
+            handleOnBlur={handleOnBlur}
+            count={quantity}
+          />
+        )}
+        {warningMessage && <WarningMessage>{warningMessage}</WarningMessage>}
+        {status === 'off' && <SoldOutBtn />}
+        {status === 'on' && <AddProductToCart />}
+      </InfoSetContainer>
     </ProductInfoContainer>
   )
 }

@@ -187,7 +187,6 @@ export function ProductCard({
   const { handleAddCartItem } = useContext(LocalStorageContext)
   const [inStock, setInStock] = useState(0)
   const quantity = 1
-
   const productInfo = useMemo(
     () => ({
       name,
@@ -212,7 +211,6 @@ export function ProductCard({
   }, [id, stockQuantity])
 
   const handleAddProductInCart = () => {
-    console.log(inStock)
     if (inStock > 0) {
       setInStock(inStock - 1)
       handleAddCartItem(id, productInfo)
