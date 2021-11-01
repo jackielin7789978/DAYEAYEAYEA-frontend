@@ -65,9 +65,7 @@ export const Cart = ({
 
   useEffect(() => {
     ;(async () => {
-      console.log(item.id)
       const result = await getProductById(item.id)
-      console.log(result)
       if (!result) return
       return setTotalQuantity(result.data.quantity)
     })()
