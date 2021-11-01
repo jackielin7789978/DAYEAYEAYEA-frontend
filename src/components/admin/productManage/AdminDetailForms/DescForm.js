@@ -3,6 +3,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { ADMIN_COLOR, COLOR } from '../../../../constants/style'
 import { changeProductInfoById } from '../../../../webAPI/adminProductsAPI'
+import { checkInputIsValid } from '../../../../utils'
 import {
   Form,
   Input,
@@ -50,8 +51,13 @@ export default function DetailDescForm({ product }) {
   const [errorMsgForShort, setErrorMsgForShort] = useState('')
   const [errorMsgForLong, setErrorMsgForLong] = useState('')
   const [isDisabled, setIsDisabled] = useState(true)
-  const [isValid, setIsValid] = useState(true)
+  const [validCheck, setValidCheck] = useState(true)
   const [buttonStatus, setButtonStatus] = useState('edit')
+  const [isValid, setIsValid] = useState({
+    name: true,
+    shortDesc: true,
+    longDesc: true
+  })
 
   const handleOnChange = useCallback(
     (e) => {
@@ -76,21 +82,27 @@ export default function DetailDescForm({ product }) {
         targetValue.length > 40
           ? setErrorMsgForName('此欄位不得超過中英文 40 個字')
           : setErrorMsgForName('')
-        errorMsgForName ? setIsValid(true) : setIsValid(false)
+        errorMsgForName
+          ? setIsValid({ ...isValid, [e.target.name]: false })
+          : setIsValid({ ...isValid, [e.target.name]: true })
       }
       if (targetName === 'shortDesc') {
         targetValue ? setErrorMsgForShort('') : setErrorMsgForShort(errMsg)
         targetValue.length > 200
           ? setErrorMsgForName('此欄位不得超過中英文 200 個字')
           : setErrorMsgForName('')
-        errorMsgForShort ? setIsValid(true) : setIsValid(false)
+        errorMsgForShort
+          ? setIsValid({ ...isValid, [e.target.name]: false })
+          : setIsValid({ ...isValid, [e.target.name]: true })
       }
       if (targetName === 'longDesc') {
         targetValue ? setErrorMsgForLong('') : setErrorMsgForLong(errMsg)
-        errorMsgForLong ? setIsValid(true) : setIsValid(false)
+        errorMsgForLong
+          ? setIsValid({ ...isValid, [e.target.name]: false })
+          : setIsValid({ ...isValid, [e.target.name]: true })
       }
     },
-    [errorMsgForName, errorMsgForShort, errorMsgForLong]
+    [errorMsgForName, errorMsgForShort, errorMsgForLong, isValid]
   )
 
   const handleLeaveClick = useCallback(
@@ -110,10 +122,16 @@ export default function DetailDescForm({ product }) {
   const handleSaveClick = useCallback(
     (e) => {
       e.preventDefault()
-      if (!isValid) return
-      if (isValid) changeProductInfoById(id, descData)
-      setIsDisabled((isDisabled) => !isDisabled)
-      setButtonStatus((buttonStatus) => 'edit')
+      const allCheck = checkInputIsValid(isValid)
+      if (!allCheck) {
+        setValidCheck(false)
+        return alert('請完整填寫正確商品資訊後再提交')
+      } else {
+        setValidCheck(true)
+        changeProductInfoById(id, descData)
+        setIsDisabled((isDisabled) => !isDisabled)
+        setButtonStatus((buttonStatus) => 'edit')
+      }
     },
     [isValid, id, descData]
   )
@@ -157,7 +175,7 @@ export default function DetailDescForm({ product }) {
       </ComponentDiv>
       <ButtonGroup
         status={buttonStatus}
-        isValid={isValid}
+        validCheck={validCheck}
         onLeaveClick={handleLeaveClick}
         onEditClick={handleEditClick}
         onSaveClick={handleSaveClick}

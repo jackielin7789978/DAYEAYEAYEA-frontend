@@ -109,6 +109,12 @@ export const checkIsImg = (imgData) => {
   return result
 }
 
+export const checkInputIsValid = (isValid) => {
+  const isValidForCheck = Object.values(isValid)
+  const result = isValidForCheck.every((valid) => valid)
+  return result
+}
+
 export const calTotalPages = (totalItems) => {
   if (totalItems % 10) return Math.floor(totalItems / 10) + 1
   return totalItems / 10

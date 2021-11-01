@@ -1,11 +1,11 @@
 import styled from 'styled-components'
-import { useState, useCallback } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { useState, useCallback, useContext } from 'react'
+import { Link } from 'react-router-dom'
 import {
   changeProductStatus,
-  changeProductQuantity,
-  deleteProductById
+  changeProductQuantity
 } from '../../../webAPI/adminProductsAPI'
+import { ModalContext } from '../../../context'
 import { GeneralBtn } from '../../../components/Button'
 import { ItemCounter } from '../../../components/Counter'
 import {
@@ -74,6 +74,7 @@ function TableItem({ product }) {
     status,
     Product_imgs
   } = product
+  const { setIsModalOpen, setProductId } = useContext(ModalContext)
   const [productQuantity, setProductQuantity] = useState(quantity)
   const [productStatus, setProductStatus] = useState(status)
   const length = Product_imgs.length
@@ -81,7 +82,6 @@ function TableItem({ product }) {
   const [productImg, setProductImg] = useState(
     Product_imgs && Product_imgs[length - 1].imgUrlSm
   )
-  let history = useHistory()
   const handleCount = useCallback(
     (type, id) => {
       let changeQuantity
@@ -125,15 +125,13 @@ function TableItem({ product }) {
 
   const handleOnDeleteClick = useCallback(
     (e) => {
+      e.preventDefault()
+      window.document.body.style.overflow = 'hidden'
       const targetId = Number(e.target.id)
-      deleteProductById(targetId).then((result) => {
-        if (!result) return
-        if (result.ok === 0) return alert(result.message)
-        alert('成功刪除商品')
-        history.go(0)
-      })
+      setIsModalOpen(true)
+      setProductId(targetId)
     },
-    [history]
+    [setIsModalOpen, setProductId]
   )
 
   return (
@@ -167,7 +165,7 @@ function TableItem({ product }) {
       </ProductCell>
       <ProductCell>
         <ButtonContainer onClick={handleOnDeleteClick} id={id}>
-          <GeneralBtn color='admin_grey' id={id}>
+          <GeneralBtn color='admin_grey' id={id} onClick={handleOnDeleteClick}>
             刪除
           </GeneralBtn>
         </ButtonContainer>

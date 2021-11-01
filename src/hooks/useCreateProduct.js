@@ -59,7 +59,7 @@ export default function useCreateProduct() {
       for (const key in isChecked) {
         if (isChecked[key] === false) {
           isAllChecked = false
-          alert('請完整填寫正確商品資訊後再提交，謝謝')
+          alert('請完整填寫正確商品資訊後再提交')
           return
         }
         isAllChecked = true

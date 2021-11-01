@@ -2,6 +2,7 @@ import { useEffect, useCallback, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { imgVerify } from '../../../../utils'
+import { checkInputIsValid } from '../../../../utils'
 import { FONT_SIZE, ADMIN_COLOR } from '../../../../constants/style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
@@ -308,7 +309,7 @@ export default function DetailImgForm({ product }) {
     2: true,
     3: true
   })
-  const [isChecked, setIsChecked] = useState(true)
+  const [validCheck, setValidCheck] = useState(true)
   const history = useHistory()
   const deleteKeysFromData = (data) => {
     delete data.productId
@@ -339,16 +340,17 @@ export default function DetailImgForm({ product }) {
   const handleSaveClick = useCallback(
     (e) => {
       e.preventDefault()
-      for (const key in isValid) {
-        if (isValid[key] === false) {
-          return setIsChecked(false)
+      const allCheck = checkInputIsValid(isValid)
+      if (!allCheck) {
+        setValidCheck(false)
+        return alert('請完整填寫正確商品資訊後再提交')
+      } else {
+        setValidCheck(true)
+        const newProductImgs = {
+          imgsData: [productImgUrlOne, productImgUrlOTwo, productImgUrlThree]
         }
-        setIsChecked(true)
+        changeProductInfoById(parseInt(id), newProductImgs)
       }
-      const newProductImgs = {
-        imgsData: [productImgUrlOne, productImgUrlOTwo, productImgUrlThree]
-      }
-      changeProductInfoById(parseInt(id), newProductImgs)
     },
     [isValid, productImgUrlOne, productImgUrlOTwo, productImgUrlThree, id]
   )
@@ -384,7 +386,7 @@ export default function DetailImgForm({ product }) {
       <ButtonForImgForm
         onSaveClick={handleSaveClick}
         onLeaveClick={handleLeaveClick}
-        isChecked={isChecked}
+        isChecked={validCheck}
       />
     </ImgForm>
   )
