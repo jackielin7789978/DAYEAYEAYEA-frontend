@@ -70,28 +70,32 @@ export default function Products() {
   return (
     <PageWidth>
       {isLoading && <IsLoadingComponent />}
-      <FullModal
-        open={isModalOpen}
-        content='已成功加入購物車 ! '
-        onClose={handleModalClose}
-      />
-      <ProductPageDiv>
-        <ProductTopContainer>
-          <ProductImgsComponent imgs={productImgs} />
-          <ProductUpInfoComponent
-            id={id}
-            name={name}
-            shortDesc={shortDesc}
-            imgs={productImgs}
-            price={price}
-            discountPrice={discountPrice}
-            hasDiscount={hasDiscount}
-            totalQuantity={quantity}
-            status={status}
+      {!isLoading && (
+        <>
+          <FullModal
+            open={isModalOpen}
+            content='已成功加入購物車 ! '
+            onClose={handleModalClose}
           />
-        </ProductTopContainer>
-        <ProductBottomInfoComponent longDesc={longDesc} />
-      </ProductPageDiv>
+          <ProductPageDiv>
+            <ProductTopContainer>
+              <ProductImgsComponent imgs={productImgs} />
+              <ProductUpInfoComponent
+                id={id}
+                name={name}
+                shortDesc={shortDesc}
+                imgs={productImgs}
+                price={price}
+                discountPrice={discountPrice}
+                hasDiscount={hasDiscount}
+                totalQuantity={quantity}
+                status={status}
+              />
+            </ProductTopContainer>
+            <ProductBottomInfoComponent longDesc={longDesc} />
+          </ProductPageDiv>
+        </>
+      )}
     </PageWidth>
   )
 }

@@ -71,11 +71,7 @@ export default function Categories() {
     }
   }, [setIsLoading, slug, page, setAPIResult])
 
-  const whiteCardAmount = countWhiteCardAmount(
-    products.length,
-    parseInt(page),
-    isDesktop
-  )
+  const whiteCardAmount = countWhiteCardAmount(products.length, isDesktop)
   return (
     <PageWidth>
       {isLoading && <IsLoadingComponent />}

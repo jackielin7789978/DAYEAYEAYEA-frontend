@@ -95,11 +95,7 @@ export default function Search() {
   const SearchProductsAmount = searchResult.length
   const { totalPage, pagesArray } = setSearchPageInArray(SearchProductsAmount)
 
-  const whiteCardAmount = countWhiteCardAmount(
-    SearchProductsAmount,
-    currentPage,
-    isDesktop
-  )
+  const whiteCardAmount = countWhiteCardAmount(SearchProductsAmount, isDesktop)
 
   return (
     <PageWidth>

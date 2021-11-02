@@ -43,16 +43,13 @@ export const removeNewProductFromLocalStorage = () => {
   return localStorage.removeItem(NEWPRODUCTINFO)
 }
 
-export const countWhiteCardAmount = (length, page, isDesktop) => {
+export const countWhiteCardAmount = (length, isDesktop) => {
   let perWrap = isDesktop ? 4 : 2
-  const totalPage = Math.ceil(length / 12)
   let whiteCardAmountArray = []
-  if (page === totalPage) {
-    const Amount = perWrap - (length % perWrap)
-    if (Amount !== perWrap) {
-      for (let i = 1; i <= Amount; i++) {
-        whiteCardAmountArray.push(i)
-      }
+  const Amount = perWrap - (length % perWrap)
+  if (Amount !== perWrap) {
+    for (let i = 1; i <= Amount; i++) {
+      whiteCardAmountArray.push(i)
     }
   }
   return whiteCardAmountArray
