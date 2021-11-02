@@ -43,16 +43,13 @@ export const removeNewProductFromLocalStorage = () => {
   return localStorage.removeItem(NEWPRODUCTINFO)
 }
 
-export const countWhiteCardAmount = (length, page, isDesktop) => {
+export const countWhiteCardAmount = (length, isDesktop) => {
   let perWrap = isDesktop ? 4 : 2
-  const totalPage = Math.ceil(length / 12)
   let whiteCardAmountArray = []
-  if (page === totalPage) {
-    const Amount = perWrap - (length % perWrap)
-    if (Amount !== perWrap) {
-      for (let i = 1; i <= Amount; i++) {
-        whiteCardAmountArray.push(i)
-      }
+  const Amount = perWrap - (length % perWrap)
+  if (Amount !== perWrap) {
+    for (let i = 1; i <= Amount; i++) {
+      whiteCardAmountArray.push(i)
     }
   }
   return whiteCardAmountArray
@@ -106,6 +103,12 @@ export const imgVerify = (imgUrl) => {
 export const checkIsImg = (imgData) => {
   const imgDataForCheck = Object.values(imgData)
   const result = imgDataForCheck.every((imgUrl) => imgVerify(imgUrl))
+  return result
+}
+
+export const checkInputIsValid = (isValid) => {
+  const isValidForCheck = Object.values(isValid)
+  const result = isValidForCheck.every((valid) => valid)
   return result
 }
 

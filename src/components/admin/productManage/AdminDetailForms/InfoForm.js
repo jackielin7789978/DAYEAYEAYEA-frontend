@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 import { useHistory, useParams } from 'react-router-dom'
+import { checkInputIsValid } from '../../../../utils'
 import { changeProductInfoById } from '../../../../webAPI/adminProductsAPI'
 import {
   Form,
@@ -94,22 +95,23 @@ function ArticlesDropdown({ productValue, disabled, onChange, name }) {
 }
 
 // styledComponent End
-const handleBlur = (e, setValid, setErrMsg) => {
+
+const handleBlur = (e, isValid, setIsValid, setErrMsg) => {
   const targetValue = e.target.value.trim(' ')
   if (!targetValue) {
     setErrMsg('此欄位不得為空')
-    return setValid(false)
+    return setIsValid({ ...isValid, [e.target.name]: false })
   }
   if (isNaN(targetValue)) {
     setErrMsg('此欄位僅限輸入數字')
-    return setValid(false)
+    return setIsValid({ ...isValid, [e.target.name]: false })
   }
   if (targetValue >= 100000) {
-    setValid(false)
-    return setErrMsg('此欄位數字超過上限五位數')
+    setErrMsg('此欄位數字超過上限五位數')
+    return setIsValid({ ...isValid, [e.target.name]: false })
   }
-  setValid(true)
   setErrMsg('')
+  setIsValid({ ...isValid, [e.target.name]: true })
 }
 
 function StatusComponent({
@@ -164,10 +166,12 @@ function PriceComponent({
   discountPrice,
   formData,
   setFormData,
+  isValid,
   setIsValid,
   disabled
 }) {
-  const [errorMsg, setErrorMsg] = useState('')
+  const [errorMsgForPrice, setErrorMsgForPrice] = useState('')
+  const [errorMsgForDiscount, setErrorMsgForDiscount] = useState('')
   const [inputPriceValue, setInputPriceValue] = useState({
     price,
     discountPrice
@@ -180,25 +184,30 @@ function PriceComponent({
     },
     [setFormData, formData, inputPriceValue]
   )
-  const handleOnBlur = useCallback(
+  const handleOnPriceBlur = useCallback(
     (e) => {
-      const { price, discountPrice } = inputPriceValue
+      const { discountPrice } = inputPriceValue
       const targetValue = parseInt(e.target.value)
-      handleBlur(e, setIsValid, setErrorMsg)
-      if (e.target.name === 'price') {
-        if (discountPrice && targetValue < discountPrice) {
-          setErrorMsg('原價價格不得低於特價')
-          setIsValid(false)
-        }
-      }
-      if (e.target.name === 'discountPrice') {
-        if (price && targetValue > price) {
-          setErrorMsg('特價價格不可高於原價')
-          setIsValid(false)
-        }
+      handleBlur(e, isValid, setIsValid, setErrorMsgForPrice)
+      if (discountPrice && targetValue < discountPrice) {
+        setErrorMsgForPrice('原價價格不得低於特價')
+        return setIsValid({ ...isValid, [e.target.name]: false })
       }
     },
-    [setIsValid, inputPriceValue]
+    [setIsValid, inputPriceValue, isValid]
+  )
+
+  const handleOnDiscountBlur = useCallback(
+    (e) => {
+      const { price } = inputPriceValue
+      const targetValue = parseInt(e.target.value)
+      handleBlur(e, isValid, setIsValid, setErrorMsgForDiscount)
+      if (price && targetValue > price) {
+        setErrorMsgForDiscount('特價價格不可高於原價')
+        return setIsValid({ ...isValid, [e.target.name]: false })
+      }
+    },
+    [setIsValid, inputPriceValue, isValid]
   )
 
   return (
@@ -211,9 +220,10 @@ function PriceComponent({
             name='price'
             value={inputPriceValue.price}
             onChange={handleOnChange}
-            onBlur={handleOnBlur}
+            onBlur={handleOnPriceBlur}
             disabled={disabled}
           ></PriceInput>
+          {errorMsgForPrice && <ErrorMsg>{errorMsgForPrice}</ErrorMsg>}
         </SelectedComponent>
         <SelectedComponent>
           <InputTitle>
@@ -224,12 +234,12 @@ function PriceComponent({
             name='discountPrice'
             value={inputPriceValue.discountPrice}
             onChange={handleOnChange}
-            onBlur={handleOnBlur}
+            onBlur={handleOnDiscountBlur}
             disabled={disabled}
           ></PriceInput>
+          {errorMsgForDiscount && <ErrorMsg>{errorMsgForDiscount}</ErrorMsg>}
         </SelectedComponent>
       </OptionsContainer>
-      {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
     </InfoFormSetContainer>
   )
 }
@@ -238,6 +248,7 @@ function QuantityComponent({
   quantity,
   formData,
   setFormData,
+  isValid,
   setIsValid,
   disabled
 }) {
@@ -247,18 +258,17 @@ function QuantityComponent({
   const handleOnChange = useCallback(
     (e) => {
       const targetValue = e.target.value.trim(' ')
-      const newValue = targetValue ? targetValue : ''
-      setInputQuantityValue(newValue)
-      setFormData({ ...formData, [e.target.name]: newValue })
+      setInputQuantityValue(targetValue)
+      setFormData({ ...formData, [e.target.name]: targetValue })
     },
     [setFormData, formData, setInputQuantityValue]
   )
 
   const handleOnBlur = useCallback(
     (e) => {
-      handleBlur(e, setIsValid, setErrorMsg)
+      handleBlur(e, isValid, setIsValid, setErrorMsg)
     },
-    [setIsValid]
+    [isValid, setIsValid]
   )
   return (
     <InfoFormSetContainer>
@@ -281,9 +291,9 @@ export default function DetailInfoForm({ product }) {
   const history = useHistory()
   const { id } = useParams()
   const { status, category, article, price, discountPrice, quantity } = product
-  const [isValid, setIsValid] = useState(true)
   const [buttonStatus, setButtonStatus] = useState('edit')
   const [isDisabled, setIsDisabled] = useState(true)
+  const [validCheck, setValidCheck] = useState(true)
   const [InfoData, setInfoData] = useState({
     status,
     category,
@@ -291,6 +301,12 @@ export default function DetailInfoForm({ product }) {
     price,
     discountPrice,
     quantity
+  })
+  const [isValid, setIsValid] = useState({
+    status: true,
+    price: true,
+    discountPrice: true,
+    quantity: true
   })
   const handleEditClick = useCallback((e) => {
     e.preventDefault()
@@ -309,12 +325,22 @@ export default function DetailInfoForm({ product }) {
   const handleSaveClick = useCallback(
     (e) => {
       e.preventDefault()
-      if (!isValid) return
-      changeProductInfoById(parseInt(id), InfoData)
-      setIsDisabled((isDisabled) => !isDisabled)
-      setButtonStatus((buttonStatus) => 'edit')
+      const allCheck = checkInputIsValid(isValid)
+      if (!allCheck) {
+        if (!validCheck) return
+        setValidCheck(false)
+        return alert('請完整填寫正確商品資訊後再提交')
+      } else {
+        setValidCheck(true)
+        changeProductInfoById(parseInt(id), InfoData).then((result) => {
+          if (result.ok !== 1) return alert(result.message)
+          alert('成功修改商品資訊')
+          setIsDisabled((isDisabled) => !isDisabled)
+          setButtonStatus((buttonStatus) => 'edit')
+        })
+      }
     },
-    [isValid, id, InfoData]
+    [isValid, id, InfoData, validCheck]
   )
   return (
     <InfoForm>
@@ -324,6 +350,7 @@ export default function DetailInfoForm({ product }) {
         article={InfoData.article}
         formData={InfoData}
         setFormData={setInfoData}
+        isValid={isValid}
         setIsValid={setIsValid}
         disabled={isDisabled}
       ></StatusComponent>
@@ -332,6 +359,7 @@ export default function DetailInfoForm({ product }) {
         discountPrice={InfoData.discountPrice}
         formData={InfoData}
         setFormData={setInfoData}
+        isValid={isValid}
         setIsValid={setIsValid}
         disabled={isDisabled}
       ></PriceComponent>
@@ -339,12 +367,13 @@ export default function DetailInfoForm({ product }) {
         quantity={InfoData.quantity}
         formData={InfoData}
         setFormData={setInfoData}
+        isValid={isValid}
         setIsValid={setIsValid}
         disabled={isDisabled}
       ></QuantityComponent>
       <ButtonGroup
         status={buttonStatus}
-        isValid={isValid}
+        validCheck={validCheck}
         onLeaveClick={handleLeaveClick}
         onEditClick={handleEditClick}
         onSaveClick={handleSaveClick}

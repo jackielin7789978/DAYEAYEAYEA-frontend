@@ -133,7 +133,6 @@ export default function Articles() {
   const { imgUrl, title, content } = articleData
   const whiteCardAmount = countWhiteCardAmount(
     articleProducts.length,
-    parseInt(page),
     isDesktop
   )
 
