@@ -25,7 +25,7 @@ const ModalContent = styled.div`
   left: 50%;
   top: 50%;
   transform: ${(props) =>
-    props.isNavClick ? 'translate(-50%, -50%)' : 'translate(-24%, -36%)'};
+    props.isNavClick ? 'translate(-50%, -50%)' : 'translate(-24%, -50%)'};
   height: 220px;
   width: 315px;
   margin: 0px auto;
