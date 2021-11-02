@@ -100,15 +100,7 @@ function GeneralModal({ icon, content, buttonOne, buttonTwo, open, onClose }) {
   )
 }
 
-function FullModal({
-  icon,
-  content,
-  buttonOne,
-  buttonTwo,
-  open,
-  onClose,
-  desk
-}) {
+function FullModal({ icon, content, buttonOne, buttonTwo, open, onClose }) {
   const { isNavClick } = useContext(ModalContext)
   if (!open) return null
   return (

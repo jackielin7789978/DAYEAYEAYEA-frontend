@@ -72,7 +72,9 @@ function AdminRoutes() {
   }, [setIsModalOpen])
 
   return (
-    <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
+    <LoadingContext.Provider
+      value={{ isLoading, setIsLoading, isNavClick, setIsNavClick }}
+    >
       <ModalContext.Provider
         value={{
           isModalOpen,

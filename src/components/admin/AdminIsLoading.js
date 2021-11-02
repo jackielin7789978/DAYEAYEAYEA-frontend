@@ -1,10 +1,12 @@
 import styled from 'styled-components'
+import { useContext } from 'react'
 import { css } from '@emotion/react'
 import SyncLoader from 'react-spinners/SyncLoader'
 import { ADMIN_COLOR } from '../../constants/style'
+import { LoadingContext } from '../../context'
 
 const FixedBackground = styled.div`
-  position: absolute;
+  position: fixed;
   z-index: 3;
   top: 0;
   left: 0;
@@ -17,11 +19,12 @@ const FixedBackground = styled.div`
 
 const IsLoadingStyle = styled.div`
   margin: 0 auto;
-  position: absolute;
+  position: fixed;
   z-index: 4;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: ${(props) => (props.isNavClick ? '50%' : '55%')};
+  left: ${(props) => (props.isNavClick ? '50%' : '55%')};
+  transform: ${(props) =>
+    props.isNavClick ? 'translate(-50%, -50%)' : 'translate(-24%, -36%)'};
 `
 
 const override = css`
@@ -30,9 +33,10 @@ const override = css`
 `
 
 export function AdminIsLoadingComponent() {
+  const { isNavClick } = useContext(LoadingContext)
   return (
     <FixedBackground>
-      <IsLoadingStyle>
+      <IsLoadingStyle isNavClick={isNavClick}>
         <SyncLoader
           color={ADMIN_COLOR.table_blue}
           css={override}
