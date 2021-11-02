@@ -8,6 +8,7 @@ import {
 import AdminOrders from './AdminOrders/AdminOrders'
 import AdminOrderDetail from './AdminOrders/AdminOrderDetail'
 import Layout from './Layout'
+import NotFound from './Admin404'
 
 export {
   AdminLogin,
@@ -18,5 +19,6 @@ export {
   AdminProducts,
   AdminProductDetail,
   AdminProductAdd,
-  Layout
+  Layout,
+  NotFound
 }

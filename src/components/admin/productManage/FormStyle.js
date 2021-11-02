@@ -87,7 +87,7 @@ function ButtonGroup({
   onEditClick,
   onSaveClick,
   onLeaveClick,
-  isValid
+  validCheck
 }) {
   return (
     <ButtonContainer>
@@ -97,7 +97,7 @@ function ButtonGroup({
         </ButtonDiv>
       ) : (
         <ButtonDiv onClick={onSaveClick}>
-          <SaveBtn color={isValid ? 'admin_blue' : ''}>儲存</SaveBtn>
+          <SaveBtn color={validCheck ? 'admin_blue' : ''}>儲存</SaveBtn>
         </ButtonDiv>
       )}
       <ButtonDiv onClick={onLeaveClick}>

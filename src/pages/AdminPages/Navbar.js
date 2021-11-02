@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { ModalContext } from '../../context'
 import {
   faShoppingCart,
   faUserFriends,
@@ -121,7 +122,7 @@ const SwitchButton = styled.button`
 
 const Navbar = ({ handleLogout }) => {
   const [active, setActive] = useState(false)
-
+  const { setIsNavClick } = useContext(ModalContext)
   return (
     <NavWrapper $active={active}>
       <NavbarList>
@@ -149,7 +150,13 @@ const Navbar = ({ handleLogout }) => {
         <FontAwesomeIcon icon={faSignOutAlt} />
         Logout
       </LogoutButton>
-      <SwitchButton $active={active} onClick={() => setActive((pre) => !pre)}>
+      <SwitchButton
+        $active={active}
+        onClick={() => {
+          setIsNavClick((isNavClick) => !isNavClick)
+          setActive((pre) => !pre)
+        }}
+      >
         <FontAwesomeIcon icon={faAngleLeft} />
       </SwitchButton>
     </NavWrapper>

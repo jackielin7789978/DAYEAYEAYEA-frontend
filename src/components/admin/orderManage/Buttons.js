@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { GeneralBtn } from '../../../components/Button'
-import { FullModal } from '../../Modal'
 
 const Wrapper = styled.div`
   position: absolute;
@@ -17,9 +16,7 @@ const Wrapper = styled.div`
 export default function Buttons({
   orderDetail,
   handleOrderStatus,
-  handleArchive,
-  isModalOpen,
-  setIsModalOpen
+  handleArchive
 }) {
   return (
     <Wrapper>
@@ -58,26 +55,6 @@ export default function Buttons({
           children='封存訂單'
         />
       )}
-      <FullModal
-        open={isModalOpen}
-        content='確定要取消這筆訂單嗎？'
-        buttonOne={
-          <GeneralBtn
-            onClick={() => handleOrderStatus('cancel')}
-            color='admin_blue'
-            children='確定'
-          />
-        }
-        buttonTwo={
-          <GeneralBtn
-            onClick={() => setIsModalOpen(false)}
-            color='admin_grey'
-            children='返回'
-          />
-        }
-        onClose={() => setIsModalOpen(false)}
-        desk='back'
-      />
     </Wrapper>
   )
 }

@@ -22,6 +22,8 @@ import Item from '../../../components/admin/orderManage/DetailItem'
 import OrderInfo from '../../../components/admin/orderManage/OrderInfo'
 import Buttons from '../../../components/admin/orderManage/Buttons'
 import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
+import { GeneralBtn } from '../../../components/Button'
+import { FullModal } from '../../../components/Modal'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -212,6 +214,29 @@ export default function AdminOrderDetail() {
           </>
         )}
       </Container>
+      <FullModal
+        open={isModalOpen}
+        content='確定要取消這筆訂單嗎？'
+        buttonOne={
+          <GeneralBtn
+            onClick={() => handleOrderStatus('cancel')}
+            color='admin_blue'
+            children='確定'
+            buttonStyle={{ width: '45%' }}
+          />
+        }
+        buttonTwo={
+          <GeneralBtn
+            onClick={() => setIsModalOpen(false)}
+            color='admin_grey'
+            children='返回'
+            buttonStyle={{ width: '45%' }}
+          />
+        }
+        onClose={() => {
+          setIsModalOpen(false)
+        }}
+      />
     </PageWrapper>
   )
 }

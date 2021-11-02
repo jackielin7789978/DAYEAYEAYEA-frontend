@@ -1,10 +1,12 @@
 import styled from 'styled-components'
+import { useContext } from 'react'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../constants/style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { ModalContext } from '../context'
 
 const FixedBackground = styled.div`
-  position: ${(props) => (props.desk === 'back' ? 'absolute' : 'fixed')};
+  position: fixed;
   z-index: 3;
   top: 0;
   left: 0;
@@ -19,10 +21,11 @@ const ModalContent = styled.div`
   background: ${COLOR.light};
   font-size: ${FONT_SIZE.lg};
   color: ${COLOR.text_dark};
-  position: ${(props) => (props.desk === 'back' ? 'absolute' : 'fixed')};
+  position: fixed;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: ${(props) =>
+    props.isNavClick ? 'translate(-50%, -50%)' : 'translate(-24%, -36%)'};
   height: 220px;
   width: 315px;
   margin: 0px auto;
@@ -32,7 +35,7 @@ const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  text-align: center;
 
   ${MEDIA_QUERY.tablet} {
     height: 260px;
@@ -97,20 +100,13 @@ function GeneralModal({ icon, content, buttonOne, buttonTwo, open, onClose }) {
   )
 }
 
-function FullModal({
-  icon,
-  content,
-  buttonOne,
-  buttonTwo,
-  open,
-  onClose,
-  desk
-}) {
+function FullModal({ icon, content, buttonOne, buttonTwo, open, onClose }) {
+  const { isNavClick } = useContext(ModalContext)
   if (!open) return null
   return (
     <div>
-      <FixedBackground onClick={onClose} desk={desk} />
-      <ModalContent desk={desk}>
+      <FixedBackground onClick={onClose} />
+      <ModalContent isNavClick={isNavClick}>
         <CloseButton onClick={onClose} />
         <ModalIcon icon={icon} />
         <ModalContentDiv>{content}</ModalContentDiv>

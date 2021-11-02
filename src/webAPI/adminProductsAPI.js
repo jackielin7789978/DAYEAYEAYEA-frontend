@@ -32,7 +32,7 @@ export const changeProductStatus = async (id, newStatus) => {
         status: newStatus
       })
     })
-    return await res.json().then((result) => alert(result.message))
+    return await res.json()
   } catch (e) {
     console.log(e)
   }
@@ -52,7 +52,7 @@ export const changeProductQuantity = async (id, newQuantity) => {
         quantity: newQuantity
       })
     })
-    return await res.json().then((result) => alert(result.message))
+    return await res.json()
   } catch (e) {
     console.log(e)
   }
@@ -104,7 +104,7 @@ export const changeProductInfoById = async (id, newInfo) => {
       },
       body: JSON.stringify(newInfo)
     })
-    return await res.json().then((result) => alert(result.message))
+    return await res.json()
   } catch (e) {
     console.log(e)
   }
