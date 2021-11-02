@@ -235,9 +235,7 @@ export default function AdminOrderDetail() {
         }
         onClose={() => {
           setIsModalOpen(false)
-          document.body.style.overflow = 'hidden'
         }}
-        desk='back'
       />
     </PageWrapper>
   )
