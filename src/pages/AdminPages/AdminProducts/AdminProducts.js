@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useState, useLayoutEffect, useCallback, useContext } from 'react'
 import { useParams, useLocation, useHistory, Link } from 'react-router-dom'
-import { LoadingContext, ModalContext } from '../../../context'
+import { LoadingContext, ModalContext, AdminContext } from '../../../context'
 import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
 import {
   CategoryDropdown,
@@ -16,7 +16,10 @@ import {
   deleteProductById
 } from '../../../webAPI/adminProductsAPI'
 import { setAdminProductsPageInArray } from '../../../utils'
-import { FullModal } from '../../../components/Modal'
+import {
+  AdminDeleteModal,
+  PermissionDeniedModal
+} from '../../../components/admin/productManage/AdminProductModal'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -64,7 +67,9 @@ export default function AdminProducts() {
   const [products, setProducts] = useState([])
   const [categoryFilter, setCategoryFilter] = useState('all')
   const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, handleModalClose, productId } = useContext(ModalContext)
+  const { isModalOpen, setIsModalOpen, handleModalClose, productId } =
+    useContext(ModalContext)
+  const { isSuperAdmin } = useContext(AdminContext)
   const { page } = useParams()
   const keywords = useLocation().search
   const history = useHistory()
@@ -120,6 +125,10 @@ export default function AdminProducts() {
     )
   }
 
+  const handelOnClick = useCallback(() => {
+    setIsModalOpen(true)
+  }, [setIsModalOpen])
+
   const handleDropDownChange = useCallback(
     (e) => {
       setCategoryFilter((categoryFilter) => e.target.value)
@@ -135,22 +144,35 @@ export default function AdminProducts() {
   return (
     <PageWrapper>
       {isLoading && <AdminIsLoadingComponent />}
-      <FullModal
-        open={isModalOpen}
-        content='確定要刪除嗎？'
-        onClose={handleModalClose}
-        buttonOne={<DeleteButton onDeleteClick={handleDelete} />}
-        buttonTwo={<CancelButton onCancelClick={handleModalClose} />}
-      />
+      {isSuperAdmin ? (
+        <AdminDeleteModal
+          open={isModalOpen}
+          onClose={handleModalClose}
+          buttonOne={<DeleteButton onDeleteClick={handleDelete} />}
+          buttonTwo={<CancelButton onCancelClick={handleModalClose} />}
+        />
+      ) : (
+        <PermissionDeniedModal open={isModalOpen} onClose={handleModalClose} />
+      )}
       <SearchContainer>
         <SearchSideContainer>
           <Search />
           <CategoryDropdown onChange={handleDropDownChange} />
         </SearchSideContainer>
         <SearchSideContainer>
-          <Link style={{ width: '100px' }} to={'/admin/products/add'}>
-            <GeneralBtn color='admin_blue'>新增商品</GeneralBtn>
-          </Link>
+          {isSuperAdmin ? (
+            <Link style={{ width: '100px' }} to={'/admin/products/add'}>
+              <GeneralBtn color='admin_blue'>新增商品</GeneralBtn>
+            </Link>
+          ) : (
+            <GeneralBtn
+              buttonStyle={{ width: '100px' }}
+              color='admin_blue'
+              onClick={handelOnClick}
+            >
+              新增商品
+            </GeneralBtn>
+          )}
         </SearchSideContainer>
       </SearchContainer>
       <Table products={showProductsByPage} />

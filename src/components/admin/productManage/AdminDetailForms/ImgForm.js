@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react'
+import { useEffect, useCallback, useState, useContext } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { imgVerify } from '../../../../utils'
@@ -7,6 +7,7 @@ import { FONT_SIZE, ADMIN_COLOR } from '../../../../constants/style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { changeProductInfoById } from '../../../../webAPI/adminProductsAPI'
+import { AdminContext } from '../../../../context'
 import {
   Form,
   Input,
@@ -301,6 +302,7 @@ function ImgInputSet({
 export default function DetailImgForm({ product }) {
   const { id } = useParams()
   const { Product_imgs } = product
+  const { isSuperAdmin } = useContext(AdminContext)
   const [productImgUrlOne, setProductImgUrlOne] = useState({})
   const [productImgUrlOTwo, setProductImgUrlTwo] = useState({})
   const [productImgUrlThree, setProductImgUrlThree] = useState({})
@@ -398,6 +400,7 @@ export default function DetailImgForm({ product }) {
         onSaveClick={handleSaveClick}
         onLeaveClick={handleLeaveClick}
         isChecked={validCheck}
+        isSuperAdmin={isSuperAdmin}
       />
     </ImgForm>
   )

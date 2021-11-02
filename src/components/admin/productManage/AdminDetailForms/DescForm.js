@@ -1,9 +1,10 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useContext } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { ADMIN_COLOR, COLOR } from '../../../../constants/style'
 import { changeProductInfoById } from '../../../../webAPI/adminProductsAPI'
 import { checkInputIsValid } from '../../../../utils'
+import { AdminContext } from '../../../../context'
 import {
   Form,
   Input,
@@ -47,6 +48,7 @@ export default function DetailDescForm({ product }) {
   const { id } = useParams()
   const { name, shortDesc, longDesc } = product
   const [descData, setDescData] = useState({ name, shortDesc, longDesc })
+  const { isSuperAdmin } = useContext(AdminContext)
   const [errorMsgForName, setErrorMsgForName] = useState('')
   const [errorMsgForShort, setErrorMsgForShort] = useState('')
   const [errorMsgForLong, setErrorMsgForLong] = useState('')
@@ -187,6 +189,7 @@ export default function DetailDescForm({ product }) {
         onLeaveClick={handleLeaveClick}
         onEditClick={handleEditClick}
         onSaveClick={handleSaveClick}
+        isSuperAdmin={isSuperAdmin}
       />
     </DescForm>
   )

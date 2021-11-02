@@ -1,8 +1,9 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useContext } from 'react'
 import styled from 'styled-components'
 import { useHistory, useParams } from 'react-router-dom'
 import { checkInputIsValid } from '../../../../utils'
 import { changeProductInfoById } from '../../../../webAPI/adminProductsAPI'
+import { AdminContext } from '../../../../context'
 import {
   Form,
   FormTitleComponent,
@@ -288,6 +289,7 @@ function QuantityComponent({
 }
 
 export default function DetailInfoForm({ product }) {
+  const { isSuperAdmin } = useContext(AdminContext)
   const history = useHistory()
   const { id } = useParams()
   const { status, category, article, price, discountPrice, quantity } = product
@@ -377,6 +379,7 @@ export default function DetailInfoForm({ product }) {
         onLeaveClick={handleLeaveClick}
         onEditClick={handleEditClick}
         onSaveClick={handleSaveClick}
+        isSuperAdmin={isSuperAdmin}
       />
     </InfoForm>
   )
