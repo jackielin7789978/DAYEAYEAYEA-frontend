@@ -70,9 +70,7 @@ const ShoppingCardIcon = styled(FontAwesomeIcon)`
   margin-top: 2px;
   color: ${COLOR.light};
 `
-const ColorShoppingCardIcon = styled(FontAwesomeIcon)`
-  margin-right: 6px;
-  margin-bottom: 2px;
+const ColorShoppingCardIcon = styled(ShoppingCardIcon)`
   color: ${COLOR.primary_light};
 `
 const GeneralIcon = styled(FontAwesomeIcon)`
