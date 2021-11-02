@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useCallback } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useHistory } from 'react-router'
 import styled from 'styled-components'
 import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
@@ -34,11 +34,18 @@ const Wrapper = styled.div`
   }
 `
 
-
 export default function Me() {
   const [isLoading, setIsLoading] = useState(false)
   const [profile, setProfile] = useState(null)
   const history = useHistory()
+  const tabIndex = useMemo(() => {
+    const path = history.location.pathname
+    const urlMapping = {
+      '/member/orders': 1,
+      '/member/info': 2
+    }
+    return urlMapping[path] || 0
+  }, [history])
   const logout = useCallback(() => {
     localStorage.removeItem('token')
     history.push('/')
@@ -51,8 +58,7 @@ export default function Me() {
         setIsLoading(() => false)
         setProfile(res.data)
       })
-  }, [])
-
+  }, [history.location.pathname])
 
 
   return (
@@ -69,6 +75,7 @@ export default function Me() {
               <Info profile={profile} />
             ]}
             presetTab={0}
+            changeTab={tabIndex}
           />
         </Wrapper>
       </Container>

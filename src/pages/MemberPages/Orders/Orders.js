@@ -12,7 +12,7 @@ const Orders = ({ orders }) => {
 
   return (
     <Container>
-      <OrderTable pageBar={true} orders={orders} />
+      <OrderTable pageBar={true} orders={orders || []} />
     </Container>
   )
 }

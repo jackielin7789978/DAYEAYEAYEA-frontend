@@ -53,6 +53,7 @@ const PageList = ({ currPage, arr, setCurrPage }) => {
       { 
         arr.map((i, index) => (
           <PageLi 
+            key={'page' + index}
             $active={currPage === index + 1} 
             onClick={() => setCurrPage(index + 1)}>
             {index + 1}

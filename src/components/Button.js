@@ -142,9 +142,9 @@ function SaveBtn({ id, color, children, buttonStyle, onClick }) {
   )
 }
 
-function GeneralBtn({ id, color, children, buttonStyle, onClick }) {
+function GeneralBtn({ id, color, type, children, buttonStyle, onClick }) {
   return (
-    <ButtonStyle id={id} color={color} style={buttonStyle} onClick={onClick}>
+    <ButtonStyle id={id} type={type} color={color} style={buttonStyle} onClick={onClick}>
       {children}
     </ButtonStyle>
   )

@@ -1,10 +1,9 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useHistory } from 'react-router'
 import styled from 'styled-components'
 import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
-import { EditBtn } from '../../../components/Button'
+import { GeneralBtn, EditBtn } from '../../../components/Button'
 import { useForm } from "react-hook-form";
-import { IsLoadingComponent as Loading } from '../../../components/IsLoading'
 import { updateMe } from '../../../webAPI/memberAPI'
 
 const Container = styled.div`
@@ -26,7 +25,7 @@ const Field = styled.div`
   flex-wrap: wrap;
   min-height: 36px;
 
-  * {
+  h5, label, p {
     line-height: 36px;
   }
 
@@ -66,80 +65,94 @@ const Field = styled.div`
   `}
 `
 
-const Button = ({ color, children, onClick }) => {
+const BtnField = styled.div`
+    position: absolute;
+    top: 16px;
+    right: 20px;
+
+    button + button {
+      margin-left: 8px;
+    }
+`
+
+const EditButton = ({ color, children, onClick }) => {
   const style = {
-    position: 'absolute',
-    top: '16px',
-    right: '20px',
     width: '120px'
   }
   return <EditBtn color={color} buttonStyle={style} children={children} onClick={onClick} />
 }
 
+const Button = ({ type, color, children, onClick }) => {
+  const style = {
+    width: '80px'
+  }
+  return <GeneralBtn type={type} color={color} buttonStyle={style} children={children} onClick={onClick}/>
+}
 
-const Info = ({ profile  }) => {
-  const [isLoading, setIsLoading] = useState(false)
+
+const Info = ({ profile }) => {
   const [isEditing, setIsEditing] = useState(false);
   const history = useHistory()
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const onSubmit = async (data) => {
-    setIsLoading(() => true)
+  const onSubmit = useCallback(async (data) => {
     try {
       const { fullname, adress, phone } = data
       const res = await updateMe(fullname, adress, phone)
       if (res.ok) {
-        setIsEditing(() =>false)
-        history.go(0)
+        history.location.pathname === '/member/info' ? history.go(0) : history.push('/member/info')
       }
-      
     } catch (error) {
       const { message } = error.response.data
       console.log(message)
     } finally {
-      setIsLoading(() => false)
+      setIsEditing(() => false)
     }
-  }
+  }, [history])
 
   return (
     <Container>
-      { isLoading && <Loading/> }
       <InfoWrapper>
         {
           !isEditing ? (
             <>
-              <Button color={'accent'} onClick={() => setIsEditing(() => true)}>編輯</Button>
+              <BtnField>
+                <EditButton color={'accent'} onClick={() => setIsEditing(() => true)}>編輯</EditButton>
+              </BtnField>
               <Field>
                 <h5>帳號:</h5>
-                <p>{ profile.username }</p>
+                <p>{ profile?.username }</p>
               </Field>
               <Field>
                 <h5>電郵:</h5>
-                <p>{ profile.email }</p>
+                <p>{ profile?.email }</p>
               </Field>
               <Field>
                 <h5>姓名:</h5>
-                <p>{ profile.fullname }</p>
+                <p>{ profile?.fullname }</p>
               </Field>
               <Field>
                 <h5>地址:</h5>
-                <p>{ profile.address }</p>
+                <p>{ profile?.address }</p>
               </Field>
               <Field>
                 <h5>電話:</h5>
-                <p>{ profile.phone }</p>
+                <p>{ profile?.phone }</p>
               </Field>
             </>
           ) : (
             <form onSubmit={handleSubmit(onSubmit)}>
-              <Button color={'warning'} >完成編輯</Button>
+              <BtnField>
+                <Button type="button" color={'accent'} onClick={() => setIsEditing(() => false)} >返回</Button>
+                <Button type="submit" color={'warning'} >儲存</Button>
+              </BtnField>
               <Field>
                 <h5>帳號:</h5>
-                <p>{ profile.username }</p>
+                <p>{ profile?.username }</p>
               </Field>
               <Field>
                 <h5>電郵:</h5>
-                <p>{ profile.email }</p>
+                <p>{ profile?.email }</p>
               </Field>
               <Field>
                 <label>姓名:</label>
@@ -147,7 +160,7 @@ const Info = ({ profile  }) => {
                   $danger={errors.fullname}
                   type="text" 
                   placeholder="fullname"
-                  defaultValue={profile.fullname}
+                  defaultValue={profile?.fullname}
                   {...register(
                     "fullname", { 
                       pattern: {
@@ -165,11 +178,11 @@ const Info = ({ profile  }) => {
                   $danger={errors.address}
                   type="text" 
                   placeholder="address"
-                  defaultValue={profile.address}
+                  defaultValue={profile?.address}
                   {...register(
                     "address", { 
                       pattern: {
-                        value: /[\u4e00-\u9fa5_a-zA-Z]{6,30}/,
+                        value: /[\u4e00-\u9fa5_a-zA-Z]{6,36}/,
                         message: '請輸入正確的地址'
                       }
                     }
@@ -183,7 +196,7 @@ const Info = ({ profile  }) => {
                   $danger={errors.phone}
                   type="text" 
                   placeholder="phone"
-                  defaultValue={profile.phone}
+                  defaultValue={profile?.phone}
                   {...register(
                     "phone", { 
                       pattern: {
