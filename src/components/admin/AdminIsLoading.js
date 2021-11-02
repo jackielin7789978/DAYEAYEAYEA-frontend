@@ -21,7 +21,7 @@ const IsLoadingStyle = styled.div`
   margin: 0 auto;
   position: fixed;
   z-index: 4;
-  top: ${(props) => (props.isNavClick ? '55%' : '50%')};
+  top: 50%;
   left: ${(props) => (props.isNavClick ? '55%' : '50%')};
   transform: ${(props) =>
     props.isNavClick ? 'translate(-24%, -50%)' : 'translate(-50%, -50%)'};
