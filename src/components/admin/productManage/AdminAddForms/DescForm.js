@@ -77,8 +77,8 @@ export default function DetailDescForm({
       }
       if (targetName === 'name') {
         checkValid(targetValue, setErrorMsgForName, errMsg, targetName)
-        if (targetValue.length > 40) {
-          setErrorMsgForName('此欄位不得超過中英文 40 個字')
+        if (targetValue.length > 30) {
+          setErrorMsgForName('此欄位不得超過中英文 30 個字')
           setIsChecked(setDescDataIsValid(targetName, false))
         } else {
           setErrorMsgForName('')
@@ -107,7 +107,7 @@ export default function DetailDescForm({
       <FormTitleComponent title={'商品名稱敘述'} />
       <ComponentDiv>
         <InputTitle>
-          商品名稱:<span>請輸入中英文 40 個字以內之商品名稱</span>
+          商品名稱:<span>請輸入中英文 30 個字以內之商品名稱</span>
         </InputTitle>
         <DescInput
           name='name'

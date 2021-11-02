@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { COLOR, MEDIA_QUERY } from '../../constants/style'
-import { useState, useEffect, useCallback } from 'react'
+import { MEDIA_QUERY } from '../../constants/style'
+import { useState, useLayoutEffect, useCallback } from 'react'
 import useMediaQuery from '../../hooks/useMediaQuery'
 
 const ProductImgContainer = styled.div`
@@ -50,8 +50,8 @@ const ThumbnailContainer = styled.div`
   }
 `
 
-const ThumbnailImgDiv = styled.div`
-  width: 32%;
+const ThumbnailImgDiv = styled.img`
+  width: 30%;
   height: 100% !important;
   background-size: cover;
   background-repeat: no-repeat;
@@ -70,9 +70,6 @@ const ThumbnailImgDiv = styled.div`
   opacity: 0.5;
   transition: opacity ease 0.5s;
   `};
-
-  ${(props) =>
-    props.$isSelected && `border: 2px solid ${COLOR.border_primary};`};
 
   ${MEDIA_QUERY.tablet} {
     width: 100%;
@@ -115,7 +112,7 @@ export function ProductImgsComponent({ imgs }) {
   const isMobile = useMediaQuery('(max-width: 767px)')
   const selectedId = showLargeImg?.id
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setShowLargeImg(imgs[0])
     setShowThumbnailImage(imgs.filter((img) => img.imgUrlSm))
   }, [imgs])
@@ -139,17 +136,19 @@ export function ProductImgsComponent({ imgs }) {
 
       <ThumbnailContainer>
         {showThumbnailImage?.map(({ id, imgUrlMd }) => {
-          let $isSelected = id === selectedId ? true : false
+          let isSelected = id === selectedId ? true : false
           return (
-            <ThumbnailImgDiv
-              key={id}
-              id={id}
-              style={{
-                backgroundImage: `url(${imgUrlMd}})`
-              }}
-              onClick={handleThumbnailClick}
-              $isSelected={$isSelected}
-            />
+            imgUrlMd && (
+              <ThumbnailImgDiv
+                key={id}
+                id={id}
+                style={{
+                  backgroundImage: `url(${imgUrlMd}})`
+                }}
+                onClick={handleThumbnailClick}
+                $isSelected={isSelected}
+              />
+            )
           )
         })}
       </ThumbnailContainer>

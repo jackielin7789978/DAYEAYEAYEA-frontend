@@ -160,8 +160,9 @@ function StatusComponent({ productDetail, setProductDetail }) {
 }
 
 function PriceComponent({ productDetail, setProductDetail, setIsChecked }) {
-  const [errorMsg, setErrorMsg] = useState('')
   const { price, discountPrice } = productDetail
+  const [errorMsgForPrice, setErrorMsgForPrice] = useState('')
+  const [errorMsgForDiscount, setErrorMsgForDiscount] = useState('')
   const handleOnChange = useCallback(
     (e) => {
       handleChange(e, setProductDetail)
@@ -169,25 +170,31 @@ function PriceComponent({ productDetail, setProductDetail, setIsChecked }) {
     [setProductDetail]
   )
 
-  const handleOnBlur = useCallback(
+  const handleOnPriceBlur = useCallback(
     (e) => {
       const targetName = e.target.name
       const targetValue = parseInt(e.target.value)
-      handleBlur(e, setIsChecked, setErrorMsg)
-      if (e.target.name === 'price') {
-        if (discountPrice && targetValue < discountPrice) {
-          setErrorMsg('原價價格不得低於特價')
-          return setIsChecked(setImgDataIsValid(targetName, false))
-        }
-      }
-      if (e.target.name === 'discountPrice') {
-        if (price && targetValue > price) {
-          setErrorMsg('特價價格不可高於原價')
-          return setIsChecked(setImgDataIsValid(targetName, false))
-        }
+      handleBlur(e, setIsChecked, setErrorMsgForPrice)
+      if (discountPrice && targetValue < discountPrice) {
+        setErrorMsgForPrice('原價價格不得低於特價')
+        return setIsChecked(setImgDataIsValid(targetName, false))
       }
     },
-    [setIsChecked, price, discountPrice]
+    [discountPrice, setIsChecked]
+  )
+
+  const handleOnDiscountBlur = useCallback(
+    (e) => {
+      const targetName = e.target.name
+      const targetValue = parseInt(e.target.value)
+      handleBlur(e, setIsChecked, setErrorMsgForDiscount)
+
+      if (price && targetValue > price) {
+        setErrorMsgForDiscount('特價價格不可高於原價')
+        return setIsChecked(setImgDataIsValid(targetName, false))
+      }
+    },
+    [price, setIsChecked]
   )
   return (
     <InfoFormSetContainer>
@@ -199,8 +206,9 @@ function PriceComponent({ productDetail, setProductDetail, setIsChecked }) {
             name='price'
             value={price}
             onChange={handleOnChange}
-            onBlur={handleOnBlur}
+            onBlur={handleOnPriceBlur}
           ></PriceInput>
+          {errorMsgForPrice && <ErrorMsg>{errorMsgForPrice}</ErrorMsg>}
         </SelectedComponent>
         <SelectedComponent>
           <InputTitle>
@@ -211,11 +219,11 @@ function PriceComponent({ productDetail, setProductDetail, setIsChecked }) {
             name='discountPrice'
             value={discountPrice}
             onChange={handleOnChange}
-            onBlur={handleOnBlur}
+            onBlur={handleOnDiscountBlur}
           ></PriceInput>
+          {errorMsgForDiscount && <ErrorMsg>{errorMsgForDiscount}</ErrorMsg>}
         </SelectedComponent>
       </OptionsContainer>
-      {errorMsg && <ErrorMsg>{errorMsg}</ErrorMsg>}
     </InfoFormSetContainer>
   )
 }
