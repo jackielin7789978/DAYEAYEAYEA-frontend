@@ -21,10 +21,10 @@ const IsLoadingStyle = styled.div`
   margin: 0 auto;
   position: fixed;
   z-index: 4;
-  top: ${(props) => (props.isNavClick ? '50%' : '55%')};
-  left: ${(props) => (props.isNavClick ? '50%' : '55%')};
+  top: ${(props) => (props.isNavClick ? '55%' : '50%')};
+  left: ${(props) => (props.isNavClick ? '55%' : '50%')};
   transform: ${(props) =>
-    props.isNavClick ? 'translate(-50%, -50%)' : 'translate(-24%, -50%)'};
+    props.isNavClick ? 'translate(-24%, -50%)' : 'translate(-50%, -50%)'};
 `
 
 const override = css`
