@@ -6,6 +6,11 @@ import { Table, Button } from '../../components/Table'
 import { formatPrice } from '../../utils'
 
 
+const H3 = styled.h3`
+  padding-top: 24px;
+  text-align: center;
+`
+
 const PageListWrapper = styled.ul`
   display: flex;
   justify-content: center;
@@ -22,18 +27,18 @@ const Li = styled.li`
   & + & {
     margin-left: 8px;
   }
-
-  ${({ $active }) => $active && `
-    color: ${COLOR.light};
-    background: ${COLOR.primary_light_hover};
-    border: ${COLOR.border_light_grey};
-  `}
 `
 
 const PageLi = styled(Li)`
   border: 1px solid #111;
   cursor: pointer;
   transition: background .3s;
+
+  ${({ $active }) => $active && `
+    color: ${COLOR.light};
+    background: ${COLOR.primary_light_hover};
+    border: ${COLOR.border_light_grey};
+  `}
 
   &:hover, &.active {
     color: ${COLOR.light};
@@ -96,6 +101,7 @@ const OrderTable = ({ pageBar, orders }) => {
           }
         </tbody>
       </Table>
+      { !orders.length && <H3>暫無訂單</H3> }
       {
         pageBar && <PageList currPage={currPage} arr={Array(maxPage).fill()} setCurrPage={setCurrPage} / >
       }

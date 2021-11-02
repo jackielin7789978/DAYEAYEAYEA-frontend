@@ -4,6 +4,7 @@ import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 
 export const HoverArea = styled.div`
   position: fixed;
+  overflow: hidden;
   height: 100vh;
   width: 100%;
   transition: linear 0.3s;
@@ -21,7 +22,7 @@ export const HoverArea = styled.div`
 `
 export const MenuContainer = styled.div`
   width: 84%;
-  margin: 30px auto;
+  margin: 20px auto;
   position: relative;
   button {
     width: 100%;

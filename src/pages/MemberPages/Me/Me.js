@@ -8,7 +8,7 @@ import { IsLoadingComponent as Loading } from '../../../components/IsLoading'
 import Home from '../Home'
 import Orders from '../Orders'
 import Info from '../Info'
-import { getMe } from '../../../webAPI/loginAPI'
+import { getMe } from '../../../webAPI/memberAPI'
 
 
 const PageWidthHeight = styled(PageWidth)`

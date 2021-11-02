@@ -24,7 +24,8 @@ import {
   AdminMemberDetail,
   AdminProductDetail,
   AdminProductAdd,
-  Layout as AdminLayout
+  Layout as AdminLayout,
+  NotFound as AdminNotFound
 } from './pages/AdminPages'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
 import { PageHeight } from './components/general'
@@ -64,28 +65,54 @@ export default function App() {
 
 function AdminRoutes() {
   const [isLoading, setIsLoading] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [productId, setProductId] = useState('')
+  const [isNavClick, setIsNavClick] = useState(false)
+
+  const handleModalClose = useCallback(() => {
+    setIsModalOpen((isModalOpen) => false)
+  }, [setIsModalOpen])
+
   return (
-    <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
-      <Switch>
-        <Route path={'/admin/login'} component={AdminLogin} />
-        <AdminLayout>
-          <Switch>
-            <Route path={'/admin/members/:id'} component={AdminMemberDetail} />
-            <Route path={'/admin/members'} component={AdminMembers} />
-            <Route
-              path={'/admin/orders/:ticket'}
-              component={AdminOrderDetail}
-            />
-            <Route path={'/admin/orders'} component={AdminOrders} />
-            <Route
-              path={'/admin/products/detail/:id'}
-              component={AdminProductDetail}
-            />
-            <Route path={'/admin/products/add'} component={AdminProductAdd} />
-            <Route path={'/admin/products/:page'} component={AdminProducts} />
-          </Switch>
-        </AdminLayout>
-      </Switch>
+    <LoadingContext.Provider
+      value={{ isLoading, setIsLoading, isNavClick, setIsNavClick }}
+    >
+      <ModalContext.Provider
+        value={{
+          isModalOpen,
+          setIsModalOpen,
+          handleModalClose,
+          productId,
+          setProductId,
+          isNavClick,
+          setIsNavClick
+        }}
+      >
+        <Switch>
+          <Route path={'/admin/login'} component={AdminLogin} />
+          <AdminLayout>
+            <Switch>
+              <Route
+                path={'/admin/members/:id'}
+                component={AdminMemberDetail}
+              />
+              <Route path={'/admin/members'} component={AdminMembers} />
+              <Route
+                path={'/admin/orders/:ticket'}
+                component={AdminOrderDetail}
+              />
+              <Route path={'/admin/orders'} component={AdminOrders} />
+              <Route
+                path={'/admin/products/detail/:id'}
+                component={AdminProductDetail}
+              />
+              <Route path={'/admin/products/add'} component={AdminProductAdd} />
+              <Route path={'/admin/products/:page'} component={AdminProducts} />
+              <Route path={'*'} component={AdminNotFound} />
+            </Switch>
+          </AdminLayout>
+        </Switch>
+      </ModalContext.Provider>
     </LoadingContext.Provider>
   )
 }
@@ -110,7 +137,6 @@ function Shop() {
   }, [])
 
   const handleModalClose = useCallback(() => {
-    document.body.style.overflow = 'auto'
     setIsModalOpen((isModalOpen) => false)
     setIsProductSoldOut((isProductSoldOut) => false)
   }, [setIsModalOpen])

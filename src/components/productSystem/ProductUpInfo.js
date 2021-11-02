@@ -228,11 +228,11 @@ export function ProductUpInfoComponent({
       <Shortdesc>{shortDesc}</Shortdesc>
       <InfoSetContainer>
         <PriceStyle discount={hasDiscount}>
-          售價: {formatPrice(parseInt(price))}
+          售價: {price && formatPrice(parseInt(price))}
         </PriceStyle>
         {hasDiscount && (
           <DiscountPriceStyle>
-            售價: {formatPrice(parseInt(discountPrice))}
+            售價: {discountPrice && formatPrice(parseInt(discountPrice))}
           </DiscountPriceStyle>
         )}
       </InfoSetContainer>

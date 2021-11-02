@@ -22,7 +22,7 @@ const RestyledHoverArea = styled(HoverArea)`
   }
 `
 const ItemsContainer = styled.div`
-  max-height: ${({ $isOpen }) => ($isOpen ? '70vh' : '0px')};
+  max-height: ${({ $isOpen }) => ($isOpen ? '62vh' : '0px')};
   overflow: scroll;
   &::-webkit-scrollbar {
     width: 3px;
@@ -69,7 +69,6 @@ const BtnWrapper = styled(Link)`
 const EmptyCart = styled.div`
   text-align: center;
   font-weight: bold;
-  font-size: ;
 `
 
 export default function CartMenu({ handleHover, $isOpen }) {
