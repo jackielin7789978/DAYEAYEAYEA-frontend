@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.js": "/DAYEAYEAYEA-frontend/static/js/main.e4d0fbc4.chunk.js",
-    "main.js.map": "/DAYEAYEAYEA-frontend/static/js/main.e4d0fbc4.chunk.js.map",
+    "main.js": "/DAYEAYEAYEA-frontend/static/js/main.e23a1edb.chunk.js",
+    "main.js.map": "/DAYEAYEAYEA-frontend/static/js/main.e23a1edb.chunk.js.map",
     "runtime-main.js": "/DAYEAYEAYEA-frontend/static/js/runtime-main.cc876c0e.js",
     "runtime-main.js.map": "/DAYEAYEAYEA-frontend/static/js/runtime-main.cc876c0e.js.map",
-    "static/js/2.aa028c4a.chunk.js": "/DAYEAYEAYEA-frontend/static/js/2.aa028c4a.chunk.js",
-    "static/js/2.aa028c4a.chunk.js.map": "/DAYEAYEAYEA-frontend/static/js/2.aa028c4a.chunk.js.map",
+    "static/js/2.cac646f3.chunk.js": "/DAYEAYEAYEA-frontend/static/js/2.cac646f3.chunk.js",
+    "static/js/2.cac646f3.chunk.js.map": "/DAYEAYEAYEA-frontend/static/js/2.cac646f3.chunk.js.map",
     "index.html": "/DAYEAYEAYEA-frontend/index.html",
-    "static/js/2.aa028c4a.chunk.js.LICENSE.txt": "/DAYEAYEAYEA-frontend/static/js/2.aa028c4a.chunk.js.LICENSE.txt"
+    "static/js/2.cac646f3.chunk.js.LICENSE.txt": "/DAYEAYEAYEA-frontend/static/js/2.cac646f3.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.cc876c0e.js",
-    "static/js/2.aa028c4a.chunk.js",
-    "static/js/main.e4d0fbc4.chunk.js"
+    "static/js/2.cac646f3.chunk.js",
+    "static/js/main.e23a1edb.chunk.js"
   ]
 }
