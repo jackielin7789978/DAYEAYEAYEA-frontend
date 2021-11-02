@@ -23,7 +23,8 @@ import {
   AdminMemberDetail,
   AdminProductDetail,
   AdminProductAdd,
-  Layout as AdminLayout
+  Layout as AdminLayout,
+  NotFound as AdminNotFound
 } from './pages/AdminPages'
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
 import { PageHeight } from './components/general'
@@ -82,6 +83,7 @@ function AdminRoutes() {
             />
             <Route path={'/admin/products/add'} component={AdminProductAdd} />
             <Route path={'/admin/products/:page'} component={AdminProducts} />
+            <Route path={'*'} component={AdminNotFound} />
           </Switch>
         </AdminLayout>
       </Switch>
