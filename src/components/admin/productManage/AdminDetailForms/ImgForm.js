@@ -342,6 +342,7 @@ export default function DetailImgForm({ product }) {
       e.preventDefault()
       const allCheck = checkInputIsValid(isValid)
       if (!allCheck) {
+        if (!validCheck) return
         setValidCheck(false)
         return alert('請完整填寫正確商品資訊後再提交')
       } else {
@@ -349,10 +350,20 @@ export default function DetailImgForm({ product }) {
         const newProductImgs = {
           imgsData: [productImgUrlOne, productImgUrlOTwo, productImgUrlThree]
         }
-        changeProductInfoById(parseInt(id), newProductImgs)
+        changeProductInfoById(parseInt(id), newProductImgs).then((result) => {
+          if (result.ok !== 1) return alert(result.message)
+          alert('成功修改商品資訊')
+        })
       }
     },
-    [isValid, productImgUrlOne, productImgUrlOTwo, productImgUrlThree, id]
+    [
+      isValid,
+      productImgUrlOne,
+      productImgUrlOTwo,
+      productImgUrlThree,
+      id,
+      validCheck
+    ]
   )
 
   return (

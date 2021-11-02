@@ -90,7 +90,9 @@ function TableItem({ product }) {
         changeQuantity = productQuantity <= 1 ? 1 : productQuantity - 1
       }
       setProductQuantity(changeQuantity)
-      changeProductQuantity(id, changeQuantity, product)
+      changeProductQuantity(id, changeQuantity, product).then((result) => {
+        if (result.ok !== 1) return alert(result.message)
+      })
     },
     [productQuantity, setProductQuantity, product]
   )
@@ -108,7 +110,11 @@ function TableItem({ product }) {
       let changeQuantity = e.target.value ? parseInt(e.target.value) : 1
       if (changeQuantity < 1) changeQuantity = 1
       setProductQuantity((productQuantity) => changeQuantity)
-      changeProductQuantity(targetId, changeQuantity, product)
+      changeProductQuantity(targetId, changeQuantity, product).then(
+        (result) => {
+          if (result.ok !== 1) return alert(result.message)
+        }
+      )
     },
     [product]
   )

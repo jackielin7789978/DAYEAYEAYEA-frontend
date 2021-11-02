@@ -327,16 +327,20 @@ export default function DetailInfoForm({ product }) {
       e.preventDefault()
       const allCheck = checkInputIsValid(isValid)
       if (!allCheck) {
+        if (!validCheck) return
         setValidCheck(false)
         return alert('請完整填寫正確商品資訊後再提交')
       } else {
         setValidCheck(true)
-        changeProductInfoById(parseInt(id), InfoData)
-        setIsDisabled((isDisabled) => !isDisabled)
-        setButtonStatus((buttonStatus) => 'edit')
+        changeProductInfoById(parseInt(id), InfoData).then((result) => {
+          if (result.ok !== 1) return alert(result.message)
+          alert('成功修改商品資訊')
+          setIsDisabled((isDisabled) => !isDisabled)
+          setButtonStatus((buttonStatus) => 'edit')
+        })
       }
     },
-    [isValid, id, InfoData]
+    [isValid, id, InfoData, validCheck]
   )
   return (
     <InfoForm>

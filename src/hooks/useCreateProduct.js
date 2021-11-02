@@ -70,6 +70,7 @@ export default function useCreateProduct() {
           if (result.ok === 0) return alert(result.message)
           removeNewProductFromLocalStorage()
           alert('成功新增商品')
+          window.location.reload(false)
         })
       }
     },
