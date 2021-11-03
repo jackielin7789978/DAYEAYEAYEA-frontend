@@ -13,9 +13,12 @@ import {
   RadionLabel,
   InputTitle,
   Input,
-  BtnFlexCenter
+  BtnFlexCenter,
+  Selects,
+  Select
 } from '../../../components/checkoutSystem/Step'
 import { useForm } from 'react-hook-form'
+import { useTwZipCode, cities, districts } from 'use-tw-zipcode'
 import { GeneralBtn } from '../../../components/Button'
 import { UserContext } from '../../../context'
 import Login from '../../Login/Login'
@@ -27,8 +30,33 @@ export default function Step2() {
   const { user } = useContext(UserContext)
   const { errMsg } = useState()
   const location = useHistory()
+
+  const [userCity, setuserCity] = useState()
+  const [userDistrict, setUserDistrict] = useState()
+  const [userStreet, setUserStreet] = useState()
+
+  const { city, zipCode, handleCityChange, handleDistrictChange } =
+    useTwZipCode()
+
   useEffect(() => {
-    if (!cartItems.length) location.push('/')
+    user &&
+      setuserCity(cities.filter((city) => user?.address.includes(city))[0])
+  }, [user])
+  useEffect(() => {
+    userCity &&
+      setUserDistrict(
+        districts[userCity].filter((district) =>
+          user.address.includes(district)
+        )[0]
+      )
+  }, [handleDistrictChange, user, userCity, userDistrict])
+  useEffect(() => {
+    userDistrict &&
+      setUserStreet(user?.address.replace(userCity + userDistrict, ''))
+  }, [user, userCity, userDistrict, userStreet])
+
+  useEffect(() => {
+    if (!cartItems?.length) location.push('/')
   }, [cartItems, location])
   const {
     register,
@@ -36,21 +64,25 @@ export default function Step2() {
     handleSubmit,
     setValue
   } = useForm()
+
   const handleChecked = (e) => {
+    handleDistrictChange(userDistrict)
     if (e.target.checked) {
       setValue('orderEmail', user.email)
-      setValue('orderAddress', user.address)
+      setValue('city', userCity)
+      setValue('district', userDistrict)
+      setValue('street', userStreet)
       setValue('orderName', user.fullname)
       setValue('orderPhone', user.phone)
     } else {
       setValue('orderEmail', '')
-      setValue('orderAddress', '')
+      setValue('street', '')
       setValue('orderName', '')
       setValue('orderPhone', '')
     }
   }
   const subTotal = useMemo(() => {
-    if (!cartItems.length) return
+    if (!cartItems?.length) return
     return (
       cartItems
         .map((item) => item.discountPrice * item.quantity)
@@ -58,12 +90,13 @@ export default function Step2() {
     )
   }, [cartItems])
   const onSubmit = async (submitData) => {
+    const address = `${zipCode}${submitData.city}${submitData.district}${submitData.street}`
     const orderItem = cartItems.map((item) => ({
       productId: item.id,
       quantity: item.quantity
     }))
     const result = await createOrder(
-      submitData.orderAddress,
+      address,
       submitData.orderEmail,
       submitData.orderName,
       submitData.orderPhone,
@@ -113,16 +146,6 @@ export default function Step2() {
                 {errors.orderName?.type === 'required' && '請填寫姓名'}
               </ErrorMsg>
               <InputWrapper>
-                <InputTitle children='地址:' />
-                <Input
-                  type='text'
-                  {...register('orderAddress', { required: true })}
-                />
-              </InputWrapper>
-              <ErrorMsg>
-                {errors.orderAddress?.type === 'required' && '請填寫地址'}
-              </ErrorMsg>
-              <InputWrapper>
                 <InputTitle children='電話:' />
                 <Input
                   type='tel'
@@ -137,6 +160,36 @@ export default function Step2() {
                 {errors.orderPhone?.type === 'required' && '請填寫電話'}
                 {errors.orderPhone?.type === 'pattern' && '請符合電話號碼規格'}
               </ErrorMsg>
+              <InputWrapper>
+                <InputTitle children='地址:' />
+
+                <Select
+                  {...register('city')}
+                  onChange={(e) => handleCityChange(e.target.value)}
+                >
+                  {cities.map((city, i) => {
+                    return <option key={i}>{city}</option>
+                  })}
+                </Select>
+                <Select
+                  {...register('district')}
+                  onChange={(e) => handleDistrictChange(e.target.value)}
+                >
+                  {districts[city].map((district, i) => {
+                    return <option key={i}>{district}</option>
+                  })}
+                </Select>
+
+                <Input
+                  style={{ margin: '20px 0px 0px 55px' }}
+                  type='text'
+                  {...register('street', { required: true })}
+                />
+              </InputWrapper>
+              <ErrorMsg>
+                {errors.orderAddress?.type === 'required' && '請填寫地址'}
+              </ErrorMsg>
+
               <Label>
                 <input type='checkbox' id='userData' onChange={handleChecked} />
                 <label htmlFor='userData'>寄件資訊與顧客資訊相同</label>

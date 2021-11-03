@@ -343,6 +343,7 @@ export const InputWrapper = styled.div`
   align-items: center;
   margin: 30px 0px;
   justify-content: flex-start;
+  flex-wrap: wrap;
 `
 export const InputTitle = styled.div``
 export const RadionLabel = styled.span`
@@ -438,3 +439,10 @@ export const MsgTitle = styled.div`
   margin-top: 30px;
   font-weight: bold;
 `
+export const Select = styled.select`
+  padding: 10px;
+  margin-left: 20px;
+  border: solid 1px #cecece;
+  min-width: 30%;
+`
+export const Selects = styled.div``
