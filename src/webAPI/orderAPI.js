@@ -61,3 +61,15 @@ export const getOrderAll = async () => {
     console.log(e)
   }
 }
+export const cancelOrder = async (ticket) => {
+  try {
+    const token = getTokenFromLocalStorage()
+    const result = await fetch(`${BASE_URL}/orders/me/${ticket}/cancel`, {
+      method: 'PATCH',
+      headers: { authorization: `Bearer ${token}` }
+    })
+    return result.json()
+  } catch (e) {
+    console.log(e)
+  }
+}

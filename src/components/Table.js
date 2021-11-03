@@ -3,11 +3,11 @@ import { COLOR, MEDIA_QUERY } from '../constants/style'
 import { GeneralBtn } from './Button'
 
 
-const Button = ({ children }) => {
+const Button = ({ children, onClick }) => {
   const style = {
     width: '50%'
   }
-  return <GeneralBtn color={'accent'} buttonStyle={style} children={children}/>
+  return <GeneralBtn color={'accent'} buttonStyle={style} children={children} onClick={onClick}/>
 }
 
 

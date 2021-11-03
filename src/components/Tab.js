@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { COLOR } from '../constants/style'
 import styled from 'styled-components'
 const TabWrapper = styled.div`
@@ -23,8 +23,10 @@ const Tab = styled.div`
   `};
 `
 // preset 預設顯示 tab
-export const Tabs = ({ tabs, tabsPanel, presetTab }) => {
+export const Tabs = ({ tabs, tabsPanel, presetTab, changeTab }) => {
   const [activeTab, setActiveTab] = useState(presetTab)
+  useEffect(() => changeTab && setActiveTab(() => changeTab), [changeTab])
+
   return (
     <>
       <TabWrapper>
