@@ -1,5 +1,7 @@
 import styled from 'styled-components'
-import { Table } from '../Table'
+import { Table } from '../../../components/Table'
+import { formatPrice } from '../../../utils'
+import { MEDIA_QUERY } from '../../../constants/style'
 
 
 const ItemTH = styled.th`
@@ -11,20 +13,33 @@ const ItemTD = styled.td`
   justify-content: space-evenly;
   align-items: center;
   min-width: 50%;
+  max-width: 50%;
   height: 100px;
+  padding: 8px 0;
+
+  span {
+    padding: 0 16px;
+  }
+
+  ${MEDIA_QUERY.desktop} {
+    img {
+      display: block;
+    }
+    span {
+      width: 50%;
+    }
+  }
 `
 
 const TD = styled.td`
   line-height: 68px;
 `
 
-
-
 const IMG = styled.img`
   width: 120px;
   height: auto;
+  display: none;
 `
-
 
 const ItemTable = ({ order }) => {
 
@@ -38,14 +53,14 @@ const ItemTable = ({ order }) => {
         </tr>
       </thead>
       <tbody>
-        { order.map((item) => (
-            <tr>
+        { order.map(({ Product, quantity }) => (
+            <tr key={Product.id}>
               <ItemTD>
-                <IMG src="https://images.unsplash.com/photo-1602409339188-95d178a611a0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=150&q=80" alt="" />
-                <span>123</span>
+                <IMG src={ Product.Product_imgs[0].imgUrlSm } alt="" />
+                <span>{ Product.name }</span>
               </ItemTD>
-              <TD>$1380</TD>
-              <TD>1</TD>
+              <TD>{ formatPrice(Product.discountPrice) }</TD>
+              <TD>{ quantity }</TD>
             </tr>
           ))
         }
