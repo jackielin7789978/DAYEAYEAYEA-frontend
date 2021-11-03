@@ -4,7 +4,8 @@ import styled from 'styled-components'
 import { ADMIN_COLOR, COLOR } from '../../../../constants/style'
 import { changeProductInfoById } from '../../../../webAPI/adminProductsAPI'
 import { checkInputIsValid } from '../../../../utils'
-import { AdminContext } from '../../../../context'
+import { AdminContext, ModalContext } from '../../../../context'
+import { PermissionDeniedModal } from '../AdminProductModal'
 import {
   Form,
   Input,
@@ -49,6 +50,8 @@ export default function DetailDescForm({ product }) {
   const { name, shortDesc, longDesc } = product
   const [descData, setDescData] = useState({ name, shortDesc, longDesc })
   const { isSuperAdmin } = useContext(AdminContext)
+  const { isModalOpen, setIsModalOpen, handleModalClose } =
+    useContext(ModalContext)
   const [errorMsgForName, setErrorMsgForName] = useState('')
   const [errorMsgForShort, setErrorMsgForShort] = useState('')
   const [errorMsgForLong, setErrorMsgForLong] = useState('')
@@ -115,11 +118,15 @@ export default function DetailDescForm({ product }) {
     [history]
   )
 
-  const handleEditClick = useCallback((e) => {
-    e.preventDefault()
-    setIsDisabled((isDisabled) => !isDisabled)
-    setButtonStatus((buttonStatus) => 'save')
-  }, [])
+  const handleEditClick = useCallback(
+    (e) => {
+      e.preventDefault()
+      if (!isSuperAdmin) return setIsModalOpen(true)
+      setIsDisabled((isDisabled) => !isDisabled)
+      setButtonStatus((buttonStatus) => 'save')
+    },
+    [isSuperAdmin, setIsModalOpen]
+  )
 
   const handleSaveClick = useCallback(
     (e) => {
@@ -143,6 +150,7 @@ export default function DetailDescForm({ product }) {
   )
   return (
     <DescForm>
+      <PermissionDeniedModal open={isModalOpen} onClose={handleModalClose} />
       <FormTitleComponent title={'商品名稱敘述'} />
       <ComponentDiv>
         <InputTitle>
@@ -189,7 +197,6 @@ export default function DetailDescForm({ product }) {
         onLeaveClick={handleLeaveClick}
         onEditClick={handleEditClick}
         onSaveClick={handleSaveClick}
-        isSuperAdmin={isSuperAdmin}
       />
     </DescForm>
   )

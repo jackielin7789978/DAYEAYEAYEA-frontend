@@ -190,10 +190,10 @@ export default function AdminProducts() {
           )}
         </SearchSideContainer>
       </SearchContainer>
-      {products.length > 0 ? (
-        <Table products={showProductsByPage} />
-      ) : (
+      {keywords && products.length === 0 ? (
         <SearchResultDiv>{`您搜尋的關鍵字「${keywordString}」，沒有找到符合的商品`}</SearchResultDiv>
+      ) : (
+        <Table products={showProductsByPage} />
       )}
       <PaginatorDiv>
         {pagesArray &&

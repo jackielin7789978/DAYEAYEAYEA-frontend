@@ -7,7 +7,8 @@ import { FONT_SIZE, ADMIN_COLOR } from '../../../../constants/style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { changeProductInfoById } from '../../../../webAPI/adminProductsAPI'
-import { AdminContext } from '../../../../context'
+import { AdminContext, ModalContext } from '../../../../context'
+import { PermissionDeniedModal } from '../AdminProductModal'
 import {
   Form,
   Input,
@@ -303,6 +304,8 @@ export default function DetailImgForm({ product }) {
   const { id } = useParams()
   const { Product_imgs } = product
   const { isSuperAdmin } = useContext(AdminContext)
+  const { isModalOpen, setIsModalOpen, handleModalClose } =
+    useContext(ModalContext)
   const [productImgUrlOne, setProductImgUrlOne] = useState({})
   const [productImgUrlOTwo, setProductImgUrlTwo] = useState({})
   const [productImgUrlThree, setProductImgUrlThree] = useState({})
@@ -342,6 +345,7 @@ export default function DetailImgForm({ product }) {
   const handleSaveClick = useCallback(
     (e) => {
       e.preventDefault()
+      if (!isSuperAdmin) return setIsModalOpen(true)
       const allCheck = checkInputIsValid(isValid)
       if (!allCheck) {
         if (!validCheck) return
@@ -364,12 +368,15 @@ export default function DetailImgForm({ product }) {
       productImgUrlOTwo,
       productImgUrlThree,
       id,
-      validCheck
+      validCheck,
+      isSuperAdmin,
+      setIsModalOpen
     ]
   )
 
   return (
     <ImgForm>
+      <PermissionDeniedModal open={isModalOpen} onClose={handleModalClose} />
       <FormTitleComponent title='商品圖片網址' />
       <FormContentContainer>
         <ImgInputSet
@@ -400,7 +407,6 @@ export default function DetailImgForm({ product }) {
         onSaveClick={handleSaveClick}
         onLeaveClick={handleLeaveClick}
         isChecked={validCheck}
-        isSuperAdmin={isSuperAdmin}
       />
     </ImgForm>
   )
