@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
-import { COLOR, FONT } from './style'
+import { COLOR, FONT, MEDIA_QUERY } from './style'
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -17,7 +17,13 @@ const GlobalStyle = createGlobalStyle`
     flex-direction: column;
   }
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 0px;
+    ${MEDIA_QUERY.tablet} {
+      width: 10px;
+    }
+    ${MEDIA_QUERY.desktop} {
+      width: 10px;
+    }
   }
   ::-webkit-scrollbar-track {
     -webkit-border-radius: 24px;
