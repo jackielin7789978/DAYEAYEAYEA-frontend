@@ -4,6 +4,7 @@ import { useState, useLayoutEffect, useCallback, useContext } from 'react'
 import { useParams, useLocation, useHistory, Link } from 'react-router-dom'
 import { LoadingContext, ModalContext, AdminContext } from '../../../context'
 import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
+import { ADMIN_MEDIA_QUERY } from '../../../constants/style'
 import {
   CategoryDropdown,
   Search
@@ -34,7 +35,14 @@ const SearchContainer = styled.div`
   margin: 20px auto;
   display: flex;
   justify-content: space-between;
-  width: 95%;
+  width: 90vw;
+  ${ADMIN_MEDIA_QUERY.md} {
+    width: 80vw;
+    max-width: 1200px;
+  }
+  ${ADMIN_MEDIA_QUERY.lg} {
+    max-width: 1200px;
+  }
 `
 
 const SearchSideContainer = styled.div`
@@ -83,7 +91,7 @@ export default function AdminProducts() {
   const keywordString = qs.parse(keywords, { ignoreQueryPrefix: true }).search
   const history = useHistory()
   const location = useLocation()
-  const productsPerPage = 10
+  const productsPerPage = 12
   const perPageSliceStart = (Number(page) - 1) * productsPerPage
   const perPageSliceEnd = Number(page) * productsPerPage
   let showProductsList
@@ -95,10 +103,16 @@ export default function AdminProducts() {
     deleteProductById(productId).then((result) => {
       if (!result) return
       if (result.ok === 0) return alert(result.message)
-      alert('成功刪除商品')
-      history.go(0)
+      const deletedProductsList = showProductsList.filter(
+        (product) => product.id !== productId
+      )
+      setProducts((products) => deletedProductsList)
+      if (deletedProductsList.length % productsPerPage === 0) {
+        history.push(`/admin/products/${totalPage - 1}`)
+      }
+      handleModalClose()
     })
-  }, [history, productId])
+  }, [productId, showProductsList, handleModalClose, totalPage, history])
 
   useLayoutEffect(() => {
     setIsLoading(true)
