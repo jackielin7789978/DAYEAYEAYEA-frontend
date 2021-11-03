@@ -22,7 +22,7 @@ const RestyledHoverArea = styled(HoverArea)`
   }
 `
 const ItemsContainer = styled.div`
-  max-height: ${({ $isOpen }) => ($isOpen ? '60vh' : '0px')};
+  max-height: ${({ $isOpen }) => ($isOpen ? '70vh' : '0px')};
   overflow: scroll;
   &::-webkit-scrollbar {
     width: 3px;
