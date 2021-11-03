@@ -40,7 +40,7 @@ const PageLi = styled(Li)`
     border: ${COLOR.border_light_grey};
   `}
 
-  &:hover, &.active {
+  &:hover {
     color: ${COLOR.light};
     background: ${COLOR.primary_light_hover};
     border: ${COLOR.border_light_grey};
@@ -103,9 +103,7 @@ const OrderTable = ({ pageBar, orders }) => {
         </tbody>
       </Table>
       { !orders.length && <H3>暫無訂單</H3> }
-      {
-        pageBar && <PageList currPage={currPage} arr={Array(maxPage).fill()} setCurrPage={setCurrPage} / >
-      }
+      { pageBar && <PageList currPage={currPage} arr={Array(maxPage).fill()} setCurrPage={setCurrPage} / > }
     </>
   )
 }

@@ -6,7 +6,7 @@ import Categories from './Categories'
 import Search from './Search'
 import Home from './Home'
 import Login from './Login'
-import Me from './MemberPages/Me'
+import MeTab from './MemberPages/MeTab'
 import OrderDetail from './MemberPages/OrderDetail'
 import Products from './Products'
 import NotFound from './404/404'
@@ -20,7 +20,7 @@ export {
   Search,
   Home,
   Login,
-  Me,
+  MeTab,
   OrderDetail,
   Products,
   NotFound

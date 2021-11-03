@@ -1,7 +1,8 @@
-import { useState, useEffect, useMemo, useCallback } from 'react'
-import { useHistory } from 'react-router'
+import { useContext, useState, useEffect, useMemo, useCallback } from 'react'
+import { useHistory, useParams } from 'react-router'
 import styled from 'styled-components'
 import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
+import { UserContext } from '../../../context'
 import { Tabs } from '../../../components/Tab'
 import { PageWidth } from '../../../components/general'
 import { IsLoadingComponent as Loading } from '../../../components/IsLoading'
@@ -17,7 +18,7 @@ const PageWidthHeight = styled(PageWidth)`
 const Container = styled.div`
   margin: 60px auto 0;
   width: 80%;
-  min-width: 450px;
+  min-width: 350px;
 `
 const Title = styled.div`
   font-size: ${FONT_SIZE.lg};
@@ -34,22 +35,24 @@ const Wrapper = styled.div`
   }
 `
 
-export default function Me() {
+export default function MeTab() {
+  const { user, setUser } = useContext(UserContext)
   const [isLoading, setIsLoading] = useState(false)
   const [profile, setProfile] = useState(null)
   const history = useHistory()
+  const { tab } = useParams()
   const tabIndex = useMemo(() => {
-    const path = history.location.pathname
     const urlMapping = {
-      '/member/orders': 1,
-      '/member/info': 2
+      'orders': 1,
+      'info': 2
     }
-    return urlMapping[path] || 0
-  }, [history])
+    return urlMapping[tab] || 0
+  }, [tab])
   const logout = useCallback(() => {
     localStorage.removeItem('token')
+    setUser(null)
     history.push('/')
-  }, [history])
+  }, [history, setUser])
 
   useEffect(() => {
     setIsLoading(() => true)

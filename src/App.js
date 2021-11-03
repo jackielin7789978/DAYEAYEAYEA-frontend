@@ -10,7 +10,7 @@ import {
   Search,
   Home,
   Login,
-  Me,
+  MeTab,
   OrderDetail,
   Products,
   NotFound
@@ -261,10 +261,8 @@ function MemberRoutes() {
   const { path } = useRouteMatch()
   return (
     <Switch>
-      <Route path={`${path}/me`} component={Me} />
-      <Route path={`${path}/info`} component={Me} />
-      <Route path={`${path}/orders`} component={Me} />
       <Route path={`${path}/orders/:ticket`} component={OrderDetail} />
+      <Route path={`${path}/:tab(me|info|orders)`} component={MeTab} />
     </Switch>
   )
 }

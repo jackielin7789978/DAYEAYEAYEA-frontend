@@ -66,29 +66,40 @@ const Field = styled.div`
 `
 
 const BtnField = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
     position: absolute;
     top: 16px;
-    right: 20px;
+    right: 12px;
+    width: 100px;
+    font-size: ${FONT_SIZE.md};
 
     button + button {
       margin-left: 8px;
+    }
+
+    ${MEDIA_QUERY.desktop} {
+      width: 150px;
+      font-size: ${FONT_SIZE.lg};
     }
 `
 
 const EditButton = ({ color, children, onClick }) => {
   const style = {
-    width: '120px'
+    width: '60%',
+    fontSize: '14px'
   }
   return <EditBtn color={color} buttonStyle={style} children={children} onClick={onClick} />
 }
 
 const Button = ({ type, color, children, onClick }) => {
   const style = {
-    width: '80px'
+    width: '40%',
+    fontSize: '14px'
   }
   return <GeneralBtn type={type} color={color} buttonStyle={style} children={children} onClick={onClick}/>
 }
-
 
 const Info = ({ profile }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -96,6 +107,7 @@ const Info = ({ profile }) => {
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = useCallback(async (data) => {
+    setIsEditing(() => false)
     try {
       const { fullname, adress, phone } = data
       const res = await updateMe(fullname, adress, phone)
@@ -105,8 +117,6 @@ const Info = ({ profile }) => {
     } catch (error) {
       const { message } = error.response.data
       console.log(message)
-    } finally {
-      setIsEditing(() => false)
     }
   }, [history])
 

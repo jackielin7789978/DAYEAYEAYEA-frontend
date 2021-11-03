@@ -16,7 +16,7 @@ const PageWidthHeight = styled(PageWidth)`
 const Container = styled.div`
   margin: 60px auto 0;
   width: 80%;
-  min-width: 450px;
+  min-width: 350px;
 `
 const Title = styled.div`
   font-size: ${FONT_SIZE.lg};
@@ -53,11 +53,19 @@ const Field = styled.div`
 `
 
 const ButtonGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   position: absolute;
   top: 20px;
   right: 20px;
   button + button {
     margin-left: 16px;
+    margin-top: 4px;
+  }
+
+  ${MEDIA_QUERY.desktop} {
+    flex-direction: row;
   }
 `
 
@@ -101,7 +109,7 @@ const OrderDetail = () => {
           <>
             <Info>
               <ButtonGroup>
-                <Button color={'accent'} onClick={() => history.goBack(-1)} >返回</Button>
+                <Button color={'accent'} onClick={() => history.push('/member/orders')} >返回</Button>
                 {
                   (data?.status === '處理中') && <Button color={'warning'} onClick={handleCancel} >取消訂單</Button>
                 }

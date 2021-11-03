@@ -25,7 +25,7 @@ const Tab = styled.div`
 // preset 預設顯示 tab
 export const Tabs = ({ tabs, tabsPanel, presetTab, changeTab }) => {
   const [activeTab, setActiveTab] = useState(presetTab)
-  useEffect(() => setActiveTab(changeTab || 0), [changeTab])
+  useEffect(() => changeTab && setActiveTab(() => changeTab), [changeTab])
 
   return (
     <>
