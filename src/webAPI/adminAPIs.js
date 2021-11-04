@@ -1,4 +1,4 @@
-import { getTokenFromLocalStorage } from '../utils'
+import { getTokenFromLocalStorage, isTokenExpired } from '../utils'
 
 const BASE_URL = 'https://api.coolizz.tw/admin'
 
@@ -24,6 +24,7 @@ export const adminLogin = async (username, password) => {
 
 export const adminCheck = async () => {
   const token = getTokenFromLocalStorage()
+  if (isTokenExpired(token)) return false
   try {
     const res = await fetch(`${BASE_URL}/me`, {
       method: 'GET',
