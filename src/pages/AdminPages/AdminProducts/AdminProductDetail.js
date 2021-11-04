@@ -18,8 +18,8 @@ export default function AdminProductDetail() {
   useEffect(() => {
     setIsLoading(true)
     getProductById(parseInt(id)).then((result) => {
-      if (!result) return
-      if (result.ok === 0) return history.push('/404')
+      if (!result) return history.push('/admin/404')
+      if (result.ok === 0) return history.push('/admin/404')
       const data = JSON.parse(JSON.stringify(result.data))
       setProductDetail(() => data)
       setIsLoading(false)

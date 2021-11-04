@@ -1,8 +1,10 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useContext } from 'react'
 import styled from 'styled-components'
 import { useHistory, useParams } from 'react-router-dom'
 import { checkInputIsValid } from '../../../../utils'
 import { changeProductInfoById } from '../../../../webAPI/adminProductsAPI'
+import { AdminContext, ModalContext } from '../../../../context'
+import { PermissionDeniedModal } from '../AdminProductModal'
 import {
   Form,
   FormTitleComponent,
@@ -288,6 +290,9 @@ function QuantityComponent({
 }
 
 export default function DetailInfoForm({ product }) {
+  const { isSuperAdmin } = useContext(AdminContext)
+  const { isModalOpen, setIsModalOpen, handleModalClose } =
+    useContext(ModalContext)
   const history = useHistory()
   const { id } = useParams()
   const { status, category, article, price, discountPrice, quantity } = product
@@ -308,11 +313,15 @@ export default function DetailInfoForm({ product }) {
     discountPrice: true,
     quantity: true
   })
-  const handleEditClick = useCallback((e) => {
-    e.preventDefault()
-    setIsDisabled((isDisabled) => !isDisabled)
-    setButtonStatus((buttonStatus) => 'save')
-  }, [])
+  const handleEditClick = useCallback(
+    (e) => {
+      e.preventDefault()
+      if (!isSuperAdmin) return setIsModalOpen(true)
+      setIsDisabled((isDisabled) => !isDisabled)
+      setButtonStatus((buttonStatus) => 'save')
+    },
+    [isSuperAdmin, setIsModalOpen]
+  )
 
   const handleLeaveClick = useCallback(
     (e) => {
@@ -344,6 +353,7 @@ export default function DetailInfoForm({ product }) {
   )
   return (
     <InfoForm>
+      <PermissionDeniedModal open={isModalOpen} onClose={handleModalClose} />
       <StatusComponent
         status={InfoData.status}
         category={InfoData.category}

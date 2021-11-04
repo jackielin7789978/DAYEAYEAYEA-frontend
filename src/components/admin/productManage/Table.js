@@ -18,7 +18,7 @@ import {
 } from '../TableStyle'
 
 const TableWrapper = styled(Wrapper)`
-  width: 95%;
+  width: 100%;
 `
 
 const NameHeader = styled(Header)`
@@ -132,7 +132,6 @@ function TableItem({ product }) {
   const handleOnDeleteClick = useCallback(
     (e) => {
       e.preventDefault()
-      window.document.body.style.overflow = 'hidden'
       const targetId = Number(e.target.id)
       setIsModalOpen(true)
       setProductId(targetId)

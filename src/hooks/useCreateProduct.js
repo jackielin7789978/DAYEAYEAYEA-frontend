@@ -1,6 +1,9 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useHistory } from 'react-router-dom'
-import { createNewProduct } from '../webAPI/adminProductsAPI'
+import {
+  createNewProduct,
+  getAllProductsByPage
+} from '../webAPI/adminProductsAPI'
 import {
   addNewProductToLocalStorage,
   getNewProductFromLocalStorage,
@@ -9,18 +12,21 @@ import {
 
 export default function useCreateProduct() {
   let history = useHistory()
-  const initProductState = {
-    status: 'on',
-    category: 'home',
-    article: 'fragrance',
-    name: '',
-    longDesc: '',
-    shortDesc: '',
-    quantity: '',
-    price: '',
-    discountPrice: '',
-    imgsData: [{}, {}, {}]
-  }
+  const initProductState = useMemo(() => {
+    return {
+      status: 'on',
+      category: 'home',
+      article: 'fragrance',
+      name: '',
+      longDesc: '',
+      shortDesc: '',
+      quantity: '',
+      price: '',
+      discountPrice: '',
+      imgsData: [{}, {}, {}]
+    }
+  }, [])
+
   const [isChecked, setIsChecked] = useState({
     name: false,
     price: false,
@@ -52,6 +58,7 @@ export default function useCreateProduct() {
     },
     [history]
   )
+
   const handleSaveClick = useCallback(
     (e) => {
       e.preventDefault()
@@ -69,12 +76,15 @@ export default function useCreateProduct() {
           if (!result) return
           if (result.ok === 0) return alert(result.message)
           removeNewProductFromLocalStorage()
-          alert('成功新增商品')
-          window.location.reload(false)
+          getAllProductsByPage(1).then((result) => {
+            if (!result || result.ok !== 1)
+              return history.push('/admin/products/1')
+            history.push(`/admin/products/${result.totalPage}`)
+          })
         })
       }
     },
-    [productDetail, isChecked]
+    [productDetail, isChecked, history]
   )
 
   return {

@@ -1,9 +1,11 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useContext } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { ADMIN_COLOR, COLOR } from '../../../../constants/style'
 import { changeProductInfoById } from '../../../../webAPI/adminProductsAPI'
 import { checkInputIsValid } from '../../../../utils'
+import { AdminContext, ModalContext } from '../../../../context'
+import { PermissionDeniedModal } from '../AdminProductModal'
 import {
   Form,
   Input,
@@ -47,6 +49,9 @@ export default function DetailDescForm({ product }) {
   const { id } = useParams()
   const { name, shortDesc, longDesc } = product
   const [descData, setDescData] = useState({ name, shortDesc, longDesc })
+  const { isSuperAdmin } = useContext(AdminContext)
+  const { isModalOpen, setIsModalOpen, handleModalClose } =
+    useContext(ModalContext)
   const [errorMsgForName, setErrorMsgForName] = useState('')
   const [errorMsgForShort, setErrorMsgForShort] = useState('')
   const [errorMsgForLong, setErrorMsgForLong] = useState('')
@@ -78,31 +83,45 @@ export default function DetailDescForm({ product }) {
       const targetValue = e.target.value.trim(' ')
       const errMsg = '此欄位不得為空'
       if (targetName === 'name') {
-        targetValue ? setErrorMsgForName('') : setErrorMsgForName(errMsg)
-        targetValue.length > 30
-          ? setErrorMsgForName('此欄位不得超過中英文 30 個字')
-          : setErrorMsgForName('')
-        errorMsgForName
-          ? setIsValid({ ...isValid, [e.target.name]: false })
-          : setIsValid({ ...isValid, [e.target.name]: true })
+        if (!targetValue) {
+          setErrorMsgForName(errMsg)
+          return setIsValid({ ...isValid, [e.target.name]: false })
+        }
+        if (targetValue.length > 30) {
+          setErrorMsgForName('此欄位不得超過中英文 30 個字')
+          return setIsValid({ ...isValid, [e.target.name]: false })
+        }
+
+        if (targetValue && targetValue.length <= 30) {
+          setErrorMsgForName('')
+          setIsValid({ ...isValid, [e.target.name]: true })
+        }
       }
       if (targetName === 'shortDesc') {
-        targetValue ? setErrorMsgForShort('') : setErrorMsgForShort(errMsg)
-        targetValue.length > 200
-          ? setErrorMsgForName('此欄位不得超過中英文 200 個字')
-          : setErrorMsgForName('')
-        errorMsgForShort
-          ? setIsValid({ ...isValid, [e.target.name]: false })
-          : setIsValid({ ...isValid, [e.target.name]: true })
+        if (!targetValue) {
+          setErrorMsgForShort(errMsg)
+          return setIsValid({ ...isValid, [e.target.name]: false })
+        }
+        if (targetValue.length > 200) {
+          setErrorMsgForShort('此欄位不得超過中英文 200 個字')
+          return setIsValid({ ...isValid, [e.target.name]: false })
+        }
+        if (targetValue && targetValue.length <= 200) {
+          setErrorMsgForShort('')
+          setIsValid({ ...isValid, [e.target.name]: true })
+        }
       }
       if (targetName === 'longDesc') {
-        targetValue ? setErrorMsgForLong('') : setErrorMsgForLong(errMsg)
-        errorMsgForLong
-          ? setIsValid({ ...isValid, [e.target.name]: false })
-          : setIsValid({ ...isValid, [e.target.name]: true })
+        if (!targetValue) {
+          setErrorMsgForLong(errMsg)
+          setIsValid({ ...isValid, [e.target.name]: false })
+        } else {
+          setErrorMsgForLong('')
+          setIsValid({ ...isValid, [e.target.name]: true })
+        }
       }
     },
-    [errorMsgForName, errorMsgForShort, errorMsgForLong, isValid]
+    [isValid]
   )
 
   const handleLeaveClick = useCallback(
@@ -113,11 +132,15 @@ export default function DetailDescForm({ product }) {
     [history]
   )
 
-  const handleEditClick = useCallback((e) => {
-    e.preventDefault()
-    setIsDisabled((isDisabled) => !isDisabled)
-    setButtonStatus((buttonStatus) => 'save')
-  }, [])
+  const handleEditClick = useCallback(
+    (e) => {
+      e.preventDefault()
+      if (!isSuperAdmin) return setIsModalOpen(true)
+      setIsDisabled((isDisabled) => !isDisabled)
+      setButtonStatus((buttonStatus) => 'save')
+    },
+    [isSuperAdmin, setIsModalOpen]
+  )
 
   const handleSaveClick = useCallback(
     (e) => {
@@ -141,6 +164,7 @@ export default function DetailDescForm({ product }) {
   )
   return (
     <DescForm>
+      <PermissionDeniedModal open={isModalOpen} onClose={handleModalClose} />
       <FormTitleComponent title={'商品名稱敘述'} />
       <ComponentDiv>
         <InputTitle>
@@ -183,7 +207,6 @@ export default function DetailDescForm({ product }) {
       </ComponentDiv>
       <ButtonGroup
         status={buttonStatus}
-        validCheck={validCheck}
         onLeaveClick={handleLeaveClick}
         onEditClick={handleEditClick}
         onSaveClick={handleSaveClick}
