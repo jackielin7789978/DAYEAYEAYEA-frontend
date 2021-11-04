@@ -69,11 +69,11 @@ const ButtonDiv = styled.div`
   width: 15%;
   margin: 0px 8px;
 `
-function ButtonForImgForm({ onLeaveClick, onSaveClick, isChecked }) {
+function ButtonForImgForm({ onLeaveClick, onSaveClick }) {
   return (
     <ButtonContainer>
       <ButtonDiv onClick={onSaveClick}>
-        <SaveBtn color={isChecked ? 'admin_blue' : ''}>儲存</SaveBtn>
+        <SaveBtn color='admin_blue'>儲存</SaveBtn>
       </ButtonDiv>
       <ButtonDiv onClick={onLeaveClick}>
         <LogoutBtn color='admin_blue'>離開</LogoutBtn>
@@ -82,13 +82,7 @@ function ButtonForImgForm({ onLeaveClick, onSaveClick, isChecked }) {
   )
 }
 
-function ButtonGroup({
-  status,
-  onEditClick,
-  onSaveClick,
-  onLeaveClick,
-  validCheck
-}) {
+function ButtonGroup({ status, onEditClick, onSaveClick, onLeaveClick }) {
   return (
     <ButtonContainer>
       {status === 'edit' ? (
@@ -97,7 +91,7 @@ function ButtonGroup({
         </ButtonDiv>
       ) : (
         <ButtonDiv onClick={onSaveClick}>
-          <SaveBtn color={validCheck ? 'admin_blue' : ''}>儲存</SaveBtn>
+          <SaveBtn color='admin_blue'>儲存</SaveBtn>
         </ButtonDiv>
       )}
       <ButtonDiv onClick={onLeaveClick}>
