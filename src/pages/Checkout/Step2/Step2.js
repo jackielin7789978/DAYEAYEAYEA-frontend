@@ -1,10 +1,4 @@
-import {
-  useContext,
-  useState,
-  useEffect,
-  useMemo,
-  useLayoutEffect
-} from 'react'
+import { useContext, useState, useEffect, useMemo, useCallback } from 'react'
 import { useHistory } from 'react-router'
 import { PageWidth } from '../../../components/general'
 import { ErrorMsg } from '../../../components/loginSystem/loginCard'
@@ -37,32 +31,25 @@ export default function Step2() {
   const { errMsg } = useState()
   const location = useHistory()
 
-  const [userCity, setuserCity] = useState()
-  const [userDistrict, setUserDistrict] = useState()
   const [userStreet, setUserStreet] = useState()
 
-  const { city, district, zipCode, handleCityChange, handleDistrictChange } =
+  const { city, zipCode, handleCityChange, handleDistrictChange } =
     useTwZipCode()
 
+  const newCity = useMemo(() => {
+    return cities.filter((item) => user?.address.includes(item))[0]
+  }, [user])
+
+  const newDistricts = useMemo(() => {
+    if (!newCity) return ''
+    return districts[newCity].filter((district) =>
+      user.address.includes(district)
+    )[0]
+  }, [user, newCity])
+
   useEffect(() => {
-    user &&
-      setuserCity(cities.filter((city) => user?.address.includes(city))[0])
-    userCity &&
-      setUserDistrict(
-        districts[userCity].filter((district) =>
-          user.address.includes(district)
-        )[0]
-      )
-    userDistrict &&
-      setUserStreet(user?.address.replace(userCity + userDistrict, ''))
-  }, [
-    city,
-    handleCityChange,
-    handleDistrictChange,
-    user,
-    userCity,
-    userDistrict
-  ])
+    setUserStreet(user?.address.replace(newCity + newDistricts, ''))
+  }, [user, newCity, newDistricts])
 
   useEffect(() => {
     if (!cartItems?.length) location.push('/')
@@ -73,24 +60,37 @@ export default function Step2() {
     handleSubmit,
     setValue
   } = useForm()
-  const handleChecked = (e) => {
-    user?.address && handleCityChange(userCity)
-    userCity && handleDistrictChange(userDistrict)
-    if (e.target.checked) {
-      setValue('orderEmail', user.email)
-      setValue('city', userCity)
-      console.log(userDistrict)
-      setValue('district', userDistrict)
-      setValue('street', userStreet)
-      setValue('orderName', user.fullname)
-      setValue('orderPhone', user.phone)
-    } else {
-      setValue('orderEmail', '')
-      setValue('street', '')
-      setValue('orderName', '')
-      setValue('orderPhone', '')
-    }
-  }
+
+  const handleChecked = useCallback(
+    async (e) => {
+      if (e.target.checked) {
+        await handleCityChange(newCity)
+        await handleDistrictChange(newDistricts)
+        setTimeout(() => {
+          setValue('district', newDistricts)
+        }, 0)
+        setValue('orderEmail', user.email)
+        setValue('city', newCity)
+        setValue('street', userStreet)
+        setValue('orderName', user.fullname)
+        setValue('orderPhone', user.phone)
+      } else {
+        setValue('orderEmail', '')
+        setValue('street', '')
+        setValue('orderName', '')
+        setValue('orderPhone', '')
+      }
+    },
+    [
+      handleCityChange,
+      handleDistrictChange,
+      newCity,
+      newDistricts,
+      user,
+      userStreet,
+      setValue
+    ]
+  )
   const subTotal = useMemo(() => {
     if (!cartItems?.length) return
     return (
@@ -101,28 +101,27 @@ export default function Step2() {
   }, [cartItems])
   const onSubmit = async (submitData) => {
     const address = `${zipCode}${submitData.city}${submitData.district}${submitData.street}`
-    console.log(address)
-    // const orderItem = cartItems.map((item) => ({
-    //   productId: item.id,
-    //   quantity: item.quantity
-    // }))
-    // const result = await createOrder(
-    //   address,
-    //   submitData.orderEmail,
-    //   submitData.orderName,
-    //   submitData.orderPhone,
-    //   submitData.payment,
-    //   submitData.shipping,
-    //   orderItem,
-    //   subTotal,
-    //   0 //isDelete
-    // )
-    // if (result.ok === 0) {
-    //   console.log(result.message)
-    // }
-    // localStorage.removeItem('cartItemsList')
-    // location.push(`/checkout/step3/${result.ticketNo}`)
-    // setCartItems([])
+    const orderItem = cartItems.map((item) => ({
+      productId: item.id,
+      quantity: item.quantity
+    }))
+    const result = await createOrder(
+      address,
+      submitData.orderEmail,
+      submitData.orderName,
+      submitData.orderPhone,
+      submitData.payment,
+      submitData.shipping,
+      orderItem,
+      subTotal,
+      0 //isDelete
+    )
+    if (result.ok === 0) {
+      console.log(result.message)
+    }
+    localStorage.removeItem('cartItemsList')
+    location.push(`/checkout/step3/${result.ticketNo}`)
+    setCartItems([])
   }
   return (
     <PageWidth>
