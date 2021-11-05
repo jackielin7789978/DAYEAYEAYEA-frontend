@@ -50,7 +50,7 @@ const ThumbnailContainer = styled.div`
   }
 `
 
-const ThumbnailImgDiv = styled.img`
+const ThumbnailImgDiv = styled.div`
   width: 30%;
   height: 100% !important;
   background-size: cover;
