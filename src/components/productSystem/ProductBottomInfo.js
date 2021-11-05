@@ -42,7 +42,7 @@ const TitleBorder = styled.div`
   }
 `
 
-const LongDescContent = styled.div`
+const LongDescSingleContent = styled.div`
   margin: 20px auto;
   width: 85%;
   text-align: center;
@@ -50,11 +50,21 @@ const LongDescContent = styled.div`
   line-height: 1.5em;
   ${MEDIA_QUERY.tablet} {
     line-height: 2em;
-    text-align: left;
   }
   ${MEDIA_QUERY.desktop} {
     line-height: 2em;
-    text-align: left;
+  }
+`
+
+const LongDescMultiContent = styled.div`
+  display: inline-block;
+  text-align: left;
+  line-height: 1.5em;
+  ${MEDIA_QUERY.tablet} {
+    line-height: 2em;
+  }
+  ${MEDIA_QUERY.desktop} {
+    line-height: 2em;
   }
 `
 export function ProductBottomInfoComponent({ longDesc }) {
@@ -64,7 +74,9 @@ export function ProductBottomInfoComponent({ longDesc }) {
         商品敘述
         <TitleBorder />
       </Title>
-      <LongDescContent>{longDesc}</LongDescContent>
+      <LongDescSingleContent>
+        <LongDescMultiContent>{longDesc}</LongDescMultiContent>
+      </LongDescSingleContent>
     </ProductBottomContainer>
   )
 }

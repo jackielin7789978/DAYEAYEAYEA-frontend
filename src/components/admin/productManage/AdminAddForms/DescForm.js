@@ -67,36 +67,42 @@ export default function DetailDescForm({
       const targetName = e.target.name
       const targetValue = e.target.value.trim(' ')
       const errMsg = '此欄位不得為空'
-      const checkValid = (targetValue, setErrorMsg, errMsg, targetName) => {
+      if (targetName === 'name') {
         if (!targetValue) {
-          setErrorMsg(errMsg)
+          setErrorMsgForName(errMsg)
           return setIsChecked(setDescDataIsValid(targetName, false))
         }
-        setErrorMsg('')
-        setIsChecked(setDescDataIsValid(targetName, true))
-      }
-      if (targetName === 'name') {
-        checkValid(targetValue, setErrorMsgForName, errMsg, targetName)
         if (targetValue.length > 30) {
           setErrorMsgForName('此欄位不得超過中英文 30 個字')
-          setIsChecked(setDescDataIsValid(targetName, false))
-        } else {
+          return setIsChecked(setDescDataIsValid(targetName, false))
+        }
+        if (targetValue && targetValue.length <= 30) {
           setErrorMsgForName('')
           setIsChecked(setDescDataIsValid(targetName, true))
         }
       }
       if (targetName === 'shortDesc') {
-        checkValid(targetValue, setErrorMsgForShort, errMsg, targetName)
+        if (!targetValue) {
+          setErrorMsgForShort(errMsg)
+          return setIsChecked(setDescDataIsValid(targetName, false))
+        }
         if (targetValue.length > 200) {
           setErrorMsgForShort('此欄位不得超過中英文 200 個字')
           setIsChecked(setDescDataIsValid(targetName, false))
-        } else {
+        }
+        if (targetValue && targetValue.length <= 30) {
           setErrorMsgForShort('')
           setIsChecked(setDescDataIsValid(targetName, true))
         }
       }
       if (targetName === 'longDesc') {
-        return checkValid(targetValue, setErrorMsgForLong, errMsg, targetName)
+        if (!targetValue) {
+          setErrorMsgForLong(errMsg)
+          setIsChecked(setDescDataIsValid(targetName, false))
+        } else {
+          setErrorMsgForLong('')
+          setIsChecked(setDescDataIsValid(targetName, true))
+        }
       }
     },
     [setIsChecked, setDescDataIsValid]

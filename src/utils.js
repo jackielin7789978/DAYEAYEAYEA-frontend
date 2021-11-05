@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import decode from 'jwt-decode'
 
 const CARTTITLE_NAME = 'cartItemsList'
 const TOKEN = 'token'
@@ -74,7 +75,7 @@ export const setSearchPageInArray = (totalNum) => {
 }
 
 export const setAdminProductsPageInArray = (totalNum) => {
-  const productsAmountPerPage = 10
+  const productsAmountPerPage = 12
   const totalPage = Math.ceil(totalNum / productsAmountPerPage)
   const pagesArray = []
   for (let i = 1; i <= totalPage; i++) {
@@ -115,4 +116,16 @@ export const checkInputIsValid = (isValid) => {
 export const calTotalPages = (totalItems) => {
   if (totalItems % 10) return Math.floor(totalItems / 10) + 1
   return totalItems / 10
+}
+
+export const isTokenExpired = (token) => {
+  try {
+    const _info = decode(token);
+    if (_info.exp < Date.now() / 1000) {
+      return true;
+    } else return false;
+  } catch (error) {
+    console.log(error)
+    return false;
+  }
 }

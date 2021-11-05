@@ -18,6 +18,23 @@ export const getAllProducts = async () => {
   }
 }
 
+export const getAllProductsByPage = async (page) => {
+  const token = getTokenFromLocalStorage()
+  let res
+  try {
+    res = await fetch(`${BASE_URL}/products/page/${page}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    })
+    return await res.json()
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 export const changeProductStatus = async (id, newStatus) => {
   const token = getTokenFromLocalStorage()
   let res

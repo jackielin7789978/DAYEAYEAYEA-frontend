@@ -1,8 +1,10 @@
 import styled from 'styled-components'
+import qs from 'qs'
 import { useState, useLayoutEffect, useCallback, useContext } from 'react'
 import { useParams, useLocation, useHistory, Link } from 'react-router-dom'
-import { LoadingContext, ModalContext } from '../../../context'
+import { LoadingContext, ModalContext, AdminContext } from '../../../context'
 import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
+import { ADMIN_MEDIA_QUERY } from '../../../constants/style'
 import {
   CategoryDropdown,
   Search
@@ -16,7 +18,10 @@ import {
   deleteProductById
 } from '../../../webAPI/adminProductsAPI'
 import { setAdminProductsPageInArray } from '../../../utils'
-import { FullModal } from '../../../components/Modal'
+import {
+  AdminDeleteModal,
+  PermissionDeniedModal
+} from '../../../components/admin/productManage/AdminProductModal'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -30,7 +35,14 @@ const SearchContainer = styled.div`
   margin: 20px auto;
   display: flex;
   justify-content: space-between;
-  width: 95%;
+  width: 90vw;
+  ${ADMIN_MEDIA_QUERY.md} {
+    width: 80vw;
+    max-width: 1200px;
+  }
+  ${ADMIN_MEDIA_QUERY.lg} {
+    max-width: 1200px;
+  }
 `
 
 const SearchSideContainer = styled.div`
@@ -38,6 +50,13 @@ const SearchSideContainer = styled.div`
 `
 const PaginatorDiv = styled.div`
   margin: 10px auto;
+`
+
+const SearchResultDiv = styled.div`
+  display: flex;
+  height: 300px;
+  align-items: center;
+  justify-content: center;
 `
 
 function CancelButton({ onCancelClick }) {
@@ -64,26 +83,36 @@ export default function AdminProducts() {
   const [products, setProducts] = useState([])
   const [categoryFilter, setCategoryFilter] = useState('all')
   const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, handleModalClose, productId } = useContext(ModalContext)
+  const { isModalOpen, setIsModalOpen, handleModalClose, productId } =
+    useContext(ModalContext)
+  const { isSuperAdmin } = useContext(AdminContext)
   const { page } = useParams()
-  const keywords = useLocation().search
+  const keywords = useLocation().search.trim(' ')
+  const keywordString = qs.parse(keywords, { ignoreQueryPrefix: true }).search
   const history = useHistory()
   const location = useLocation()
-  const productsPerPage = 10
+  const productsPerPage = 12
   const perPageSliceStart = (Number(page) - 1) * productsPerPage
   const perPageSliceEnd = Number(page) * productsPerPage
   let showProductsList
   let pagesArray
+  let totalPage
   let showProductsByPage
 
   const handleDelete = useCallback(() => {
     deleteProductById(productId).then((result) => {
       if (!result) return
       if (result.ok === 0) return alert(result.message)
-      alert('成功刪除商品')
-      history.go(0)
+      const deletedProductsList = showProductsList.filter(
+        (product) => product.id !== productId
+      )
+      setProducts((products) => deletedProductsList)
+      if (deletedProductsList.length % productsPerPage === 0) {
+        history.push(`/admin/products/${totalPage - 1}`)
+      }
+      handleModalClose()
     })
-  }, [history, productId])
+  }, [productId, showProductsList, handleModalClose, totalPage, history])
 
   useLayoutEffect(() => {
     setIsLoading(true)
@@ -91,7 +120,7 @@ export default function AdminProducts() {
       searchProductsFromAdmin(keywords).then((result) => {
         if (!result) return setIsLoading((isLoading) => true)
         if (result.ok === 0) {
-          return
+          return history.push('/admin/404')
         }
         setIsLoading(false)
         setProducts(result.data)
@@ -101,7 +130,7 @@ export default function AdminProducts() {
       getAllProducts().then((result) => {
         if (!result) return setIsLoading((isLoading) => true)
         if (result.ok === 0) {
-          return
+          return history.push('/admin/404')
         }
         setIsLoading(false)
         setProducts(result.data)
@@ -114,11 +143,20 @@ export default function AdminProducts() {
       categoryFilter === 'all' ? product : product.category === categoryFilter
     )
     pagesArray = setAdminProductsPageInArray(showProductsList.length).pagesArray
+    totalPage = setAdminProductsPageInArray(showProductsList.length).totalPage
     showProductsByPage = showProductsList.slice(
       perPageSliceStart,
       perPageSliceEnd
     )
   }
+
+  if (totalPage) {
+    parseInt(page) > totalPage && history.push('/admin/404')
+  }
+
+  const handelOnClick = useCallback(() => {
+    setIsModalOpen(true)
+  }, [setIsModalOpen])
 
   const handleDropDownChange = useCallback(
     (e) => {
@@ -135,25 +173,42 @@ export default function AdminProducts() {
   return (
     <PageWrapper>
       {isLoading && <AdminIsLoadingComponent />}
-      <FullModal
-        open={isModalOpen}
-        content='確定要刪除嗎？'
-        onClose={handleModalClose}
-        buttonOne={<DeleteButton onDeleteClick={handleDelete} />}
-        buttonTwo={<CancelButton onCancelClick={handleModalClose} />}
-      />
+      {isSuperAdmin ? (
+        <AdminDeleteModal
+          open={isModalOpen}
+          onClose={handleModalClose}
+          buttonOne={<DeleteButton onDeleteClick={handleDelete} />}
+          buttonTwo={<CancelButton onCancelClick={handleModalClose} />}
+        />
+      ) : (
+        <PermissionDeniedModal open={isModalOpen} onClose={handleModalClose} />
+      )}
       <SearchContainer>
         <SearchSideContainer>
           <Search />
           <CategoryDropdown onChange={handleDropDownChange} />
         </SearchSideContainer>
         <SearchSideContainer>
-          <Link style={{ width: '100px' }} to={'/admin/products/add'}>
-            <GeneralBtn color='admin_blue'>新增商品</GeneralBtn>
-          </Link>
+          {isSuperAdmin ? (
+            <Link style={{ width: '100px' }} to={'/admin/products/add'}>
+              <GeneralBtn color='admin_blue'>新增商品</GeneralBtn>
+            </Link>
+          ) : (
+            <GeneralBtn
+              buttonStyle={{ width: '100px' }}
+              color='admin_blue'
+              onClick={handelOnClick}
+            >
+              新增商品
+            </GeneralBtn>
+          )}
         </SearchSideContainer>
       </SearchContainer>
-      <Table products={showProductsByPage} />
+      {keywords && products.length === 0 ? (
+        <SearchResultDiv>{`您搜尋的關鍵字「${keywordString}」，沒有找到符合的商品`}</SearchResultDiv>
+      ) : (
+        <Table products={showProductsByPage} />
+      )}
       <PaginatorDiv>
         {pagesArray &&
           pagesArray.map((pageValue) => {
