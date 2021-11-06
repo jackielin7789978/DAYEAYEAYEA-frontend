@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react'
-import { useHistory } from 'react-router'
 import styled from 'styled-components'
 import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import { GeneralBtn, EditBtn } from '../../../components/Button'
@@ -103,22 +102,21 @@ const Button = ({ type, color, children, onClick }) => {
 
 const Info = ({ profile }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const history = useHistory()
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = useCallback(async (data) => {
     setIsEditing(() => false)
     try {
-      const { fullname, adress, phone } = data
-      const res = await updateMe(fullname, adress, phone)
-      if (res.ok) {
-        history.location.pathname === '/member/info' ? history.go(0) : history.push('/member/info')
-      }
+      const { fullname, address, phone } = data
+      profile.fullname = fullname.trim()
+      profile.address = address.trim()
+      profile.phone = phone
+      await updateMe(fullname.trim(), address.trim(), phone)
     } catch (error) {
       const { message } = error.response.data
       console.log(message)
     }
-  }, [history])
+  }, [profile])
 
   return (
     <Container>
