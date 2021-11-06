@@ -129,7 +129,7 @@ const Navbar = ({ handleLogout }) => {
         <Avatar to='/'>
           <img src='https://i.imgur.com/jPZXt9T.png' alt='' />
         </Avatar>
-        <Nav exact to='/admin/members'>
+        <Nav to='/admin/members'>
           <FontAwesomeIcon icon={faUserFriends} />
           <span>會員管理</span>
         </Nav>
@@ -137,7 +137,7 @@ const Navbar = ({ handleLogout }) => {
           <FontAwesomeIcon icon={faShoppingCart} />
           <span>訂單管理</span>
         </Nav>
-        <Nav to='/admin/products/1'>
+        <Nav to='/admin/products'>
           <FontAwesomeIcon icon={faEye} />
           <span>商品管理</span>
         </Nav>
