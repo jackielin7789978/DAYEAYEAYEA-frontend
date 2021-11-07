@@ -127,7 +127,11 @@ function Shop() {
 
   const [user, setUser] = useState()
   useEffect(() => {
-    if (!getTokenFromLocalStorage() || isTokenExpired(getTokenFromLocalStorage())) return false
+    if (
+      !getTokenFromLocalStorage() ||
+      isTokenExpired(getTokenFromLocalStorage())
+    )
+      return false
     try {
       const _info = jwt_decode(getTokenFromLocalStorage())
       if (_info.hasOwnProperty('id')) return setUser(_info)
