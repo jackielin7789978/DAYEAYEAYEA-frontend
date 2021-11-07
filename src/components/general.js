@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
 import { MEDIA_QUERY } from '../constants/style'
 
 // 撐頁面高度用，已加在 Route 外面
@@ -30,14 +29,4 @@ export const AdminPageWidth = styled.div``
 export const FullWidth = styled.div`
   width: 100%;
   text-align: center;
-`
-
-// 可包在圖片裡的連結 component，height 需視圖片高度另外加上去
-export const ImgAnchor = styled(Link)`
-  display: inline-block;
-  width: 100%;
-  color: transparent;
-  &:hover {
-    color: transparent;
-  }
 `
