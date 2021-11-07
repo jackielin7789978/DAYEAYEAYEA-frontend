@@ -22,11 +22,11 @@ const PageWrapper = styled.div`
   width: 75vw;
   font-size: ${FONT_SIZE.sm};
   ${ADMIN_MEDIA_QUERY.md} {
-    max-width: 1280px;
+    max-width: 1680px;
     font-size: ${FONT_SIZE.md};
   }
   ${ADMIN_MEDIA_QUERY.lg} {
-    max-width: 1280px;
+    max-width: 1680px;
     font-size: ${FONT_SIZE.md};
   }
 `

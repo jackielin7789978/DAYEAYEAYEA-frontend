@@ -30,13 +30,12 @@ const PageWrapper = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   margin: 60px auto;
-  width: 76vw;
+  width: 70vw;
   ${ADMIN_MEDIA_QUERY.md} {
-    width: 60vw;
-    max-width: 1180px;
+    max-width: 1480px;
   }
   ${ADMIN_MEDIA_QUERY.lg} {
-    max-width: 1180px;
+    max-width: 1480px;
   }
 `
 const Container = styled(Wrapper)`

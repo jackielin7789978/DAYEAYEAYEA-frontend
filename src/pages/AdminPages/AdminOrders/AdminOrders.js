@@ -26,11 +26,11 @@ const PageWrapper = styled.div`
   width: 75vw;
   font-size: ${FONT_SIZE.sm};
   ${ADMIN_MEDIA_QUERY.md} {
-    max-width: 1280px;
+    max-width: 1680px;
     font-size: ${FONT_SIZE.md};
   }
   ${ADMIN_MEDIA_QUERY.lg} {
-    max-width: 1280px;
+    max-width: 1680px;
     font-size: ${FONT_SIZE.md};
   }
 `
@@ -39,13 +39,7 @@ const SearchContainer = styled.div`
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  width: 74vw;
-  ${ADMIN_MEDIA_QUERY.md} {
-    max-width: 1260px;
-  }
-  ${ADMIN_MEDIA_QUERY.lg} {
-    max-width: 1260px;
-  }
+  width: 100%;
 `
 const RestyleHeader = styled(Header)`
   width: 12%;
@@ -187,7 +181,7 @@ export default function AdminOrders() {
           {TotalPages.map((page) => (
             <PaginatorBtn
               onClick={() => setOffset(page * ORDERS_PER_PAGE)}
-              key={page}
+              key={`page-${page}`}
               $active={offset / 10 === page}
             >
               {page + 1}
