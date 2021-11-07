@@ -16,7 +16,7 @@ export default function Login() {
   const { isLoading } = useContext(LoadingContext)
   const [errMessage, setErrMessage] = useState()
   const { setUser } = useContext(UserContext)
-  const redirect = useHistory()
+  const history = useHistory()
   const location = useLocation()
   const tokenCheck = (token) => {
     addTokenToLocalStorage(token)
@@ -26,9 +26,9 @@ export default function Login() {
       }
       setUser(res.data)
       if (location.pathname === '/checkout/step2') {
-        return window.location.reload()
+        return
       }
-      redirect.push('/')
+      history.push('/')
     })
   }
   return (

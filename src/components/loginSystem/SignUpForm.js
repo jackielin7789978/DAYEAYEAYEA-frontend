@@ -59,14 +59,14 @@ export default function SignUpForm({
           placeholder='密碼，需 6 碼以上的英數混合'
           {...register('password', {
             required: true,
-            pattern: /^(?=.*[a-z])(?=.*\d)[a-z\d]{6,}$/
+            pattern: /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{6,}$/
           })}
         />
       </PasswordInput>
       <ErrorMsg>
         {errors.password?.type === 'required' && '請填寫密碼'}
         {errors.password?.type === 'pattern' &&
-          '密碼需為 6 碼以上且含數字及小寫英文'}
+          '密碼需為 6 碼以上且含數字及英文'}
       </ErrorMsg>
       <ArrowBtn
         color='accent'
