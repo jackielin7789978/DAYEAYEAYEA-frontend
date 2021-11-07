@@ -19,7 +19,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { useTwZipCode, cities, districts } from 'use-tw-zipcode'
 import { GeneralBtn } from '../../../components/Button'
-import { UserContext } from '../../../context'
+import { UserContext, OversoldContext } from '../../../context'
 import Login from '../../Login/Login'
 import { COLOR } from '../../../constants/style'
 import { LocalStorageContext } from '../../../context'
@@ -29,6 +29,7 @@ import { getTokenFromLocalStorage } from '../../../utils'
 export default function Step2() {
   const { cartItems, setCartItems } = useContext(LocalStorageContext)
   const { user, setUser } = useContext(UserContext)
+  const { setIsOversold } = useContext(OversoldContext)
   const { errMsg } = useState()
   const location = useHistory()
   const [userStreet, setUserStreet] = useState()
@@ -134,6 +135,7 @@ export default function Step2() {
     )
 
     if (result.ok === 0) {
+      setIsOversold(true)
       return location.push(`/checkout/step1`)
     }
     localStorage.removeItem('cartItemsList')

@@ -13,7 +13,7 @@ import { ItemCounter } from '../Counter'
 import { getProductById } from '../../webAPI/productsAPI'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { formatPrice } from '../../utils'
-import { ModalContext } from '../../context'
+import { ModalContext, OversoldContext } from '../../context'
 export const Cart = ({
   item,
   handleRemoveCartItem,
@@ -25,7 +25,42 @@ export const Cart = ({
   const [itemStatus, setItemStatus] = useState()
   const [warningMessage, setWarningMessage] = useState('')
   const { setIsModalOpen } = useContext(ModalContext)
+  const { isOversold } = useContext(OversoldContext)
+
+  useEffect(() => {
+    ;(async () => {
+      const result = await getProductById(item.id)
+      if (!result) return
+      setItemStatus(result.data.status)
+      setTotalQuantity(result.data.quantity)
+    })()
+    handleUpdateCount(quantity, item.id)
+  }, [quantity, handleUpdateCount, item.id])
+
+  useEffect(() => {
+    if (isOversold) {
+      if (itemStatus === 'off') {
+        setIsModalOpen(true)
+        setWarningMessage(`已下架，請移除商品`)
+      }
+      if (quantity > totalQuantity) {
+        setIsModalOpen(true)
+        setWarningMessage(`庫存不足，剩餘庫存 ${totalQuantity} 個`)
+      }
+    }
+  }, [
+    $setNotAllowed,
+    itemStatus,
+    setIsModalOpen,
+    quantity,
+    totalQuantity,
+    isOversold
+  ])
+
   const handleCount = (type) => {
+    if (isOversold && itemStatus === 'off') {
+      return
+    }
     setWarningMessage('')
     if (quantity === '') return setQuantity(1)
     if (type === 'increment') {
@@ -45,6 +80,9 @@ export const Cart = ({
   }
 
   function handleChange(e) {
+    if (isOversold && itemStatus === 'off') {
+      return
+    }
     setWarningMessage('')
     if (e.target.value > totalQuantity) {
       setWarningMessage('已達商品數量上限')
@@ -71,30 +109,6 @@ export const Cart = ({
       ? $setNotAllowed(true)
       : $setNotAllowed(false)
   }, [$setNotAllowed, quantity, warningMessage])
-
-  useEffect(() => {
-    ;(async () => {
-      const result = await getProductById(item.id)
-      if (!result) return
-      console.log(result.data)
-      setItemStatus(result.data.status)
-      setTotalQuantity(result.data.quantity)
-    })()
-    handleUpdateCount(quantity, item.id)
-  }, [quantity, handleUpdateCount, item.id])
-
-  useEffect(() => {
-    if (itemStatus === 'off') {
-      setIsModalOpen(true)
-      $setNotAllowed(true)
-      setWarningMessage(`已下架，請移除商品`)
-    }
-    if (quantity > totalQuantity) {
-      setIsModalOpen(true)
-      $setNotAllowed(true)
-      setWarningMessage(`庫存不足，剩餘數量 ${totalQuantity} 個`)
-    }
-  }, [$setNotAllowed, itemStatus, setIsModalOpen, totalQuantity])
 
   return (
     <Item key={item.id}>
