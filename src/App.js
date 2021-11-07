@@ -163,7 +163,7 @@ function Shop() {
     let storageProductItems = JSON.parse(getItemsFromLocalStorage()) || []
     let imgUrlSm
     if (imgs) {
-      imgUrlSm = imgs[length - 1].imgUrlSm
+      imgUrlSm = imgs[length - 1].imgUrlSm || imgs[0].imgUrlSm
     }
     const checkHasProducts =
       storageProductItems.length >= 1

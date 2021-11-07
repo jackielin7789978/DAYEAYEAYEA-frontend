@@ -6,7 +6,10 @@ import { LoadingContext, ModalContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
 import { PageWidth } from '../../components/general'
 import { getProductById } from '../../webAPI/productsAPI'
-import { FullModal } from '../../components/Modal'
+import {
+  AddCartModal,
+  SoldOutCartModal
+} from '../../components/productSystem/ProductModal'
 import { ProductImgsComponent } from '../../components/productSystem/ProductImg'
 import { ProductUpInfoComponent } from '../../components/productSystem/ProductUpInfo'
 import { ProductBottomInfoComponent } from '../../components/productSystem/ProductBottomInfo'
@@ -45,7 +48,8 @@ export default function Products() {
   const [product, setProduct] = useState([])
   const [productImgs, setProductImgs] = useState([])
   const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, handleModalClose } = useContext(ModalContext)
+  const { isModalOpen, handleModalClose, isProductSoldOut } =
+    useContext(ModalContext)
   const { id } = useParams()
   let history = useHistory()
 
@@ -72,11 +76,18 @@ export default function Products() {
       {isLoading && <IsLoadingComponent />}
       {!isLoading && (
         <>
-          <FullModal
-            open={isModalOpen}
-            content='已成功加入購物車 ! '
-            onClose={handleModalClose}
-          />
+          {isProductSoldOut && (
+            <AddCartModal
+              isModalOpen={isModalOpen}
+              handleModalClose={handleModalClose}
+            />
+          )}
+          {!isProductSoldOut && (
+            <SoldOutCartModal
+              isModalOpen={isModalOpen}
+              handleModalClose={handleModalClose}
+            />
+          )}
           <ProductPageDiv>
             <ProductTopContainer>
               <ProductImgsComponent imgs={productImgs} />
