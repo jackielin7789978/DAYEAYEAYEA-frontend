@@ -7,6 +7,7 @@ import { PageWidth } from '../../../components/general'
 import { getOrderOne, cancelOrder } from '../../../webAPI/orderAPI'
 import ItemTable from './ItemTable'
 import { formatPrice } from '../../../utils'
+import useModal from '../../../hooks/useModal'
 
 
 const PageWidthHeight = styled(PageWidth)`
@@ -76,8 +77,17 @@ const Button = ({ children, color, onClick }) => {
   return <GeneralBtn color={color} buttonStyle={style} children={children} onClick={onClick}/>
 }
 
+const ModalButton = ({ children, color, onClick }) => {
+  const style = {
+    fontSize: '16px',
+    width: '100px'
+  }
+  return <GeneralBtn color={color} buttonStyle={style} children={children} onClick={onClick}/>
+}
+
 const OrderDetail = () => {
   const [data, setData] = useState(null);
+  const { handleModalOpen, handleModalClose, Modal } = useModal()
   const history = useHistory()
   const { ticket } = useParams()
   const refreshOrder = useCallback(() => {
@@ -88,11 +98,12 @@ const OrderDetail = () => {
   }, [ticket])
 
   const handleCancel = useCallback(() => {
+    handleModalClose()
     cancelOrder(ticket)
       .then((res) => {
         refreshOrder()
       })
-  }, [ticket, refreshOrder])
+  }, [ticket, handleModalClose, refreshOrder])
 
   useEffect(() => {
     refreshOrder()
@@ -100,6 +111,11 @@ const OrderDetail = () => {
 
   return (
     <PageWidthHeight>
+      <Modal 
+        content={'確定取消訂單 ？ '}
+        buttonOne={<ModalButton color={'accent'} onClick={handleCancel}>確定</ModalButton>}
+        buttonTwo={<ModalButton color={'primary'} onClick={handleModalClose}>取消</ModalButton>}
+      />
       <Container>
         <Title>訂單詳情</Title>
         <Wrapper>
@@ -107,7 +123,7 @@ const OrderDetail = () => {
             <ButtonGroup>
               <Button color={'accent'} onClick={() => history.push('/member/orders')} >返回</Button>
               {
-                (data?.status === '處理中') && <Button color={'warning'} onClick={handleCancel} >取消訂單</Button>
+                (data?.status === '處理中') && <Button color={'warning'} onClick={handleModalOpen} >取消訂單</Button>
               }
             </ButtonGroup>
             <Field>

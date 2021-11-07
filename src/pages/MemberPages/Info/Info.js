@@ -2,9 +2,9 @@ import { useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import { GeneralBtn, EditBtn } from '../../../components/Button'
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form"
 import { updateMe } from '../../../webAPI/memberAPI'
-import { FullModal } from '../../../components/Modal';
+import useModal from '../../../hooks/useModal'
 
 
 const Container = styled.div`
@@ -102,19 +102,10 @@ const Button = ({ type, color, children, onClick }) => {
   return <GeneralBtn type={type} color={color} buttonStyle={style} children={children} onClick={onClick}/>
 }
 
-const SaveModal = ({ isModalOpen, handleModalClose }) => {
-  return (
-    <FullModal
-      open={isModalOpen}
-      content='已更新會員資訊 ! '
-      onClose={handleModalClose}
-    />
-  )
-}
 
 const Info = ({ profile }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const { handleModalOpen, Modal } = useModal()
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = useCallback(async (data) => {
@@ -124,20 +115,18 @@ const Info = ({ profile }) => {
       profile.fullname = fullname.trim()
       profile.address = address.trim()
       profile.phone = phone
+
       await updateMe(fullname.trim(), address.trim(), phone)
-      setIsModalOpen(true)
+      handleModalOpen()
     } catch (error) {
       const { message } = error.response.data
       console.log(message)
     }
-  }, [profile])
+  }, [profile, handleModalOpen])
 
   return (
     <Container>
-      <SaveModal
-          isModalOpen={isModalOpen}
-          handleModalClose={() => setIsModalOpen(false)}
-        />
+      <Modal content={'已更新會員資訊 ! '} />
       <InfoWrapper>
         {
           !isEditing ? (

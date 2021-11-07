@@ -35,9 +35,8 @@ const Wrapper = styled.div`
 `
 
 export default function MeTab() {
-  const { user, setUser } = useContext(UserContext)
+  const { setUser } = useContext(UserContext)
   const [profile, setProfile] = useState(null)
-  const [isModal, serIsModal] = useState(false)
   const history = useHistory()
   const { tab } = useParams()
   const tabIndex = useMemo(() => {
