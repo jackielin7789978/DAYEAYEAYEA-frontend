@@ -15,6 +15,9 @@ const Btn = styled(Link)`
     }
   }
 `
+const RestyledContainer = styled(Container)`
+  border-radius: 20px;
+`
 const RestyledCell = styled(Cell)`
   word-wrap: break-word;
   padding: 0 4px;
@@ -28,7 +31,7 @@ export default function TableItem({ member }) {
         )
       : 0
   return (
-    <Container>
+    <RestyledContainer>
       <RestyledCell style={{ width: '19%' }}>{member.username}</RestyledCell>
       <RestyledCell style={{ width: '50%' }}>{member.email}</RestyledCell>
       <RestyledCell style={{ width: '15%' }}>
@@ -42,6 +45,6 @@ export default function TableItem({ member }) {
           <GeneralBtn children={'詳情'} />
         </Btn>
       </RestyledCell>
-    </Container>
+    </RestyledContainer>
   )
 }
