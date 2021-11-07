@@ -108,6 +108,7 @@ function AdminRoutes() {
               />
               <Route path={'/admin/products/add'} component={AdminProductAdd} />
               <Route path={'/admin/products/:page'} component={AdminProducts} />
+              <Route path={'/admin/products/'} component={AdminProducts} />
               <Route path={'*'} component={AdminNotFound} />
             </Switch>
           </AdminLayout>

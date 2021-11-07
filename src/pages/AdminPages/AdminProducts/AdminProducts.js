@@ -86,7 +86,7 @@ export default function AdminProducts() {
   const { isModalOpen, setIsModalOpen, handleModalClose, productId } =
     useContext(ModalContext)
   const { isSuperAdmin } = useContext(AdminContext)
-  const { page } = useParams()
+  const { page = 1 } = useParams()
   const keywords = useLocation().search.trim(' ')
   const keywordString = qs.parse(keywords, { ignoreQueryPrefix: true }).search
   const history = useHistory()
