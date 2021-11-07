@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import {
   Item,
   ItemImg,
@@ -13,6 +13,7 @@ import { ItemCounter } from '../Counter'
 import { getProductById } from '../../webAPI/productsAPI'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { formatPrice } from '../../utils'
+import { ModalContext } from '../../context'
 export const Cart = ({
   item,
   handleRemoveCartItem,
@@ -21,16 +22,24 @@ export const Cart = ({
 }) => {
   const [quantity, setQuantity] = useState(item.quantity)
   const [totalQuantity, setTotalQuantity] = useState()
+  const [itemStatus, setItemStatus] = useState()
   const [warningMessage, setWarningMessage] = useState('')
+  const { setIsModalOpen } = useContext(ModalContext)
   const handleCount = (type) => {
     setWarningMessage('')
     if (quantity === '') return setQuantity(1)
     if (type === 'increment') {
-      return quantity >= totalQuantity
-        ? setWarningMessage('已達商品數量上限')
-        : setQuantity(quantity + 1)
+      if (quantity >= totalQuantity) {
+        setQuantity(totalQuantity)
+        return setWarningMessage('已達商品數量上限')
+      }
+      setQuantity(quantity + 1)
     } else {
       if (quantity <= 1) return setQuantity(1)
+      if (quantity > totalQuantity) {
+        setQuantity(totalQuantity)
+        return setWarningMessage('已達商品數量上限')
+      }
       setQuantity(quantity - 1)
     }
   }
@@ -67,10 +76,25 @@ export const Cart = ({
     ;(async () => {
       const result = await getProductById(item.id)
       if (!result) return
-      return setTotalQuantity(result.data.quantity)
+      console.log(result.data)
+      setItemStatus(result.data.status)
+      setTotalQuantity(result.data.quantity)
     })()
     handleUpdateCount(quantity, item.id)
-  }, [quantity, handleUpdateCount, item.id, totalQuantity])
+  }, [quantity, handleUpdateCount, item.id])
+
+  useEffect(() => {
+    if (itemStatus === 'off') {
+      setIsModalOpen(true)
+      $setNotAllowed(true)
+      setWarningMessage(`已下架，請移除商品`)
+    }
+    if (quantity > totalQuantity) {
+      setIsModalOpen(true)
+      $setNotAllowed(true)
+      setWarningMessage(`庫存不足，剩餘數量 ${totalQuantity} 個`)
+    }
+  }, [$setNotAllowed, itemStatus, setIsModalOpen, totalQuantity])
 
   return (
     <Item key={item.id}>

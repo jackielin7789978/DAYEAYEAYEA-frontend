@@ -30,7 +30,7 @@ export const Tabs = ({ tabs, tabsPanel, presetTab }) => {
       <TabWrapper>
         {tabs.map((tab, index) => (
           <Tab
-            key={index}
+            key={`tab${index}`}
             $active={activeTab === index}
             onClick={() => {
               setActiveTab(index)

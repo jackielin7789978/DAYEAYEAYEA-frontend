@@ -50,7 +50,7 @@ export default function Step2() {
 
   useEffect(() => {
     if (!user?.address) return ''
-    setUserStreet(user?.address.replace(newCity + newDistricts, ''))
+    setUserStreet(user?.address.replace(newCity, '').replace(newDistricts, ''))
   }, [user, newCity, newDistricts])
 
   useEffect(() => {
@@ -75,12 +75,16 @@ export default function Step2() {
     async (e) => {
       if (e.target.checked) {
         if (user?.address) {
-          await handleCityChange(newCity)
-          await handleDistrictChange(newDistricts)
-          setTimeout(() => {
-            setValue('district', newDistricts)
-          }, 0)
-          setValue('city', newCity)
+          if (newCity) {
+            await handleCityChange(newCity)
+            setValue('city', newCity)
+          }
+          if (newDistricts) {
+            await handleDistrictChange(newDistricts)
+            setTimeout(() => {
+              setValue('district', newDistricts)
+            }, 0)
+          }
           setValue('street', userStreet)
         }
         setValue('orderEmail', user.email)
@@ -130,7 +134,7 @@ export default function Step2() {
     )
 
     if (result.ok === 0) {
-      console.log(result.message)
+      return location.push(`/checkout/step1`)
     }
     localStorage.removeItem('cartItemsList')
     location.push(`/checkout/step3/${result.ticketNo}`)

@@ -12,11 +12,13 @@ import {
   BtnFlex,
   LinkStyle
 } from '../../../components/checkoutSystem/Step'
-import { LocalStorageContext } from '../../../context'
+import { LocalStorageContext, ModalContext } from '../../../context'
 import { GeneralBtn } from '../../../components/Button'
 import { Cart } from '../../../components/checkoutSystem/step1CartItem'
 import { addItemsToLocalStorage, formatPrice } from '../../../utils'
+import { FullModal } from '../../../components/Modal'
 export default function Step1() {
+  const { isModalOpen, handleModalClose } = useContext(ModalContext)
   const [notAllowed, setNotAllowed] = useState('')
   const location = useHistory()
   const { cartItems, setCartItems, totalItems, handleRemoveCartItem } =
@@ -50,6 +52,11 @@ export default function Step1() {
   )
   return (
     <PageWidth>
+      <FullModal
+        open={isModalOpen}
+        content={'部分商品庫存有異動，請更新購物車再購買'}
+        onClose={handleModalClose}
+      />
       {cartItems && (
         <>
           <Steps />
