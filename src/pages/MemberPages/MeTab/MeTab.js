@@ -5,7 +5,6 @@ import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import { UserContext } from '../../../context'
 import { Tabs } from '../../../components/Tab'
 import { PageWidth } from '../../../components/general'
-import { IsLoadingComponent as Loading } from '../../../components/IsLoading'
 import Home from '../Home'
 import Orders from '../Orders'
 import Info from '../Info'
@@ -35,8 +34,7 @@ const Wrapper = styled.div`
 `
 
 export default function MeTab() {
-  const { user, setUser } = useContext(UserContext)
-  const [isLoading, setIsLoading] = useState(false)
+  const { setUser } = useContext(UserContext)
   const [profile, setProfile] = useState(null)
   const history = useHistory()
   const { tab } = useParams()
@@ -53,17 +51,18 @@ export default function MeTab() {
     history.push('/')
   }, [history, setUser])
 
+  const refreshUser = useCallback(() => {
+    getMe().then(res => {
+        setProfile(res.data)
+      })
+  }, [])
+
   useEffect(() => {
-    setIsLoading(() => true)
-    getMe().then((res) => {
-      setIsLoading(() => false)
-      setProfile(res.data)
-    })
-  }, [history.location.pathname])
+    refreshUser()
+  }, [history.location.pathname, refreshUser])
 
   return (
     <PageWidthHeight>
-      {isLoading && <Loading />}
       <Container>
         <Title>會員專區</Title>
         <Wrapper>
