@@ -120,12 +120,12 @@ export const calTotalPages = (totalItems) => {
 
 export const isTokenExpired = (token) => {
   try {
-    const _info = decode(token);
+    const _info = decode(token)
     if (_info.exp < Date.now() / 1000) {
-      return true;
-    } else return false;
+      return true
+    } else return false
   } catch (error) {
     console.log(error)
-    return false;
+    return false
   }
 }
