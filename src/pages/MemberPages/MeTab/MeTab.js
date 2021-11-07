@@ -5,10 +5,13 @@ import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import { UserContext } from '../../../context'
 import { Tabs } from '../../../components/Tab'
 import { PageWidth } from '../../../components/general'
+import { IsLoadingComponent as Loading } from '../../../components/IsLoading'
 import Home from '../Home'
 import Orders from '../Orders'
 import Info from '../Info'
-import { getMe } from '../../../webAPI/memberAPI'
+import useAxios from '../../../hooks/useAxios'
+import useFetch from '../../../hooks/useFetch'
+
 
 const PageWidthHeight = styled(PageWidth)`
   min-height: 600px;
@@ -35,7 +38,8 @@ const Wrapper = styled.div`
 
 export default function MeTab() {
   const { setUser } = useContext(UserContext)
-  const [profile, setProfile] = useState(null)
+  const [{ data = {}, loading: isLoading, error }, refetch] = useAxios('/members/me')
+  // const { isLoading, response, error, refetch} = useFetch('https://api.coolizz.tw/members/me')
   const history = useHistory()
   const { tab } = useParams()
   const tabIndex = useMemo(() => {
@@ -51,27 +55,22 @@ export default function MeTab() {
     history.push('/')
   }, [history, setUser])
 
-  const refreshUser = useCallback(() => {
-    getMe().then(res => {
-        setProfile(res.data)
-      })
-  }, [])
+  console.log(data, isLoading, error)
+  // useEffect(() => refetch(), [history.location, refetch])
 
-  useEffect(() => {
-    refreshUser()
-  }, [history.location.pathname, refreshUser])
 
   return (
     <PageWidthHeight>
+      { isLoading && <Loading /> }
       <Container>
         <Title>會員專區</Title>
         <Wrapper>
           <Tabs
             tabs={['會員首頁', '訂單紀錄', '會員資料']}
             tabsPanel={[
-              <Home profile={profile} logout={logout} />,
-              <Orders orders={profile?.Orders} />,
-              <Info profile={profile} />
+              <Home profile={data.data} logout={logout} />,
+              <Orders orders={data.data?.Orders} />,
+              <Info profile={data.data} />
             ]}
             presetTab={0}
             changeTab={tabIndex}
