@@ -3,14 +3,13 @@ import { Link } from 'react-router-dom'
 import { COLOR, ADMIN_COLOR, ADMIN_MEDIA_QUERY } from '../../constants/style'
 
 export const Wrapper = styled.div`
-  width: 80vw;
+  width: 100%;
   margin: 0px auto;
   ${ADMIN_MEDIA_QUERY.md} {
-    width: 70vw;
-    max-width: 1200px;
+    max-width: 1680px;
   }
   ${ADMIN_MEDIA_QUERY.lg} {
-    max-width: 1200px;
+    max-width: 1680px;
   }
 `
 export const ColumnHeader = styled.div`

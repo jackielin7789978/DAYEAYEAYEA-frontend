@@ -4,7 +4,7 @@ import { useState, useLayoutEffect, useCallback, useContext } from 'react'
 import { useParams, useLocation, useHistory, Link } from 'react-router-dom'
 import { LoadingContext, ModalContext, AdminContext } from '../../../context'
 import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
-import { ADMIN_MEDIA_QUERY } from '../../../constants/style'
+import { ADMIN_MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import {
   CategoryDropdown,
   Search
@@ -28,28 +28,31 @@ const PageWrapper = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  width: 75vw;
   border: 1px solid transparent;
-  padding: 40px 20px;
+  margin: 40px auto;
+  font-size: ${FONT_SIZE.sm};
+  ${ADMIN_MEDIA_QUERY.md} {
+    max-width: 1680px;
+    font-size: ${FONT_SIZE.md};
+  }
+  ${ADMIN_MEDIA_QUERY.lg} {
+    max-width: 1680px;
+    font-size: ${FONT_SIZE.md};
+  }
 `
 const SearchContainer = styled.div`
   margin: 20px auto;
   display: flex;
   justify-content: space-between;
-  width: 90vw;
-  ${ADMIN_MEDIA_QUERY.md} {
-    width: 80vw;
-    max-width: 1200px;
-  }
-  ${ADMIN_MEDIA_QUERY.lg} {
-    max-width: 1200px;
-  }
+  width: 100%;
 `
 
 const SearchSideContainer = styled.div`
   display: flex;
 `
 const PaginatorDiv = styled.div`
-  margin: 10px auto;
+  margin: 20px auto;
 `
 
 const SearchResultDiv = styled.div`
@@ -86,7 +89,7 @@ export default function AdminProducts() {
   const { isModalOpen, setIsModalOpen, handleModalClose, productId } =
     useContext(ModalContext)
   const { isSuperAdmin } = useContext(AdminContext)
-  const { page } = useParams()
+  const { page = 1 } = useParams()
   const keywords = useLocation().search.trim(' ')
   const keywordString = qs.parse(keywords, { ignoreQueryPrefix: true }).search
   const history = useHistory()

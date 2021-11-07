@@ -11554,6 +11554,11 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
+use-tw-zipcode@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/use-tw-zipcode/-/use-tw-zipcode-2.0.3.tgz#6492ca1378997fa8b72ba05ef34407fde42a4200"
+  integrity sha512-VCkU2hXjXtxntbsUWD2zvnyHC6B6Ic7Sx6CwiiInVKuB65YzcERlJQb9g+05cKiv77SGJCrPjvhZOgz7yX4hHw==
+
 use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
