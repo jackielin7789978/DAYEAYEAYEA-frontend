@@ -14,7 +14,6 @@ import {
   InputTitle,
   Input,
   BtnFlexCenter,
-  Selects,
   Select
 } from '../../../components/checkoutSystem/Step'
 import { useForm } from 'react-hook-form'
@@ -25,18 +24,20 @@ import Login from '../../Login/Login'
 import { COLOR } from '../../../constants/style'
 import { LocalStorageContext } from '../../../context'
 import { createOrder } from '../../../webAPI/orderAPI'
+import { getMe } from '../../../webAPI/memberAPI'
+import { getTokenFromLocalStorage } from '../../../utils'
 export default function Step2() {
   const { cartItems, setCartItems } = useContext(LocalStorageContext)
-  const { user } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
   const { errMsg } = useState()
   const location = useHistory()
-
   const [userStreet, setUserStreet] = useState()
 
   const { city, zipCode, handleCityChange, handleDistrictChange } =
     useTwZipCode()
 
   const newCity = useMemo(() => {
+    if (!user?.address) return ''
     return cities.filter((item) => user?.address.includes(item))[0]
   }, [user])
 
@@ -48,12 +49,22 @@ export default function Step2() {
   }, [user, newCity])
 
   useEffect(() => {
+    if (!user?.address) return ''
     setUserStreet(user?.address.replace(newCity + newDistricts, ''))
   }, [user, newCity, newDistricts])
 
   useEffect(() => {
     if (!cartItems?.length) location.push('/')
   }, [cartItems, location])
+
+  useEffect(() => {
+    if (!getTokenFromLocalStorage()) return false
+    getMe().then((res) => {
+      setUser(res.data)
+      console.log(user)
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const {
     register,
     formState: { errors },
@@ -64,14 +75,16 @@ export default function Step2() {
   const handleChecked = useCallback(
     async (e) => {
       if (e.target.checked) {
-        await handleCityChange(newCity)
-        await handleDistrictChange(newDistricts)
-        setTimeout(() => {
-          setValue('district', newDistricts)
-        }, 0)
+        if (user?.address) {
+          await handleCityChange(newCity)
+          await handleDistrictChange(newDistricts)
+          setTimeout(() => {
+            setValue('district', newDistricts)
+          }, 0)
+          setValue('city', newCity)
+          setValue('street', userStreet)
+        }
         setValue('orderEmail', user.email)
-        setValue('city', newCity)
-        setValue('street', userStreet)
         setValue('orderName', user.fullname)
         setValue('orderPhone', user.phone)
       } else {
@@ -172,7 +185,6 @@ export default function Step2() {
               </ErrorMsg>
               <InputWrapper>
                 <InputTitle children='地址:' />
-
                 <Select
                   {...register('city')}
                   onChange={(e) => handleCityChange(e.target.value)}
@@ -189,15 +201,16 @@ export default function Step2() {
                     return <option key={i}>{district}</option>
                   })}
                 </Select>
-
+              </InputWrapper>
+              <InputWrapper>
                 <Input
-                  style={{ margin: '20px 0px 0px 55px' }}
+                  style={{ marginLeft: '55px' }}
                   type='text'
                   {...register('street', { required: true })}
                 />
               </InputWrapper>
               <ErrorMsg>
-                {errors.orderAddress?.type === 'required' && '請填寫地址'}
+                {errors.street?.type === 'required' && '請填寫地址'}
               </ErrorMsg>
 
               <Label>

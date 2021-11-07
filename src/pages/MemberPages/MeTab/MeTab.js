@@ -11,7 +11,6 @@ import Orders from '../Orders'
 import Info from '../Info'
 import { getMe } from '../../../webAPI/memberAPI'
 
-
 const PageWidthHeight = styled(PageWidth)`
   min-height: 600px;
 `
@@ -43,8 +42,8 @@ export default function MeTab() {
   const { tab } = useParams()
   const tabIndex = useMemo(() => {
     const urlMapping = {
-      'orders': 1,
-      'info': 2
+      orders: 1,
+      info: 2
     }
     return urlMapping[tab] || 0
   }, [tab])
@@ -56,25 +55,23 @@ export default function MeTab() {
 
   useEffect(() => {
     setIsLoading(() => true)
-    getMe()
-      .then(res => {
-        setIsLoading(() => false)
-        setProfile(res.data)
-      })
+    getMe().then((res) => {
+      setIsLoading(() => false)
+      setProfile(res.data)
+    })
   }, [history.location.pathname])
-
 
   return (
     <PageWidthHeight>
-      { isLoading && <Loading/> }
+      {isLoading && <Loading />}
       <Container>
         <Title>會員專區</Title>
         <Wrapper>
           <Tabs
             tabs={['會員首頁', '訂單紀錄', '會員資料']}
             tabsPanel={[
-              <Home profile={profile} logout={logout} />, 
-              <Orders orders={profile?.Orders} />, 
+              <Home profile={profile} logout={logout} />,
+              <Orders orders={profile?.Orders} />,
               <Info profile={profile} />
             ]}
             presetTab={0}

@@ -444,5 +444,5 @@ export const Select = styled.select`
   margin-left: 20px;
   border: solid 1px #cecece;
   min-width: 30%;
+  flex: 1;
 `
-export const Selects = styled.div``
