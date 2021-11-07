@@ -39,6 +39,7 @@ export const getMe = async () => {
   const token = getTokenFromLocalStorage()
   try {
     const result = await fetch(`${BASE_URL}/members/me`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         authorization: `Bearer ${token}`

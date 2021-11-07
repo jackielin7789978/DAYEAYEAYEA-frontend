@@ -4,10 +4,10 @@ import styled from 'styled-components'
 import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import { GeneralBtn } from '../../../components/Button'
 import { PageWidth } from '../../../components/general'
-import { IsLoadingComponent as Loading } from '../../../components/IsLoading'
 import { getOrderOne, cancelOrder } from '../../../webAPI/orderAPI'
 import ItemTable from './ItemTable'
 import { formatPrice } from '../../../utils'
+import useModal from '../../../hooks/useModal'
 
 
 const PageWidthHeight = styled(PageWidth)`
@@ -77,71 +77,81 @@ const Button = ({ children, color, onClick }) => {
   return <GeneralBtn color={color} buttonStyle={style} children={children} onClick={onClick}/>
 }
 
+const ModalButton = ({ children, color, onClick }) => {
+  const style = {
+    fontSize: '16px',
+    width: '100px'
+  }
+  return <GeneralBtn color={color} buttonStyle={style} children={children} onClick={onClick}/>
+}
+
 const OrderDetail = () => {
   const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false)
+  const { handleModalOpen, handleModalClose, Modal } = useModal()
   const history = useHistory()
   const { ticket } = useParams()
-  const handleCancel = useCallback(() => {
-    setIsLoading(() => true)
-    cancelOrder(ticket)
-      .then((res) => {
-        setIsLoading(() => false)
-        history.go(0)
-      })
-  }, [ticket, history])
-
-  useEffect(() => {
-    setIsLoading(() => true)
+  const refreshOrder = useCallback(() => {
     getOrderOne(ticket)
       .then((res) => {
-        setIsLoading(() => false)
         setData(() => res.data)
       })
   }, [ticket])
 
+  const handleCancel = useCallback(() => {
+    handleModalClose()
+    cancelOrder(ticket)
+      .then((res) => {
+        refreshOrder()
+      })
+  }, [ticket, handleModalClose, refreshOrder])
+
+  useEffect(() => {
+    refreshOrder()
+  }, [refreshOrder])
+
   return (
     <PageWidthHeight>
+      <Modal 
+        content={'確定取消訂單 ？ '}
+        buttonOne={<ModalButton color={'accent'} onClick={handleCancel}>確定</ModalButton>}
+        buttonTwo={<ModalButton color={'primary'} onClick={handleModalClose}>取消</ModalButton>}
+      />
       <Container>
         <Title>訂單詳情</Title>
         <Wrapper>
-        { isLoading ? <Loading/> : (
-          <>
-            <Info>
-              <ButtonGroup>
-                <Button color={'accent'} onClick={() => history.push('/member/orders')} >返回</Button>
-                {
-                  (data?.status === '處理中') && <Button color={'warning'} onClick={handleCancel} >取消訂單</Button>
-                }
-              </ButtonGroup>
-              <Field>
-                <h5>訂單狀態:　</h5>
-                <p>{ data?.status }</p>
-              </Field>
-              <Field>
-                <h5>訂單金額:　</h5>
-                <p>{ data?.subTotal && formatPrice(data.subTotal) }</p>
-              </Field>
-              <Field>
-                <h5>收件人電郵:</h5>
-                <p>{ data?.orderEmail || '尚未輸入' }</p>
-              </Field>
-              <Field>
-                <h5>收件人姓名:</h5>
-                <p>{ data?.orderName || '尚未輸入' }</p>
-              </Field>
-              <Field>
-                <h5>收件人地址:</h5>
-                <p>{ data?.orderAddress || '尚未輸入' }</p>
-              </Field>
-              <Field>
-                <h5>收件人電話:</h5>
-                <p>{ data?.orderPhone || '尚未輸入' }</p>
-              </Field>
-            </Info>
-            <ItemTable order={ data?.Order_items || [] } />
-          </>
-          ) }
+          <Info>
+            <ButtonGroup>
+              <Button color={'accent'} onClick={() => history.push('/member/orders')} >返回</Button>
+              {
+                (data?.status === '處理中') && <Button color={'warning'} onClick={handleModalOpen} >取消訂單</Button>
+              }
+            </ButtonGroup>
+            <Field>
+              <h5>訂單狀態:　</h5>
+              <p>{ data?.status }</p>
+            </Field>
+            <Field>
+              <h5>訂單金額:　</h5>
+              <p>{ data?.subTotal && formatPrice(data.subTotal) }</p>
+            </Field>
+            <Field>
+              <h5>收件人電郵:</h5>
+              <p>{ data?.orderEmail || '' }</p>
+            </Field>
+            <Field>
+              <h5>收件人姓名:</h5>
+              <p>{ data?.orderName || '' }</p>
+            </Field>
+            <Field>
+              <h5>收件人地址:</h5>
+              <p>{ data?.orderAddress || '' }</p>
+            </Field>
+            <Field>
+              <h5>收件人電話:</h5>
+              <p>{ data?.orderPhone || '' }</p>
+            </Field>
+          </Info>
+          <ItemTable order={ data?.Order_items || [] } />
         </Wrapper>
       </Container>
     </PageWidthHeight>

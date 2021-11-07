@@ -1,10 +1,11 @@
 import { useState, useCallback } from 'react'
-import { useHistory } from 'react-router'
 import styled from 'styled-components'
 import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import { GeneralBtn, EditBtn } from '../../../components/Button'
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form"
 import { updateMe } from '../../../webAPI/memberAPI'
+import useModal from '../../../hooks/useModal'
+
 
 const Container = styled.div`
   width: 90%;
@@ -101,27 +102,31 @@ const Button = ({ type, color, children, onClick }) => {
   return <GeneralBtn type={type} color={color} buttonStyle={style} children={children} onClick={onClick}/>
 }
 
+
 const Info = ({ profile }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const history = useHistory()
+  const { handleModalOpen, Modal } = useModal()
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = useCallback(async (data) => {
     setIsEditing(() => false)
     try {
-      const { fullname, adress, phone } = data
-      const res = await updateMe(fullname, adress, phone)
-      if (res.ok) {
-        history.location.pathname === '/member/info' ? history.go(0) : history.push('/member/info')
-      }
+      const { fullname, address, phone } = data
+      profile.fullname = fullname.trim()
+      profile.address = address.trim()
+      profile.phone = phone
+
+      await updateMe(fullname.trim(), address.trim(), phone)
+      handleModalOpen()
     } catch (error) {
       const { message } = error.response.data
       console.log(message)
     }
-  }, [history])
+  }, [profile, handleModalOpen])
 
   return (
     <Container>
+      <Modal content={'已更新會員資訊 ! '} />
       <InfoWrapper>
         {
           !isEditing ? (

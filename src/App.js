@@ -39,8 +39,7 @@ import {
   ScrollToTop,
   addItemsToLocalStorage,
   getItemsFromLocalStorage,
-  getTokenFromLocalStorage,
-  isTokenExpired
+  getTokenFromLocalStorage
 } from './utils'
 import {
   LoadingContext,
@@ -68,7 +67,7 @@ function AdminRoutes() {
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [productId, setProductId] = useState('')
-  const [isNavClick, setIsNavClick] = useState(true)
+  const [isNavClick, setIsNavClick] = useState(false)
 
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
@@ -109,6 +108,7 @@ function AdminRoutes() {
               />
               <Route path={'/admin/products/add'} component={AdminProductAdd} />
               <Route path={'/admin/products/:page'} component={AdminProducts} />
+              <Route path={'/admin/products/'} component={AdminProducts} />
               <Route path={'*'} component={AdminNotFound} />
             </Switch>
           </AdminLayout>
@@ -127,11 +127,7 @@ function Shop() {
 
   const [user, setUser] = useState()
   useEffect(() => {
-    if (
-      !getTokenFromLocalStorage() ||
-      isTokenExpired(getTokenFromLocalStorage())
-    )
-      return false
+    if (!getTokenFromLocalStorage()) return false
     try {
       const _info = jwt_decode(getTokenFromLocalStorage())
       if (_info.hasOwnProperty('id')) return setUser(_info)
