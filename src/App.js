@@ -45,7 +45,8 @@ import {
   LoadingContext,
   ModalContext,
   LocalStorageContext,
-  UserContext
+  UserContext,
+  OversoldContext
 } from './context'
 import GlobalStyle from './constants/globalStyle'
 import jwt_decode from 'jwt-decode'
@@ -68,7 +69,6 @@ function AdminRoutes() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [productId, setProductId] = useState('')
   const [isNavClick, setIsNavClick] = useState(false)
-
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
   }, [setIsModalOpen])
@@ -249,13 +249,16 @@ function Shop() {
   )
 }
 function CheckoutRoutes() {
+  const [isOversold, setIsOversold] = useState(false)
   const { path } = useRouteMatch()
   return (
-    <Switch>
-      <Route path={`${path}/step1`} component={Step1} />
-      <Route path={`${path}/step2`} component={Step2} />
-      <Route path={`${path}/step3/:ticket`} component={Step3} />
-    </Switch>
+    <OversoldContext.Provider value={{ isOversold, setIsOversold }}>
+      <Switch>
+        <Route path={`${path}/step1`} component={Step1} />
+        <Route path={`${path}/step2`} component={Step2} />
+        <Route path={`${path}/step3/:ticket`} component={Step3} />
+      </Switch>
+    </OversoldContext.Provider>
   )
 }
 function MemberRoutes() {
