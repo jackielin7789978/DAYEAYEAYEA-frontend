@@ -5,6 +5,7 @@ import { GeneralBtn, EditBtn } from '../../../components/Button'
 import { useForm } from "react-hook-form"
 import { updateMe } from '../../../webAPI/memberAPI'
 import useModal from '../../../hooks/useModal'
+import useFetch from '../../../hooks/useFetch'
 
 
 const Container = styled.div`
@@ -105,6 +106,7 @@ const Button = ({ type, color, children, onClick }) => {
 
 const Info = ({ profile }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const { isLoading, value, error, fetchData } = useFetch('/members/me', { method: 'Patch'})
   const { handleModalOpen, Modal } = useModal()
   const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -116,13 +118,13 @@ const Info = ({ profile }) => {
       profile.address = address.trim()
       profile.phone = phone
 
-      await updateMe(fullname.trim(), address.trim(), phone)
+      fetchData({fullname, address, phone})
       handleModalOpen()
     } catch (error) {
       const { message } = error.response.data
       console.log(message)
     }
-  }, [profile, handleModalOpen])
+  }, [profile, fetchData, handleModalOpen])
 
   return (
     <Container>

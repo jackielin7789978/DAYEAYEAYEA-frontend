@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useMemo, useCallback } from 'react'
+import { useContext, useMemo, useCallback, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router'
 import styled from 'styled-components'
 import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
@@ -9,7 +9,6 @@ import { IsLoadingComponent as Loading } from '../../../components/IsLoading'
 import Home from '../Home'
 import Orders from '../Orders'
 import Info from '../Info'
-import useAxios from '../../../hooks/useAxios'
 import useFetch from '../../../hooks/useFetch'
 
 
@@ -38,8 +37,7 @@ const Wrapper = styled.div`
 
 export default function MeTab() {
   const { setUser } = useContext(UserContext)
-  const [{ data = {}, loading: isLoading, error }, refetch] = useAxios('/members/me')
-  // const { isLoading, response, error, refetch} = useFetch('https://api.coolizz.tw/members/me')
+  const { isLoading, value, error, fetchData } = useFetch('/members/me')
   const history = useHistory()
   const { tab } = useParams()
   const tabIndex = useMemo(() => {
@@ -55,9 +53,9 @@ export default function MeTab() {
     history.push('/')
   }, [history, setUser])
 
-  console.log(data, isLoading, error)
-  // useEffect(() => refetch(), [history.location, refetch])
+  useEffect(() => fetchData(), [fetchData])
 
+  console.log(value, isLoading, error)
 
   return (
     <PageWidthHeight>
@@ -68,9 +66,9 @@ export default function MeTab() {
           <Tabs
             tabs={['會員首頁', '訂單紀錄', '會員資料']}
             tabsPanel={[
-              <Home profile={data.data} logout={logout} />,
-              <Orders orders={data.data?.Orders} />,
-              <Info profile={data.data} />
+              <Home profile={value.data} logout={logout} />,
+              <Orders orders={value.data?.Orders} />,
+              <Info profile={value.data} />
             ]}
             presetTab={0}
             changeTab={tabIndex}
