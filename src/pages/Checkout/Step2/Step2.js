@@ -61,7 +61,6 @@ export default function Step2() {
     if (!getTokenFromLocalStorage()) return false
     getMe().then((res) => {
       setUser(res.data)
-      console.log(user)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -129,6 +128,7 @@ export default function Step2() {
       subTotal,
       0 //isDelete
     )
+
     if (result.ok === 0) {
       console.log(result.message)
     }
