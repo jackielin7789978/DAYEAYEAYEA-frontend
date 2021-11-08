@@ -102,21 +102,6 @@ export default function AdminProducts() {
   let totalPage
   let showProductsByPage
 
-  const handleDelete = useCallback(() => {
-    deleteProductById(productId).then((result) => {
-      if (!result) return
-      if (result.ok === 0) return alert(result.message)
-      const deletedProductsList = showProductsList.filter(
-        (product) => product.id !== productId
-      )
-      setProducts((products) => deletedProductsList)
-      if (deletedProductsList.length % productsPerPage === 0) {
-        history.push(`/admin/products/${totalPage - 1}`)
-      }
-      handleModalClose()
-    })
-  }, [productId, showProductsList, handleModalClose, totalPage, history])
-
   useLayoutEffect(() => {
     setIsLoading(true)
     if (keywords) {
@@ -172,6 +157,28 @@ export default function AdminProducts() {
     },
     [history, location, keywords]
   )
+
+  const handleDelete = useCallback(() => {
+    deleteProductById(productId).then((result) => {
+      if (!result) return
+      if (result.ok === 0) return alert(result.message)
+      const deletedProductsList = products.filter(
+        (product) => product.id !== productId
+      )
+      setProducts((products) => deletedProductsList)
+      if ((showProductsByPage.length - 1) % productsPerPage === 0) {
+        history.push(`/admin/products/${totalPage - 1}`)
+      }
+      handleModalClose()
+    })
+  }, [
+    productId,
+    products,
+    handleModalClose,
+    totalPage,
+    history,
+    showProductsByPage
+  ])
 
   return (
     <PageWrapper>

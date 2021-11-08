@@ -4,7 +4,8 @@ import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import { ShoppingCarBtn, GeneralBtn } from '../../components/Button'
 import { ItemCounter } from '../../components/Counter'
 import { ModalContext, LocalStorageContext } from '../../context'
-import { formatPrice } from '../../utils'
+import { formatPrice, getItemsFromLocalStorage } from '../../utils'
+import { useEffect } from 'react/cjs/react.development'
 
 const ProductInfoContainer = styled.div`
   width: 100%;
@@ -145,11 +146,20 @@ export function ProductUpInfoComponent({
   totalQuantity,
   status
 }) {
+  const localCart = JSON.parse(getItemsFromLocalStorage())
+  let isProductInCart = localCart
+    ? localCart.filter((item) => item.id === parseInt(id))
+    : []
+  let cartQuantity =
+    isProductInCart.length > 0 ? isProductInCart[0].quantity : 0
+  const stock = totalQuantity - cartQuantity
   const [quantity, setQuantity] = useState(1)
   const [warningMessage, setWarningMessage] = useState('')
   // eslint-disable-next-line no-unused-vars
-  const { isModalOpen, setIsModalOpen } = useContext(ModalContext)
+  const { isModalOpen, setIsModalOpen, setIsProductSoldOut } =
+    useContext(ModalContext)
   const { handleAddCartItem } = useContext(LocalStorageContext)
+  const [inStock, setInStock] = useState(stock)
 
   const productInfo = useMemo(
     () => ({
@@ -161,10 +171,22 @@ export function ProductUpInfoComponent({
     }),
     [name, price, discountPrice, imgs, quantity]
   )
-  const handleAddProductInCart = (e) => {
-    const targetId = Number(e.target.id)
-    handleAddCartItem(targetId, productInfo)
-    setIsModalOpen(true)
+
+  useEffect(() => {
+    setInStock(stock)
+  }, [stock])
+
+  const handleAddProductInCart = () => {
+    if (inStock > 0) {
+      setInStock(inStock - quantity)
+      handleAddCartItem(parseInt(id), productInfo)
+      setIsProductSoldOut((isProductSoldOut) => true)
+      return setIsModalOpen(true)
+    }
+    if (inStock === 0) {
+      setIsProductSoldOut((isProductSoldOut) => false)
+      return setIsModalOpen(true)
+    }
   }
 
   const handleCount = useCallback(
@@ -237,7 +259,7 @@ export function ProductUpInfoComponent({
         )}
       </InfoSetContainer>
       <InfoSetContainer>
-        {status === 'on' && (
+        {status === 'on' && totalQuantity !== 0 && (
           <ItemCounter
             buttonStyle={{ marginTop: '20px' }}
             handleCount={handleCount}
@@ -248,7 +270,8 @@ export function ProductUpInfoComponent({
         )}
         {warningMessage && <WarningMessage>{warningMessage}</WarningMessage>}
         {status === 'off' && <SoldOutBtn />}
-        {status === 'on' && <AddProductToCart />}
+        {totalQuantity === 0 && <SoldOutBtn />}
+        {status === 'on' && totalQuantity !== 0 && <AddProductToCart />}
       </InfoSetContainer>
     </ProductInfoContainer>
   )
