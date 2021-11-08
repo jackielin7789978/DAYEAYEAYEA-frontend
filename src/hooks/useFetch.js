@@ -1,17 +1,13 @@
 import { useState, useMemo, useCallback } from 'react'
 import { getTokenFromLocalStorage } from '../utils'
+import { BASE_URL } from '../constants/baseURL'
 
-
-const BASE_URL = 'https://api.coolizz.tw'
 
 const useFetch = (url, options, callback, errorHandler) => {
   const [isLoading, setIsLoading] = useState(false)
   const [value, setValue] = useState({})
   const [error, setError] = useState(null)
-  const targetURL = useMemo(() => {
-    if (/^https/.test(url)) return url
-    return `${BASE_URL}${url}`
-  }, [url])
+  const targetURL = useMemo(() =>  /^https/.test(url) ?  url : `${BASE_URL}${url}`, [url])
 
   const fetchData = useCallback((jsonData = null) => {
     ;(async () => {
@@ -20,7 +16,7 @@ const useFetch = (url, options, callback, errorHandler) => {
         setValue({})
         setError(null)
         const DEFAULT_OPTIONS = {
-          method: 'Get',
+          method: 'GET',
           headers: { 
             'Content-Type': 'application/json',
             Authorization: `Bearer ${getTokenFromLocalStorage()}`
