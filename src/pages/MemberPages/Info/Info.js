@@ -108,9 +108,7 @@ const Info = ({ profile }) => {
   const { handleModalOpen, Modal } = useModal()
   const { fetchData: updateMe } = useFetch(
     '/members/me', 
-    { method: 'PATCH'},
-    () => handleModalOpen('已更新會員資訊 ! '),
-    () => handleModalOpen('更新會員資訊失敗 ! ')
+    { method: 'PATCH'}
     )
   const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -122,12 +120,17 @@ const Info = ({ profile }) => {
       profile.address = address
       profile.phone = phone
 
-      updateMe({fullname, address, phone})
+      updateMe(
+        '',
+        { fullname, address, phone },
+        () => handleModalOpen('已更新會員資訊 ! '),
+        () => handleModalOpen('更新會員資訊失敗 ! ')
+      )
     } catch (error) {
       const { message } = error.response.data
       console.log(message)
     }
-  }, [profile, updateMe])
+  }, [profile, updateMe, handleModalOpen])
 
   return (
     <Container>

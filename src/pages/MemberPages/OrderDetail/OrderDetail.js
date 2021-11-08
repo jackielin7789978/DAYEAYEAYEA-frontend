@@ -93,14 +93,16 @@ const OrderDetail = () => {
   const { isLoading, value , fetchData } = useFetch(`/orders/me/${ticket}`)
   const { fetchData: cancelOrder } = useFetch(
     `/orders/me/${ticket}/cancel`, 
-    { method: 'PATCH' },
-    () => value.data.status = '已取消'
-  )
-
+    { method: 'PATCH' }
+    )
   const handleCancel = useCallback(() => {
-    cancelOrder()
+    cancelOrder(
+      '',
+      null,
+      () => { value.data.status = '已取消' }
+    )
     handleModalClose()
-  }, [handleModalClose, cancelOrder])
+  }, [handleModalClose, cancelOrder, value])
 
 
   useEffect(() => {

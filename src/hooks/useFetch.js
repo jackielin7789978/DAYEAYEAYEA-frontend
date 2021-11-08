@@ -3,13 +3,19 @@ import { getTokenFromLocalStorage } from '../utils'
 import { BASE_URL } from '../constants/baseURL'
 
 
-const useFetch = (url, options, callback, errorHandler) => {
+const useFetch = (url, options) => {
   const [isLoading, setIsLoading] = useState(false)
   const [value, setValue] = useState({})
   const [error, setError] = useState(null)
   const targetURL = useMemo(() =>  /^https/.test(url) ?  url : `${BASE_URL}${url}`, [url])
 
-  const fetchData = useCallback((jsonData = null) => {
+  const fetchData = useCallback(
+    (
+      suffixPath = '', 
+      bodyData = null,
+      callback,
+      errorHandler
+    ) => {
     ;(async () => {
       try {
         setIsLoading(true)
@@ -22,9 +28,9 @@ const useFetch = (url, options, callback, errorHandler) => {
             Authorization: `Bearer ${getTokenFromLocalStorage()}`
           },
         }
-        const body = jsonData && JSON.stringify(jsonData)
+        const body = bodyData && JSON.stringify(bodyData)
         const res = await fetch(
-          targetURL, 
+          targetURL + suffixPath, 
           { 
             ...DEFAULT_OPTIONS , 
             ...options,
@@ -43,7 +49,7 @@ const useFetch = (url, options, callback, errorHandler) => {
         setIsLoading(false)
       }
     })()
-  }, [targetURL, options, callback, errorHandler])
+  }, [targetURL, options])
 
   return { 
     isLoading, 
