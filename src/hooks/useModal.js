@@ -2,16 +2,23 @@ import { useState, useCallback } from 'react'
 import { FullModal } from '../components/Modal'
 
 
-const useModal = () => {
+const useModal = (initialContent = '') => {
   const [isModal, setIsModal] = useState(false)
-  const handleModalOpen = useCallback(() => setIsModal(true), [])
-  const handleModalClose = useCallback(() => setIsModal(false), [])
+  const [value, setValue] = useState(initialContent)
+  const handleModalOpen = useCallback((content) => {
+    if (content) setValue(content)
+    setIsModal(true)
+  }, [])
+  const handleModalClose = useCallback(() => {
+    setValue(initialContent)
+    setIsModal(false)
+  }, [initialContent])
 
-  const Modal = ({ content, buttonOne, buttonTwo }) => {
+  const Modal = ({ buttonOne, buttonTwo }) => {
     return (
       <FullModal
         open={isModal}
-        content={content}
+        content={value}
         onClose={handleModalClose}
         buttonOne={buttonOne}
         buttonTwo={buttonTwo}

@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import { GeneralBtn, EditBtn } from '../../../components/Button'
 import { useForm } from "react-hook-form"
-import { updateMe } from '../../../webAPI/memberAPI'
 import useModal from '../../../hooks/useModal'
+import useFetch from '../../../hooks/useFetch'
 
 
 const Container = styled.div`
@@ -106,27 +106,32 @@ const Button = ({ type, color, children, onClick }) => {
 const Info = ({ profile }) => {
   const [isEditing, setIsEditing] = useState(false);
   const { handleModalOpen, Modal } = useModal()
+  const { fetchData: updateMe } = useFetch(
+    '/members/me', 
+    { method: 'PATCH'},
+    () => handleModalOpen('已更新會員資訊 ! '),
+    () => handleModalOpen('更新會員資訊失敗 ! ')
+    )
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = useCallback(async (data) => {
     setIsEditing(() => false)
     try {
       const { fullname, address, phone } = data
-      profile.fullname = fullname.trim()
-      profile.address = address.trim()
+      profile.fullname = fullname
+      profile.address = address
       profile.phone = phone
 
-      await updateMe(fullname.trim(), address.trim(), phone)
-      handleModalOpen()
+      updateMe({fullname, address, phone})
     } catch (error) {
       const { message } = error.response.data
       console.log(message)
     }
-  }, [profile, handleModalOpen])
+  }, [profile, updateMe])
 
   return (
     <Container>
-      <Modal content={'已更新會員資訊 ! '} />
+      <Modal />
       <InfoWrapper>
         {
           !isEditing ? (
@@ -179,7 +184,7 @@ const Info = ({ profile }) => {
                   {...register(
                     "fullname", { 
                       pattern: {
-                        value: /[\u4e00-\u9fa5_a-zA-Z]{2,10}/,
+                        value: /^[\u4e00-\u9fa5_a-zA-Z]{2,10}$/,
                         message: '請輸入中英文 2~10 字元'
                       }
                     }
@@ -197,7 +202,7 @@ const Info = ({ profile }) => {
                   {...register(
                     "address", { 
                       pattern: {
-                        value: /[\u4e00-\u9fa5_a-zA-Z]{6,36}/,
+                        value: /^[\u4e00-\u9fa5_a-zA-Z1-9]{6,36}$/,
                         message: '請輸入正確的地址'
                       }
                     }
