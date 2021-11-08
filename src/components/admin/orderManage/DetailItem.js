@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { ImgAnchor } from '../../general'
 import { formatPrice, multiplyPrice } from '../../../utils'
 import { COLOR } from '../../../constants/style'
 import { Link } from 'react-router-dom'
@@ -23,8 +22,8 @@ const ItemContainer = styled.div`
     text-align: right;
   }
 `
-const Pic = styled.div`
-  max-width: 70px;
+const Pic = styled(Link)`
+  width: 70px;
   height: 70px;
   background: url(${({ $img }) => $img}) no-repeat center;
   background-size: cover;
@@ -39,12 +38,17 @@ const Name = styled(Link)`
 `
 
 export default function Item({ item }) {
+  console.log(item)
   return (
     <ItemContainer>
       <div>
-        <Pic $img={JSON.stringify(item.Product.Product_imgs[0].imgUrlSm)}>
-          <ImgAnchor to={`/admin/products/detail/${item.productId}`} />
-        </Pic>
+        <Pic
+          to={`/admin/products/detail/${item.productId}`}
+          $img={JSON.stringify(
+            item.Product.Product_imgs[item.Product.Product_imgs.length - 1]
+              .imgUrlSm
+          )}
+        />
         <Name to={`/admin/products/detail/${item.productId}`}>
           {item.Product.name}
         </Name>
