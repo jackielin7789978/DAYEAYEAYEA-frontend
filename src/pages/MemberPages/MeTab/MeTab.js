@@ -37,7 +37,7 @@ const Wrapper = styled.div`
 
 export default function MeTab() {
   const { setUser } = useContext(UserContext)
-  const { isLoading, value, error, fetchData } = useFetch('/members/me')
+  const { isLoading, value, fetchData } = useFetch('/members/me')
   const history = useHistory()
   const { tab } = useParams()
   const tabIndex = useMemo(() => {
@@ -54,8 +54,6 @@ export default function MeTab() {
   }, [history, setUser])
 
   useEffect(() => fetchData(), [fetchData])
-
-  console.log(value, isLoading, error)
 
   return (
     <PageWidthHeight>

@@ -1,13 +1,14 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { COLOR, MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import { GeneralBtn } from '../../../components/Button'
 import { PageWidth } from '../../../components/general'
-import { getOrderOne, cancelOrder } from '../../../webAPI/orderAPI'
+import { IsLoadingComponent as Loading } from '../../../components/IsLoading'
 import ItemTable from './ItemTable'
 import { formatPrice } from '../../../utils'
 import useModal from '../../../hooks/useModal'
+import useFetch from '../../../hooks/useFetch'
 
 
 const PageWidthHeight = styled(PageWidth)`
@@ -86,35 +87,32 @@ const ModalButton = ({ children, color, onClick }) => {
 }
 
 const OrderDetail = () => {
-  const [data, setData] = useState(null);
-  const { handleModalOpen, handleModalClose, Modal } = useModal()
+  const { handleModalOpen, handleModalClose, Modal } = useModal('確定取消訂單 ？ ')
   const history = useHistory()
   const { ticket } = useParams()
-  const refreshOrder = useCallback(() => {
-    getOrderOne(ticket)
-      .then((res) => {
-        setData(() => res.data)
-      })
-  }, [ticket])
+  const { isLoading, value , fetchData } = useFetch(`/orders/me/${ticket}`)
+  const { fetchData: cancelOrder } = useFetch(
+    `/orders/me/${ticket}/cancel`, 
+    { method: 'PATCH' },
+    () => value.data.status = '已取消'
+  )
 
   const handleCancel = useCallback(() => {
+    cancelOrder()
     handleModalClose()
-    cancelOrder(ticket)
-      .then((res) => {
-        refreshOrder()
-      })
-  }, [ticket, handleModalClose, refreshOrder])
+  }, [handleModalClose, cancelOrder])
+
 
   useEffect(() => {
-    refreshOrder()
-  }, [refreshOrder])
+    fetchData()
+  }, [fetchData])
 
   return (
     <PageWidthHeight>
+      { isLoading && <Loading /> }
       <Modal 
-        content={'確定取消訂單 ？ '}
-        buttonOne={<ModalButton color={'accent'} onClick={handleCancel}>確定</ModalButton>}
-        buttonTwo={<ModalButton color={'primary'} onClick={handleModalClose}>取消</ModalButton>}
+        buttonOne={<ModalButton color={'accent'} onClick={() => handleCancel()}>確定</ModalButton>}
+        buttonTwo={<ModalButton color={'primary'} onClick={() => handleModalClose()}>取消</ModalButton>}
       />
       <Container>
         <Title>訂單詳情</Title>
@@ -123,35 +121,35 @@ const OrderDetail = () => {
             <ButtonGroup>
               <Button color={'accent'} onClick={() => history.push('/member/orders')} >返回</Button>
               {
-                (data?.status === '處理中') && <Button color={'warning'} onClick={handleModalOpen} >取消訂單</Button>
+                (value?.data?.status === '處理中') && <Button color={'warning'} onClick={() => handleModalOpen()} >取消訂單</Button>
               }
             </ButtonGroup>
             <Field>
               <h5>訂單狀態:　</h5>
-              <p>{ data?.status }</p>
+              <p>{ value?.data?.status }</p>
             </Field>
             <Field>
               <h5>訂單金額:　</h5>
-              <p>{ data?.subTotal && formatPrice(data.subTotal) }</p>
+              <p>{ value?.data?.subTotal && formatPrice(value?.data.subTotal) }</p>
             </Field>
             <Field>
               <h5>收件人電郵:</h5>
-              <p>{ data?.orderEmail || '' }</p>
+              <p>{ value?.data?.orderEmail || '' }</p>
             </Field>
             <Field>
               <h5>收件人姓名:</h5>
-              <p>{ data?.orderName || '' }</p>
+              <p>{ value?.data?.orderName || '' }</p>
             </Field>
             <Field>
               <h5>收件人地址:</h5>
-              <p>{ data?.orderAddress || '' }</p>
+              <p>{ value?.data?.orderAddress || '' }</p>
             </Field>
             <Field>
               <h5>收件人電話:</h5>
-              <p>{ data?.orderPhone || '' }</p>
+              <p>{ value?.data?.orderPhone || '' }</p>
             </Field>
           </Info>
-          <ItemTable order={ data?.Order_items || [] } />
+          <ItemTable order={ value?.data?.Order_items || [] } />
         </Wrapper>
       </Container>
     </PageWidthHeight>
