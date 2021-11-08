@@ -39,10 +39,10 @@ const useFetch = (url, options) => {
         const data = await res.json()
         setValue(data)
         if (res.status !== 200) throw new Error(data.message)
-        if (callback) callback()
+        if (callback) callback(data)
         
       } catch (error) {
-        if (errorHandler) errorHandler()
+        if (errorHandler) errorHandler(error)
         setError(error)
 
       } finally {
