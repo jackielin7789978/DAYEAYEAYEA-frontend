@@ -19,7 +19,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { useTwZipCode, cities, districts } from 'use-tw-zipcode'
 import { GeneralBtn } from '../../../components/Button'
-import { UserContext } from '../../../context'
+import { UserContext, OversoldContext } from '../../../context'
 import Login from '../../Login/Login'
 import { COLOR } from '../../../constants/style'
 import { LocalStorageContext } from '../../../context'
@@ -29,6 +29,7 @@ import { getTokenFromLocalStorage } from '../../../utils'
 export default function Step2() {
   const { cartItems, setCartItems } = useContext(LocalStorageContext)
   const { user, setUser } = useContext(UserContext)
+  const { setIsOversold } = useContext(OversoldContext)
   const { errMsg } = useState()
   const location = useHistory()
   const [userStreet, setUserStreet] = useState()
@@ -50,7 +51,7 @@ export default function Step2() {
 
   useEffect(() => {
     if (!user?.address) return ''
-    setUserStreet(user?.address.replace(newCity + newDistricts, ''))
+    setUserStreet(user?.address.replace(newCity, '').replace(newDistricts, ''))
   }, [user, newCity, newDistricts])
 
   useEffect(() => {
@@ -75,12 +76,16 @@ export default function Step2() {
     async (e) => {
       if (e.target.checked) {
         if (user?.address) {
-          await handleCityChange(newCity)
-          await handleDistrictChange(newDistricts)
-          setTimeout(() => {
-            setValue('district', newDistricts)
-          }, 0)
-          setValue('city', newCity)
+          if (newCity) {
+            await handleCityChange(newCity)
+            setValue('city', newCity)
+          }
+          if (newDistricts) {
+            await handleDistrictChange(newDistricts)
+            setTimeout(() => {
+              setValue('district', newDistricts)
+            }, 0)
+          }
           setValue('street', userStreet)
         }
         setValue('orderEmail', user.email)
@@ -130,7 +135,8 @@ export default function Step2() {
     )
 
     if (result.ok === 0) {
-      console.log(result.message)
+      setIsOversold(true)
+      return location.push(`/checkout/step1`)
     }
     localStorage.removeItem('cartItemsList')
     location.push(`/checkout/step3/${result.ticketNo}`)

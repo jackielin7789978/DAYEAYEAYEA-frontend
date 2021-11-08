@@ -9,6 +9,8 @@ import {
 } from '../../../constants/style'
 import { Wrapper } from '../../../components/admin/TableStyle'
 import { LogoutBtn } from '../../../components/Button'
+import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
+import { GeneralBtn } from '../../../components/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { formatPrice } from '../../../utils'
@@ -18,12 +20,10 @@ import {
   archiveOrder
 } from '../../../webAPI/adminAPIs'
 import useFetchData from '../../../hooks/useFetchData'
+import useModal from '../../../hooks/useModal'
 import Item from '../../../components/admin/orderManage/DetailItem'
 import OrderInfo from '../../../components/admin/orderManage/OrderInfo'
 import Buttons from '../../../components/admin/orderManage/Buttons'
-import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
-import { GeneralBtn } from '../../../components/Button'
-import { FullModal } from '../../../components/Modal'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -112,12 +112,27 @@ const PriceDetail = styled.div`
   }
 `
 
+const ModalButton = ({ children, color, onClick }) => {
+  const style = {
+    fontSize: '16px',
+    width: '45%'
+  }
+  return (
+    <GeneralBtn
+      color={color}
+      buttonStyle={style}
+      children={children}
+      onClick={onClick}
+    />
+  )
+}
 export default function AdminOrderDetail() {
   const [isOpen, setIsOpen] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const [orderDetail, setOrderDetail] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const { ticket } = useParams()
+  const { isModal, setIsModal, handleModalClose, Modal } = useModal()
+  const [modalContent, setModalContent] = useState('')
 
   useFetchData(getSingleOrder, setOrderDetail, setIsLoading, ticket)
 
@@ -125,18 +140,29 @@ export default function AdminOrderDetail() {
     ;(async () => {
       const res = await archiveOrder(ticketNo)
       if (!res.ok) return alert('發生錯誤：' + res.message)
-      alert('已封存訂單！')
-      window.location.reload()
+      setModalContent('已封存訂單')
+      setIsModal(true)
+      setOrderDetail({ ...orderDetail, isDeleted: 1 })
     })()
   }
 
   const handleOrderStatus = (action) => {
-    if (action === 'cancel' && !isModalOpen) return setIsModalOpen(true)
+    // 按下取消後，會先跳 Modal 向使用者確認是否取消
+    if (action === 'cancel' && !isModal) {
+      setModalContent('確定要取消這筆訂單？')
+      setIsModal(true)
+      return
+    }
+    if (action === 'cancel') {
+      setModalContent('確定要取消這筆訂單？')
+    } else {
+      setModalContent('變更成功！')
+    }
     ;(async () => {
       const res = await updateOrderStatus(ticket, action)
       if (!res.ok) return alert('發生錯誤：' + res.message)
-      alert('變更成功！')
-      window.location.reload()
+      setIsModal(true)
+      setOrderDetail({ ...orderDetail, status: convertOrderStatus(action) })
     })()
   }
 
@@ -207,35 +233,52 @@ export default function AdminOrderDetail() {
               orderDetail={orderDetail}
               handleOrderStatus={handleOrderStatus}
               handleArchive={handleArchive}
-              isModalOpen={isModalOpen}
-              setIsModalOpen={setIsModalOpen}
+              isModal={isModal}
+              setIsModal={setIsModal}
             />
           </>
         )}
       </Container>
-      <FullModal
-        open={isModalOpen}
-        content='確定要取消這筆訂單嗎？'
-        buttonOne={
-          <GeneralBtn
-            onClick={() => handleOrderStatus('cancel')}
-            color='admin_blue'
-            children='確定'
-            buttonStyle={{ width: '45%' }}
-          />
-        }
-        buttonTwo={
-          <GeneralBtn
-            onClick={() => setIsModalOpen(false)}
-            color='admin_grey'
-            children='返回'
-            buttonStyle={{ width: '45%' }}
-          />
-        }
-        onClose={() => {
-          setIsModalOpen(false)
-        }}
-      />
+      {modalContent === '確定要取消這筆訂單？' ? (
+        <Modal
+          open={isModal}
+          content={modalContent}
+          buttonOne={
+            <ModalButton
+              color={'admin_blue'}
+              onClick={() => handleOrderStatus('cancel')}
+            >
+              確定
+            </ModalButton>
+          }
+          buttonTwo={
+            <ModalButton color={'admin_grey'} onClick={() => setIsModal(false)}>
+              返回
+            </ModalButton>
+          }
+          onClose={handleModalClose}
+        />
+      ) : (
+        <Modal open={isModal} content={modalContent} />
+      )}
     </PageWrapper>
   )
+}
+
+const convertOrderStatus = (status) => {
+  let convertedStatus = ''
+  switch (status) {
+    case 'ship':
+      convertedStatus = '已出貨'
+      break
+    case 'cancel':
+      convertedStatus = '已取消'
+      break
+    case 'complete':
+      convertedStatus = '已完成'
+      break
+    default:
+      convertedStatus = '處理中'
+  }
+  return convertedStatus
 }

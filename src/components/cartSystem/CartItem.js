@@ -3,7 +3,6 @@ import { LocalStorageContext } from '../../context'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
-import { ImgAnchor } from '../general'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { formatPrice } from '../../utils'
@@ -17,7 +16,7 @@ const ItemContainer = styled.div`
     padding: 10px 0px;
   }
 `
-const Pic = styled.div`
+const Pic = styled(Link)`
   min-width: 70px;
   height: 70px;
   background: url(${({ $img }) => $img}) no-repeat center;
@@ -71,9 +70,7 @@ export default function CartItem({ id, name, img, price, quantity }) {
   const { handleRemoveCartItem } = useContext(LocalStorageContext)
   return (
     <ItemContainer>
-      <Pic $img={img}>
-        <ImgAnchor to={`/products/${id}`} style={{ height: '70px' }} />
-      </Pic>
+      <Pic to={`/products/${id}`} style={{ height: '70px' }} $img={img} />
       <Info>
         <Name to={`/products/${id}`}>{name}</Name>
         <NumPrice>

@@ -151,7 +151,8 @@ function TableItem({ product }) {
           count={productQuantity}
         />
       </ProductCell>
-      <ProductCell>{article}</ProductCell>
+      {article !== 'null' && <ProductCell>{article}</ProductCell>}
+      {article === 'null' && <ProductCell>無</ProductCell>}
       <ProductCell>
         <ButtonContainer onClick={handleOnStatusClick} id={id}>
           <StatusButton status={productStatus} id={id} />

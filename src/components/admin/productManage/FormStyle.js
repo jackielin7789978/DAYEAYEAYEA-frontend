@@ -1,15 +1,27 @@
 import styled from 'styled-components'
-import { ADMIN_COLOR, COLOR, FONT_SIZE } from '../../../constants/style'
+import {
+  ADMIN_COLOR,
+  COLOR,
+  FONT_SIZE,
+  ADMIN_MEDIA_QUERY
+} from '../../../constants/style'
 import { EditBtn, LogoutBtn, SaveBtn } from '../../../components/Button'
 
 const FormWrapper = styled.div`
   min-height: 850px;
   height: 850px;
   transition: 1.5s;
-  width: 90%;
   margin: 30px auto;
   border: 1px solid ${ADMIN_COLOR.border_grey};
+  width: 70vw;
+  ${ADMIN_MEDIA_QUERY.md} {
+    max-width: 1480px;
+  }
+  ${ADMIN_MEDIA_QUERY.lg} {
+    max-width: 1480px;
+  }
 `
+
 const Form = styled.form`
   padding: 20px 0px 50px 0px;
   height: 100%;

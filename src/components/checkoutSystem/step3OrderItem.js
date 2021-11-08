@@ -11,7 +11,7 @@ import {
 import { formatPrice } from '../../utils'
 export const OrderItem = ({ item }) => {
   return (
-    <Item key={item.productId}>
+    <Item key={`product${item.productId}`}>
       {/* 有些商品的 Product_imgs 陣列沒有 3 個(例如耳環)，一律抓第 3 個會出錯，故新增判斷 */}
       <ItemImg
         img={

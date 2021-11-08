@@ -6,7 +6,6 @@ import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import { ShoppingCarBtn, ShoppingCarWhiteBtn, GeneralBtn } from '../Button'
 import { ModalContext, LocalStorageContext } from '../../context'
 import { formatPrice, getItemsFromLocalStorage } from '../../utils'
-import { useEffect } from 'react'
 
 const CardContainerDiv = styled.div`
   margin: 8px 4px;
@@ -18,6 +17,11 @@ const CardContainerDiv = styled.div`
   position: relative;
   ${(props) =>
     props.status === 'off' &&
+    `
+    opacity: 0.5;
+  `}
+  ${(props) =>
+    props.stockQuantity === 0 &&
     `
     opacity: 0.5;
   `}
@@ -182,10 +186,17 @@ export function ProductCard({
 }) {
   let hasDiscount = price !== discountPrice ? true : false
   const isDesktop = useMediaQuery('(min-width: 1200px)')
+  const localCart = JSON.parse(getItemsFromLocalStorage())
+  let isProductInCart = localCart
+    ? localCart.filter((item) => item.id === parseInt(id))
+    : []
+  let cartQuantity =
+    isProductInCart.length > 0 ? isProductInCart[0].quantity : 0
+  const stock = stockQuantity - cartQuantity
   // eslint-disable-next-line no-unused-vars
   const { setIsModalOpen, setIsProductSoldOut } = useContext(ModalContext)
   const { handleAddCartItem } = useContext(LocalStorageContext)
-  const [inStock, setInStock] = useState(0)
+  const [inStock, setInStock] = useState(stock)
   const quantity = 1
   const productInfo = useMemo(
     () => ({
@@ -198,22 +209,10 @@ export function ProductCard({
     [name, price, discountPrice, imgs]
   )
 
-  useEffect(() => {
-    const cartInLocal = JSON.parse(getItemsFromLocalStorage())
-    const isProductInCart =
-      (cartInLocal && cartInLocal.filter((item) => item.id === id)) || []
-    if (isProductInCart.length === 0) {
-      setInStock(stockQuantity)
-    } else {
-      const surplus = stockQuantity - isProductInCart[0].quantity
-      surplus === 0 ? setInStock(0) : setInStock(surplus)
-    }
-  }, [id, stockQuantity])
-
   const handleAddProductInCart = () => {
     if (inStock > 0) {
       setInStock(inStock - 1)
-      handleAddCartItem(id, productInfo)
+      handleAddCartItem(parseInt(id), productInfo)
       setIsProductSoldOut((isProductSoldOut) => true)
       return setIsModalOpen(true)
     }
@@ -224,12 +223,13 @@ export function ProductCard({
   }
 
   return (
-    <CardContainerDiv status={status}>
+    <CardContainerDiv status={status} stockQuantity={stockQuantity}>
       <CardLink to={`/products/${id}`}>
         <ImgContainer
           style={{ backgroundImage: `url(${imgUrl})` }}
           status={status}
         >
+          {stockQuantity === 0 && <SoldOut>售完</SoldOut>}
           {status === 'off' && <SoldOut>售完</SoldOut>}
         </ImgContainer>
         <ProductInfoContainer>
@@ -251,6 +251,11 @@ export function ProductCard({
           ) : (
             <ShoppingCarWhiteBtn onClick={handleAddProductInCart} />
           )}
+        </ButtonContainer>
+      )}
+      {stockQuantity === 0 && (
+        <ButtonContainer>
+          <GeneralBtn>售完</GeneralBtn>
         </ButtonContainer>
       )}
       {status === 'off' && (
