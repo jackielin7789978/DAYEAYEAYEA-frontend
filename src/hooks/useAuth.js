@@ -29,11 +29,14 @@ const useAuth = (suffixPath = '') => {
   }, [token])
 
   const singIn = useCallback((username, password) => {
-    fetchData('/login', { username, password }, (res) => setToken(res.token))
+    fetchData({
+      suffixPath: '/login',
+      bodyData: { username, password },
+      handler: (res) => setToken(res.token)})
   }, [fetchData])
 
   const signUp = useCallback((username, email, password) => {
-    fetchData('', { username, email, password })
+    fetchData({ bodyData: { username, email, password }})
   }, [fetchData])
 
   const logout = useCallback(() => {
@@ -45,6 +48,7 @@ const useAuth = (suffixPath = '') => {
 
   return {
     user,
+    setUser,
     token,
     isLoggedIn,
     verifyAuth,
@@ -55,7 +59,6 @@ const useAuth = (suffixPath = '') => {
 }
 
 export default useAuth
-
 
 const AuthContext = createContext()
 

@@ -51,6 +51,7 @@ import {
 } from './context'
 import GlobalStyle from './constants/globalStyle'
 import jwt_decode from 'jwt-decode'
+import useAuth from './hooks/useAuth'
 
 export default function App() {
   return (
@@ -126,17 +127,8 @@ function Shop() {
     JSON.parse(getItemsFromLocalStorage())
   )
 
-  const [user, setUser] = useState()
-  useEffect(() => {
-    if (!getTokenFromLocalStorage() || isTokenExpired(getTokenFromLocalStorage())) return false
-    try {
-      const _info = jwt_decode(getTokenFromLocalStorage())
-      if (_info.hasOwnProperty('id')) return setUser(_info)
-      return setUser(null)
-    } catch (error) {
-      return setUser(null)
-    }
-  }, [])
+  const { user, setUser } = useAuth()
+
 
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
