@@ -28,7 +28,7 @@ export default function Buttons({
             children='出貨'
           />
           <GeneralBtn
-            onClick={() => handleOrderStatus('cancel')}
+            onClick={() => handleOrderStatus('check cancel')}
             color='admin_grey'
             children='取消訂單'
           />

@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import { getOrders } from '../../../webAPI/adminAPIs'
-import { Search, Filter } from '../../../components/admin/orderManage/Search'
 import styled from 'styled-components'
 import {
   FONT_SIZE,
@@ -12,11 +10,15 @@ import {
   Header,
   TableItemContainer
 } from '../../../components/admin/TableStyle'
-import TableItem from '../../../components/admin/orderManage/TableItem'
 import { GeneralBtn } from '../../../components/Button'
-import useFetchData from '../../../hooks/useFetchData'
 import { calTotalPages } from '../../../utils'
 import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
+import {
+  TableItem,
+  Search,
+  Filter
+} from '../../../components/admin/orderManage'
+import useFetch from '../../../hooks/useFetch'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -66,12 +68,31 @@ const PaginatorBtn = styled.button`
 `
 const headerNames = ['訂單狀態', '訂單編號', 'Email', '訂單金額', 'Edit']
 
+// Enzo 更新 useFetch 後再修，目前有同步問題，先用 orders.data && 擋掉
 export default function AdminOrders() {
-  const [orders, setOrders] = useState([])
   const [filter, setFilter] = useState('所有訂單')
   const [isViewingArchive, setIsViewingArchive] = useState(false)
   const [offset, setOffset] = useState(0)
-  const [isLoading, setIsLoading] = useState(true)
+
+  // 抓所有訂單
+  const {
+    isLoading,
+    value: orders,
+    fetchData: getOrders
+  } = useFetch('/admin/orders/')
+
+  useEffect(() => {
+    getOrders('active', null, null, () => {
+      console.log('something"s wrong')
+    })
+  }, [getOrders])
+
+  // 查看所有/封存訂單
+  const handleGetOrders = (condition) => {
+    getOrders(condition, null, null, () => {
+      console.log('something"s wrong')
+    })
+  }
 
   // 搜尋功能
   const [searchVal, setSearchVal] = useState('')
@@ -80,7 +101,7 @@ export default function AdminOrders() {
     let reg = new RegExp(searchVal, 'i')
     searchVal
       ? setSearchedOrders(
-          orders.filter(
+          orders.data.filter(
             (order) =>
               reg.test(order.status) ||
               reg.test(order.ticketNo) ||
@@ -90,30 +111,21 @@ export default function AdminOrders() {
       : setSearchedOrders('')
   }, [orders, searchVal])
 
-  const filteredOrders = orders.filter((orders) => orders.status === filter)
+  let filteredOrders
   const ORDERS_PER_PAGE = 10
-  const TotalPages =
-    filter === '所有訂單'
-      ? [...Array(calTotalPages(orders.length)).keys()]
-      : [...Array(calTotalPages(filteredOrders.length)).keys()]
+  let TotalPages = Array(1)
+  if (orders.data) {
+    filteredOrders = orders.data.filter((order) => order.status === filter)
+    TotalPages =
+      filter === '所有訂單'
+        ? [...Array(calTotalPages(orders.data.length)).keys()]
+        : [...Array(calTotalPages(filteredOrders.length)).keys()]
+  }
 
   const handleFilter = (name) => {
     setFilter(name)
     setOffset(0)
   }
-
-  const handleGetOrders = (condition) => {
-    setIsLoading(true)
-    ;(async () => {
-      const res = await getOrders(condition)
-      if (!res.ok) alert('發生錯誤：' + res.message)
-      setOrders(res.data)
-      setOffset(0)
-      setIsLoading(false)
-    })()
-  }
-
-  useFetchData(getOrders, setOrders, setIsLoading, 'active')
 
   return (
     <PageWrapper>
@@ -163,11 +175,13 @@ export default function AdminOrders() {
                 .sort((a, b) => b.id - a.id)
                 .map((order) => <TableItem key={order.id} order={order} />)
             : isViewingArchive
-            ? orders
+            ? orders.data &&
+              orders.data
                 .sort((a, b) => b.id - a.id)
                 .slice(offset, offset + ORDERS_PER_PAGE)
                 .map((order) => <TableItem key={order.id} order={order} />)
-            : orders
+            : orders.data &&
+              orders.data
                 .filter((order) =>
                   filter === '所有訂單' ? order : order.status === filter
                 )
