@@ -106,10 +106,7 @@ const Button = ({ type, color, children, onClick }) => {
 const Info = ({ profile }) => {
   const [isEditing, setIsEditing] = useState(false);
   const { handleModalOpen, Modal } = useModal()
-  const { fetchData: updateMe } = useFetch(
-    '/members/me', 
-    { method: 'PATCH'}
-    )
+  const { fetchData: updateMe } = useFetch('/members/me', { method: 'PATCH'})
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = useCallback(async (data) => {
@@ -120,12 +117,11 @@ const Info = ({ profile }) => {
       profile.address = address
       profile.phone = phone
 
-      updateMe(
-        '',
-        { fullname, address, phone },
-        () => handleModalOpen('已更新會員資訊 ! '),
-        () => handleModalOpen('更新會員資訊失敗 ! ')
-      )
+      updateMe({
+        bodyData: { fullname, address, phone },
+        handler: () => handleModalOpen('已更新會員資訊 ! '),
+        errorHandler: () => handleModalOpen('更新會員資訊失敗 ! ')
+      })
     } catch (error) {
       const { message } = error.response.data
       console.log(message)

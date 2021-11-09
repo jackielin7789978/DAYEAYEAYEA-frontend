@@ -12,7 +12,20 @@ const useFetch = (url, options) => {
   )
 
   const fetchData = useCallback(
-    (suffixPath = '', bodyData = null, callback, errorHandler) => {
+    (args) => {
+      let requestOption = {
+        suffixPath: '',
+        bodyData: null,
+        handler: undefined,
+        errorHandler: undefined
+      }
+      if (args && typeof args === 'object') {
+        requestOption = { ...requestOption, ...args }
+      }
+      const { suffixPath, bodyData, handler, errorHandler } = {
+        ...requestOption
+      }
+
       ;(async () => {
         try {
           setIsLoading(true)
@@ -26,7 +39,7 @@ const useFetch = (url, options) => {
             }
           }
           const body = bodyData && JSON.stringify(bodyData)
-          const res = await fetch(targetURL + suffixPath, {
+          const res = await fetch(targetURL + (suffixPath || ''), {
             ...DEFAULT_OPTIONS,
             ...options,
             body
@@ -34,9 +47,9 @@ const useFetch = (url, options) => {
           const data = await res.json()
           setValue(data)
           if (res.status !== 200) throw new Error(data.message)
-          if (callback) callback()
+          if (handler) handler(data)
         } catch (error) {
-          if (errorHandler) errorHandler()
+          if (errorHandler) errorHandler(error)
           setError(error)
         } finally {
           setIsLoading(false)
