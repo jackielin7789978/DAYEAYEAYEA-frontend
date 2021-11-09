@@ -131,7 +131,11 @@ export default function AdminOrderDetail() {
   const { isModal, setIsModal, handleModalOpen, Modal } = useModal('')
 
   // 抓訂單資料
-  const { isLoading, value, fetchData } = useFetch(`/admin/orders/${ticket}`)
+  const {
+    isLoading,
+    value: order,
+    fetchData
+  } = useFetch(`/admin/orders/${ticket}`)
 
   useEffect(() => {
     fetchData()
@@ -143,9 +147,11 @@ export default function AdminOrderDetail() {
   })
 
   const handleArchive = () => {
-    archiveOrder('', '', () => {
-      handleModalOpen('已封存訂單。')
-      value.data.isDeleted = 1
+    archiveOrder({
+      handler: () => {
+        handleModalOpen('已封存訂單。')
+        order.data.isDeleted = 1
+      }
     })
   }
 
@@ -166,8 +172,11 @@ export default function AdminOrderDetail() {
     setIsCheckModalOpen(false)
     handleModalOpen('變更成功！')
     setIsModal(true)
-    updateOrderStatus(action, '', () => {
-      value.data.status = convertOrderStatus(action)
+    updateOrderStatus({
+      suffixPath: action,
+      handler: () => {
+        order.data.status = convertOrderStatus(action)
+      }
     })
   }
 
@@ -182,16 +191,16 @@ export default function AdminOrderDetail() {
         />
       </Link>
       <Container>
-        {value.data && (
+        {order.data && (
           <>
             <Title>訂購明細</Title>
             <Subtotal>
               <span>
-                共 <b>{value.data.Order_items.length}</b> 件商品
+                共 <b>{order.data.Order_items.length}</b> 件商品
               </span>
               <span>
                 合計：
-                <b>{value.data.subTotal && formatPrice(value.data.subTotal)}</b>
+                <b>{order.data.subTotal && formatPrice(order.data.subTotal)}</b>
               </span>
               <Collapser
                 onClick={() => {
@@ -208,7 +217,7 @@ export default function AdminOrderDetail() {
                 <Header>數量</Header>
                 <Header>小計</Header>
               </TableHeaders>
-              {value.data.Order_items.map((item) => (
+              {order.data.Order_items.map((item) => (
                 <Item key={item.productId} item={item} />
               ))}
               <PriceDetail>
@@ -219,7 +228,7 @@ export default function AdminOrderDetail() {
                 <div>
                   <span>合計：</span>
                   <span>
-                    {value.data.subTotal && formatPrice(value.data.subTotal)}
+                    {order.data.subTotal && formatPrice(order.data.subTotal)}
                   </span>
                 </div>
               </PriceDetail>
@@ -228,12 +237,12 @@ export default function AdminOrderDetail() {
         )}
       </Container>
       <Container>
-        {value.data && (
+        {order.data && (
           <>
             <Title>訂單資料</Title>
-            <OrderInfo orderDetail={value.data} />
+            <OrderInfo orderDetail={order.data} />
             <Buttons
-              orderDetail={value.data}
+              orderDetail={order.data}
               handleOrderStatus={handleOrderStatus}
               handleArchive={handleArchive}
               isModal={isModal}
