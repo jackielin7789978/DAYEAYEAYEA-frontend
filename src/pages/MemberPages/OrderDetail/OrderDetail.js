@@ -91,23 +91,13 @@ const OrderDetail = () => {
   const history = useHistory()
   const { ticket } = useParams()
   const { isLoading, value , fetchData } = useFetch(`/orders/me/${ticket}`)
-  const { fetchData: cancelOrder } = useFetch(
-    `/orders/me/${ticket}/cancel`, 
-    { method: 'PATCH' }
-    )
+  const { fetchData: cancelOrder } = useFetch(`/orders/me/${ticket}/cancel`, { method: 'PATCH' })
   const handleCancel = useCallback(() => {
-    cancelOrder(
-      '',
-      null,
-      () => { value.data.status = '已取消' }
-    )
+    cancelOrder({ handler: () => value.data.status = '已取消' })
     handleModalClose()
   }, [handleModalClose, cancelOrder, value])
 
-
-  useEffect(() => {
-    fetchData()
-  }, [fetchData])
+  useEffect(() => fetchData(), [fetchData])
 
   return (
     <PageWidthHeight>

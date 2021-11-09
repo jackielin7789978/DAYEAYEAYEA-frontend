@@ -9,13 +9,18 @@ const useFetch = (url, options) => {
   const [error, setError] = useState(null)
   const targetURL = useMemo(() =>  /^https/.test(url) ?  url : `${BASE_URL}${url}`, [url])
 
-  const fetchData = useCallback(
-    (
-      suffixPath = '', 
-      bodyData = null,
-      callback,
-      errorHandler
-    ) => {
+  const fetchData = useCallback((args) => {
+    let requestOption = {
+      suffixPath: '', 
+      bodyData: null, 
+      handler: undefined, 
+      errorHandler: undefined
+    }
+    if (args && typeof args === 'object') {
+      requestOption = { ...requestOption, ...args }
+    }
+    const { suffixPath, bodyData, handler, errorHandler } = { ...requestOption }
+
     ;(async () => {
       try {
         setIsLoading(true)
@@ -30,7 +35,7 @@ const useFetch = (url, options) => {
         }
         const body = bodyData && JSON.stringify(bodyData)
         const res = await fetch(
-          targetURL + suffixPath, 
+          targetURL + (suffixPath || ''),
           { 
             ...DEFAULT_OPTIONS , 
             ...options,
@@ -39,7 +44,7 @@ const useFetch = (url, options) => {
         const data = await res.json()
         setValue(data)
         if (res.status !== 200) throw new Error(data.message)
-        if (callback) callback(data)
+        if (handler) handler(data)
         
       } catch (error) {
         if (errorHandler) errorHandler(error)
