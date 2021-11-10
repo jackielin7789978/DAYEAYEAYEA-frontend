@@ -14,19 +14,23 @@ const useAuth = (suffixPath = '') => {
   
   const verifyAuth = useCallback(() => {
     try {
-      setToken(() => getTokenFromLocalStorage())
-      if (token && !isTokenExpired(token)) {
-        const user = jwt_decode(token)
-        setUser(() => user)
+      const _token = getTokenFromLocalStorage()
+      if (_token && !isTokenExpired(_token)) {
+        console.log(isTokenExpired(_token))
+        const user = jwt_decode(_token)
+        console.log(user.exp)
+        console.log(Date.now() / 1000)
+        setToken(_token)
+        setUser(user)
         setIsLoggedIn(true)
         return
       }
     } catch(e) {
       console.log(e)
     }
-    setUser(() => null)
+    setUser(null)
     setIsLoggedIn(false)
-  }, [token])
+  }, [])
 
   const singIn = useCallback((username, password) => {
     fetchData({
