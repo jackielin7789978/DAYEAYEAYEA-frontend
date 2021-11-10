@@ -5,8 +5,9 @@ import {
   getAllProductsByPage,
   getCategoryProductsByPage
 } from '../../webAPI/productsAPI'
-import { LoadingContext, ModalContext } from '../../context'
-import { IsLoadingComponent } from '../../components/IsLoading'
+import useModal from '../../hooks/useModal'
+import { LoadingContext } from '../../context'
+import { IsLoadingComponent as Loading } from '../../components/IsLoading'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { PageWidth } from '../../components/general'
 import {
@@ -15,10 +16,6 @@ import {
 } from '../../components/productSystem/ProductCard'
 import { countWhiteCardAmount, setNumInArray } from '../../utils'
 import { PaginatorButton } from '../../components/Paginator'
-import {
-  AddCartModal,
-  SoldOutCartModal
-} from '../../components/productSystem/ProductModal'
 
 const CardContainer = styled.div`
   display: flex;
@@ -35,8 +32,7 @@ export default function Categories() {
   const [products, setProducts] = useState([])
   const [totalPage, setTotalPage] = useState([])
   const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, handleModalClose, isProductSoldOut } =
-    useContext(ModalContext)
+  const { handleModalOpen, Modal } = useModal()
   const isMobile = useMediaQuery('(max-width: 767px)')
   const isDesktop = useMediaQuery('(min-width: 1200px)')
   const pathname = useLocation().pathname
@@ -74,68 +70,63 @@ export default function Categories() {
   const whiteCardAmount = countWhiteCardAmount(products.length, isDesktop)
   return (
     <PageWidth>
-      {isLoading && <IsLoadingComponent />}
-      {isProductSoldOut && (
-        <AddCartModal
-          isModalOpen={isModalOpen}
-          handleModalClose={handleModalClose}
-        />
-      )}
-      {!isProductSoldOut && (
-        <SoldOutCartModal
-          isModalOpen={isModalOpen}
-          handleModalClose={handleModalClose}
-        />
-      )}
-      <CardContainer>
-        {products.map(
-          ({
-            id,
-            name,
-            price,
-            Product_imgs,
-            discountPrice,
-            status,
-            quantity
-          }) => {
-            const length = Product_imgs.length
-            const imgUrl = isMobile
-              ? Product_imgs[length - 1].imgUrlMd
-              : Product_imgs[length - 1].imgUrlLg
-            return (
-              <ProductCard
-                id={id}
-                key={id}
-                imgUrl={imgUrl}
-                imgs={Product_imgs}
-                name={name}
-                price={price}
-                discountPrice={discountPrice}
-                status={status}
-                stockQuantity={quantity}
-              />
-            )
-          }
-        )}
-        {whiteCardAmount.length > 0 &&
-          whiteCardAmount.map((amount) => {
-            return <WhiteCard key={amount} />
-          })}
-      </CardContainer>
-      {totalPage.length > 1 && (
-        <PaginatorDiv>
-          {totalPage.map((singlePage) => {
-            const linkDirection = `/categories/${slug}/${singlePage}`
-            return (
-              <PaginatorButton
-                key={singlePage}
-                page={singlePage}
-                to={linkDirection}
-                active={pathname === linkDirection}
-              ></PaginatorButton>
-            )
-          })}
-        </PaginatorDiv>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <Modal />
+          <CardContainer>
+            {products.map(
+              ({
+                id,
+                name,
+                price,
+                Product_imgs,
+                discountPrice,
+                status,
+                quantity
+              }) => {
+                const length = Product_imgs.length
+                const imgUrl = isMobile
+                  ? Product_imgs[length - 1].imgUrlMd
+                  : Product_imgs[length - 1].imgUrlLg
+                return (
+                  <ProductCard
+                    id={id}
+                    key={id}
+                    imgUrl={imgUrl}
+                    imgs={Product_imgs}
+                    name={name}
+                    price={price}
+                    discountPrice={discountPrice}
+                    status={status}
+                    stockQuantity={quantity}
+                    handleModalOpen={handleModalOpen}
+                  />
+                )
+              }
+            )}
+            {whiteCardAmount.length > 0 &&
+              whiteCardAmount.map((amount) => {
+                return <WhiteCard key={amount} />
+              })}
+          </CardContainer>
+          {totalPage.length > 1 && (
+            <PaginatorDiv>
+              {totalPage.map((singlePage) => {
+                const linkDirection = `/categories/${slug}/${singlePage}`
+                return (
+                  <PaginatorButton
+                    key={singlePage}
+                    page={singlePage}
+                    to={linkDirection}
+                    active={pathname === linkDirection}
+                  ></PaginatorButton>
+                )
+              })}
+            </PaginatorDiv>
+          )}
+        </>
       )}
     </PageWidth>
   )

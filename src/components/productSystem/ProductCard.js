@@ -4,7 +4,7 @@ import useMediaQuery from '../../hooks/useMediaQuery'
 import { Link } from 'react-router-dom'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import { ShoppingCarBtn, ShoppingCarWhiteBtn, GeneralBtn } from '../Button'
-import { ModalContext, LocalStorageContext } from '../../context'
+import { LocalStorageContext } from '../../context'
 import { formatPrice, getItemsFromLocalStorage } from '../../utils'
 
 const CardContainerDiv = styled.div`
@@ -182,20 +182,19 @@ export function ProductCard({
   discountPrice,
   imgs,
   status,
-  stockQuantity
+  stockQuantity,
+  handleModalOpen
 }) {
-  let hasDiscount = price !== discountPrice ? true : false
+  const { handleAddCartItem } = useContext(LocalStorageContext)
   const isDesktop = useMediaQuery('(min-width: 1200px)')
   const localCart = JSON.parse(getItemsFromLocalStorage())
+  let hasDiscount = price !== discountPrice ? true : false
   let isProductInCart = localCart
     ? localCart.filter((item) => item.id === parseInt(id))
     : []
   let cartQuantity =
     isProductInCart.length > 0 ? isProductInCart[0].quantity : 0
   const stock = stockQuantity - cartQuantity
-  // eslint-disable-next-line no-unused-vars
-  const { setIsModalOpen, setIsProductSoldOut } = useContext(ModalContext)
-  const { handleAddCartItem } = useContext(LocalStorageContext)
   const [inStock, setInStock] = useState(stock)
   const quantity = 1
   const productInfo = useMemo(
@@ -213,12 +212,10 @@ export function ProductCard({
     if (inStock > 0) {
       setInStock(inStock - 1)
       handleAddCartItem(parseInt(id), productInfo)
-      setIsProductSoldOut((isProductSoldOut) => true)
-      return setIsModalOpen(true)
+      return handleModalOpen('已成功加入購物車 ! ')
     }
     if (inStock === 0) {
-      setIsProductSoldOut((isProductSoldOut) => false)
-      return setIsModalOpen(true)
+      return handleModalOpen('此商品達庫存上限')
     }
   }
 
@@ -229,8 +226,7 @@ export function ProductCard({
           style={{ backgroundImage: `url(${imgUrl})` }}
           status={status}
         >
-          {stockQuantity === 0 && <SoldOut>售完</SoldOut>}
-          {status === 'off' && <SoldOut>售完</SoldOut>}
+          {(stockQuantity === 0 || status === 'off') && <SoldOut>售完</SoldOut>}
         </ImgContainer>
         <ProductInfoContainer>
           <TitleContainer>{name}</TitleContainer>
@@ -253,12 +249,7 @@ export function ProductCard({
           )}
         </ButtonContainer>
       )}
-      {stockQuantity === 0 && (
-        <ButtonContainer>
-          <GeneralBtn>售完</GeneralBtn>
-        </ButtonContainer>
-      )}
-      {status === 'off' && (
+      {(stockQuantity === 0 || status === 'off') && (
         <ButtonContainer>
           <GeneralBtn>售完</GeneralBtn>
         </ButtonContainer>

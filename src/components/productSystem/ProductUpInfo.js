@@ -144,7 +144,8 @@ export function ProductUpInfoComponent({
   imgs,
   hasDiscount,
   totalQuantity,
-  status
+  status,
+  handleModalOpen
 }) {
   const localCart = JSON.parse(getItemsFromLocalStorage())
   let isProductInCart = localCart
@@ -180,12 +181,10 @@ export function ProductUpInfoComponent({
     if (inStock > 0) {
       setInStock(inStock - quantity)
       handleAddCartItem(parseInt(id), productInfo)
-      setIsProductSoldOut((isProductSoldOut) => true)
-      return setIsModalOpen(true)
+      return handleModalOpen('已成功加入購物車 ! ')
     }
     if (inStock === 0) {
-      setIsProductSoldOut((isProductSoldOut) => false)
-      return setIsModalOpen(true)
+      return handleModalOpen('此商品達庫存上限')
     }
   }
 

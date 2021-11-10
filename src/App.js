@@ -121,14 +121,17 @@ function AdminRoutes() {
 function Shop() {
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isProductSoldOut, setIsProductSoldOut] = useState(false)
   const [cartItems, setCartItems] = useState(
     JSON.parse(getItemsFromLocalStorage())
   )
-
   const [user, setUser] = useState()
+
   useEffect(() => {
-    if (!getTokenFromLocalStorage() || isTokenExpired(getTokenFromLocalStorage())) return false
+    if (
+      !getTokenFromLocalStorage() ||
+      isTokenExpired(getTokenFromLocalStorage())
+    )
+      return false
     try {
       const _info = jwt_decode(getTokenFromLocalStorage())
       if (_info.hasOwnProperty('id')) return setUser(_info)
@@ -140,7 +143,6 @@ function Shop() {
 
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
-    setIsProductSoldOut((isProductSoldOut) => false)
   }, [setIsModalOpen])
 
   const totalPrice = useMemo(() => {
@@ -212,9 +214,7 @@ function Shop() {
           value={{
             isModalOpen,
             setIsModalOpen,
-            handleModalClose,
-            isProductSoldOut,
-            setIsProductSoldOut
+            handleModalClose
           }}
         >
           <LocalStorageContext.Provider
