@@ -1,22 +1,17 @@
 import { useState, useEffect } from 'react'
-import { getOrders } from '../../../webAPI/adminAPIs'
-import { Search, Filter } from '../../../components/admin/orderManage/Search'
 import styled from 'styled-components'
 import {
   FONT_SIZE,
-  ADMIN_COLOR,
-  ADMIN_MEDIA_QUERY
+  ADMIN_MEDIA_QUERY,
+  ADMIN_COLOR
 } from '../../../constants/style'
-import {
-  ColumnHeader,
-  Header,
-  TableItemContainer
-} from '../../../components/admin/TableStyle'
-import TableItem from '../../../components/admin/orderManage/TableItem'
+import { ColumnHeader, Header } from '../../../components/admin/TableStyle'
 import { GeneralBtn } from '../../../components/Button'
-import useFetchData from '../../../hooks/useFetchData'
-import { calTotalPages } from '../../../utils'
 import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
+import { Table, Search, Filter } from '../../../components/admin/orderManage'
+import useFetch from '../../../hooks/useFetch'
+import { ITEMS_PER_PAGE } from '../../../constants/itemsPerPage'
+import { calTotalPages } from '../../../utils'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -67,20 +62,57 @@ const PaginatorBtn = styled.button`
 const headerNames = ['訂單狀態', '訂單編號', 'Email', '訂單金額', 'Edit']
 
 export default function AdminOrders() {
-  const [orders, setOrders] = useState([])
-  const [filter, setFilter] = useState('所有訂單')
   const [isViewingArchive, setIsViewingArchive] = useState(false)
+  const [filter, setFilter] = useState('所有訂單')
   const [offset, setOffset] = useState(0)
-  const [isLoading, setIsLoading] = useState(true)
+  const [pages, setPages] = useState(() => Array(1).fill())
+  const handleFilter = (name) => {
+    setFilter(name)
+    setOffset(0)
+  }
+  // 抓所有訂單
+  const {
+    isLoading,
+    value: orders,
+    fetchData: getOrders
+  } = useFetch('/admin/orders/')
+
+  useEffect(() => {
+    getOrders({
+      suffixPath: 'active'
+    })
+  }, [getOrders])
+
+  // 查看所有/封存訂單
+  const handleGetOrders = (condition) => {
+    getOrders({ suffixPath: condition })
+  }
+  // 根據訂單比數計算頁數並產生 array
+  useEffect(() => {
+    if (orders.data) {
+      setPages(() => {
+        if (filter === '所有訂單')
+          return [...Array(calTotalPages(orders.data.length)).fill()]
+        return [
+          ...Array(
+            calTotalPages(
+              orders.data.filter((order) => order.status === filter).length
+            )
+          ).fill()
+        ]
+      })
+    }
+  }, [filter, orders])
 
   // 搜尋功能
   const [searchVal, setSearchVal] = useState('')
   const [searchedOrders, setSearchedOrders] = useState()
   useEffect(() => {
+    if (!orders.data) return
     let reg = new RegExp(searchVal, 'i')
     searchVal
       ? setSearchedOrders(
-          orders.filter(
+          orders.data.filter(
             (order) =>
               reg.test(order.status) ||
               reg.test(order.ticketNo) ||
@@ -89,31 +121,6 @@ export default function AdminOrders() {
         )
       : setSearchedOrders('')
   }, [orders, searchVal])
-
-  const filteredOrders = orders.filter((orders) => orders.status === filter)
-  const ORDERS_PER_PAGE = 10
-  const TotalPages =
-    filter === '所有訂單'
-      ? [...Array(calTotalPages(orders.length)).keys()]
-      : [...Array(calTotalPages(filteredOrders.length)).keys()]
-
-  const handleFilter = (name) => {
-    setFilter(name)
-    setOffset(0)
-  }
-
-  const handleGetOrders = (condition) => {
-    setIsLoading(true)
-    ;(async () => {
-      const res = await getOrders(condition)
-      if (!res.ok) alert('發生錯誤：' + res.message)
-      setOrders(res.data)
-      setOffset(0)
-      setIsLoading(false)
-    })()
-  }
-
-  useFetchData(getOrders, setOrders, setIsLoading, 'active')
 
   return (
     <PageWrapper>
@@ -157,30 +164,20 @@ export default function AdminOrders() {
       {isLoading ? (
         <AdminIsLoadingComponent />
       ) : (
-        <TableItemContainer>
-          {searchedOrders
-            ? searchedOrders
-                .sort((a, b) => b.id - a.id)
-                .map((order) => <TableItem key={order.id} order={order} />)
-            : isViewingArchive
-            ? orders
-                .sort((a, b) => b.id - a.id)
-                .slice(offset, offset + ORDERS_PER_PAGE)
-                .map((order) => <TableItem key={order.id} order={order} />)
-            : orders
-                .filter((order) =>
-                  filter === '所有訂單' ? order : order.status === filter
-                )
-                .sort((a, b) => b.id - a.id)
-                .slice(offset, offset + ORDERS_PER_PAGE)
-                .map((order) => <TableItem key={order.id} order={order} />)}
-        </TableItemContainer>
+        <Table
+          orders={orders.data}
+          searchedOrders={searchedOrders}
+          isViewingArchive={isViewingArchive}
+          filter={filter}
+          offset={offset}
+          setOffset={setOffset}
+        />
       )}
-      {!searchVal && !isLoading && (
+      {!searchVal && !isLoading && orders.data && (
         <Paginator>
-          {TotalPages.map((page) => (
+          {pages.map((page) => (
             <PaginatorBtn
-              onClick={() => setOffset(page * ORDERS_PER_PAGE)}
+              onClick={() => setOffset(page * ITEMS_PER_PAGE)}
               key={`page-${page}`}
               $active={offset / 10 === page}
             >

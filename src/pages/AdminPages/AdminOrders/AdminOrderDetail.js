@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import {
@@ -14,16 +14,9 @@ import { GeneralBtn } from '../../../components/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { formatPrice } from '../../../utils'
-import {
-  getSingleOrder,
-  updateOrderStatus,
-  archiveOrder
-} from '../../../webAPI/adminAPIs'
-import useFetchData from '../../../hooks/useFetchData'
 import useModal from '../../../hooks/useModal'
-import Item from '../../../components/admin/orderManage/DetailItem'
-import OrderInfo from '../../../components/admin/orderManage/OrderInfo'
-import Buttons from '../../../components/admin/orderManage/Buttons'
+import useFetch from '../../../hooks/useFetch'
+import { Item, OrderInfo, Buttons } from '../../../components/admin/orderManage'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -128,47 +121,60 @@ const ModalButton = ({ children, color, onClick }) => {
 }
 export default function AdminOrderDetail() {
   const [isOpen, setIsOpen] = useState(false)
-  const [orderDetail, setOrderDetail] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
   const { ticket } = useParams()
-  const { isModal, setIsModal, handleModalClose, Modal } = useModal()
-  const [modalContent, setModalContent] = useState('')
+  const checkModal = useModal('確定要取消這筆訂單？')
+  const modal = useModal('')
 
-  useFetchData(getSingleOrder, setOrderDetail, setIsLoading, ticket)
+  // 抓訂單資料
+  const {
+    isLoading,
+    value: order,
+    fetchData
+  } = useFetch(`/admin/orders/${ticket}`)
 
-  const handleArchive = (ticketNo) => {
-    ;(async () => {
-      const res = await archiveOrder(ticketNo)
-      if (!res.ok) return alert('發生錯誤：' + res.message)
-      setModalContent('已封存訂單')
-      setIsModal(true)
-      setOrderDetail({ ...orderDetail, isDeleted: 1 })
-    })()
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
+
+  //封存訂單
+  const { fetchData: archiveOrder } = useFetch(`/admin/orders/${ticket}`, {
+    method: 'DELETE'
+  })
+
+  const handleArchive = () => {
+    archiveOrder({
+      handler: () => {
+        modal.handleModalOpen('已封存訂單。')
+        order.data.isDeleted = 1
+      }
+    })
   }
 
+  //改變訂單狀態
+  const { fetchData: updateOrderStatus } = useFetch(
+    `/admin/orders/${ticket}/`,
+    {
+      method: 'PATCH'
+    }
+  )
+
   const handleOrderStatus = (action) => {
-    // 按下取消後，會先跳 Modal 向使用者確認是否取消
-    if (action === 'cancel' && !isModal) {
-      setModalContent('確定要取消這筆訂單？')
-      setIsModal(true)
+    if (action === 'check cancel') {
+      checkModal.handleModalOpen('確定要取消這筆訂單？')
       return
     }
-    if (action === 'cancel') {
-      setModalContent('確定要取消這筆訂單？')
-    } else {
-      setModalContent('變更成功！')
-    }
-    ;(async () => {
-      const res = await updateOrderStatus(ticket, action)
-      if (!res.ok) return alert('發生錯誤：' + res.message)
-      setIsModal(true)
-      setOrderDetail({ ...orderDetail, status: convertOrderStatus(action) })
-    })()
+    checkModal.setIsModal(false)
+    modal.handleModalOpen('變更成功！')
+    updateOrderStatus({
+      suffixPath: action,
+      handler: () => {
+        order.data.status = convertOrderStatus(action)
+      }
+    })
   }
 
   return (
     <PageWrapper $isOpen={isOpen}>
-      {isLoading && <AdminIsLoadingComponent />}
       <Link to='/admin/orders'>
         <LogoutBtn
           color='admin_blue'
@@ -176,18 +182,20 @@ export default function AdminOrderDetail() {
           buttonStyle={{ width: '120px' }}
         />
       </Link>
-      <Container>
-        {orderDetail && (
-          <>
+      {isLoading ? (
+        <AdminIsLoadingComponent />
+      ) : (
+        <>
+          <Container>
             <Title>訂購明細</Title>
             <Subtotal>
               <span>
-                共 <b>{orderDetail.Order_items.length}</b> 件商品
+                共 <b>{order?.data?.Order_items.length}</b> 件商品
               </span>
               <span>
                 合計：
                 <b>
-                  {orderDetail.subTotal && formatPrice(orderDetail.subTotal)}
+                  {order?.data?.subTotal && formatPrice(order?.data?.subTotal)}
                 </b>
               </span>
               <Collapser
@@ -205,7 +213,7 @@ export default function AdminOrderDetail() {
                 <Header>數量</Header>
                 <Header>小計</Header>
               </TableHeaders>
-              {orderDetail.Order_items.map((item) => (
+              {order?.data?.Order_items.map((item) => (
                 <Item key={item.productId} item={item} />
               ))}
               <PriceDetail>
@@ -216,51 +224,44 @@ export default function AdminOrderDetail() {
                 <div>
                   <span>合計：</span>
                   <span>
-                    {orderDetail.subTotal && formatPrice(orderDetail.subTotal)}
+                    {order?.data?.subTotal &&
+                      formatPrice(order?.data?.subTotal)}
                   </span>
                 </div>
               </PriceDetail>
             </Menu>
-          </>
-        )}
-      </Container>
-      <Container>
-        {orderDetail && (
-          <>
+          </Container>
+          <Container>
             <Title>訂單資料</Title>
-            <OrderInfo orderDetail={orderDetail} />
+            <OrderInfo orderDetail={order?.data} />
             <Buttons
-              orderDetail={orderDetail}
+              orderDetail={order?.data}
               handleOrderStatus={handleOrderStatus}
               handleArchive={handleArchive}
-              isModal={isModal}
-              setIsModal={setIsModal}
             />
-          </>
-        )}
-      </Container>
-      {modalContent === '確定要取消這筆訂單？' ? (
-        <Modal
-          open={isModal}
-          content={modalContent}
-          buttonOne={
-            <ModalButton
-              color={'admin_blue'}
-              onClick={() => handleOrderStatus('cancel')}
-            >
-              確定
-            </ModalButton>
-          }
-          buttonTwo={
-            <ModalButton color={'admin_grey'} onClick={() => setIsModal(false)}>
-              返回
-            </ModalButton>
-          }
-          onClose={handleModalClose}
-        />
-      ) : (
-        <Modal open={isModal} content={modalContent} />
+          </Container>
+        </>
       )}
+      <modal.Modal open={modal.isModal} />
+      <checkModal.Modal
+        open={checkModal.isModalOpen}
+        buttonOne={
+          <ModalButton
+            color={'admin_blue'}
+            onClick={() => handleOrderStatus('cancel')}
+          >
+            確定
+          </ModalButton>
+        }
+        buttonTwo={
+          <ModalButton
+            color={'admin_grey'}
+            onClick={() => checkModal.setIsModal(false)}
+          >
+            返回
+          </ModalButton>
+        }
+      />
     </PageWrapper>
   )
 }

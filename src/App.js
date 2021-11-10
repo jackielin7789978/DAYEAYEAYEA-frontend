@@ -69,7 +69,7 @@ function AdminRoutes() {
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [productId, setProductId] = useState('')
-  const [isNavClick, setIsNavClick] = useState(false)
+  const [isNavClick, setIsNavClick] = useState(true)
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
   }, [setIsModalOpen])
