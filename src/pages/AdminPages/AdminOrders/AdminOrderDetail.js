@@ -122,13 +122,8 @@ const ModalButton = ({ children, color, onClick }) => {
 export default function AdminOrderDetail() {
   const [isOpen, setIsOpen] = useState(false)
   const { ticket } = useParams()
-  const {
-    isModal: isCheckModalOpen,
-    setIsModal: setIsCheckModalOpen,
-    handleModalOpen: handleCheckModalOpen,
-    Modal: CheckModal
-  } = useModal('確定要取消這筆訂單？')
-  const { isModal, setIsModal, handleModalOpen, Modal } = useModal('')
+  const checkModal = useModal('確定要取消這筆訂單？')
+  const modal = useModal('')
 
   // 抓訂單資料
   const {
@@ -149,7 +144,7 @@ export default function AdminOrderDetail() {
   const handleArchive = () => {
     archiveOrder({
       handler: () => {
-        handleModalOpen('已封存訂單。')
+        modal.handleModalOpen('已封存訂單。')
         order.data.isDeleted = 1
       }
     })
@@ -165,13 +160,11 @@ export default function AdminOrderDetail() {
 
   const handleOrderStatus = (action) => {
     if (action === 'check cancel') {
-      handleCheckModalOpen('確定要取消這筆訂單？')
-      setIsCheckModalOpen(true)
+      checkModal.handleModalOpen('確定要取消這筆訂單？')
       return
     }
-    setIsCheckModalOpen(false)
-    handleModalOpen('變更成功！')
-    setIsModal(true)
+    checkModal.setIsModal(false)
+    modal.handleModalOpen('變更成功！')
     updateOrderStatus({
       suffixPath: action,
       handler: () => {
@@ -182,7 +175,6 @@ export default function AdminOrderDetail() {
 
   return (
     <PageWrapper $isOpen={isOpen}>
-      {isLoading && <AdminIsLoadingComponent />}
       <Link to='/admin/orders'>
         <LogoutBtn
           color='admin_blue'
@@ -190,17 +182,21 @@ export default function AdminOrderDetail() {
           buttonStyle={{ width: '120px' }}
         />
       </Link>
-      <Container>
-        {order.data && (
-          <>
+      {isLoading ? (
+        <AdminIsLoadingComponent />
+      ) : (
+        <>
+          <Container>
             <Title>訂購明細</Title>
             <Subtotal>
               <span>
-                共 <b>{order.data.Order_items.length}</b> 件商品
+                共 <b>{order?.data?.Order_items.length}</b> 件商品
               </span>
               <span>
                 合計：
-                <b>{order.data.subTotal && formatPrice(order.data.subTotal)}</b>
+                <b>
+                  {order?.data?.subTotal && formatPrice(order?.data?.subTotal)}
+                </b>
               </span>
               <Collapser
                 onClick={() => {
@@ -217,7 +213,7 @@ export default function AdminOrderDetail() {
                 <Header>數量</Header>
                 <Header>小計</Header>
               </TableHeaders>
-              {order.data.Order_items.map((item) => (
+              {order?.data?.Order_items.map((item) => (
                 <Item key={item.productId} item={item} />
               ))}
               <PriceDetail>
@@ -228,32 +224,27 @@ export default function AdminOrderDetail() {
                 <div>
                   <span>合計：</span>
                   <span>
-                    {order.data.subTotal && formatPrice(order.data.subTotal)}
+                    {order?.data?.subTotal &&
+                      formatPrice(order?.data?.subTotal)}
                   </span>
                 </div>
               </PriceDetail>
             </Menu>
-          </>
-        )}
-      </Container>
-      <Container>
-        {order.data && (
-          <>
+          </Container>
+          <Container>
             <Title>訂單資料</Title>
-            <OrderInfo orderDetail={order.data} />
+            <OrderInfo orderDetail={order?.data} />
             <Buttons
-              orderDetail={order.data}
+              orderDetail={order?.data}
               handleOrderStatus={handleOrderStatus}
               handleArchive={handleArchive}
-              isModal={isModal}
-              setIsModal={setIsModal}
             />
-          </>
-        )}
-      </Container>
-      <Modal open={isModal} />
-      <CheckModal
-        open={isCheckModalOpen}
+          </Container>
+        </>
+      )}
+      <modal.Modal open={modal.isModal} />
+      <checkModal.Modal
+        open={checkModal.isModalOpen}
         buttonOne={
           <ModalButton
             color={'admin_blue'}
@@ -263,7 +254,10 @@ export default function AdminOrderDetail() {
           </ModalButton>
         }
         buttonTwo={
-          <ModalButton color={'admin_grey'} onClick={() => setIsModal(false)}>
+          <ModalButton
+            color={'admin_grey'}
+            onClick={() => checkModal.setIsModal(false)}
+          >
             返回
           </ModalButton>
         }

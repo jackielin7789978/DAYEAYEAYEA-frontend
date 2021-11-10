@@ -34,8 +34,8 @@ export default function OrderInfo({ orderDetail }) {
   return (
     <Wrapper>
       <div>
-        訂單狀態：{orderDetail.status}
-        {orderDetail.isDeleted ? (
+        訂單狀態：{orderDetail?.status}
+        {orderDetail?.isDeleted ? (
           <Archived>
             <FontAwesomeIcon icon={faQuestionCircle} />
             <span>此筆訂單已封存</span>
@@ -44,13 +44,13 @@ export default function OrderInfo({ orderDetail }) {
           <></>
         )}
       </div>
-      <div>訂單編號：{orderDetail.ticketNo}</div>
-      <div>訂購人姓名：{orderDetail.orderName}</div>
-      <div>寄送地址：{orderDetail.orderAddress}</div>
-      <div>聯絡信箱：{orderDetail.orderEmail}</div>
-      <div>聯絡電話：{orderDetail.orderPhone}</div>
-      <div>付款方式：{orderDetail.payment}</div>
-      <div>運送方式：{orderDetail.shipping}</div>
+      <div>訂單編號：{orderDetail?.ticketNo}</div>
+      <div>訂購人姓名：{orderDetail?.orderName}</div>
+      <div>寄送地址：{orderDetail?.orderAddress}</div>
+      <div>聯絡信箱：{orderDetail?.orderEmail}</div>
+      <div>聯絡電話：{orderDetail?.orderPhone}</div>
+      <div>付款方式：{orderDetail?.payment}</div>
+      <div>運送方式：{orderDetail?.shipping}</div>
     </Wrapper>
   )
 }

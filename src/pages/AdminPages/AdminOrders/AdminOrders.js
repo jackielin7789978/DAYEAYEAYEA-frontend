@@ -65,7 +65,7 @@ export default function AdminOrders() {
   const [isViewingArchive, setIsViewingArchive] = useState(false)
   const [filter, setFilter] = useState('所有訂單')
   const [offset, setOffset] = useState(0)
-  const [pages, setPages] = useState(Array(1).keys())
+  const [pages, setPages] = useState(() => Array(1).fill())
   const handleFilter = (name) => {
     setFilter(name)
     setOffset(0)
@@ -92,13 +92,13 @@ export default function AdminOrders() {
     if (orders.data) {
       setPages(() => {
         if (filter === '所有訂單')
-          return [...Array(calTotalPages(orders.data.length)).keys()]
+          return [...Array(calTotalPages(orders.data.length)).fill()]
         return [
           ...Array(
             calTotalPages(
               orders.data.filter((order) => order.status === filter).length
             )
-          ).keys()
+          ).fill()
         ]
       })
     }
