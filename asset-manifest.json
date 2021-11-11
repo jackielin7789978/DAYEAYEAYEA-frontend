@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/DAYEAYEAYEA-frontend/static/js/main.bdbc0bef.chunk.js",
-    "main.js.map": "/DAYEAYEAYEA-frontend/static/js/main.bdbc0bef.chunk.js.map",
+    "main.js": "/DAYEAYEAYEA-frontend/static/js/main.b84b331f.chunk.js",
+    "main.js.map": "/DAYEAYEAYEA-frontend/static/js/main.b84b331f.chunk.js.map",
     "runtime-main.js": "/DAYEAYEAYEA-frontend/static/js/runtime-main.cc876c0e.js",
     "runtime-main.js.map": "/DAYEAYEAYEA-frontend/static/js/runtime-main.cc876c0e.js.map",
     "static/js/2.76c8864b.chunk.js": "/DAYEAYEAYEA-frontend/static/js/2.76c8864b.chunk.js",
@@ -12,6 +12,6 @@
   "entrypoints": [
     "static/js/runtime-main.cc876c0e.js",
     "static/js/2.76c8864b.chunk.js",
-    "static/js/main.bdbc0bef.chunk.js"
+    "static/js/main.b84b331f.chunk.js"
   ]
 }
