@@ -38,7 +38,6 @@ const Name = styled(Link)`
 `
 
 export default function Item({ item }) {
-  console.log(item)
   return (
     <ItemContainer>
       <div>
