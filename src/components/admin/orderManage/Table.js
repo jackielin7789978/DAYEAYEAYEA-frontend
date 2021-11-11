@@ -38,8 +38,7 @@ export default function Table({
   searchedOrders,
   isViewingArchive,
   filter,
-  offset,
-  setOffset
+  offset
 }) {
   return orders ? (
     <TableItemContainer>

@@ -65,7 +65,7 @@ export default function AdminOrders() {
   const [isViewingArchive, setIsViewingArchive] = useState(false)
   const [filter, setFilter] = useState('所有訂單')
   const [offset, setOffset] = useState(0)
-  const [pages, setPages] = useState(() => Array(1).fill())
+  const [pages, setPages] = useState()
   const handleFilter = (name) => {
     setFilter(name)
     setOffset(0)
@@ -86,17 +86,22 @@ export default function AdminOrders() {
   // 查看所有/封存訂單
   const handleGetOrders = (condition) => {
     getOrders({ suffixPath: condition })
+    setOffset(0)
+    setFilter('所有訂單')
+    if (condition === 'archive') {
+      setIsViewingArchive(true)
+    }
   }
   // 根據訂單比數計算頁數並產生 array
   useEffect(() => {
-    if (orders.data) {
+    if (orders?.data) {
       setPages(() => {
         if (filter === '所有訂單')
-          return [...Array(calTotalPages(orders.data.length)).fill()]
+          return [...Array(calTotalPages(orders?.data?.length)).fill()]
         return [
           ...Array(
             calTotalPages(
-              orders.data.filter((order) => order.status === filter).length
+              orders?.data?.filter((order) => order.status === filter).length
             )
           ).fill()
         ]
@@ -108,11 +113,11 @@ export default function AdminOrders() {
   const [searchVal, setSearchVal] = useState('')
   const [searchedOrders, setSearchedOrders] = useState()
   useEffect(() => {
-    if (!orders.data) return
+    if (!orders?.data) return
     let reg = new RegExp(searchVal, 'i')
     searchVal
       ? setSearchedOrders(
-          orders.data.filter(
+          orders?.data.filter(
             (order) =>
               reg.test(order.status) ||
               reg.test(order.ticketNo) ||
@@ -165,23 +170,22 @@ export default function AdminOrders() {
         <AdminIsLoadingComponent />
       ) : (
         <Table
-          orders={orders.data}
+          orders={orders?.data}
           searchedOrders={searchedOrders}
           isViewingArchive={isViewingArchive}
           filter={filter}
           offset={offset}
-          setOffset={setOffset}
         />
       )}
-      {!searchVal && !isLoading && orders.data && (
+      {!searchVal && !isLoading && orders?.data && (
         <Paginator>
-          {pages.map((page) => (
+          {pages.map((page, index) => (
             <PaginatorBtn
-              onClick={() => setOffset(page * ITEMS_PER_PAGE)}
-              key={`page-${page}`}
-              $active={offset / 10 === page}
+              onClick={() => setOffset(index * ITEMS_PER_PAGE)}
+              key={`page-${index}`}
+              $active={offset / 10 === index}
             >
-              {page + 1}
+              {index + 1}
             </PaginatorBtn>
           ))}
         </Paginator>

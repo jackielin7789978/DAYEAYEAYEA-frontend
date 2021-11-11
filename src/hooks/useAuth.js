@@ -1,11 +1,4 @@
-import {
-  useState,
-  useMemo,
-  useCallback,
-  useEffect,
-  useContext,
-  createContext
-} from 'react'
+import { useState, useMemo, useCallback, useEffect, createContext } from 'react'
 import jwt_decode from 'jwt-decode'
 import useFetch from './useFetch'
 import { getTokenFromLocalStorage, isTokenExpired } from '../utils'
@@ -20,30 +13,36 @@ const useAuth = (suffixPath = '') => {
 
   const verifyAuth = useCallback(() => {
     try {
-      setToken(() => getTokenFromLocalStorage())
-      if (token && !isTokenExpired(token)) {
-        const user = jwt_decode(token)
-        setUser(() => user)
+      const _token = getTokenFromLocalStorage()
+      if (_token && !isTokenExpired(_token)) {
+        // fetchData({ suffixPath: '/check' })
+        const user = jwt_decode(_token)
+        setToken(_token)
+        setUser(user)
         setIsLoggedIn(true)
         return
       }
     } catch (e) {
       console.log(e)
     }
-    setUser(() => null)
+    setUser(null)
     setIsLoggedIn(false)
-  }, [token])
+  }, [])
 
   const signIn = useCallback(
     (username, password) => {
-      fetchData('/login', { username, password }, (res) => setToken(res.token))
+      fetchData({
+        suffixPath: '/login',
+        bodyData: { username, password },
+        handler: (res) => setToken(res.token)
+      })
     },
     [fetchData]
   )
 
   const signUp = useCallback(
     (username, email, password) => {
-      fetchData('', { username, email, password })
+      fetchData({ bodyData: { username, email, password } })
     },
     [fetchData]
   )
@@ -57,6 +56,7 @@ const useAuth = (suffixPath = '') => {
 
   return {
     user,
+    setUser,
     token,
     isLoggedIn,
     verifyAuth,
