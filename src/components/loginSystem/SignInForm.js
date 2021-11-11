@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import {
   Form,
   Input,
@@ -8,30 +8,35 @@ import {
 } from '../../components/loginSystem/loginCard'
 import { LoginBtn } from '../../components/Button'
 import { useForm } from 'react-hook-form'
-import { signIn } from '../../webAPI/loginAPI'
+// import { signIn } from '../../webAPI/loginAPI'
 import { LoadingContext } from '../../context'
+
 export default function SignInForm({
-  tokenCheck,
-  $errMessage,
-  $setErrMessage
+  addToken,
+  errMessage,
+  setErrMessage,
+  token,
+  signIn
 }) {
-  const { setIsLoading } = useContext(LoadingContext)
   const {
     register,
     formState: { errors },
     handleSubmit
   } = useForm()
-  const onSubmit = async (submitData) => {
-    setIsLoading(true)
+
+  const onSubmit = (submitData) => {
     const { username, password } = submitData
-    const result = await signIn(username, password)
-    if (result.ok === 0) {
-      setIsLoading(false)
-      return $setErrMessage('帳號或密碼不正確')
-    }
-    $setErrMessage(null)
-    tokenCheck(result.token)
+    signIn(username, password)
+    // if (result.ok === 0) {
+    //   setIsLoading(false)
+    //   return $setErrMessage('帳號或密碼不正確')
+    // }
+    // $setErrMessage(null)
+    // addToken(token)
   }
+  useEffect(() => {
+    console.log(token)
+  }, [token])
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Input
@@ -59,8 +64,8 @@ export default function SignInForm({
         children='登入'
         buttonStyle={{ marginTop: '20px' }}
       />
-      {$errMessage && (
-        <ErrorMsg style={{ textAlign: 'center' }}>{$errMessage}</ErrorMsg>
+      {errMessage && (
+        <ErrorMsg style={{ textAlign: 'center' }}>{errMessage}</ErrorMsg>
       )}
     </Form>
   )

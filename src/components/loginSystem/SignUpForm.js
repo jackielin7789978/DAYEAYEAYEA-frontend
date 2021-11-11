@@ -9,11 +9,7 @@ import { ArrowBtn } from '../../components/Button'
 import { useForm } from 'react-hook-form'
 import { signIn, signUp } from '../../webAPI/loginAPI'
 import { LoadingContext } from '../../context'
-export default function SignUpForm({
-  tokenCheck,
-  $errMessage,
-  $setErrMessage
-}) {
+export default function SignUpForm({ addToken, errMessage, setErrMessage }) {
   const { setIsLoading } = useContext(LoadingContext)
   const {
     register,
@@ -26,14 +22,14 @@ export default function SignUpForm({
     signUp(username, email, password).then((data) => {
       if (data.ok === 0) {
         setIsLoading(false)
-        return $setErrMessage('該帳號或信箱已被註冊')
+        return setErrMessage('該帳號或信箱已被註冊')
       }
       signIn(username, password).then((data) => {
         if (data.ok === 0) {
-          return $setErrMessage(data.message)
+          return setErrMessage(data.message)
         }
-        $setErrMessage(null)
-        tokenCheck(data.token)
+        setErrMessage(null)
+        addToken(data.token)
       })
     })
   }
@@ -73,8 +69,8 @@ export default function SignUpForm({
         children='註冊'
         buttonStyle={{ marginTop: '20px' }}
       />
-      {$errMessage && (
-        <ErrorMsg style={{ textAlign: 'center' }}>{$errMessage}</ErrorMsg>
+      {errMessage && (
+        <ErrorMsg style={{ textAlign: 'center' }}>{errMessage}</ErrorMsg>
       )}
     </Form>
   )

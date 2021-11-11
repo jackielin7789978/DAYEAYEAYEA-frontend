@@ -114,10 +114,7 @@ export default function AdminMemberDetail() {
   }, [memberDetail?.level, setValue])
 
   const onSubmit = async (submitData) => {
-    const result = await updateMemberLevel(
-      memberDetail.Orders[0].memberId,
-      submitData.level
-    )
+    const result = await updateMemberLevel(memberDetail.id, submitData.level)
     if (result.ok === 0) {
       console.log(result.message)
       return false
