@@ -46,7 +46,7 @@ const useFetch = (url, options) => {
           })
           const data = await res.json()
           setValue(data)
-          if (res.status !== 200) throw new Error(data.message)
+          if (!/^2\d{2}$/.test(res.status)) throw new Error(data.message)
           if (handler) handler(data)
         } catch (error) {
           if (errorHandler) errorHandler(error)

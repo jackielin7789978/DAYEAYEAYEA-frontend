@@ -51,6 +51,7 @@ import {
 } from './context'
 import GlobalStyle from './constants/globalStyle'
 import jwt_decode from 'jwt-decode'
+import useAuth from './hooks/useAuth'
 
 export default function App() {
   return (
