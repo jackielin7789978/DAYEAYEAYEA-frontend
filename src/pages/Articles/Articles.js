@@ -1,21 +1,16 @@
 import styled from 'styled-components'
-import { useState, useEffect, useContext, useCallback } from 'react'
+import { useEffect } from 'react'
 import { useParams, useHistory, useLocation } from 'react-router-dom'
-import { getArticlesById } from '../../webAPI/articlesAPI'
-import { getProductByArticle } from '../../webAPI/productsAPI'
-import { LoadingContext, ModalContext } from '../../context'
+import useFetch from '../../hooks/useFetch'
+import useModal from '../../hooks/useModal'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
-import { IsLoadingComponent } from '../../components/IsLoading'
+import { IsLoadingComponent as Loading } from '../../components/IsLoading'
 import {
   ProductCard,
   WhiteCard
 } from '../../components/productSystem/ProductCard'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { PageWidth, FullWidth } from '../../components/general'
-import {
-  AddCartModal,
-  SoldOutCartModal
-} from '../../components/productSystem/ProductModal'
 import { PaginatorButton } from '../../components/Paginator'
 import { setNumInArray, countWhiteCardAmount } from '../../utils'
 
@@ -80,12 +75,7 @@ const PaginatorDiv = styled.div`
 export default function Articles() {
   const { id, page } = useParams()
   const pathname = useLocation().pathname
-  const [articleData, setArticleData] = useState([])
-  const [articleProducts, setArticleProducts] = useState([])
-  const [totalPage, setTotalPage] = useState([])
-  const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, handleModalClose, isProductSoldOut } =
-    useContext(ModalContext)
+  const { handleModalOpen, Modal } = useModal()
   const isMobile = useMediaQuery('(max-width: 767px)')
   const isDesktop = useMediaQuery('(min-width: 1200px)')
   let history = useHistory()
@@ -98,119 +88,109 @@ export default function Articles() {
     }
   }
 
-  const PageIsFound = useCallback(
-    (result) => {
-      let isFound = false
-      if (result === 0) {
-        history.push('/404')
-        return setIsLoading(false)
-      }
-      if (result === 1) isFound = true
-      return isFound
-    },
-    [history, setIsLoading]
-  )
+  const {
+    isLoading,
+    value,
+    fetchData: getArticleById
+  } = useFetch(`/articles/${id}`)
+  const {
+    isLoading: ProductsLoading,
+    value: Products,
+    fetchData: getProductsByArticle
+  } = useFetch(`/products/article/${articleSort}/${page}`)
 
   useEffect(() => {
-    setIsLoading(true)
-    getArticlesById(parseInt(id)).then((result) => {
-      if (!result) return
-      const isResultOk = PageIsFound(result.ok)
-      if (isResultOk) {
-        getProductByArticle(articleSort, parseInt(page)).then((result) => {
-          const isResultOk = PageIsFound(result.ok)
-          if (isResultOk) {
-            setArticleProducts(result.data)
-            setTotalPage((totalPage) => setNumInArray(result.totalPage))
+    getArticleById({
+      handler: () => {
+        getProductsByArticle({
+          errorHandler: () => {
+            history.push('/404')
           }
         })
-        setArticleData((articleData) => result.data)
-        setIsLoading(false)
+      },
+      errorHandler: () => {
+        history.push('/404')
       }
     })
-  }, [setIsLoading, id, page, articleSort, history, PageIsFound])
+  }, [id, page, articleSort, history, getArticleById, getProductsByArticle])
 
-  const { imgUrl, title, content } = articleData
   const whiteCardAmount = countWhiteCardAmount(
-    articleProducts.length,
+    Products?.data?.length,
     isDesktop
   )
 
   return (
     <>
-      <FullWidth>
-        <ArticleImgContainer style={{ backgroundImage: `url(${imgUrl})` }} />
-      </FullWidth>
-      <PageWidth>
-        {isLoading && <IsLoadingComponent />}
-        {isProductSoldOut && (
-          <AddCartModal
-            isModalOpen={isModalOpen}
-            handleModalClose={handleModalClose}
-          />
-        )}
-        {!isProductSoldOut && (
-          <SoldOutCartModal
-            isModalOpen={isModalOpen}
-            handleModalClose={handleModalClose}
-          />
-        )}
-        <Title>
-          {title}
-          <TitleBorder />
-        </Title>
-        <ContentDiv>{content}</ContentDiv>
-        <ProductCardsContainer>
-          {articleProducts.map(
-            ({
-              id,
-              name,
-              price,
-              Product_imgs,
-              discountPrice,
-              status,
-              quantity
-            }) => {
-              const length = Product_imgs.length
-              const imgUrl = isMobile
-                ? Product_imgs[length - 1].imgUrlSm
-                : Product_imgs[length - 1].imgUrlMd
-              return (
-                <ProductCard
-                  id={id}
-                  key={id}
-                  imgs={Product_imgs}
-                  imgUrl={imgUrl}
-                  name={name}
-                  price={price}
-                  discountPrice={discountPrice}
-                  status={status}
-                  stockQuantity={quantity}
-                />
-              )
-            }
-          )}
-          {whiteCardAmount.length > 0 &&
-            whiteCardAmount.map((amount) => {
-              return <WhiteCard key={amount} />
-            })}
-        </ProductCardsContainer>
-        {totalPage.length > 1 && (
-          <PaginatorDiv>
-            {totalPage.map((singlePage) => {
-              const linkDirection = `/articles/${id}/${singlePage}`
-              return (
-                <PaginatorButton
-                  key={singlePage}
-                  page={singlePage}
-                  to={linkDirection}
-                  active={pathname === linkDirection}
-                ></PaginatorButton>
-              )
-            })}
-          </PaginatorDiv>
-        )}
-      </PageWidth>
+      {isLoading || ProductsLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <FullWidth>
+            <ArticleImgContainer
+              style={{ backgroundImage: `url(${value?.data?.imgUrl})` }}
+            />
+          </FullWidth>
+          <PageWidth>
+            <Modal />
+            <Title>
+              {value?.data?.title}
+              <TitleBorder />
+            </Title>
+            <ContentDiv>{value?.data?.content}</ContentDiv>
+            <ProductCardsContainer>
+              {Products?.data?.map(
+                ({
+                  id,
+                  name,
+                  price,
+                  Product_imgs,
+                  discountPrice,
+                  status,
+                  quantity
+                }) => {
+                  const length = Product_imgs.length
+                  const imgUrl = isMobile
+                    ? Product_imgs[length - 1].imgUrlSm
+                    : Product_imgs[length - 1].imgUrlMd
+                  return (
+                    <ProductCard
+                      id={id}
+                      key={id}
+                      imgs={Product_imgs}
+                      imgUrl={imgUrl}
+                      name={name}
+                      price={price}
+                      discountPrice={discountPrice}
+                      status={status}
+                      stockQuantity={quantity}
+                      handleModalOpen={handleModalOpen}
+                    />
+                  )
+                }
+              )}
+              {whiteCardAmount.length > 0 &&
+                whiteCardAmount.map((amount) => {
+                  return <WhiteCard key={amount} />
+                })}
+            </ProductCardsContainer>
+            {setNumInArray(Products?.totalPage) && (
+              <PaginatorDiv>
+                {setNumInArray(Products?.totalPage).map((singlePage) => {
+                  const linkDirection = `/articles/${id}/${singlePage}`
+                  return (
+                    <PaginatorButton
+                      key={singlePage}
+                      page={singlePage}
+                      to={linkDirection}
+                      active={pathname === linkDirection}
+                    ></PaginatorButton>
+                  )
+                })}
+              </PaginatorDiv>
+            )}
+          </PageWidth>
+        </>
+      )}
     </>
   )
 }

@@ -1,8 +1,7 @@
-import { useState } from 'react'
+import { useEffect } from 'react'
 import styled from 'styled-components'
 import Slider from 'react-slick'
-import useFetchData from '../hooks/useFetchData'
-import { getAllArticles } from '../webAPI/articlesAPI'
+import useFetch from '../hooks/useFetch'
 import { FullWidth } from './general'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../constants/style'
 import { Link } from 'react-router-dom'
@@ -41,9 +40,11 @@ const CarouselItem = styled(Link)`
 `
 
 export default function Carousel() {
-  const [articles, setArticles] = useState([])
+  const { value, fetchData } = useFetch(`/articles`)
 
-  useFetchData(getAllArticles, setArticles)
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
 
   var settings = {
     dots: true,
@@ -57,7 +58,7 @@ export default function Carousel() {
   return (
     <FullWidth>
       <Slider {...settings} style={{ marginBottom: '40px' }}>
-        {articles.map((article) => (
+        {value?.data?.map((article) => (
           <CarouselItem
             to={`/articles/${article.id}/1`}
             key={article.id}

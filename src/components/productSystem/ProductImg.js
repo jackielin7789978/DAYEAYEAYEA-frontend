@@ -113,8 +113,8 @@ export function ProductImgsComponent({ imgs }) {
   const selectedId = showLargeImg?.id
 
   useLayoutEffect(() => {
-    setShowLargeImg(imgs[0])
-    setShowThumbnailImage(imgs.filter((img) => img.imgUrlSm))
+    imgs && setShowLargeImg(imgs[0])
+    imgs && setShowThumbnailImage(imgs.filter((img) => img.imgUrlSm))
   }, [imgs])
 
   const handleThumbnailClick = useCallback(

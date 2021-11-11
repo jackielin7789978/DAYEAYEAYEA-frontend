@@ -69,7 +69,6 @@ export default function App() {
 function AdminRoutes() {
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [productId, setProductId] = useState('')
   const [isNavClick, setIsNavClick] = useState(true)
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
@@ -84,8 +83,6 @@ function AdminRoutes() {
           isModalOpen,
           setIsModalOpen,
           handleModalClose,
-          productId,
-          setProductId,
           isNavClick,
           setIsNavClick
         }}
@@ -122,12 +119,11 @@ function AdminRoutes() {
 function Shop() {
   const [isLoading, setIsLoading] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isProductSoldOut, setIsProductSoldOut] = useState(false)
   const [cartItems, setCartItems] = useState(
     JSON.parse(getItemsFromLocalStorage())
   )
-
   const [user, setUser] = useState()
+
   useEffect(() => {
     if (
       !getTokenFromLocalStorage() ||
@@ -145,7 +141,6 @@ function Shop() {
 
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
-    setIsProductSoldOut((isProductSoldOut) => false)
   }, [setIsModalOpen])
 
   const totalPrice = useMemo(() => {
@@ -217,9 +212,7 @@ function Shop() {
           value={{
             isModalOpen,
             setIsModalOpen,
-            handleModalClose,
-            isProductSoldOut,
-            setIsProductSoldOut
+            handleModalClose
           }}
         >
           <LocalStorageContext.Provider
