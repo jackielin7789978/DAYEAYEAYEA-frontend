@@ -3,7 +3,7 @@ import { useState, useCallback, useMemo, useContext } from 'react'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import { ShoppingCarBtn, GeneralBtn } from '../../components/Button'
 import { ItemCounter } from '../../components/Counter'
-import { ModalContext, LocalStorageContext } from '../../context'
+import { LocalStorageContext } from '../../context'
 import { formatPrice, getItemsFromLocalStorage } from '../../utils'
 import { useEffect } from 'react/cjs/react.development'
 
@@ -157,8 +157,6 @@ export function ProductUpInfoComponent({
   const [quantity, setQuantity] = useState(1)
   const [warningMessage, setWarningMessage] = useState('')
   // eslint-disable-next-line no-unused-vars
-  const { isModalOpen, setIsModalOpen, setIsProductSoldOut } =
-    useContext(ModalContext)
   const { handleAddCartItem } = useContext(LocalStorageContext)
   const [inStock, setInStock] = useState(stock)
 

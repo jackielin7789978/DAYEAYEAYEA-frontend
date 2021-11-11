@@ -1,11 +1,11 @@
 import { useState, useCallback, useContext } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
+import useFetch from '../../../../hooks/useFetch'
+import useModal from '../../../../hooks/useModal'
 import { ADMIN_COLOR, COLOR } from '../../../../constants/style'
-import { changeProductInfoById } from '../../../../webAPI/adminProductsAPI'
 import { checkInputIsValid } from '../../../../utils'
-import { AdminContext, ModalContext } from '../../../../context'
-import { PermissionDeniedModal } from '../AdminProductModal'
+import { AdminContext } from '../../../../context'
 import {
   Form,
   Input,
@@ -49,9 +49,11 @@ export default function DetailDescForm({ product }) {
   const { id } = useParams()
   const { name, shortDesc, longDesc } = product
   const [descData, setDescData] = useState({ name, shortDesc, longDesc })
+  const { handleModalOpen, Modal } = useModal('此帳號沒有相關權限')
+  const { fetchData } = useFetch(`/admin/products/${parseInt(id)}`, {
+    method: 'PATCH'
+  })
   const { isSuperAdmin } = useContext(AdminContext)
-  const { isModalOpen, setIsModalOpen, handleModalClose } =
-    useContext(ModalContext)
   const [errorMsgForName, setErrorMsgForName] = useState('')
   const [errorMsgForShort, setErrorMsgForShort] = useState('')
   const [errorMsgForLong, setErrorMsgForLong] = useState('')
@@ -135,11 +137,11 @@ export default function DetailDescForm({ product }) {
   const handleEditClick = useCallback(
     (e) => {
       e.preventDefault()
-      if (!isSuperAdmin) return setIsModalOpen(true)
+      if (!isSuperAdmin) return handleModalOpen()
       setIsDisabled((isDisabled) => !isDisabled)
       setButtonStatus((buttonStatus) => 'save')
     },
-    [isSuperAdmin, setIsModalOpen]
+    [isSuperAdmin, handleModalOpen]
   )
 
   const handleSaveClick = useCallback(
@@ -152,19 +154,24 @@ export default function DetailDescForm({ product }) {
         return alert('請完整填寫正確商品資訊後再提交')
       } else {
         setValidCheck(true)
-        changeProductInfoById(id, descData).then((result) => {
-          if (result.ok !== 1) return alert(result.message)
-          alert('成功修改商品資訊')
-          setIsDisabled((isDisabled) => !isDisabled)
-          setButtonStatus((buttonStatus) => 'edit')
+        fetchData({
+          bodyData: descData,
+          handler: () => {
+            alert('成功修改商品資訊')
+            setIsDisabled((isDisabled) => !isDisabled)
+            setButtonStatus((buttonStatus) => 'edit')
+          },
+          errorHandler: (error) => {
+            alert(error.message)
+          }
         })
       }
     },
-    [isValid, id, descData, validCheck]
+    [isValid, descData, validCheck, fetchData]
   )
   return (
     <DescForm>
-      <PermissionDeniedModal open={isModalOpen} onClose={handleModalClose} />
+      <Modal />
       <FormTitleComponent title={'商品名稱敘述'} />
       <ComponentDiv>
         <InputTitle>

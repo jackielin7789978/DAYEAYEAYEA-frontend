@@ -1,13 +1,12 @@
 import styled from 'styled-components'
-import { useState, useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import useMediaQuery from '../../hooks/useMediaQuery'
+import useFetch from '../../hooks/useFetch'
 import useModal from '../../hooks/useModal'
-import { LoadingContext } from '../../context'
 import { IsLoadingComponent as Loading } from '../../components/IsLoading'
 import { PageWidth } from '../../components/general'
 import { COLOR, MEDIA_QUERY } from '../../constants/style'
 import { ProductCard } from '../../components/productSystem/ProductCard'
-import { getCategoryProducts } from '../../webAPI/productsAPI'
 import { HomeCategoriesImg } from '../../components/homeSystem/HomeCategoriesImg'
 import Carousel from '../../components/Carousel'
 
@@ -36,20 +35,9 @@ const CardContainer = styled.div`
     margin: 20px 0px;
   }
 `
-
-const getProductsByCategory = (category, setProducts, setIsLoading) => {
-  setIsLoading(true)
-  getCategoryProducts(category).then((products) => {
-    if (!products) return
-    if (products.ok === 0) return
-    setProducts(products.data.slice(-4))
-    setIsLoading(false)
-  })
-}
-
 const showProductsInComponent = (data, MediaQuery, handleModalOpen) => {
   const isMobile = MediaQuery('(max-width: 767px)')
-  return data.map(
+  return data?.map(
     ({ id, name, price, Product_imgs, discountPrice, status, quantity }) => {
       const length = Product_imgs.length
       const imgUrl = isMobile
@@ -74,23 +62,10 @@ const showProductsInComponent = (data, MediaQuery, handleModalOpen) => {
 }
 
 export default function Home() {
-  const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const [homeProducts, setHomeProducts] = useState([])
-  const [apparelProducts, setApparelProducts] = useState([])
-  const [kitchenwareProducts, setKitchenProducts] = useState([])
-  const [foodProducts, setFoodProducts] = useState([])
-  const [stationeryProducts, setStationeryProducts] = useState([])
-  const [outdoorProducts, setOutdoorProducts] = useState([])
   const { handleModalOpen, Modal } = useModal()
+  const { isLoading, value, fetchData } = useFetch(`/products`)
 
-  useEffect(() => {
-    getProductsByCategory('home', setHomeProducts, setIsLoading)
-    getProductsByCategory('apparel', setApparelProducts, setIsLoading)
-    getProductsByCategory('kitchenware', setKitchenProducts, setIsLoading)
-    getProductsByCategory('food', setFoodProducts, setIsLoading)
-    getProductsByCategory('stationery', setStationeryProducts, setIsLoading)
-    getProductsByCategory('outdoor', setOutdoorProducts, setIsLoading)
-  }, [setIsLoading])
+  useEffect(() => fetchData(), [fetchData])
 
   return (
     <>
@@ -106,7 +81,9 @@ export default function Home() {
           />
           <CardContainer>
             {showProductsInComponent(
-              homeProducts,
+              value?.data
+                ?.filter((product) => product.category === 'home')
+                .slice(-4),
               useMediaQuery,
               handleModalOpen
             )}
@@ -120,7 +97,9 @@ export default function Home() {
           />
           <CardContainer>
             {showProductsInComponent(
-              apparelProducts,
+              value?.data
+                ?.filter((product) => product.category === 'apparel')
+                .slice(-4),
               useMediaQuery,
               handleModalOpen
             )}
@@ -134,7 +113,9 @@ export default function Home() {
           />
           <CardContainer>
             {showProductsInComponent(
-              kitchenwareProducts,
+              value?.data
+                ?.filter((product) => product.category === 'kitchenware')
+                .slice(-4),
               useMediaQuery,
               handleModalOpen
             )}
@@ -148,7 +129,9 @@ export default function Home() {
           />
           <CardContainer>
             {showProductsInComponent(
-              foodProducts,
+              value?.data
+                ?.filter((product) => product.category === 'food')
+                .slice(-4),
               useMediaQuery,
               handleModalOpen
             )}
@@ -162,7 +145,9 @@ export default function Home() {
           />
           <CardContainer>
             {showProductsInComponent(
-              stationeryProducts,
+              value?.data
+                ?.filter((product) => product.category === 'stationery')
+                .slice(-4),
               useMediaQuery,
               handleModalOpen
             )}
@@ -176,13 +161,14 @@ export default function Home() {
           />
           <CardContainer>
             {showProductsInComponent(
-              outdoorProducts,
+              value?.data
+                ?.filter((product) => product.category === 'outdoor')
+                .slice(-4),
               useMediaQuery,
               handleModalOpen
             )}
           </CardContainer>
         </ProductContainer>
-        )
       </PageWidth>
     </>
   )

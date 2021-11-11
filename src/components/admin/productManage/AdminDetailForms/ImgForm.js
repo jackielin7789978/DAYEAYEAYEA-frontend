@@ -1,14 +1,15 @@
 import { useEffect, useCallback, useState, useContext } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
+import useFetch from '../../../../hooks/useFetch'
+import useModal from '../../../../hooks/useModal'
 import { imgVerify } from '../../../../utils'
 import { checkInputIsValid } from '../../../../utils'
 import { FONT_SIZE, ADMIN_COLOR } from '../../../../constants/style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
-import { changeProductInfoById } from '../../../../webAPI/adminProductsAPI'
-import { AdminContext, ModalContext } from '../../../../context'
-import { PermissionDeniedModal } from '../AdminProductModal'
+import { AdminContext } from '../../../../context'
+
 import {
   Form,
   Input,
@@ -304,8 +305,10 @@ export default function DetailImgForm({ product }) {
   const { id } = useParams()
   const { Product_imgs } = product
   const { isSuperAdmin } = useContext(AdminContext)
-  const { isModalOpen, setIsModalOpen, handleModalClose } =
-    useContext(ModalContext)
+  const { handleModalOpen, Modal } = useModal('此帳號沒有相關權限')
+  const { fetchData } = useFetch(`/admin/products/${parseInt(id)}`, {
+    method: 'PATCH'
+  })
   const [productImgUrlOne, setProductImgUrlOne] = useState({})
   const [productImgUrlOTwo, setProductImgUrlTwo] = useState({})
   const [productImgUrlThree, setProductImgUrlThree] = useState({})
@@ -345,7 +348,7 @@ export default function DetailImgForm({ product }) {
   const handleSaveClick = useCallback(
     (e) => {
       e.preventDefault()
-      if (!isSuperAdmin) return setIsModalOpen(true)
+      if (!isSuperAdmin) return handleModalOpen()
       const allCheck = checkInputIsValid(isValid)
       if (!allCheck) {
         if (!validCheck) return
@@ -356,9 +359,14 @@ export default function DetailImgForm({ product }) {
         const newProductImgs = {
           imgsData: [productImgUrlOne, productImgUrlOTwo, productImgUrlThree]
         }
-        changeProductInfoById(parseInt(id), newProductImgs).then((result) => {
-          if (result.ok !== 1) return alert(result.message)
-          alert('成功修改商品資訊')
+        fetchData({
+          bodyData: newProductImgs,
+          handler: () => {
+            alert('成功修改商品資訊')
+          },
+          errorHandler: (error) => {
+            alert(error.message)
+          }
         })
       }
     },
@@ -367,16 +375,16 @@ export default function DetailImgForm({ product }) {
       productImgUrlOne,
       productImgUrlOTwo,
       productImgUrlThree,
-      id,
       validCheck,
       isSuperAdmin,
-      setIsModalOpen
+      handleModalOpen,
+      fetchData
     ]
   )
 
   return (
     <ImgForm>
-      <PermissionDeniedModal open={isModalOpen} onClose={handleModalClose} />
+      <Modal />
       <FormTitleComponent title='商品圖片網址' />
       <FormContentContainer>
         <ImgInputSet

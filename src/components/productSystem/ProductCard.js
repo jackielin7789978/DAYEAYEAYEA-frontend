@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useMemo, useContext, useState } from 'react'
+import { useMemo, useContext, useState, useEffect } from 'react'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { Link } from 'react-router-dom'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
@@ -207,6 +207,10 @@ export function ProductCard({
     }),
     [name, price, discountPrice, imgs]
   )
+
+  useEffect(() => {
+    setInStock(stock)
+  }, [stock])
 
   const handleAddProductInCart = () => {
     if (inStock > 0) {

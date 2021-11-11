@@ -1,11 +1,8 @@
 import styled from 'styled-components'
 import { useState, useCallback, useContext } from 'react'
+import { ProductIdContext } from '../../../context'
 import { Link } from 'react-router-dom'
-import {
-  changeProductStatus,
-  changeProductQuantity
-} from '../../../webAPI/adminProductsAPI'
-import { ModalContext } from '../../../context'
+import useFetch from '../../../hooks/useFetch'
 import { GeneralBtn } from '../../../components/Button'
 import { ItemCounter } from '../../../components/Counter'
 import {
@@ -59,7 +56,7 @@ function StatusButton({ id, status }) {
   )
 }
 
-function TableItem({ product }) {
+function TableItem({ product, handleModalOpen }) {
   const {
     id,
     name,
@@ -70,27 +67,33 @@ function TableItem({ product }) {
     status,
     Product_imgs
   } = product
-  const { setIsModalOpen, setProductId } = useContext(ModalContext)
   const [productQuantity, setProductQuantity] = useState(quantity)
   const [productStatus, setProductStatus] = useState(status)
+  const { setProductId } = useContext(ProductIdContext)
+  const { fetchData } = useFetch(`/admin/products/${id}`, {
+    method: 'PATCH'
+  })
   const length = Product_imgs.length
   // eslint-disable-next-line no-unused-vars
   const [productImg, setProductImg] = useState(
     Product_imgs && Product_imgs[length - 1].imgUrlSm
   )
   const handleCount = useCallback(
-    (type, id) => {
+    (type) => {
       let changeQuantity
       if (type === 'increment') changeQuantity = productQuantity + 1
       if (type === 'decrement') {
         changeQuantity = productQuantity <= 1 ? 1 : productQuantity - 1
       }
       setProductQuantity(changeQuantity)
-      changeProductQuantity(id, changeQuantity, product).then((result) => {
-        if (result.ok !== 1) return alert(result.message)
+      fetchData({
+        bodyData: { quantity: changeQuantity },
+        errorHandler: (error) => {
+          alert(error.message)
+        }
       })
     },
-    [productQuantity, setProductQuantity, product]
+    [productQuantity, setProductQuantity, fetchData]
   )
 
   const handleChange = useCallback((e) => {
@@ -102,37 +105,37 @@ function TableItem({ product }) {
 
   const handleOnBlur = useCallback(
     (e) => {
-      const targetId = Number(e.target.id)
       let changeQuantity = e.target.value ? parseInt(e.target.value) : 1
       if (changeQuantity < 1) changeQuantity = 1
       setProductQuantity((productQuantity) => changeQuantity)
-      changeProductQuantity(targetId, changeQuantity, product).then(
-        (result) => {
-          if (result.ok !== 1) return alert(result.message)
+      fetchData({
+        bodyData: { quantity: changeQuantity },
+        errorHandler: (error) => {
+          alert(error.message)
         }
-      )
+      })
     },
-    [product]
+    [fetchData]
   )
 
-  const handleOnStatusClick = useCallback(
-    (e) => {
-      const targetId = Number(e.target.id)
-      let newStatus = productStatus === 'on' ? 'off' : 'on'
-      setProductStatus(newStatus)
-      changeProductStatus(targetId, newStatus, product)
-    },
-    [productStatus, product]
-  )
+  const handleOnStatusClick = useCallback(() => {
+    let newStatus = productStatus === 'on' ? 'off' : 'on'
+    setProductStatus(newStatus)
+    fetchData({
+      bodyData: { status: newStatus },
+      errorHandler: (error) => {
+        alert(error.message)
+      }
+    })
+  }, [productStatus, fetchData])
 
   const handleOnDeleteClick = useCallback(
     (e) => {
       e.preventDefault()
-      const targetId = Number(e.target.id)
-      setIsModalOpen(true)
-      setProductId(targetId)
+      setProductId(Number(e.target.id))
+      handleModalOpen()
     },
-    [setIsModalOpen, setProductId]
+    [handleModalOpen, setProductId]
   )
 
   return (
@@ -176,7 +179,7 @@ function TableItem({ product }) {
   )
 }
 
-export default function Table({ products }) {
+export default function Table({ products, handleModalOpen }) {
   const headerNames = [
     '商品預覽',
     '商品名稱',
@@ -201,7 +204,12 @@ export default function Table({ products }) {
       <TableItemContainer>
         {products &&
           products.map((product) => (
-            <TableItem key={product.id} product={product} />
+            <TableItem
+              key={product.id}
+              product={product}
+              id={product.id}
+              handleModalOpen={handleModalOpen}
+            />
           ))}
       </TableItemContainer>
     </Wrapper>
