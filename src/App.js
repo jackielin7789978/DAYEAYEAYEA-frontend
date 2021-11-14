@@ -30,7 +30,7 @@ import {
 import { Brand, FAQ, Join, Notice, Privacy } from './pages/InfoPages/index'
 import { PageHeight } from './components/general'
 import {
-  HashRouter as Router,
+  BrowserRouter as Router,
   Route,
   Switch,
   useRouteMatch
