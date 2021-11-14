@@ -38,9 +38,7 @@ import {
 import {
   ScrollToTop,
   addItemsToLocalStorage,
-  getItemsFromLocalStorage,
-  getTokenFromLocalStorage,
-  isTokenExpired
+  getItemsFromLocalStorage
 } from './utils'
 import {
   LoadingContext,
@@ -50,7 +48,6 @@ import {
   OversoldContext
 } from './context'
 import GlobalStyle from './constants/globalStyle'
-import jwt_decode from 'jwt-decode'
 import useAuth from './hooks/useAuth'
 
 export default function App() {
@@ -126,22 +123,7 @@ function Shop() {
   const [cartItems, setCartItems] = useState(
     JSON.parse(getItemsFromLocalStorage())
   )
-
-  const [user, setUser] = useState()
-  useEffect(() => {
-    if (
-      !getTokenFromLocalStorage() ||
-      isTokenExpired(getTokenFromLocalStorage())
-    )
-      return false
-    try {
-      const _info = jwt_decode(getTokenFromLocalStorage())
-      if (_info.hasOwnProperty('id')) return setUser(_info)
-      return setUser(null)
-    } catch (error) {
-      return setUser(null)
-    }
-  }, [])
+  const memberAuth = useAuth('members')
 
   const handleModalClose = useCallback(() => {
     setIsModalOpen((isModalOpen) => false)
@@ -211,7 +193,7 @@ function Shop() {
   }, [])
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={memberAuth}>
       <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
         <ModalContext.Provider
           value={{

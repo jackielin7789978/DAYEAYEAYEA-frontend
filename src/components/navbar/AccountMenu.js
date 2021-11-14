@@ -23,7 +23,7 @@ const RestyledMenuContainer = styled(MenuContainer)`
   }
 `
 export default function AccountMenu({ handleHover, $isOpen, $setMenu }) {
-  const { user, setUser } = useContext(UserContext)
+  const { user, logout } = useContext(UserContext)
   return (
     <RestyledHoverArea
       onMouseOver={() => {
@@ -36,24 +36,21 @@ export default function AccountMenu({ handleHover, $isOpen, $setMenu }) {
     >
       <RestyledMenuContainer $isOpen={$isOpen}>
         <CSSTriangle $isOpen={$isOpen} />
-
-        {user ? (
+        {user && (
           <>
             <AccountTitle to='/member/me'>會員專區</AccountTitle>
             <AccountTitle
               to=''
               onClick={() => {
-                localStorage.removeItem('token')
-                setUser(null)
+                logout()
                 $setMenu('')
               }}
             >
               登出
             </AccountTitle>
           </>
-        ) : (
-          <AccountTitle to='/login'>登入/註冊</AccountTitle>
         )}
+        {!user && <AccountTitle to='/login'>登入/註冊</AccountTitle>}
       </RestyledMenuContainer>
     </RestyledHoverArea>
   )

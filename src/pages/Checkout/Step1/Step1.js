@@ -38,11 +38,13 @@ export default function Step1() {
     if (!cartItems || !cartItems.length) location.push('/')
     addItemsToLocalStorage(cartItems)
   }, [cartItems, location])
+
   useEffect(() => {
     if (isOversold) {
       handleModalOpen()
     }
   }, [handleModalOpen, isOversold])
+
   const handleUpdateCount = useCallback(
     (quantity, id) => {
       setCartItems((c) =>
@@ -90,7 +92,7 @@ export default function Step1() {
             <Link style={LinkStyle} to='/'>
               <GeneralBtn color='accent' children='繼續購物' />
             </Link>
-            {notAllowed ? (
+            {notAllowed && (
               <Link style={LinkStyle} to='/checkout/step1'>
                 <GeneralBtn
                   color='light_grey'
@@ -98,7 +100,8 @@ export default function Step1() {
                   children='前往結帳'
                 />
               </Link>
-            ) : (
+            )}
+            {!notAllowed && (
               <Link style={LinkStyle} to='/checkout/step2'>
                 <GeneralBtn color='primary' children='前往結帳' />
               </Link>

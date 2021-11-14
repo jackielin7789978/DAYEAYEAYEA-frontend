@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
@@ -26,26 +25,25 @@ const StyledSearchIcon = styled(FontAwesomeIcon)`
   transform: translate(0, -50%);
 `
 
-export function Search({ value, setValue }) {
-  const [isSearching, setIsSearching] = useState(false)
+export function Search({ search, setSearch, isSearching, setIsSearching }) {
   useEffect(() => {
-    value ? setIsSearching(true) : setIsSearching(false)
-  }, [value])
+    search ? setIsSearching(true) : setIsSearching(false)
+  }, [search, setIsSearching])
   const handleChange = (e) => {
-    setValue(e.target.value)
+    setSearch(e.target.value)
   }
   return (
     <Wrapper>
       <StyledSearchIcon icon={faSearch} />
       <Input
         placeholder={'輸入帳號、信箱、名稱或是電話來搜尋使用者'}
-        value={value}
+        value={search}
         onChange={handleChange}
       ></Input>
       {isSearching && (
         <GeneralBtn
           onClick={() => {
-            setValue('')
+            setSearch('')
           }}
           color={'admin_blue'}
           children={'清除搜尋'}

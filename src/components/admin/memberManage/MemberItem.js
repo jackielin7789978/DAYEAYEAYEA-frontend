@@ -15,9 +15,7 @@ const Btn = styled(Link)`
     }
   }
 `
-const RestyledContainer = styled(Container)`
-  border-radius: 20px;
-`
+const RestyledContainer = styled(Container)``
 const RestyledCell = styled(Cell)`
   word-wrap: break-word;
   padding: 0 4px;

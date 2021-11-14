@@ -1,7 +1,11 @@
 import { useState, useMemo, useCallback, useEffect, createContext } from 'react'
 import jwt_decode from 'jwt-decode'
 import useFetch from './useFetch'
-import { getTokenFromLocalStorage, isTokenExpired } from '../utils'
+import {
+  getTokenFromLocalStorage,
+  addTokenToLocalStorage,
+  isTokenExpired
+} from '../utils'
 import { BASE_URL } from '../constants/baseURL'
 
 const useAuth = (suffixPath = '') => {
@@ -9,11 +13,13 @@ const useAuth = (suffixPath = '') => {
   const [token, setToken] = useState(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const url = useMemo(() => `${BASE_URL}/${suffixPath}`, [suffixPath])
-  const { fetchData } = useFetch(url, { method: 'POST' })
+  const { isLoading, error, value, fetchData } = useFetch(url, {
+    method: 'POST'
+  })
 
-  const verifyAuth = useCallback(() => {
+  const verifyAuth = useCallback((temp) => {
     try {
-      const _token = getTokenFromLocalStorage()
+      const _token = temp && getTokenFromLocalStorage()
       if (_token && !isTokenExpired(_token)) {
         // fetchData({ suffixPath: '/check' })
         const user = jwt_decode(_token)
@@ -34,21 +40,31 @@ const useAuth = (suffixPath = '') => {
       fetchData({
         suffixPath: '/login',
         bodyData: { username, password },
-        handler: (res) => setToken(res.token)
+        handler: (res) => {
+          addTokenToLocalStorage(res.token)
+          verifyAuth(res.token)
+        }
       })
     },
-    [fetchData]
+    [fetchData, verifyAuth]
   )
 
   const signUp = useCallback(
     (username, email, password) => {
-      fetchData({ bodyData: { username, email, password } })
+      fetchData({
+        bodyData: { username, email, password },
+        handler: (res) => {
+          if (res.message === 'Register Success') {
+            signIn(username, password)
+          }
+        }
+      })
     },
-    [fetchData]
+    [fetchData, signIn]
   )
 
   const logout = useCallback(() => {
-    localStorage.remove('token') // TODO ?
+    localStorage.removeItem('token') // TODO ?
     verifyAuth()
   }, [verifyAuth])
 
@@ -57,6 +73,9 @@ const useAuth = (suffixPath = '') => {
   return {
     user,
     setUser,
+    isLoading,
+    error,
+    value,
     token,
     isLoggedIn,
     verifyAuth,

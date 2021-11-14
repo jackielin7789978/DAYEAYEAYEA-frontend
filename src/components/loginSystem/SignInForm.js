@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useState } from 'react'
 import {
   Form,
   Input,
@@ -8,16 +8,11 @@ import {
 } from '../../components/loginSystem/loginCard'
 import { LoginBtn } from '../../components/Button'
 import { useForm } from 'react-hook-form'
-// import { signIn } from '../../webAPI/loginAPI'
-import { LoadingContext } from '../../context'
-
-export default function SignInForm({
-  addToken,
-  errMessage,
-  setErrMessage,
-  token,
-  signIn
-}) {
+import { UserContext } from '../../context'
+import { useEffect } from 'react/cjs/react.development'
+export default function SignInForm() {
+  const [errMessage, setErrMessage] = useState()
+  const { signIn, error } = useContext(UserContext)
   const {
     register,
     formState: { errors },
@@ -25,18 +20,15 @@ export default function SignInForm({
   } = useForm()
 
   const onSubmit = (submitData) => {
+    setErrMessage(null)
     const { username, password } = submitData
     signIn(username, password)
-    // if (result.ok === 0) {
-    //   setIsLoading(false)
-    //   return $setErrMessage('帳號或密碼不正確')
-    // }
-    // $setErrMessage(null)
-    // addToken(token)
   }
   useEffect(() => {
-    console.log(token)
-  }, [token])
+    if (error) {
+      return setErrMessage('帳號或密碼不正確')
+    }
+  }, [error])
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Input
