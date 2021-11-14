@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useParams, useHistory } from 'react-router-dom'
 import { PageWidth } from '../../../components/general'
 import {
@@ -14,21 +14,25 @@ import {
 } from '../../../components/checkoutSystem/Step'
 import { GeneralBtn } from '../../../components/Button'
 import { OrderItem } from '../../../components/checkoutSystem/step3OrderItem'
-import { getOrderOne } from '../../../webAPI/orderAPI'
 import { formatPrice } from '../../../utils'
+import useFetch from '../../../hooks/useFetch'
+
 export default function Step3() {
   const location = useHistory()
   let { ticket } = useParams()
+  const { error, fetchData: getOrderOne } = useFetch(`/orders/me/${ticket}`)
   const [orderData, setOrderData] = useState(() => {
-    ;(async () => {
-      const result = await getOrderOne(ticket)
-      if (result.ok === 0) {
-        console.log(result.message)
-        return location.push('/')
+    getOrderOne({
+      handler: (res) => {
+        setOrderData(res.data)
       }
-      return setOrderData(result.data)
-    })()
+    })
   })
+  useEffect(() => {
+    if (error) {
+      return location.push('/')
+    }
+  }, [error, location])
   return (
     <PageWidth>
       <Steps />

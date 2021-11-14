@@ -23,12 +23,13 @@ import { UserContext, OversoldContext } from '../../../context'
 import Login from '../../Login/Login'
 import { COLOR } from '../../../constants/style'
 import { LocalStorageContext } from '../../../context'
-import { createOrder } from '../../../webAPI/orderAPI'
-import { getMe } from '../../../webAPI/memberAPI'
 import { getTokenFromLocalStorage } from '../../../utils'
+import useFetch from '../../../hooks/useFetch'
 export default function Step2() {
   const { cartItems, setCartItems } = useContext(LocalStorageContext)
   const { user, setUser } = useContext(UserContext)
+  const getMe = useFetch('/members/me')
+  const createOrder = useFetch('/orders', { method: 'POST' })
   const { setIsOversold } = useContext(OversoldContext)
   const { errMsg } = useState()
   const location = useHistory()
@@ -60,11 +61,14 @@ export default function Step2() {
 
   useEffect(() => {
     if (!getTokenFromLocalStorage()) return false
-    getMe().then((res) => {
-      setUser(res.data)
+    getMe.fetchData({
+      handler: (res) => {
+        setUser(res.data)
+      }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
   const {
     register,
     formState: { errors },
@@ -117,31 +121,37 @@ export default function Step2() {
     )
   }, [cartItems])
   const onSubmit = async (submitData) => {
-    const address = `${zipCode}${submitData.city}${submitData.district}${submitData.street}`
+    const { orderEmail, orderName, orderPhone, payment, shipping } = submitData
+    const orderAddress = `${zipCode}${submitData.city}${submitData.district}${submitData.street}`
     const orderItem = cartItems.map((item) => ({
       productId: item.id,
       quantity: item.quantity
     }))
-    const result = await createOrder(
-      address,
-      submitData.orderEmail,
-      submitData.orderName,
-      submitData.orderPhone,
-      submitData.payment,
-      submitData.shipping,
-      orderItem,
-      subTotal,
-      0 //isDelete
-    )
-
-    if (result.ok === 0) {
+    createOrder.fetchData({
+      bodyData: {
+        orderAddress,
+        orderEmail,
+        orderName,
+        orderPhone,
+        payment,
+        shipping,
+        orderItem,
+        subTotal,
+        isDeleted: 0
+      }
+    })
+  }
+  useEffect(() => {
+    if (createOrder.value.ok === 0) {
       setIsOversold(true)
       return location.push(`/checkout/step1`)
     }
-    localStorage.removeItem('cartItemsList')
-    location.push(`/checkout/step3/${result.ticketNo}`)
-    setCartItems([])
-  }
+    if (createOrder.value.ok === 1) {
+      localStorage.removeItem('cartItemsList')
+      location.push(`/checkout/step3/${createOrder.value.ticketNo}`)
+      setCartItems([])
+    }
+  }, [createOrder.value, location, setCartItems, setIsOversold])
   return (
     <PageWidth>
       <Steps />

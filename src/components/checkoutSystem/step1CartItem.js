@@ -10,52 +10,50 @@ import {
   WarningMessage
 } from './Step'
 import { ItemCounter } from '../Counter'
-import { getProductById } from '../../webAPI/productsAPI'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { formatPrice } from '../../utils'
-import { ModalContext, OversoldContext } from '../../context'
+import { OversoldContext } from '../../context'
+import useFetch from '../../hooks/useFetch'
 export const Cart = ({
   item,
   handleRemoveCartItem,
   handleUpdateCount,
   $setNotAllowed
 }) => {
+  const {
+    value,
+    error,
+    fetchData: getProductById
+  } = useFetch(`/products/${item.id}`)
+
   const [quantity, setQuantity] = useState(item.quantity)
   const [totalQuantity, setTotalQuantity] = useState()
   const [itemStatus, setItemStatus] = useState()
   const [warningMessage, setWarningMessage] = useState('')
-  const { setIsModalOpen } = useContext(ModalContext)
   const { isOversold } = useContext(OversoldContext)
 
   useEffect(() => {
-    ;(async () => {
-      const result = await getProductById(item.id)
-      if (!result) return
-      setItemStatus(result.data.status)
-      setTotalQuantity(result.data.quantity)
-    })()
+    getProductById()
     handleUpdateCount(quantity, item.id)
-  }, [quantity, handleUpdateCount, item.id])
+  }, [quantity, handleUpdateCount, item.id, getProductById])
+
+  useEffect(() => {
+    if (value.data) {
+      setItemStatus(value?.data?.status)
+      setTotalQuantity(value?.data?.quantity)
+    }
+  }, [value, error])
 
   useEffect(() => {
     if (isOversold) {
       if (itemStatus === 'off') {
-        setIsModalOpen(true)
-        setWarningMessage(`已下架，請移除商品`)
+        return setWarningMessage(`已下架，請移除商品`)
       }
       if (quantity > totalQuantity) {
-        setIsModalOpen(true)
         setWarningMessage(`庫存不足，剩餘庫存 ${totalQuantity} 個`)
       }
     }
-  }, [
-    $setNotAllowed,
-    itemStatus,
-    setIsModalOpen,
-    quantity,
-    totalQuantity,
-    isOversold
-  ])
+  }, [$setNotAllowed, itemStatus, quantity, totalQuantity, isOversold])
 
   const handleCount = (type) => {
     if (isOversold && itemStatus === 'off') {
@@ -99,16 +97,15 @@ export const Cart = ({
 
   useEffect(() => {
     if (item.quantity === '') {
-      $setNotAllowed(true)
       setWarningMessage('請填寫數量')
     }
-  }, [$setNotAllowed, item.quantity])
+  }, [item.quantity])
 
   useEffect(() => {
     warningMessage === '請填寫數量'
       ? $setNotAllowed(true)
       : $setNotAllowed(false)
-  }, [$setNotAllowed, quantity, warningMessage])
+  }, [$setNotAllowed, warningMessage])
 
   return (
     <Item key={item.id}>

@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useContext } from 'react'
 import { useHistory, useLocation } from 'react-router'
 import {
   PageWidthHeight,
@@ -8,29 +8,21 @@ import {
 import { Tabs } from '../../components/Tab'
 import SignInForm from '../../components/loginSystem/SignInForm'
 import SignUpForm from '../../components/loginSystem/SignUpForm'
-import { addTokenToLocalStorage } from '../../utils'
-import { getMe } from '../../webAPI/loginAPI'
-import { LoadingContext, UserContext } from '../../context'
+import { UserContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
+import { useEffect } from 'react/cjs/react.development'
 export default function Login() {
-  const { isLoading } = useContext(LoadingContext)
-  const [errMessage, setErrMessage] = useState()
-  const { setUser } = useContext(UserContext)
+  const { user, isLoading } = useContext(UserContext)
   const history = useHistory()
   const location = useLocation()
-  const tokenCheck = (token) => {
-    addTokenToLocalStorage(token)
-    getMe().then((res) => {
-      if (res.ok === 0) {
-        setErrMessage(res.message)
-      }
-      setUser(res.data)
+  useEffect(() => {
+    if (user) {
       if (location.pathname === '/checkout/step2') {
         return
       }
       history.push('/')
-    })
-  }
+    }
+  }, [history, location.pathname, user])
   return (
     <PageWidthHeight>
       {isLoading && <IsLoadingComponent />}
@@ -38,18 +30,7 @@ export default function Login() {
         <FormWrapper>
           <Tabs
             tabs={['註冊', '登入']}
-            tabsPanel={[
-              <SignUpForm
-                tokenCheck={tokenCheck}
-                $errMessage={errMessage}
-                $setErrMessage={setErrMessage}
-              />,
-              <SignInForm
-                tokenCheck={tokenCheck}
-                $errMessage={errMessage}
-                $setErrMessage={setErrMessage}
-              />
-            ]}
+            tabsPanel={[<SignUpForm />, <SignInForm />]}
             presetTab={1}
           ></Tabs>
         </FormWrapper>

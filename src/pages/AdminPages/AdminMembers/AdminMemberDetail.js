@@ -1,6 +1,7 @@
-import { useEffect, useState, useContext, useLayoutEffect } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useHistory, useLocation } from 'react-router-dom'
+import useFetch from '../../../hooks/useFetch'
 import {
   ColumnHeader,
   Header,
@@ -14,10 +15,7 @@ import {
   ADMIN_MEDIA_QUERY
 } from '../../../constants/style'
 import { useForm } from 'react-hook-form'
-import { updateMemberLevel } from '../../../webAPI/adminMembersAPI'
 import { useParams } from 'react-router-dom'
-import { getMember } from '../../../webAPI/adminMembersAPI'
-import { LoadingContext } from '../../../context'
 import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
 import { calTotalPages } from '../../../utils'
 import { PaginatorButton } from '../../../components/admin/PaginatorStyle'
@@ -74,19 +72,22 @@ const Paginator = styled.div`
 `
 const headerNames = ['訂單狀態', '訂單編號', 'Email', '訂單金額', 'Edit']
 export default function AdminMemberDetail() {
-  const { isLoading, setIsLoading } = useContext(LoadingContext)
   let { id } = useParams()
+  const getMember = useFetch(`/admin/members/${id}`)
+  const updateMemberLevel = useFetch(`/admin/members/${id}`, {
+    method: 'PATCH'
+  })
   const location = useHistory()
   const [isEdit, setIsEdit] = useState(false)
   const [memberDetail, setMemberDetail] = useState(() => {
-    ;(async () => {
-      const result = await getMember(id)
-      if (result.ok === 0) {
-        return location.push('/404')
+    getMember.fetchData({
+      handler: (res) => {
+        if (res.ok === 0) {
+          return location.push('/404')
+        }
+        setMemberDetail(res.data)
       }
-      setMemberDetail(result.data)
-      setIsLoading(false)
-    })()
+    })
   })
 
   const [offset, setOffset] = useState(0)
@@ -106,30 +107,29 @@ export default function AdminMemberDetail() {
     isEdit ? setIsEdit(false) : setIsEdit(true)
   }
   const { register, handleSubmit, setValue } = useForm()
-  useLayoutEffect(() => {
-    setIsLoading(true)
-  }, [setIsLoading])
+
   useEffect(() => {
     setValue('level', memberDetail?.level)
   }, [memberDetail?.level, setValue])
 
   const onSubmit = async (submitData) => {
-    const result = await updateMemberLevel(memberDetail.id, submitData.level)
-    if (result.ok === 0) {
-      console.log(result.message)
-      return false
-    }
+    updateMemberLevel.fetchData({
+      bodyData: {
+        level: submitData.level
+      }
+    })
     setMemberDetail({ ...memberDetail, level: submitData.level })
     alert('已編輯完成!')
     handleEdit()
   }
+
   return (
     <PageWrapper>
-      {isLoading && <AdminIsLoadingComponent />}
+      {getMember.isLoading && <AdminIsLoadingComponent />}
       <LogoutBtn
         onClick={() => {
           setMemberDetail(null)
-          location.push('/admin/members')
+          location.goBack()
         }}
         color={'admin_blue'}
         children={'回會員列表'}

@@ -1,7 +1,6 @@
-import { useEffect, useLayoutEffect, useState, useContext } from 'react'
+import { useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
-import { getAllMembers } from '../../../webAPI/adminMembersAPI'
 import {
   ColumnHeader,
   Header,
@@ -10,10 +9,10 @@ import {
 import { ADMIN_MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import TableItem from '../../../components/admin/memberManage/MemberItem'
 import { Search } from '../../../components/admin/memberManage/Search'
-import { LoadingContext } from '../../../context'
 import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
 import { calTotalPages } from '../../../utils'
 import { PaginatorButton } from '../../../components/admin/PaginatorStyle'
+import useFetch from '../../../hooks/useFetch'
 const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -58,36 +57,49 @@ const Msg = styled.div`
   padding: 30px;
 `
 export default function AdminMembers() {
-  const { isLoading, setIsLoading } = useContext(LoadingContext)
+  const {
+    isLoading,
+    error,
+    fetchData: getAllMembers
+  } = useFetch('/admin/members')
   const location = useHistory()
+  const [isSearching, setIsSearching] = useState(false)
   const [members, setMembers] = useState(() => {
-    ;(async () => {
-      const result = await getAllMembers()
-      if (result.ok === 0) {
-        return location.push('/404')
+    getAllMembers({
+      handler: (res) => {
+        setMembers(res.data)
       }
-      setMembers(result.data)
-      setIsLoading(false)
-    })()
+    })
   })
+  useEffect(() => {
+    if (error) {
+      return location.push('/404')
+    }
+  }, [location, error])
+
   const [offset, setOffset] = useState(0)
   const query = useLocation().search
   const [page, setPage] = useState()
   useEffect(() => {
+    if (isSearching) {
+      setPage('1')
+      return setOffset((page - 1) * 10)
+    }
     const param = new URLSearchParams(query)
     param.get('page') ? setPage(param.get('page')) : setPage('1')
     setOffset((page - 1) * 10)
-  }, [page, query])
+  }, [isSearching, page, query])
   const ORDERS_PER_PAGE = 10
-  const TotalPages = members && [...Array(calTotalPages(members.length)).keys()]
-  const [value, setValue] = useState('')
+  const [search, setSearch] = useState('')
+
   const [membersFilter, setMembersFilter] = useState()
-  useLayoutEffect(() => {
-    setIsLoading(true)
-  }, [setIsLoading])
+  const TotalPages = membersFilter && [
+    ...Array(calTotalPages(membersFilter.length)).keys()
+  ]
+
   useEffect(() => {
-    let reg = new RegExp(value, 'i')
-    value
+    let reg = new RegExp(search, 'i')
+    search
       ? setMembersFilter(
           members.filter(
             (member) =>
@@ -98,13 +110,17 @@ export default function AdminMembers() {
           )
         )
       : setMembersFilter(members)
-  }, [members, value])
-
+  }, [members, search])
   return (
     <PageWrapper>
       {isLoading && <AdminIsLoadingComponent />}
       <SearchContainer>
-        <Search value={value} setValue={setValue} />
+        <Search
+          search={search}
+          setSearch={setSearch}
+          isSearching={isSearching}
+          setIsSearching={setIsSearching}
+        />
       </SearchContainer>
       <ColumnHeader>
         {headerNames.map((name) => (
@@ -123,12 +139,13 @@ export default function AdminMembers() {
       </TableItemContainer>
       <Paginator>
         {TotalPages &&
-          TotalPages.map((pageValue) => (
+          membersFilter.length > 10 &&
+          TotalPages.map((pagesearch) => (
             <PaginatorButton
-              key={pageValue}
-              page={pageValue + 1}
-              to={`/admin/members?page=${pageValue + 1}`}
-              active={pageValue + 1 === parseInt(page)}
+              key={pagesearch}
+              page={pagesearch + 1}
+              to={`/admin/members?page=${pagesearch + 1}`}
+              active={pagesearch + 1 === parseInt(page)}
             ></PaginatorButton>
           ))}
       </Paginator>
