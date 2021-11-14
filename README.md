@@ -5,6 +5,7 @@
 這是一個使用 React 建立的電子商務前端專案，為虛構的生活選物品牌 **DAYEAYEAYEA** 打造購物網站及管理後台。使用者分為一般消費者和店家管理員，消費者可在前台網站享受流暢的購物體驗、管理會員資料及查看訂單紀錄，而管理員則可以在後台針對「會員」、「商品」和「訂單」三大區塊進行管理。
 
 > [DAYEAYEAYEA 購物網站](https://jackielin7789978.github.io/DAYEAYEAYEA-frontend/)
+
 > [管理後台](https://jackielin7789978.github.io/DAYEAYEAYEA-frontend/admin/login)：測試帳號 admin01 / 密碼: Admin1357
 
 ![](https://i.imgur.com/nSdyHE7.gif)
