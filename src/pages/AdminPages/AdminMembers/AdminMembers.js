@@ -83,12 +83,13 @@ export default function AdminMembers() {
   useEffect(() => {
     if (isSearching) {
       setPage('1')
-      return setOffset((page - 1) * 10)
+      return setOffset(0)
     }
     const param = new URLSearchParams(query)
     param.get('page') ? setPage(param.get('page')) : setPage('1')
     setOffset((page - 1) * 10)
-  }, [isSearching, page, query])
+  }, [page, query, isSearching])
+
   const ORDERS_PER_PAGE = 10
   const [search, setSearch] = useState('')
 
@@ -137,7 +138,7 @@ export default function AdminMembers() {
             .map((member) => <TableItem key={member.id} member={member} />)}
         {!membersFilter?.length && <Msg>沒有符合條件的客人</Msg>}
       </TableItemContainer>
-      <Paginator>
+      <Paginator onClick={() => setIsSearching(false)}>
         {TotalPages &&
           membersFilter.length > 10 &&
           TotalPages.map((pagesearch) => (

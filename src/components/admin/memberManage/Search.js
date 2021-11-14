@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { ADMIN_COLOR } from '../../../constants/style'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { GeneralBtn } from '../../Button'
 const Wrapper = styled.div`
   position: relative;
@@ -26,9 +26,11 @@ const StyledSearchIcon = styled(FontAwesomeIcon)`
 `
 
 export function Search({ search, setSearch, isSearching, setIsSearching }) {
+  const [clearBtn, setClearBtn] = useState(false)
   useEffect(() => {
     search ? setIsSearching(true) : setIsSearching(false)
-  }, [search, setIsSearching])
+    search ? setClearBtn(true) : setClearBtn(false)
+  }, [search, setClearBtn, setIsSearching])
   const handleChange = (e) => {
     setSearch(e.target.value)
   }
@@ -40,7 +42,7 @@ export function Search({ search, setSearch, isSearching, setIsSearching }) {
         value={search}
         onChange={handleChange}
       ></Input>
-      {isSearching && (
+      {clearBtn && (
         <GeneralBtn
           onClick={() => {
             setSearch('')
