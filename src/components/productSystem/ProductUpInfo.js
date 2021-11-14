@@ -1,11 +1,10 @@
 import styled from 'styled-components'
-import { useState, useCallback, useMemo, useContext } from 'react'
+import { useState, useCallback, useMemo, useContext, useEffect } from 'react'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import { ShoppingCarBtn, GeneralBtn } from '../../components/Button'
 import { ItemCounter } from '../../components/Counter'
 import { LocalStorageContext } from '../../context'
 import { formatPrice, getItemsFromLocalStorage } from '../../utils'
-import { useEffect } from 'react/cjs/react.development'
 
 const ProductInfoContainer = styled.div`
   width: 100%;
