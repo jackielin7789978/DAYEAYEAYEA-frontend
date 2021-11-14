@@ -4,9 +4,9 @@
 
 這是一個使用 React 建立的電子商務前端專案，為虛構的生活選物品牌 **DAYEAYEAYEA** 打造購物網站及管理後台。使用者分為一般消費者和店家管理員，消費者可在前台網站享受流暢的購物體驗、管理會員資料及查看訂單紀錄，而管理員則可以在後台針對「會員」、「商品」和「訂單」三大區塊進行管理。
 
-> [DAYEAYEAYEA 購物網站](https://jackielin7789978.github.io/DAYEAYEAYEA-frontend/)
+> [DAYEAYEAYEA 購物網站](https://dayeayeayea.netlify.app/)
 
-> [管理後台](https://jackielin7789978.github.io/DAYEAYEAYEA-frontend/admin/login)：測試帳號 admin01 / 密碼: Admin1357
+> [管理後台](https://dayeayeayea.netlify.app/admin/login)：測試帳號 admin01 / 密碼: Admin1357
 
 ![](https://i.imgur.com/nSdyHE7.gif)
 ![](https://i.imgur.com/znJvjej.png)
@@ -17,6 +17,7 @@
 - Create React App - 建立專案項目環境
 - React - Function Components + Hooks
 - Prettier - 統一程式碼格式
+- Netlify - 部署網站
 - [React Router](https://www.npmjs.com/package/react-router) - Web App 路由管理
 - [Styled Components](https://styled-components.com/) - 以組件為單位撰寫 CSS 樣式
 - [React Hook Form](https://www.npmjs.com/package/react-hook-form) - 處理表單驗證
@@ -25,7 +26,7 @@
 - [use-tw-zipcode](https://www.npmjs.com/package/use-tw-zipcode) - 製作台灣縣市、行政區下拉式選單，並取得郵遞區號
 - [jwt-decode](https://www.npmjs.com/package/jwt-decode) - JTW token 解碼
 - [qs](https://www.npmjs.com/package/qs) - 解析 query string，用於搜尋商品功能
-- [gh-pages](https://www.npmjs.com/package/gh-pages) - 方便將前端專案部署至 GitHub Pages
+- [gh-pages](https://www.npmjs.com/package/gh-pages) - 用於將專案 Demo 部署至 GitHub Pages
 
 ## 功能介紹
 
@@ -125,7 +126,3 @@
 #### `yarn build`
 
 在 `build` 資料夾中建立此專案的 production 版本
-
-#### `yarn deploy`
-
-在 GitHub Page 上部屬此專案網站
