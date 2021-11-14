@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { useHistory, useLocation } from 'react-router'
 import {
   PageWidthHeight,
@@ -10,7 +10,6 @@ import SignInForm from '../../components/loginSystem/SignInForm'
 import SignUpForm from '../../components/loginSystem/SignUpForm'
 import { UserContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
-import { useEffect } from 'react/cjs/react.development'
 export default function Login() {
   const { user, isLoading } = useContext(UserContext)
   const history = useHistory()
