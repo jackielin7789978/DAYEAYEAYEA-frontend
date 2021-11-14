@@ -29,7 +29,6 @@
     "use-tw-zipcode": "^2.0.3",
     "web-vitals": "^1.0.1"
   },
-  "homepage": "https://jackielin7789978.github.io/DAYEAYEAYEA-frontend",
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
