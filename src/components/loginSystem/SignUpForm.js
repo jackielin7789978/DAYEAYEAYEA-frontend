@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import {
   Form,
   Input,
@@ -8,7 +8,6 @@ import {
 import { ArrowBtn } from '../../components/Button'
 import { useForm } from 'react-hook-form'
 import { UserContext } from '../../context'
-import { useEffect } from 'react/cjs/react.development'
 export default function SignUpForm() {
   const [errMessage, setErrMessage] = useState()
   const { error, signUp } = useContext(UserContext)
