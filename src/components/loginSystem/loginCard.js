@@ -56,7 +56,8 @@ const ErrorMsg = styled.p`
   font-weight: bold;
   text-align: left;
 `
-const SendPassword = styled(Link)`
+const SendPassword = styled.div`
+  cursor: pointer;
   font-weight: bold;
   color: ${COLOR.text_dark};
   margin-top: 20px;

@@ -10,7 +10,9 @@ import SignInForm from '../../components/loginSystem/SignInForm'
 import SignUpForm from '../../components/loginSystem/SignUpForm'
 import { UserContext } from '../../context'
 import { IsLoadingComponent } from '../../components/IsLoading'
+import useModal from '../../hooks/useModal'
 export default function Login() {
+  const { setIsModal, Modal } = useModal('忘記了也沒辦法')
   const { user, isLoading } = useContext(UserContext)
   const history = useHistory()
   const location = useLocation()
@@ -24,12 +26,13 @@ export default function Login() {
   }, [history, location.pathname, user])
   return (
     <PageWidthHeight>
+      <Modal />
       {isLoading && <IsLoadingComponent />}
       <AbsoluteCenter>
         <FormWrapper>
           <Tabs
             tabs={['註冊', '登入']}
-            tabsPanel={[<SignUpForm />, <SignInForm />]}
+            tabsPanel={[<SignUpForm />, <SignInForm setIsModal={setIsModal} />]}
             presetTab={1}
           ></Tabs>
         </FormWrapper>
