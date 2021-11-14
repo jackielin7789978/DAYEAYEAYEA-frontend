@@ -6,7 +6,7 @@ import Navbar from './Navbar'
 import Footer from './Footer'
 import jwt_decode from 'jwt-decode'
 import { getTokenFromLocalStorage } from '../../utils'
-import { AdminContext } from '../../context'
+import { AdminContext, NavClickContext } from '../../context'
 
 const Wrapper = styled.div`
   display: flex;
@@ -24,6 +24,7 @@ const Layout = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false)
   const history = useHistory()
   const [isSuperAdmin, setIsSuperAdmin] = useState(true)
+  const [isNavClick, setIsNavClick] = useState(true)
 
   useEffect(() => {
     ;(async () => {
@@ -53,11 +54,18 @@ const Layout = ({ children }) => {
   return (
     isAdmin && (
       <AdminContext.Provider value={{ isSuperAdmin, setIsSuperAdmin }}>
-        <Wrapper>
-          <Navbar handleLogout={handleLogout} />
-          <Container>{children}</Container>
-        </Wrapper>
-        <Footer />
+        <NavClickContext.Provider
+          value={{
+            isNavClick,
+            setIsNavClick
+          }}
+        >
+          <Wrapper>
+            <Navbar handleLogout={handleLogout} />
+            <Container>{children}</Container>
+          </Wrapper>
+          <Footer />
+        </NavClickContext.Provider>
       </AdminContext.Provider>
     )
   )

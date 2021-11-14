@@ -181,7 +181,7 @@ export function ProductUpInfoComponent({
       handleAddCartItem(parseInt(id), productInfo)
       return handleModalOpen('已成功加入購物車 ! ')
     }
-    if (inStock === 0) {
+    if (inStock <= 0) {
       return handleModalOpen('此商品達庫存上限')
     }
   }
