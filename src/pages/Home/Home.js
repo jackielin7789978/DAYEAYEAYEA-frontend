@@ -1,18 +1,14 @@
 import styled from 'styled-components'
-import { useState, useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import useMediaQuery from '../../hooks/useMediaQuery'
-import { LoadingContext, ModalContext } from '../../context'
-import { IsLoadingComponent } from '../../components/IsLoading'
+import useFetch from '../../hooks/useFetch'
+import useModal from '../../hooks/useModal'
+import { IsLoadingComponent as Loading } from '../../components/IsLoading'
 import { PageWidth } from '../../components/general'
 import { COLOR, MEDIA_QUERY } from '../../constants/style'
 import { ProductCard } from '../../components/productSystem/ProductCard'
-import { getCategoryProducts } from '../../webAPI/productsAPI'
 import { HomeCategoriesImg } from '../../components/homeSystem/HomeCategoriesImg'
 import Carousel from '../../components/Carousel'
-import {
-  AddCartModal,
-  SoldOutCartModal
-} from '../../components/productSystem/ProductModal'
 
 const ProductContainer = styled.div`
   display: flex;
@@ -39,20 +35,9 @@ const CardContainer = styled.div`
     margin: 20px 0px;
   }
 `
-
-const getProductsByCategory = (category, setProducts, setIsLoading) => {
-  setIsLoading(true)
-  getCategoryProducts(category).then((products) => {
-    if (!products) return
-    if (products.ok === 0) return
-    setProducts(products.data.slice(-4))
-    setIsLoading(false)
-  })
-}
-
-const showProductsInComponent = (data, MediaQuery, setIsModalOpen) => {
+const showProductsInComponent = (data, MediaQuery, handleModalOpen) => {
   const isMobile = MediaQuery('(max-width: 767px)')
-  return data.map(
+  return data?.map(
     ({ id, name, price, Product_imgs, discountPrice, status, quantity }) => {
       const length = Product_imgs.length
       const imgUrl = isMobile
@@ -69,6 +54,7 @@ const showProductsInComponent = (data, MediaQuery, setIsModalOpen) => {
           discountPrice={discountPrice}
           status={status}
           stockQuantity={quantity}
+          handleModalOpen={handleModalOpen}
         />
       )
     }
@@ -76,42 +62,17 @@ const showProductsInComponent = (data, MediaQuery, setIsModalOpen) => {
 }
 
 export default function Home() {
-  const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const [homeProducts, setHomeProducts] = useState([])
-  const [apparelProducts, setApparelProducts] = useState([])
-  const [kitchenwareProducts, setKitchenProducts] = useState([])
-  const [foodProducts, setFoodProducts] = useState([])
-  const [stationeryProducts, setStationeryProducts] = useState([])
-  const [outdoorProducts, setOutdoorProducts] = useState([])
-  const { isModalOpen, handleModalClose, isProductSoldOut } =
-    useContext(ModalContext)
+  const { handleModalOpen, Modal } = useModal()
+  const { isLoading, value, fetchData } = useFetch(`/products`)
 
-  useEffect(() => {
-    getProductsByCategory('home', setHomeProducts, setIsLoading)
-    getProductsByCategory('apparel', setApparelProducts, setIsLoading)
-    getProductsByCategory('kitchenware', setKitchenProducts, setIsLoading)
-    getProductsByCategory('food', setFoodProducts, setIsLoading)
-    getProductsByCategory('stationery', setStationeryProducts, setIsLoading)
-    getProductsByCategory('outdoor', setOutdoorProducts, setIsLoading)
-  }, [setIsLoading])
+  useEffect(() => fetchData(), [fetchData])
 
   return (
     <>
+      {isLoading && <Loading />}
       <Carousel />
       <PageWidth>
-        {isLoading && <IsLoadingComponent />}
-        {isProductSoldOut && (
-          <AddCartModal
-            isModalOpen={isModalOpen}
-            handleModalClose={handleModalClose}
-          />
-        )}
-        {!isProductSoldOut && (
-          <SoldOutCartModal
-            isModalOpen={isModalOpen}
-            handleModalClose={handleModalClose}
-          />
-        )}
+        <Modal />
         <ProductContainer>
           <HomeCategoriesImg
             imgUrl='https://i.imgur.com/WjvyBCB.jpg'
@@ -119,7 +80,13 @@ export default function Home() {
             category={'居家生活'}
           />
           <CardContainer>
-            {showProductsInComponent(homeProducts, useMediaQuery)}
+            {showProductsInComponent(
+              value?.data
+                ?.filter((product) => product.category === 'home')
+                .slice(-4),
+              useMediaQuery,
+              handleModalOpen
+            )}
           </CardContainer>
         </ProductContainer>
         <ProductContainer>
@@ -129,7 +96,13 @@ export default function Home() {
             category={'服飾配件'}
           />
           <CardContainer>
-            {showProductsInComponent(apparelProducts, useMediaQuery)}
+            {showProductsInComponent(
+              value?.data
+                ?.filter((product) => product.category === 'apparel')
+                .slice(-4),
+              useMediaQuery,
+              handleModalOpen
+            )}
           </CardContainer>
         </ProductContainer>
         <ProductContainer>
@@ -139,7 +112,13 @@ export default function Home() {
             category={'廚房餐具'}
           />
           <CardContainer>
-            {showProductsInComponent(kitchenwareProducts, useMediaQuery)}
+            {showProductsInComponent(
+              value?.data
+                ?.filter((product) => product.category === 'kitchenware')
+                .slice(-4),
+              useMediaQuery,
+              handleModalOpen
+            )}
           </CardContainer>
         </ProductContainer>
         <ProductContainer>
@@ -149,7 +128,13 @@ export default function Home() {
             category={'食材雜貨'}
           />
           <CardContainer>
-            {showProductsInComponent(foodProducts, useMediaQuery)}
+            {showProductsInComponent(
+              value?.data
+                ?.filter((product) => product.category === 'food')
+                .slice(-4),
+              useMediaQuery,
+              handleModalOpen
+            )}
           </CardContainer>
         </ProductContainer>
         <ProductContainer>
@@ -159,7 +144,13 @@ export default function Home() {
             category={'設計文具'}
           />
           <CardContainer>
-            {showProductsInComponent(stationeryProducts, useMediaQuery)}
+            {showProductsInComponent(
+              value?.data
+                ?.filter((product) => product.category === 'stationery')
+                .slice(-4),
+              useMediaQuery,
+              handleModalOpen
+            )}
           </CardContainer>
         </ProductContainer>
         <ProductContainer>
@@ -169,7 +160,13 @@ export default function Home() {
             category={'休閒戶外'}
           />
           <CardContainer>
-            {showProductsInComponent(outdoorProducts, useMediaQuery)}
+            {showProductsInComponent(
+              value?.data
+                ?.filter((product) => product.category === 'outdoor')
+                .slice(-4),
+              useMediaQuery,
+              handleModalOpen
+            )}
           </CardContainer>
         </ProductContainer>
       </PageWidth>

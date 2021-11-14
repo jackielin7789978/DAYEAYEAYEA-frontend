@@ -3,7 +3,7 @@ import { useState, useCallback, useMemo, useContext } from 'react'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
 import { ShoppingCarBtn, GeneralBtn } from '../../components/Button'
 import { ItemCounter } from '../../components/Counter'
-import { ModalContext, LocalStorageContext } from '../../context'
+import { LocalStorageContext } from '../../context'
 import { formatPrice, getItemsFromLocalStorage } from '../../utils'
 import { useEffect } from 'react/cjs/react.development'
 
@@ -144,7 +144,8 @@ export function ProductUpInfoComponent({
   imgs,
   hasDiscount,
   totalQuantity,
-  status
+  status,
+  handleModalOpen
 }) {
   const localCart = JSON.parse(getItemsFromLocalStorage())
   let isProductInCart = localCart
@@ -156,8 +157,6 @@ export function ProductUpInfoComponent({
   const [quantity, setQuantity] = useState(1)
   const [warningMessage, setWarningMessage] = useState('')
   // eslint-disable-next-line no-unused-vars
-  const { isModalOpen, setIsModalOpen, setIsProductSoldOut } =
-    useContext(ModalContext)
   const { handleAddCartItem } = useContext(LocalStorageContext)
   const [inStock, setInStock] = useState(stock)
 
@@ -180,12 +179,10 @@ export function ProductUpInfoComponent({
     if (inStock > 0) {
       setInStock(inStock - quantity)
       handleAddCartItem(parseInt(id), productInfo)
-      setIsProductSoldOut((isProductSoldOut) => true)
-      return setIsModalOpen(true)
+      return handleModalOpen('已成功加入購物車 ! ')
     }
     if (inStock === 0) {
-      setIsProductSoldOut((isProductSoldOut) => false)
-      return setIsModalOpen(true)
+      return handleModalOpen('此商品達庫存上限')
     }
   }
 

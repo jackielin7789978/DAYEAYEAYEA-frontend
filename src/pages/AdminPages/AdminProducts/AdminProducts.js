@@ -2,8 +2,10 @@ import styled from 'styled-components'
 import qs from 'qs'
 import { useState, useLayoutEffect, useCallback, useContext } from 'react'
 import { useParams, useLocation, useHistory, Link } from 'react-router-dom'
-import { LoadingContext, ModalContext, AdminContext } from '../../../context'
-import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
+import useModal from '../../../hooks/useModal'
+import useFetch from '../../../hooks/useFetch'
+import { AdminContext, ProductIdContext } from '../../../context'
+import { AdminIsLoadingComponent as Loading } from '../../../components/admin/AdminIsLoading'
 import { ADMIN_MEDIA_QUERY, FONT_SIZE } from '../../../constants/style'
 import {
   CategoryDropdown,
@@ -12,16 +14,7 @@ import {
 import Table from '../../../components/admin/productManage/Table'
 import { PaginatorButton } from '../../../components/admin/PaginatorStyle'
 import { GeneralBtn } from '../../../components/Button'
-import {
-  getAllProducts,
-  searchProductsFromAdmin,
-  deleteProductById
-} from '../../../webAPI/adminProductsAPI'
 import { setAdminProductsPageInArray } from '../../../utils'
-import {
-  AdminDeleteModal,
-  PermissionDeniedModal
-} from '../../../components/admin/productManage/AdminProductModal'
 
 const PageWrapper = styled.div`
   display: flex;
@@ -73,7 +66,6 @@ function CancelButton({ onCancelClick }) {
     </GeneralBtn>
   )
 }
-
 function DeleteButton({ onDeleteClick }) {
   return (
     <GeneralBtn color='admin_grey' onClick={onDeleteClick}>
@@ -83,11 +75,13 @@ function DeleteButton({ onDeleteClick }) {
 }
 
 export default function AdminProducts() {
+  let showProductsList
+  let pagesArray
+  let totalPage
+  let showProductsByPage
   const [products, setProducts] = useState([])
+  const [productId, setProductId] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('all')
-  const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, setIsModalOpen, handleModalClose, productId } =
-    useContext(ModalContext)
   const { isSuperAdmin } = useContext(AdminContext)
   const { page = 1 } = useParams()
   const keywords = useLocation().search.trim(' ')
@@ -97,34 +91,42 @@ export default function AdminProducts() {
   const productsPerPage = 12
   const perPageSliceStart = (Number(page) - 1) * productsPerPage
   const perPageSliceEnd = Number(page) * productsPerPage
-  let showProductsList
-  let pagesArray
-  let totalPage
-  let showProductsByPage
+  const checkModal = useModal('此帳號沒有相關權限')
+  const deleteModal = useModal('確定要刪除嗎？')
+  const { isLoading: searchLoading, fetchData: searchProduct } = useFetch(
+    `/admin/products/${keywords}`
+  )
+  const { isLoading: getProductsLoading, fetchData: getAllProducts } =
+    useFetch(`/admin/products`)
+  const { fetchData: deleteProduct } = useFetch(
+    `/admin/products/${productId}`,
+    {
+      method: 'DELETE'
+    }
+  )
 
   useLayoutEffect(() => {
-    setIsLoading(true)
     if (keywords) {
-      searchProductsFromAdmin(keywords).then((result) => {
-        if (!result) return setIsLoading((isLoading) => true)
-        if (result.ok === 0) {
-          return history.push('/admin/404')
+      searchProduct({
+        handler: (value) => {
+          setProducts((products) => value?.data)
+        },
+        errorHandler: () => {
+          history.push('/admin/404')
         }
-        setIsLoading(false)
-        setProducts(result.data)
       })
     }
     if (!keywords) {
-      getAllProducts().then((result) => {
-        if (!result) return setIsLoading((isLoading) => true)
-        if (result.ok === 0) {
-          return history.push('/admin/404')
+      getAllProducts({
+        handler: (value) => {
+          setProducts((products) => value?.data)
+        },
+        errorHandler: () => {
+          history.push('/admin/404')
         }
-        setIsLoading(false)
-        setProducts(result.data)
       })
     }
-  }, [keywords, history, setIsLoading])
+  }, [keywords, getAllProducts, searchProduct, history])
 
   if (products) {
     showProductsList = products.filter((product) =>
@@ -142,9 +144,13 @@ export default function AdminProducts() {
     parseInt(page) > totalPage && history.push('/admin/404')
   }
 
-  const handelOnClick = useCallback(() => {
-    setIsModalOpen(true)
-  }, [setIsModalOpen])
+  const handleOnClick = useCallback(() => {
+    checkModal.handleModalOpen()
+  }, [checkModal])
+
+  const handleOnDeleteClick = useCallback(() => {
+    isSuperAdmin ? deleteModal.handleModalOpen() : checkModal.handleModalOpen()
+  }, [isSuperAdmin, deleteModal, checkModal])
 
   const handleDropDownChange = useCallback(
     (e) => {
@@ -159,79 +165,92 @@ export default function AdminProducts() {
   )
 
   const handleDelete = useCallback(() => {
-    deleteProductById(productId).then((result) => {
-      if (!result) return
-      if (result.ok === 0) return alert(result.message)
-      const deletedProductsList = products.filter(
-        (product) => product.id !== productId
-      )
-      setProducts((products) => deletedProductsList)
-      if ((showProductsByPage.length - 1) % productsPerPage === 0) {
-        history.push(`/admin/products/${totalPage - 1}`)
+    deleteProduct({
+      handler: () => {
+        const deletedProductsList = products.filter(
+          (product) => product.id !== productId
+        )
+        setProducts((products) => deletedProductsList)
+        if ((showProductsByPage.length - 1) % productsPerPage === 0) {
+          history.push(`/admin/products/${totalPage - 1}`)
+        }
+        deleteModal.handleModalClose()
+      },
+      errorHandler: (error) => {
+        return alert(error.message)
       }
-      handleModalClose()
     })
   }, [
-    productId,
-    products,
-    handleModalClose,
-    totalPage,
+    deleteProduct,
+    deleteModal,
     history,
-    showProductsByPage
+    products,
+    showProductsByPage,
+    totalPage,
+    productId
   ])
 
   return (
-    <PageWrapper>
-      {isLoading && <AdminIsLoadingComponent />}
-      {isSuperAdmin ? (
-        <AdminDeleteModal
-          open={isModalOpen}
-          onClose={handleModalClose}
-          buttonOne={<DeleteButton onDeleteClick={handleDelete} />}
-          buttonTwo={<CancelButton onCancelClick={handleModalClose} />}
-        />
-      ) : (
-        <PermissionDeniedModal open={isModalOpen} onClose={handleModalClose} />
-      )}
-      <SearchContainer>
-        <SearchSideContainer>
-          <Search />
-          <CategoryDropdown onChange={handleDropDownChange} />
-        </SearchSideContainer>
-        <SearchSideContainer>
-          {isSuperAdmin ? (
-            <Link style={{ width: '100px' }} to={'/admin/products/add'}>
-              <GeneralBtn color='admin_blue'>新增商品</GeneralBtn>
-            </Link>
-          ) : (
-            <GeneralBtn
-              buttonStyle={{ width: '100px' }}
-              color='admin_blue'
-              onClick={handelOnClick}
-            >
-              新增商品
-            </GeneralBtn>
-          )}
-        </SearchSideContainer>
-      </SearchContainer>
-      {keywords && products.length === 0 ? (
-        <SearchResultDiv>{`您搜尋的關鍵字「${keywordString}」，沒有找到符合的商品`}</SearchResultDiv>
-      ) : (
-        <Table products={showProductsByPage} />
-      )}
-      <PaginatorDiv>
-        {pagesArray &&
-          pagesArray.map((pageValue) => {
-            return (
-              <PaginatorButton
-                key={pageValue}
-                page={pageValue}
-                to={`/admin/products/${pageValue}`}
-                active={pageValue === parseInt(page)}
-              ></PaginatorButton>
-            )
-          })}
-      </PaginatorDiv>
-    </PageWrapper>
+    <ProductIdContext.Provider value={{ productId, setProductId }}>
+      <PageWrapper>
+        {(searchLoading || getProductsLoading) && <Loading />}
+        {isSuperAdmin ? (
+          <deleteModal.Modal
+            buttonOne={<DeleteButton onDeleteClick={handleDelete} />}
+            buttonTwo={
+              <CancelButton
+                onCancelClick={() => {
+                  deleteModal.setIsModal(false)
+                }}
+              />
+            }
+          />
+        ) : (
+          <checkModal.Modal />
+        )}
+        <SearchContainer>
+          <SearchSideContainer>
+            <Search />
+            <CategoryDropdown onChange={handleDropDownChange} />
+          </SearchSideContainer>
+          <SearchSideContainer>
+            {isSuperAdmin ? (
+              <Link style={{ width: '100px' }} to={'/admin/products/add'}>
+                <GeneralBtn color='admin_blue'>新增商品</GeneralBtn>
+              </Link>
+            ) : (
+              <GeneralBtn
+                buttonStyle={{ width: '100px' }}
+                color='admin_blue'
+                onClick={handleOnClick}
+              >
+                新增商品
+              </GeneralBtn>
+            )}
+          </SearchSideContainer>
+        </SearchContainer>
+        {keywords && products.length === 0 ? (
+          <SearchResultDiv>{`您搜尋的關鍵字「${keywordString}」，沒有找到符合的商品`}</SearchResultDiv>
+        ) : (
+          <Table
+            products={showProductsByPage}
+            handleModalOpen={handleOnDeleteClick}
+          />
+        )}
+        <PaginatorDiv>
+          {pagesArray &&
+            pagesArray.map((pageValue) => {
+              return (
+                <PaginatorButton
+                  key={pageValue}
+                  page={pageValue}
+                  to={`/admin/products/${pageValue}`}
+                  active={pageValue === parseInt(page)}
+                ></PaginatorButton>
+              )
+            })}
+        </PaginatorDiv>
+      </PageWrapper>
+    </ProductIdContext.Provider>
   )
 }

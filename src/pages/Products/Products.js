@@ -1,15 +1,11 @@
 import styled from 'styled-components'
-import { useState, useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
+import useFetch from '../../hooks/useFetch'
+import useModal from '../../hooks/useModal'
 import { MEDIA_QUERY } from '../../constants/style'
-import { LoadingContext, ModalContext } from '../../context'
-import { IsLoadingComponent } from '../../components/IsLoading'
+import { IsLoadingComponent as Loading } from '../../components/IsLoading'
 import { PageWidth } from '../../components/general'
-import { getProductById } from '../../webAPI/productsAPI'
-import {
-  AddCartModal,
-  SoldOutCartModal
-} from '../../components/productSystem/ProductModal'
 import { ProductImgsComponent } from '../../components/productSystem/ProductImg'
 import { ProductUpInfoComponent } from '../../components/productSystem/ProductUpInfo'
 import { ProductBottomInfoComponent } from '../../components/productSystem/ProductBottomInfo'
@@ -20,7 +16,6 @@ const ProductPageDiv = styled.div`
   flex-direction: column;
   align-items: center;
 `
-
 const ProductTopContainer = styled.div`
   width: 100%;
   height: 800px;
@@ -35,7 +30,6 @@ const ProductTopContainer = styled.div`
     justify-content: center;
     margin: 60px auto 20px auto;
   }
-
   ${MEDIA_QUERY.desktop} {
     height: 380px;
     flex-direction: row;
@@ -45,65 +39,46 @@ const ProductTopContainer = styled.div`
 `
 
 export default function Products() {
-  const [product, setProduct] = useState([])
-  const [productImgs, setProductImgs] = useState([])
-  const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, handleModalClose, isProductSoldOut } =
-    useContext(ModalContext)
+  const { handleModalOpen, Modal } = useModal()
   const { id } = useParams()
+  const { isLoading, value, fetchData } = useFetch(`/products/${parseInt(id)}`)
   let history = useHistory()
 
   useEffect(() => {
-    setIsLoading((isLoading) => true)
-    getProductById(id).then((result) => {
-      if (!result) return
-      if (result.ok === 0) {
+    fetchData({
+      errorHandler: () => {
         history.push('/404')
-        return setIsLoading(false)
       }
-      setIsLoading((isLoading) => false)
-      setProduct(result.data)
-      setProductImgs(result.data.Product_imgs)
     })
-  }, [setIsLoading, id, history])
+  }, [fetchData, history])
 
-  const { name, shortDesc, longDesc, price, discountPrice, quantity, status } =
-    product
-  let hasDiscount = price !== discountPrice ? true : false
+  let hasDiscount =
+    value?.data?.price !== value?.data?.discountPrice ? true : false
 
   return (
     <PageWidth>
-      {isLoading && <IsLoadingComponent />}
-      {!isLoading && (
+      {isLoading ? (
+        <Loading />
+      ) : (
         <>
-          {isProductSoldOut && (
-            <AddCartModal
-              isModalOpen={isModalOpen}
-              handleModalClose={handleModalClose}
-            />
-          )}
-          {!isProductSoldOut && (
-            <SoldOutCartModal
-              isModalOpen={isModalOpen}
-              handleModalClose={handleModalClose}
-            />
-          )}
+          <Modal />
           <ProductPageDiv>
             <ProductTopContainer>
-              <ProductImgsComponent imgs={productImgs} />
+              <ProductImgsComponent imgs={value?.data?.Product_imgs} />
               <ProductUpInfoComponent
                 id={id}
-                name={name}
-                shortDesc={shortDesc}
-                imgs={productImgs}
-                price={price}
-                discountPrice={discountPrice}
+                name={value?.data?.name}
+                shortDesc={value?.data?.shortDesc}
+                imgs={value?.data?.Product_imgs}
+                price={value?.data?.price}
+                discountPrice={value?.data?.discountPrice}
                 hasDiscount={hasDiscount}
-                totalQuantity={quantity}
-                status={status}
+                totalQuantity={value?.data?.quantity}
+                status={value?.data?.status}
+                handleModalOpen={handleModalOpen}
               />
             </ProductTopContainer>
-            <ProductBottomInfoComponent longDesc={longDesc} />
+            <ProductBottomInfoComponent longDesc={value?.data?.longDesc} />
           </ProductPageDiv>
         </>
       )}

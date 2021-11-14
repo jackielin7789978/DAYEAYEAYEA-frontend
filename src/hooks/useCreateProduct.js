@@ -1,9 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useHistory } from 'react-router-dom'
-import {
-  createNewProduct,
-  getAllProductsByPage
-} from '../webAPI/adminProductsAPI'
+import useFetch from './useFetch'
 import {
   addNewProductToLocalStorage,
   getNewProductFromLocalStorage,
@@ -45,6 +42,10 @@ export default function useCreateProduct() {
   const [productDetail, setProductDetail] = useState(
     JSON.parse(getNewProductFromLocalStorage()) || initProductState
   )
+  const { fetchData: createProduct } = useFetch(`/admin/products`, {
+    method: 'POST'
+  })
+  const { fetchData: getProductsPage } = useFetch(`/admin/products/page/1`)
 
   useEffect(() => {
     addNewProductToLocalStorage(productDetail)
@@ -72,19 +73,26 @@ export default function useCreateProduct() {
         isAllChecked = true
       }
       if (isAllChecked) {
-        createNewProduct(productDetail).then((result) => {
-          if (!result) return
-          if (result.ok === 0) return alert(result.message)
-          removeNewProductFromLocalStorage()
-          getAllProductsByPage(1).then((result) => {
-            if (!result || result.ok !== 1)
-              return history.push('/admin/products/1')
-            history.push(`/admin/products/${result.totalPage}`)
-          })
+        createProduct({
+          bodyData: productDetail,
+          handler: () => {
+            removeNewProductFromLocalStorage()
+            getProductsPage({
+              handler: (value) => {
+                history.push(`/admin/products/${value?.totalPage}`)
+              },
+              errorHandler: () => {
+                history.push('/admin/products/1')
+              }
+            })
+          },
+          errorHandler: (error) => {
+            alert(error.message)
+          }
         })
       }
     },
-    [productDetail, isChecked, history]
+    [productDetail, isChecked, history, getProductsPage, createProduct]
   )
 
   return {

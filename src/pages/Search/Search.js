@@ -1,23 +1,19 @@
 import styled from 'styled-components'
 import qs from 'qs'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../constants/style'
-import { useState, useEffect, useContext } from 'react'
-import { useLocation, useHistory } from 'react-router-dom'
-import { getProductByKeywords } from '../../webAPI/productsAPI'
-import { LoadingContext, ModalContext } from '../../context'
-import { IsLoadingComponent } from '../../components/IsLoading'
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import useFetch from '../../hooks/useFetch'
+import useModal from '../../hooks/useModal'
 import useMediaQuery from '../../hooks/useMediaQuery'
+import { IsLoadingComponent as Loading } from '../../components/IsLoading'
 import { PageWidth } from '../../components/general'
+import { countWhiteCardAmount, setSearchPageInArray } from '../../utils'
+import { PaginatorButton } from '../../components/Paginator'
 import {
   ProductCard,
   WhiteCard
 } from '../../components/productSystem/ProductCard'
-import { countWhiteCardAmount, setSearchPageInArray } from '../../utils'
-import {
-  AddCartModal,
-  SoldOutCartModal
-} from '../../components/productSystem/ProductModal'
-import { PaginatorButton } from '../../components/Paginator'
 
 const PageContainer = styled.div`
   height: 60vh;
@@ -49,7 +45,6 @@ const SearchNotFoundContainer = styled(SearchFoundContainer)`
   ${MEDIA_QUERY.tablet} {
     font-size: ${FONT_SIZE.lg};
   }
-
   ${MEDIA_QUERY.desktop} {
     font-size: ${FONT_SIZE.lg};
   }
@@ -64,11 +59,6 @@ function SearchFoundResult({ keyword, searchAmount }) {
 }
 
 export default function Search() {
-  const { isLoading, setIsLoading } = useContext(LoadingContext)
-  const { isModalOpen, handleModalClose, isProductSoldOut } =
-    useContext(ModalContext)
-  const [searchResult, setSearchResult] = useState([])
-  const history = useHistory()
   const isMobile = useMediaQuery('(max-width: 767px)')
   const isDesktop = useMediaQuery('(min-width: 1200px)')
   const keywords = useLocation().search
@@ -76,105 +66,92 @@ export default function Search() {
   const currentPage = Number(qs.parse(keywords, { ignoreQueryPrefix: true }).p)
   const perPageSliceStart = (currentPage - 1) * 12
   const perPageSliceEnd = currentPage * 12
+  const { handleModalOpen, Modal } = useModal()
+  const { isLoading, value, fetchData } = useFetch(`/products/${keywords}`)
 
   useEffect(() => {
-    setIsLoading((isLoading) => true)
-    if (!keywordString) {
-      setSearchResult([])
-      return setIsLoading((isLoading) => false)
-    }
-    getProductByKeywords(keywords).then((result) => {
-      if (!result) return
-      if (result.ok === 0) {
-        history.push('/404')
-      }
-      setIsLoading((isLoading) => false)
-      setSearchResult(result.data)
-    })
-  }, [setIsLoading, history, keywords, keywordString])
-  const SearchProductsAmount = searchResult.length
+    if (!keywordString) return
+    fetchData()
+  }, [fetchData, keywordString])
+  const SearchProductsAmount = value?.data?.length || 0
   const { totalPage, pagesArray } = setSearchPageInArray(SearchProductsAmount)
-
   const whiteCardAmount = countWhiteCardAmount(SearchProductsAmount, isDesktop)
 
   return (
     <PageWidth>
-      {isLoading && <IsLoadingComponent />}
-      {isProductSoldOut && (
-        <AddCartModal
-          isModalOpen={isModalOpen}
-          handleModalClose={handleModalClose}
-        />
-      )}
-      {!isProductSoldOut && (
-        <SoldOutCartModal
-          isModalOpen={isModalOpen}
-          handleModalClose={handleModalClose}
-        />
-      )}
-      {SearchProductsAmount === 0 && (
-        <PageContainer>
-          <SearchNotFoundContainer>沒有符合搜尋的商品</SearchNotFoundContainer>
-        </PageContainer>
-      )}
-      {SearchProductsAmount !== 0 && (
+      {isLoading ? (
+        <Loading />
+      ) : (
         <>
-          <SearchFoundResult
-            keyword={keywordString}
-            searchAmount={SearchProductsAmount}
-          />
-          <CardContainer>
-            {searchResult
-              .slice(perPageSliceStart, perPageSliceEnd)
-              .map(
-                ({
-                  id,
-                  name,
-                  price,
-                  Product_imgs,
-                  discountPrice,
-                  status,
-                  quantity
-                }) => {
-                  const length = Product_imgs.length
-                  const imgUrl = isMobile
-                    ? Product_imgs[length - 1].imgUrlSm
-                    : Product_imgs[length - 1].imgUrlMd
-                  return (
-                    <ProductCard
-                      id={id}
-                      key={id}
-                      imgUrl={imgUrl}
-                      imgs={Product_imgs}
-                      name={name}
-                      price={price}
-                      discountPrice={discountPrice}
-                      status={status}
-                      stockQuantity={quantity}
-                    />
-                  )
-                }
-              )}
-            {whiteCardAmount.length > 0 &&
-              whiteCardAmount.map((amount) => {
-                return <WhiteCard key={amount} />
+          <Modal />
+          {SearchProductsAmount === 0 && (
+            <PageContainer>
+              <SearchNotFoundContainer>
+                沒有符合搜尋的商品
+              </SearchNotFoundContainer>
+            </PageContainer>
+          )}
+          {SearchProductsAmount !== 0 && (
+            <>
+              <SearchFoundResult
+                keyword={keywordString}
+                searchAmount={SearchProductsAmount}
+              />
+              <CardContainer>
+                {value?.data
+                  ?.slice(perPageSliceStart, perPageSliceEnd)
+                  .map(
+                    ({
+                      id,
+                      name,
+                      price,
+                      Product_imgs,
+                      discountPrice,
+                      status,
+                      quantity
+                    }) => {
+                      const length = Product_imgs.length
+                      const imgUrl = isMobile
+                        ? Product_imgs[length - 1].imgUrlSm
+                        : Product_imgs[length - 1].imgUrlMd
+                      return (
+                        <ProductCard
+                          id={id}
+                          key={id}
+                          imgUrl={imgUrl}
+                          imgs={Product_imgs}
+                          name={name}
+                          price={price}
+                          discountPrice={discountPrice}
+                          status={status}
+                          stockQuantity={quantity}
+                          handleModalOpen={handleModalOpen}
+                        />
+                      )
+                    }
+                  )}
+                {whiteCardAmount.length > 0 &&
+                  whiteCardAmount.map((amount) => {
+                    return <WhiteCard key={amount} />
+                  })}
+              </CardContainer>
+            </>
+          )}
+          {totalPage > 1 && (
+            <PaginatorDiv>
+              {pagesArray.map((page) => {
+                return (
+                  <PaginatorButton
+                    key={page}
+                    page={page}
+                    to={`/search/?search=${keywordString}&p=${page}`}
+                    active={page === currentPage}
+                  ></PaginatorButton>
+                )
               })}
-          </CardContainer>
+            </PaginatorDiv>
+          )}
         </>
-      )}
-      {totalPage > 1 && (
-        <PaginatorDiv>
-          {pagesArray.map((page) => {
-            return (
-              <PaginatorButton
-                key={page}
-                page={page}
-                to={`/search/?search=${keywordString}&p=${page}`}
-                active={page === currentPage}
-              ></PaginatorButton>
-            )
-          })}
-        </PaginatorDiv>
       )}
     </PageWidth>
   )

@@ -1,35 +1,35 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { Tabs } from '../../../components/admin/productManage/Tab'
 import { FormWrapper } from '../../../components/admin/productManage/FormStyle'
+import useFetch from '../../../hooks/useFetch'
 import ImgForm from '../../../components/admin/productManage/AdminDetailForms/ImgForm'
 import DescForm from '../../../components/admin/productManage/AdminDetailForms/DescForm'
 import InfoForm from '../../../components/admin/productManage/AdminDetailForms/InfoForm'
-import { getProductById } from '../../../webAPI/adminProductsAPI'
-import { LoadingContext } from '../../../context'
-import { AdminIsLoadingComponent } from '../../../components/admin/AdminIsLoading'
+import { AdminIsLoadingComponent as Loading } from '../../../components/admin/AdminIsLoading'
 
 export default function AdminProductDetail() {
   const [productDetail, setProductDetail] = useState([])
-  const { isLoading, setIsLoading } = useContext(LoadingContext)
   const { id } = useParams()
+  const { isLoading, fetchData } = useFetch(`/admin/products/${parseInt(id)}`)
   let history = useHistory()
 
   useEffect(() => {
-    setIsLoading(true)
-    getProductById(parseInt(id)).then((result) => {
-      if (!result) return history.push('/admin/404')
-      if (result.ok === 0) return history.push('/admin/404')
-      const data = JSON.parse(JSON.stringify(result.data))
-      setProductDetail(() => data)
-      setIsLoading(false)
+    fetchData({
+      handler: (value) => {
+        setProductDetail((products) => JSON.parse(JSON.stringify(value?.data)))
+      },
+      errorHandler: () => {
+        history.push('/admin/404')
+      }
     })
-  }, [id, setIsLoading, history])
+  }, [fetchData, history])
 
   return (
     <FormWrapper>
-      {isLoading && <AdminIsLoadingComponent />}
-      {!isLoading && (
+      {isLoading ? (
+        <Loading />
+      ) : (
         <Tabs
           tabs={['商品圖片', '商品敘述', '商品資訊']}
           tabsPanel={[

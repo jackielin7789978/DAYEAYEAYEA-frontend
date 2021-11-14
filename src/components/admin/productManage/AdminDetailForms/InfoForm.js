@@ -1,10 +1,10 @@
 import { useCallback, useState, useContext } from 'react'
 import styled from 'styled-components'
+import useFetch from '../../../../hooks/useFetch'
+import useModal from '../../../../hooks/useModal'
 import { useHistory, useParams } from 'react-router-dom'
 import { checkInputIsValid } from '../../../../utils'
-import { changeProductInfoById } from '../../../../webAPI/adminProductsAPI'
-import { AdminContext, ModalContext } from '../../../../context'
-import { PermissionDeniedModal } from '../AdminProductModal'
+import { AdminContext } from '../../../../context'
 import {
   Form,
   FormTitleComponent,
@@ -291,10 +291,12 @@ function QuantityComponent({
 
 export default function DetailInfoForm({ product }) {
   const { isSuperAdmin } = useContext(AdminContext)
-  const { isModalOpen, setIsModalOpen, handleModalClose } =
-    useContext(ModalContext)
   const history = useHistory()
   const { id } = useParams()
+  const { handleModalOpen, Modal } = useModal('此帳號沒有相關權限')
+  const { fetchData } = useFetch(`/admin/products/${parseInt(id)}`, {
+    method: 'PATCH'
+  })
   const { status, category, article, price, discountPrice, quantity } = product
   const [buttonStatus, setButtonStatus] = useState('edit')
   const [isDisabled, setIsDisabled] = useState(true)
@@ -316,11 +318,11 @@ export default function DetailInfoForm({ product }) {
   const handleEditClick = useCallback(
     (e) => {
       e.preventDefault()
-      if (!isSuperAdmin) return setIsModalOpen(true)
+      if (!isSuperAdmin) return handleModalOpen()
       setIsDisabled((isDisabled) => !isDisabled)
       setButtonStatus((buttonStatus) => 'save')
     },
-    [isSuperAdmin, setIsModalOpen]
+    [isSuperAdmin, handleModalOpen]
   )
 
   const handleLeaveClick = useCallback(
@@ -341,19 +343,24 @@ export default function DetailInfoForm({ product }) {
         return alert('請完整填寫正確商品資訊後再提交')
       } else {
         setValidCheck(true)
-        changeProductInfoById(parseInt(id), InfoData).then((result) => {
-          if (result.ok !== 1) return alert(result.message)
-          alert('成功修改商品資訊')
-          setIsDisabled((isDisabled) => !isDisabled)
-          setButtonStatus((buttonStatus) => 'edit')
+        fetchData({
+          bodyData: InfoData,
+          handler: () => {
+            alert('成功修改商品資訊')
+            setIsDisabled((isDisabled) => !isDisabled)
+            setButtonStatus((buttonStatus) => 'edit')
+          },
+          errorHandler: (error) => {
+            alert(error.message)
+          }
         })
       }
     },
-    [isValid, id, InfoData, validCheck]
+    [isValid, InfoData, validCheck, fetchData]
   )
   return (
     <InfoForm>
-      <PermissionDeniedModal open={isModalOpen} onClose={handleModalClose} />
+      <Modal />
       <StatusComponent
         status={InfoData.status}
         category={InfoData.category}
