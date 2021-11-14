@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import Navbar from './components/navbar/Navbar'
 import Footer from './components/Footer'
 import {
@@ -40,13 +40,7 @@ import {
   addItemsToLocalStorage,
   getItemsFromLocalStorage
 } from './utils'
-import {
-  LoadingContext,
-  ModalContext,
-  LocalStorageContext,
-  UserContext,
-  OversoldContext
-} from './context'
+import { LocalStorageContext, UserContext, OversoldContext } from './context'
 import GlobalStyle from './constants/globalStyle'
 import useAuth from './hooks/useAuth'
 
@@ -64,66 +58,33 @@ export default function App() {
 }
 
 function AdminRoutes() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isNavClick, setIsNavClick] = useState(true)
-  const handleModalClose = useCallback(() => {
-    setIsModalOpen((isModalOpen) => false)
-  }, [setIsModalOpen])
-
   return (
-    <LoadingContext.Provider
-      value={{ isLoading, setIsLoading, isNavClick, setIsNavClick }}
-    >
-      <ModalContext.Provider
-        value={{
-          isModalOpen,
-          setIsModalOpen,
-          handleModalClose,
-          isNavClick,
-          setIsNavClick
-        }}
-      >
+    <Switch>
+      <Route path={'/admin/login'} component={AdminLogin} />
+      <AdminLayout>
         <Switch>
-          <Route path={'/admin/login'} component={AdminLogin} />
-          <AdminLayout>
-            <Switch>
-              <Route
-                path={'/admin/members/:id'}
-                component={AdminMemberDetail}
-              />
-              <Route path={'/admin/members'} component={AdminMembers} />
-              <Route
-                path={'/admin/orders/:ticket'}
-                component={AdminOrderDetail}
-              />
-              <Route path={'/admin/orders'} component={AdminOrders} />
-              <Route
-                path={'/admin/products/detail/:id'}
-                component={AdminProductDetail}
-              />
-              <Route path={'/admin/products/add'} component={AdminProductAdd} />
-              <Route path={'/admin/products/:page'} component={AdminProducts} />
-              <Route path={'/admin/products/'} component={AdminProducts} />
-              <Route path={'*'} component={AdminNotFound} />
-            </Switch>
-          </AdminLayout>
+          <Route path={'/admin/members/:id'} component={AdminMemberDetail} />
+          <Route path={'/admin/members'} component={AdminMembers} />
+          <Route path={'/admin/orders/:ticket'} component={AdminOrderDetail} />
+          <Route path={'/admin/orders'} component={AdminOrders} />
+          <Route
+            path={'/admin/products/detail/:id'}
+            component={AdminProductDetail}
+          />
+          <Route path={'/admin/products/add'} component={AdminProductAdd} />
+          <Route path={'/admin/products/:page'} component={AdminProducts} />
+          <Route path={'/admin/products/'} component={AdminProducts} />
+          <Route path={'*'} component={AdminNotFound} />
         </Switch>
-      </ModalContext.Provider>
-    </LoadingContext.Provider>
+      </AdminLayout>
+    </Switch>
   )
 }
 function Shop() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const [cartItems, setCartItems] = useState(
     JSON.parse(getItemsFromLocalStorage())
   )
   const memberAuth = useAuth('members')
-
-  const handleModalClose = useCallback(() => {
-    setIsModalOpen((isModalOpen) => false)
-  }, [setIsModalOpen])
 
   const totalPrice = useMemo(() => {
     if (!cartItems) return
@@ -189,43 +150,33 @@ function Shop() {
 
   return (
     <UserContext.Provider value={memberAuth}>
-      <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
-        <ModalContext.Provider
-          value={{
-            isModalOpen,
-            setIsModalOpen,
-            handleModalClose
-          }}
-        >
-          <LocalStorageContext.Provider
-            value={{
-              cartItems,
-              totalPrice,
-              totalItems,
-              setCartItems,
-              handleAddCartItem,
-              handleRemoveCartItem
-            }}
-          >
-            <Navbar />
-            <PageHeight>
-              <Switch>
-                <Route path='/articles/:id/:page' component={Articles} />
-                <Route path='/checkout' component={CheckoutRoutes} />
-                <Route path='/categories/:slug/:page' component={Categories} />
-                <Route path='/search' component={Search} />
-                <Route path='/login' component={Login} />
-                <Route path='/member' component={MemberRoutes} />
-                <Route path='/products/:id' component={Products} />
-                <Route path='/info' component={InfoRoutes} />
-                <Route exact path='/' component={Home} />
-                <Route path='*' component={NotFound} />
-              </Switch>
-            </PageHeight>
-            <Footer />
-          </LocalStorageContext.Provider>
-        </ModalContext.Provider>
-      </LoadingContext.Provider>
+      <LocalStorageContext.Provider
+        value={{
+          cartItems,
+          totalPrice,
+          totalItems,
+          setCartItems,
+          handleAddCartItem,
+          handleRemoveCartItem
+        }}
+      >
+        <Navbar />
+        <PageHeight>
+          <Switch>
+            <Route path='/articles/:id/:page' component={Articles} />
+            <Route path='/checkout' component={CheckoutRoutes} />
+            <Route path='/categories/:slug/:page' component={Categories} />
+            <Route path='/search' component={Search} />
+            <Route path='/login' component={Login} />
+            <Route path='/member' component={MemberRoutes} />
+            <Route path='/products/:id' component={Products} />
+            <Route path='/info' component={InfoRoutes} />
+            <Route exact path='/' component={Home} />
+            <Route path='*' component={NotFound} />
+          </Switch>
+        </PageHeight>
+        <Footer />
+      </LocalStorageContext.Provider>
     </UserContext.Provider>
   )
 }

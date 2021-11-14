@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import { css } from '@emotion/react'
 import SyncLoader from 'react-spinners/SyncLoader'
 import { ADMIN_COLOR } from '../../constants/style'
-import { LoadingContext } from '../../context'
+import { NavClickContext } from '../../context'
 
 const FixedBackground = styled.div`
   position: fixed;
@@ -33,7 +33,7 @@ const override = css`
 `
 
 export function AdminIsLoadingComponent() {
-  const { isNavClick } = useContext(LoadingContext)
+  const { isNavClick } = useContext(NavClickContext)
   return (
     <FixedBackground>
       <IsLoadingStyle isNavClick={isNavClick}>

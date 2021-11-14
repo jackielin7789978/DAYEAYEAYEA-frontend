@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../constants/style'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
-import { ModalContext } from '../context'
+import { NavClickContext } from '../context'
 
 const FixedBackground = styled.div`
   position: fixed;
@@ -88,20 +88,8 @@ function ModalButton({ buttonOne, buttonTwo }) {
   )
 }
 
-function GeneralModal({ icon, content, buttonOne, buttonTwo, open, onClose }) {
-  if (!open) return null
-  return (
-    <ModalContent>
-      <CloseButton onClick={onClose} />
-      <ModalIcon icon={icon} />
-      <ModalContentDiv>{content}</ModalContentDiv>
-      <ModalButton buttonOne={buttonOne} buttonTwo={buttonTwo}></ModalButton>
-    </ModalContent>
-  )
-}
-
 function FullModal({ icon, content, buttonOne, buttonTwo, open, onClose }) {
-  const { isNavClick } = useContext(ModalContext)
+  const { isNavClick } = useContext(NavClickContext)
   if (!open) return null
   return (
     <div>
@@ -116,4 +104,4 @@ function FullModal({ icon, content, buttonOne, buttonTwo, open, onClose }) {
   )
 }
 
-export { FullModal, GeneralModal }
+export { FullModal }
