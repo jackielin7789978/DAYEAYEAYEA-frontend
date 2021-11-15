@@ -143,5 +143,5 @@
 
 ## 專案連結
 
-[DAYEAYEAYEA 後端專案](https://github.com/dingdingdingliu/Dayeayeayea-backend)
-[API 文件](https://api.coolizz.tw/api-docs/)
+- [DAYEAYEAYEA 後端專案](https://github.com/dingdingdingliu/Dayeayeayea-backend)
+- [API 文件](https://api.coolizz.tw/api-docs/)
