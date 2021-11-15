@@ -3,8 +3,8 @@ import { useHistory } from 'react-router'
 import styled from 'styled-components'
 import { LoginBtn } from '../../../components/Button'
 import { COLOR, ADMIN_COLOR, FONT_SIZE } from '../../../constants/style'
-import { adminLogin } from '../../../webAPI/adminAPIs'
 import { addTokenToLocalStorage } from '../../../utils'
+import useFetch from '../../../hooks/useFetch'
 
 const Wrapper = styled.div`
   position: absolute;
@@ -67,17 +67,21 @@ export default function AdminLogin() {
   const [password, setPassword] = useState('')
   const [errMsg, setErrMsg] = useState('')
   let history = useHistory()
+  const { fetchData: adminLogin } = useFetch('/admin/login', { method: 'POST' })
 
   const handleLogin = (e) => {
     e.preventDefault()
     if (!username || !password) return setErrMsg('缺少帳號或密碼')
-    ;(async () => {
-      const res = await adminLogin(username, password)
-      if (!res.ok) return setErrMsg('帳號或密碼錯誤')
-      alert('登入成功')
-      addTokenToLocalStorage(res.token)
-      history.push('/admin/members')
-    })()
+    adminLogin({
+      bodyData: { username, password },
+      handler: (res) => {
+        if (!res.ok) return setErrMsg('帳號或密碼錯誤')
+        alert('登入成功')
+        history.push('/admin/members')
+        addTokenToLocalStorage(res.token)
+      },
+      errorHandler: () => setErrMsg('帳號或密碼有誤')
+    })
   }
 
   return (
