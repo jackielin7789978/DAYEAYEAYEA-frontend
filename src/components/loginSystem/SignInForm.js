@@ -9,7 +9,7 @@ import {
 import { LoginBtn } from '../../components/Button'
 import { useForm } from 'react-hook-form'
 import { UserContext } from '../../context'
-export default function SignInForm() {
+export default function SignInForm({ setIsModal }) {
   const [errMessage, setErrMessage] = useState()
   const { signIn, error } = useContext(UserContext)
   const {
@@ -49,7 +49,7 @@ export default function SignInForm() {
         {errors.password?.type === 'required' && '請填寫密碼'}
       </ErrorMsg>
 
-      <SendPassword to='/'>忘記密碼?</SendPassword>
+      <SendPassword onClick={() => setIsModal(true)}>忘記密碼?</SendPassword>
       <LoginBtn
         color='accent'
         children='登入'
