@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
-import { adminCheck } from '../../adminAPI'
 import styled from 'styled-components'
 import Navbar from './Navbar'
 import Footer from './Footer'
 import jwt_decode from 'jwt-decode'
 import { getTokenFromLocalStorage } from '../../utils'
 import { AdminContext, NavClickContext } from '../../context'
+import useFetch from '../../hooks/useFetch'
 
 const Wrapper = styled.div`
   display: flex;
@@ -25,15 +25,18 @@ const Layout = ({ children }) => {
   const history = useHistory()
   const [isSuperAdmin, setIsSuperAdmin] = useState(true)
   const [isNavClick, setIsNavClick] = useState(true)
+  const { fetchData: adminCheck } = useFetch('/admin/me')
 
   useEffect(() => {
-    ;(async () => {
-      if (await adminCheck()) return setIsAdmin(true)
-      setIsAdmin(false)
-      alert('請先登入!!!')
-      history.push('/admin/login')
-    })()
-  }, [history, children])
+    adminCheck({
+      handler: () => setIsAdmin(true),
+      errorHandler: () => {
+        alert('請先登入')
+        history.push('/admin/login')
+        setIsAdmin(false)
+      }
+    })
+  }, [adminCheck, history])
 
   useEffect(() => {
     const token = getTokenFromLocalStorage()
