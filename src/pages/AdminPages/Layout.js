@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
-import { adminCheck } from '../../webAPI/adminAPIs'
+import { adminCheck } from '../../adminAPI'
 import styled from 'styled-components'
 import Navbar from './Navbar'
 import Footer from './Footer'

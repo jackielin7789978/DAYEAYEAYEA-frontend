@@ -2,10 +2,10 @@ import styled from 'styled-components'
 import { useState, useEffect } from 'react'
 import { PageWidth } from '../../../components/general'
 import { COLOR, FONT_SIZE, MEDIA_QUERY } from '../../../constants/style'
-import getFAQs from '../../../webAPI/faq'
 import { IsLoadingComponent } from '../../../components/IsLoading'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons'
+import useFetch from '../../../hooks/useFetch'
 
 const Title = styled.div`
   margin-top: 40px;
@@ -80,7 +80,6 @@ const Toggle = styled(FontAwesomeIcon)`
   transform: ${({ $isOpen }) => ($isOpen ? 'rotate(180deg)' : 'none')};
 `
 
-// 問題：要怎麼限制一次只能展開一個答案？
 function Item({ faq }) {
   const [isOpen, setIsOpen] = useState(false)
   const toggleOpen = () => {
@@ -100,22 +99,11 @@ function Item({ faq }) {
 }
 export default function FAQ() {
   const [faqs, setFaqs] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  const { isLoading, fetchData: getFAQs } = useFetch('/faqs')
+
   useEffect(() => {
-    async function fetchFAQs() {
-      let res
-      try {
-        res = await getFAQs()
-        if (res.ok) {
-          setFaqs(res.data)
-          setIsLoading(false)
-        }
-      } catch (e) {
-        console.log(e)
-      }
-    }
-    fetchFAQs()
-  }, [])
+    getFAQs({ handler: (res) => setFaqs(res.data) })
+  }, [getFAQs])
 
   return (
     <>
