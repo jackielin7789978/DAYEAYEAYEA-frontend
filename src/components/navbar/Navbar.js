@@ -2,11 +2,13 @@ import { useEffect, useState, useContext } from 'react'
 import { LocalStorageContext } from '../../context'
 import { useLocation } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons'
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import {
+  faSearch,
+  faShoppingCart,
+  faUserCircle,
+  faBars,
+  faTimes
+} from '@fortawesome/free-solid-svg-icons'
 import CategoryMenu from './CategoryMenu'
 import CartMenu from '../cartSystem/CartMenu'
 import AccountMenu from './AccountMenu'
